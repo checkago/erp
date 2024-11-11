@@ -1,5 +1,5 @@
 """
-URL configuration for core project.
+URL configuration for ERP project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -15,8 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.template.context_processors import static
 from django.urls import path
+
+from backend.ERP import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
 ]
+
+if getattr(settings, 'DEBUG', False):  # Попробуйте получить DEBUG из настроек
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

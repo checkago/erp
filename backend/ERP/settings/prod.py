@@ -1,4 +1,4 @@
-# backend/core/settings/prod.py
+# backend/ERP/settings/prod.py
 
 from .base import *
 

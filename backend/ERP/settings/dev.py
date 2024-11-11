@@ -1,4 +1,4 @@
-# backend/core/settings/dev.py
+# backend/ERP/settings/dev.py
 from .base import *
 
 DEBUG = True

@@ -1,4 +1,4 @@
-# backend/core/settings/base.py
+# backend/ERP/settings/base.py
 
 from pathlib import Path
 import os
@@ -15,7 +15,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.users',
+    'apps.core',
     'apps.tasks',
     'apps.organization'
     # другие приложения
@@ -32,7 +32,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'core.urls'
+ROOT_URLCONF = 'ERP.urls'
 
 TEMPLATES = [
     {
@@ -50,7 +50,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'core.wsgi.application'
+WSGI_APPLICATION = 'ERP.wsgi.application'
 
 # Общие настройки баз данных, которые могут быть переопределены
 DATABASES = {
