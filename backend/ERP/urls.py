@@ -18,11 +18,11 @@ from django.contrib import admin
 from django.template.context_processors import static
 from django.urls import path
 
-from backend.ERP import settings
+from backend.ERP.settings import dev, base
 
 urlpatterns = [
     path("admin/", admin.site.urls),
 ]
 
-if getattr(settings, 'DEBUG', False):  # Попробуйте получить DEBUG из настроек
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+if dev.DEBUG:
+    urlpatterns += static(base.MEDIA_URL, document_root=base.MEDIA_ROOT)
