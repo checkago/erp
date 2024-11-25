@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% load static %}
+{% load sass_tags %} {% block content %}
+    <div class="page-body">
+
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            {% include "layout/breadcrumb.html" %}
+
+            <div class="row effective-card height-equal">
+                {% for Branch in branches %}
+                    <div class="col-sm-6 col-xl-4">
+                        <div class="card common-hover">
+                            <div class="card-header b-l-primary border-3">
+                                <h5>{{ Branch.short_name }}</h5>
+                                <span class="text-primary">{{ Branch.full_name }}</span>
+                                <span class="text-secondary"><strong>Руководитель:</strong> {{ Branch.manager }}</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <span class="text-secondary"><strong>Адрес:</strong> {{ Branch.address }}</span>
+                                    <span class="text-secondary"><strong>Почта:</strong> {{ Branch.email }}</span>
+                                    <span class="text-primary"><strong>Телефон:</strong> {{ Branch.phone }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- Container-fluid Ends-->
+    </div>
+
+{% endblock %}
+
+{% block scriptcontent %}
+    <!-- Plugins JS Ends-->
+    <script src="{% static 'assets/js/tooltip-init.js' %}"></script>
+    <!-- Plugins JS Ends-->
+{% endblock %}

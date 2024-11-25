@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load sass_tags %}
+
+{% block css %}
+    <!-- Plugins css start-->
+    <link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/datatables.scss' %}">
+    <!-- Plugins css Ends-->
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-body">
+        <div class="container-fluid">
+            {% include "layout/breadcrumb.html" %}
+            <div class="row">
+
+                <!-- Zero Configuration  Starts-->
+                <div class="col-sm-12">
+                    <div class="card">
+                        <div class="card-header pb-0 card-no-border">
+                            <h3>Список сотрудников</h3><span>Вы можете осуществлять поиск по сотрудников по любому из указанных в таблице параметров, сортировать список по колонкам, а также выбирать количество выводимых записей</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="display border table-striped dataTable" id="basic-1">
+                                    <thead>
+                                    <tr class="text-primary">
+                                        <th></th>
+                                        <th>Сотрудник</th>
+                                        <th>Должность</th>
+                                        <th>Филиал</th>
+                                        <th>Статус</th>
+                                        <th>Email</th>
+                                        <th>Телефон</th>
+                                        <th>Отпуск</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for Employee in employees %}
+                                        <tr class="text-normal">
+                                            <th>{% if Employee.user.avatar %}<img src="{{ Employee.user.avatar.url }}"
+                                                                                  style="height: 35px">{% else %}{% endif %}
+                                            </th>
+                                            <th>{{ Employee }}</th>
+                                            <th>{{ Employee.position }}</th>
+                                            <th>{{ Employee.branch }}</th>
+                                            <th>{% if Employee.dismissed %}
+                                                <span class="badge rounded-pill badge-warning">Уволен</span>{% else %}
+                                                <span class="badge rounded-pill badge-success">Работает</span>{% endif %}
+                                            </th>
+                                            <th>{{ Employee.user.email }}</th>
+                                            <th>{% if Employee.phone %}{{ Employee.phone }}{% else %}
+                                                <span class="badge rounded-pill badge-warning">не указан</span>{% endif %}
+                                            </th>
+                                            <th>{% if Employee.vacancy %}
+                                                <span class="badge rounded-pill badge-info">В отпуске</span>{% else %}
+                                                {% endif %}
+                                            </th>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                    <tr class="text-primary">
+                                        <th></th>
+                                        <th>Сотрудник</th>
+                                        <th>Должность</th>
+                                        <th>Филиал</th>
+                                        <th>Статус</th>
+                                        <th>Email</th>
+                                        <th>Телефон</th>
+                                        <th>Отпуск</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Zero Configuration  Ends-->
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scriptcontent %}
+    <!-- Plugins JS start-->
+    <script src="{% static 'assets/js/datatable/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'assets/js/datatable/datatables/datatable.custom.js' %}"></script>
+    <script src="{% static 'assets/js/tooltip-init.js' %}"></script>
+
+    <!-- Plugins JS Ends-->
+{% endblock %}

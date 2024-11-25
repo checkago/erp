@@ -1,0 +1,76 @@
+version: "3"
+
+services:
+  db:
+    build:
+      context: ./docker/postgres
+      dockerfile: Dockerfile
+    environment:
+      - POSTGRES_USER=bib
+      - POSTGRES_PASSWORD=Bib5221144
+      - POSTGRES_DB=office
+    volumes:
+    - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+    - "5432:5432"
+    restart: always
+
+  web:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/usr/src/office
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    restart: always
+
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443-443"
+    depends_on:
+      - web
+    restart: always
+
+  redis-server:
+    image: redis:alpine
+    hostname: redis-server
+    restart: always
+
+  worker:
+    build:
+      context: .
+    hostname: worker
+    entrypoint: celery
+    command: -A ERP.celery worker -l info -E
+    volumes:
+      - ./service:/service
+    links:
+      - redis-server
+    depends_on:
+      - redis-server
+    restart: always
+
+  celery-beat:
+    build:
+      context: .
+    hostname: worker
+    entrypoint: celery
+    command: -A ERP.celery beat -l info
+    volumes:
+      - ./service:/service
+    links:
+      - redis-server
+    depends_on:
+      - redis-server
+    restart: always
+
+
+
+
