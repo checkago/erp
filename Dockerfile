@@ -18,9 +18,12 @@ RUN apk --update add \
     libjpeg \
     libwebp-dev \
     postgresql-dev \
-    g++ \  # Компилятор C++
-    make \  # Утилита make для сборки
-    musl-dev \  # Библиотека musl для Alpine Linux
+    g++ \
+    make \
+    musl-dev
+
+# Выполнение команды make, если она необходима
+RUN make  # или RUN make 64, если это требуется вашим Makefile
 
 RUN pip install --upgrade pip
 RUN pip --default-timeout=1200 install -r requirements.txt
