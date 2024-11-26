@@ -9,7 +9,7 @@ COPY requirements.txt .
 COPY entrypoint.sh .
 
 RUN apk --update add
-RUN apk add gcc libc-dev libffi-dev jpeg-dev zlib-dev libjpeg libwebp-dev g++
+RUN apk add gcc libc-dev libffi-dev jpeg-dev zlib-dev libjpeg libwebp-dev g++ make
 RUN apk add postgresql-dev
 
 RUN pip install --upgrade pip
