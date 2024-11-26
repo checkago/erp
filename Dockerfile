@@ -18,8 +18,6 @@ RUN apk --update add \
     libjpeg \
     libwebp-dev \
     postgresql-dev \
-    g++ \
-    make
 
 RUN pip install --upgrade pip
 RUN pip --default-timeout=1200 install -r requirements.txt
