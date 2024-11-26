@@ -1,5 +1,4 @@
-FROM python:3.10-slim  # Example using a Debian-based image
-
+FROM python:3.10-alpine
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
