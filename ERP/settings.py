@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 import environ
 import mimetypes
+mimetypes.add_type("text/css", ".css", True)
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
