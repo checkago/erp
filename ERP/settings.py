@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
+import environ
 import mimetypes
 from pathlib import Path
 
@@ -28,6 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.88.98', 'office.obs-balashiha.ru']
 
+
+env = environ.Env()
+environ.Env.read_env('.env')
 
 # Application definition
 
@@ -84,10 +88,47 @@ WSGI_APPLICATION = 'ERP.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env("POSTGRES_DB"),
+        'USER': env("POSTGRES_USER"),
+        'PASSWORD': env("POSTGRES_PASSWORD"),
+        'HOST': env("POSTGRES_HOST"),
+        'PORT': env("POSTGRES_PORT"),
+        'CONN_MAX_AGE': 60 * 10,  # 10 minutes
     }
 }
+
+
+# caches = {
+#     "default": {
+#         "backend": "django_redis.cache.rediscache",
+#         "location": "redis://redis-server:6379",
+#         "options": {
+#             "client_class": "django_redis.client.defaultclient",
+#         }
+#     }
+# }
+
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+]
+
+COMPRESS_JS_FILTERS = [
+    'compressor.filters.jsmin.JSMinFilter',
+]
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_CACHE_ALIAS = 'default'
+
+SESSION_COOKIE_AGE = 1209600  # Время жизни сессии в секундах (2 недели по умолчанию)
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+CELERY_BROKER_URL = 'redis://redis-server:6379'
+CELERY_RESULT_BACKEND = 'redis://redis-server:6379'
+CELERY_TIMEZONE = 'Europe/Moscow'
+USE_TZ = True
+CELERY_TASK_TRACK_STARTED = True
+CELERY_IMPORTS = ['web.tasks']
 
 
 # Password validation
