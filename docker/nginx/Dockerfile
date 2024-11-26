@@ -1,4 +1,4 @@
-FROM nginx
+FROM nginx:alpine
 
 #COPY fullchain.pem /etc/nginx/ssl/fullchain.pem
 #COPY privkey.pem /etc/nginx/ssl/privkey.pem

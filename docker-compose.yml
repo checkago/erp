@@ -33,7 +33,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
-      - "443-443"
     depends_on:
       - web
     restart: always
