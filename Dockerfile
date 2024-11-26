@@ -18,9 +18,7 @@ RUN apk --update add \
     libjpeg \
     libwebp-dev \
     postgresql-dev \
-    g++ \
-    make \
-    musl-dev
+    build-essential
 
 # Выполнение команды make, если она необходима
 RUN make  # или RUN make 64, если это требуется вашим Makefile
