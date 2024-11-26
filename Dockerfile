@@ -1,4 +1,5 @@
 FROM python:3.10-alpine
+
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
@@ -7,8 +8,8 @@ WORKDIR /usr/src/office
 COPY requirements.txt .
 COPY entrypoint.sh .
 
-# Установка необходимых пакетов и компиляторов, включая make
-RUN apt-get update && apt-get install -y \
+# Установка необходимых пакетов и компиляторов
+RUN apk --update add \
     gcc \
     libc-dev \
     libffi-dev \
@@ -18,7 +19,7 @@ RUN apt-get update && apt-get install -y \
     libwebp-dev \
     postgresql-dev \
     g++ \
-    make  # Add make to the list of packages
+    make
 
 # Выполнение команды make, если она необходима
 RUN make  # или RUN make 64, если это требуется вашим Makefile
