@@ -87,7 +87,7 @@ class Branch(models.Model):
     full_name = models.CharField(max_length=250, verbose_name='Полное наименование')
     short_name = models.CharField(max_length=150, verbose_name='Краткое наименование')
     manager = models.ForeignKey(Employee, verbose_name='Заведующий', related_name='branch_manager_set',
-                                on_delete=models.CASCADE, null=True)
+                                on_delete=models.CASCADE, null=True, blank=True)
     address = models.CharField(max_length=250, blank=True, verbose_name='Адрес юридический')
     mail_address = models.CharField(max_length=250, blank=True, verbose_name='Адрес почтовый')
     email = models.EmailField(max_length=250, blank=True, verbose_name='Email')
