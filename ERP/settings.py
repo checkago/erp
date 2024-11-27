@@ -12,12 +12,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 import environ
 import mimetypes
+
 mimetypes.add_type("text/css", ".css", True)
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -29,7 +29,6 @@ SECRET_KEY = 'django-insecure-%zeh278!iyh%*gfum_di436#vm_vs5j-j#(*$+#h!ctf4h%%3#
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.88.98', 'office.obs-balashiha.ru']
-
 
 env = environ.Env()
 environ.Env.read_env('.env')
@@ -82,7 +81,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ERP.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -139,7 +137,6 @@ USE_TZ = True
 CELERY_TASK_TRACK_STARTED = True
 CELERY_IMPORTS = ['web.tasks']
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -158,7 +155,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -172,6 +168,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+FIRST_DAY_OF_WEEK = 1
+DATE_INPUT_FORMATS = ['%d.%m.%Y', ]
+TIME_INPUT_FORMATS = ['%H:%M', ]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -186,7 +185,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'apps/static'
 
 SASS_PROCESSOR_ROOT = BASE_DIR / 'static'
-
 
 # Media files
 MEDIA_URL = '/media/'
