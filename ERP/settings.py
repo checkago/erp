@@ -186,6 +186,10 @@ STATIC_ROOT = BASE_DIR / 'apps/static'
 
 SASS_PROCESSOR_ROOT = BASE_DIR / 'static'
 
+STATICFILES_DIRS = (
+    (BASE_DIR / 'static'),
+)
+
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
