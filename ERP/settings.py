@@ -87,28 +87,36 @@ WSGI_APPLICATION = 'ERP.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': env("POSTGRES_DB"),
-        'USER': env("POSTGRES_USER"),
-        'PASSWORD': env("POSTGRES_PASSWORD"),
-        'HOST': env("POSTGRES_HOST"),
-        'PORT': env("POSTGRES_PORT"),
-        'CONN_MAX_AGE': 60 * 10,  # 10 minutes
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
-
-# caches = {
-#     "default": {
-#         "backend": "django_redis.cache.rediscache",
-#         "location": "redis://redis-server:6379",
-#         "options": {
-#             "client_class": "django_redis.client.defaultclient",
-#         }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': env("POSTGRES_DB"),
+#         'USER': env("POSTGRES_USER"),
+#         'PASSWORD': env("POSTGRES_PASSWORD"),
+#         'HOST': env("POSTGRES_HOST"),
+#         'PORT': env("POSTGRES_PORT"),
+#         'CONN_MAX_AGE': 60 * 10,  # 10 minutes
 #     }
 # }
+
+
+caches = {
+    "default": {
+        "backend": "django_redis.cache.rediscache",
+        "location": "redis://redis-server:6379",
+        "options": {
+            "client_class": "django_redis.client.defaultclient",
+        }
+    }
+}
 
 COMPRESS_CSS_FILTERS = [
     'compressor.filters.css_default.CssAbsoluteFilter',
