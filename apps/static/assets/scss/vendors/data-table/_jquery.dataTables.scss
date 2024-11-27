@@ -156,6 +156,7 @@ table.dataTable {
 	&.display tbody {
 		th, td {
 			border-top: $table-body-border;
+			font-weight: normal;
 		}
 
 		tr:first-child th,

@@ -1341,7 +1341,7 @@ table.dataTable {
 }
 table.dataTable thead th,
 table.dataTable tfoot th {
-  font-weight: bold;
+  font-weight: normal;
 }
 table.dataTable thead th,
 table.dataTable thead td {
@@ -1353,6 +1353,7 @@ table.dataTable thead td:active {
 }
 table.dataTable tfoot th,
 table.dataTable tfoot td {
+  font-weight: normal;
   padding: 10px 18px 6px 18px;
 }
 table.dataTable tbody tr {
