@@ -21,8 +21,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./:/usr/src/office
-      - ./:/usr/src/office/apps/static:/usr/src/web/apps/static
-      - ./:/usr/src/office/media:/usr/src/web/media
     ports:
       - "8080:8080"
     depends_on:
