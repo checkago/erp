@@ -19,5 +19,6 @@ RUN pip install --upgrade celery
 RUN chmod +x entrypoint.sh
 
 COPY . .
+RUN python manage.py collectstatic --noinput
 
 ENTRYPOINT ["sh", "/usr/src/office/entrypoint.sh"]
