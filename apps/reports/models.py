@@ -5,6 +5,7 @@ from django.db import models
 from apps.core.models import Branch
 
 
+#Массовые мероприятия
 class Event(models.Model):
     
     DN = 'Досуговое направление'
@@ -70,6 +71,7 @@ class Event(models.Model):
         return f"{self.date} {self.name} {self.direction}"
 
 
+#Показатели детской библиотеки
 class ChildLibrary(models.Model):
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
 
