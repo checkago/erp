@@ -75,5 +75,11 @@ class Event(models.Model):
 class ChildLibrary(models.Model):
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
 
+    class Meta:
+        verbose_name = 'Детская библиотека'
+        verbose_name_plural = 'Детские библиотеки'
+
+    def __str__(self):
+        return f"{self.library} {len(self.cafedra)}"
 
 

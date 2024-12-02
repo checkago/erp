@@ -104,6 +104,19 @@ class Branch(models.Model):
         return Employee.objects.filter(branch=self).order_by('user__last_name', 'user__first_name')
 
 
+class Cafedra(models.Model):
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека/Филиал',
+                                related_name='branch_set', null=True)
+    name = models.CharField(max_length=150, verbose_name='Название кафедры')
+
+    class Meta:
+        verbose_name = 'Кафедра'
+        verbose_name_plural = 'Кафедры'
+
+    def __str__(self):
+        return self.name
+
+
 class Notification(models.Model):
     FIRE = 'Срочно'
     SIMPLE = 'Внимание'
