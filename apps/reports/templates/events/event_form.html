@@ -1,0 +1,22 @@
+{% extends "base.html" %} {% load static %}
+{% load sass_tags %} {% block content %}
+    <div class="page-body">
+
+        <!-- Container-fluid starts-->
+        <div class="container-fluid">
+            {% include "layout/breadcrumb.html" %}
+
+            <div class="row effective-card height-equal">
+
+            </div>
+        </div>
+        <!-- Container-fluid Ends-->
+    </div>
+
+{% endblock %}
+
+{% block scriptcontent %}
+    <!-- Plugins JS Ends-->
+    <script src="{% static 'assets/js/tooltip-init.js' %}"></script>
+    <!-- Plugins JS Ends-->
+{% endblock %}

@@ -1,6 +1,13 @@
-from django.views.generic import CreateView, UpdateView, DetailView
+from django.views.generic import CreateView, UpdateView, DetailView, ListView
 from .models import Event
 from .forms import EventForm
+
+
+class EventListView(ListView):
+    model = Event
+    form_class = EventForm
+    template_name = 'events/events_list.html'
+    success_url = '/events/'  # URL to redirect after successful creation
 
 
 class EventCreateView(CreateView):
@@ -13,7 +20,7 @@ class EventCreateView(CreateView):
 class EventUpdateView(UpdateView):
     model = Event
     form_class = EventForm
-    template_name = 'events/event_form.html'
+    template_name = ''
     success_url = '/events/'  # URL to redirect after successful update
 
 

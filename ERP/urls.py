@@ -7,6 +7,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.core.urls')),
+    path('reports/', include('apps.reports.urls')),
 ]
 
 if settings.MEDIA_ROOT:
