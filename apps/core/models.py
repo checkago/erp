@@ -106,7 +106,7 @@ class Branch(models.Model):
 
 class Cafedra(models.Model):
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека/Филиал',
-                                related_name='branch_set', null=True)
+                                related_name='cafedra_set', null=True)
     name = models.CharField(max_length=150, verbose_name='Название кафедры')
 
     class Meta:

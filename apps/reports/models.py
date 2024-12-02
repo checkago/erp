@@ -40,12 +40,12 @@ class Event(models.Model):
 
     CHILD = 'Дети'
     ADULT = 'Взрослые'
-    OTHER = 'Пожилые/Прочие'
+    OTHER = 'Прочие'
 
     age_CHOICES = (
         (CHILD, 'Дети'),
         (ADULT, 'Взрослые'),
-        (OTHER, 'Пожилые/Прочие'),
+        (OTHER, 'Прочие'),
     )
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
     name = models.CharField(max_length=250, verbose_name='Название мероприятия')
@@ -72,7 +72,18 @@ class Event(models.Model):
 
 
 #Показатели детской библиотеки
-class ChildLibrary(models.Model):
+class ChildLibraryVisitingReport(models.Model):
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
+
+    class Meta:
+        verbose_name = 'Детская библиотека'
+        verbose_name_plural = 'Детские библиотеки'
+
+    def __str__(self):
+        return f"{self.library} {len(self.cafedra)}"
+
+
+class ChildLibraryBooksReport(models.Model):
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
 
     class Meta:
