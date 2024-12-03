@@ -77,12 +77,13 @@ class ChildVisitReport(models.Model):
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
     date = models.DateField(null=True, verbose_name='Дата отчета')
     qty = models.IntegerField(default=0, verbose_name='Количество')
+
     class Meta:
         verbose_name = 'Отчет посещений по детской библиотеке'
         verbose_name_plural = 'Отчеты посещений по детским библиотекам'
 
     def __str__(self):
-        return f"{self.library} {len(self.cafedra)}"
+        return f"{self.library}"
 
 
 class ChildBookReport(models.Model):
@@ -95,7 +96,7 @@ class ChildBookReport(models.Model):
         verbose_name_plural = 'Отчеты книговыдачи детским библиотекам'
 
     def __str__(self):
-        return f"{self.library} {len(self.cafedra)}"
+        return f"{self.library}"
 
 
 class AdultVisitReport(models.Model):
@@ -108,7 +109,7 @@ class AdultVisitReport(models.Model):
         verbose_name_plural = 'Отчеты посещений взрослых библиотек'
 
     def __str__(self):
-        return f"{self.library} {len(self.cafedra)}"
+        return f"{self.library}"
 
 
 class AdultBookReport(models.Model):
@@ -121,6 +122,6 @@ class AdultBookReport(models.Model):
         verbose_name_plural = 'Отчеты книговыдачи по взрослым библиотекам'
 
     def __str__(self):
-        return f"{self.library} {len(self.cafedra)}"
+        return f"{self.library}"
 
 
