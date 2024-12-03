@@ -1,6 +1,6 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DetailView, ListView, TemplateView
+from django.views.generic import CreateView, UpdateView, ListView, TemplateView
 from .models import Event, AdultVisitReport, AdultBookReport, ChildVisitReport, ChildBookReport
 from .forms import EventForm
 from ..core.models import Employee, Cafedra
@@ -16,7 +16,20 @@ class DiaryView(TemplateView):
         context['childvisitreport'] = ChildVisitReport.objects.all()
         context['childvisitreport'] = ChildBookReport.objects.all()
         context['events'] = Event.objects.all()  # Получаем все события
+        context['form'] = EventForm()  # Получаем пустую форму для создания Event
         return context
+
+    def post(self, request, *args, **kwargs):
+        form = EventForm(request.POST)
+        if form.is_valid():
+            # Получаем библиотеку текущего пользователя
+            user = request.user
+            employee = get_object_or_404(Employee, user=user)
+            event = form.save(commit=False)
+            event.library = employee.branch  # Устанавливаем библиотеку
+            event.save()
+            return redirect(reverse_lazy('diary'))  # Перенаправление на ту же страницу или на другую
+        return self.render_to_response({'form': form})
 
 
 class EventListView(ListView):
