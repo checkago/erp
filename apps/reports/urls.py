@@ -2,13 +2,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
-from .views import EventCreateView, EventUpdateView, EventDetailView, EventListView
+from .views import EventCreateView, EventUpdateView, EventListView, DiaryView
 
 urlpatterns = [
-    path('events/', EventListView.as_view(), name='event_list'),
+    path('diary/', DiaryView.as_view(), name='diary'),
+    path('events/', EventListView.as_view(), name='events_list'),
     path('events/create/', EventCreateView.as_view(), name='event_create'),
     path('events/<pk>/update/', EventUpdateView.as_view(), name='event_update'),
-    path('events/<pk>/', EventDetailView.as_view(), name='event_detail'),
 ]
 
 

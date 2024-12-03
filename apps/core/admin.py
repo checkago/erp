@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils import timezone
 from datetime import datetime, date
 
-from .models import ErpUser, Position, Employee, Organization, Branch, Notification
+from .models import ErpUser, Position, Employee, Organization, Branch, Notification, Cafedra
 
 
 class ErpUserAdmin(BaseUserAdmin):
@@ -63,6 +63,11 @@ class BranchAdmin(admin.ModelAdmin):
     list_filter = ('organization', 'manager')
 
 
+class CafedraAdmin(admin.ModelAdmin):
+    list_display = ('name', 'library')
+    list_filter = ('library',)
+
+
 class NotificationAdmin(admin.ModelAdmin):
     list_display = ('title', 'importance', 'date', 'days', 'active')
     list_filter = ('importance', 'date', 'active')
@@ -87,4 +92,5 @@ admin.site.register(Position, PositionAdmin)
 admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Branch, BranchAdmin)
+admin.site.register(Cafedra, CafedraAdmin)
 admin.site.register(Notification, NotificationAdmin)

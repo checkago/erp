@@ -103,6 +103,9 @@ class Branch(models.Model):
     def get_employees(self):
         return Employee.objects.filter(branch=self).order_by('user__last_name', 'user__first_name')
 
+    def get_cafedra_set(self):
+        return Cafedra.objects.filter(branch=self).order_by('name')
+
 
 class Cafedra(models.Model):
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека/Филиал',

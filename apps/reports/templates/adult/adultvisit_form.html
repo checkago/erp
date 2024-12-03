@@ -7,7 +7,11 @@
             {% include "layout/breadcrumb.html" %}
 
             <div class="row effective-card height-equal">
-
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Создать мероприятие</button>
+                </form>
             </div>
         </div>
         <!-- Container-fluid Ends-->

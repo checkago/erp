@@ -2,7 +2,7 @@ import datetime
 
 from django.db import models
 
-from apps.core.models import Branch
+from apps.core.models import Branch, Cafedra
 
 
 #Массовые мероприятия
@@ -48,6 +48,7 @@ class Event(models.Model):
         (OTHER, 'Прочие'),
     )
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
+    cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
     name = models.CharField(max_length=250, verbose_name='Название мероприятия')
     date = models.DateTimeField(verbose_name='Дата проведения')
     direction = models.CharField(max_length=150, choices=direction_CHOICES, default=IPN,
@@ -72,23 +73,52 @@ class Event(models.Model):
 
 
 #Показатели детской библиотеки
-class ChildLibraryVisitingReport(models.Model):
+class ChildVisitReport(models.Model):
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
-
+    date = models.DateField(null=True, verbose_name='Дата отчета')
+    qty = models.IntegerField(default=0, verbose_name='Количество')
     class Meta:
-        verbose_name = 'Детская библиотека'
-        verbose_name_plural = 'Детские библиотеки'
+        verbose_name = 'Отчет посещений по детской библиотеке'
+        verbose_name_plural = 'Отчеты посещений по детским библиотекам'
 
     def __str__(self):
         return f"{self.library} {len(self.cafedra)}"
 
 
-class ChildLibraryBooksReport(models.Model):
+class ChildBookReport(models.Model):
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
+    date = models.DateField(null=True, verbose_name='Дата отчета')
+    qty = models.IntegerField(default=0, verbose_name='Количество')
 
     class Meta:
-        verbose_name = 'Детская библиотека'
-        verbose_name_plural = 'Детские библиотеки'
+        verbose_name = 'Отчет книговыдачи по детской библиотеке'
+        verbose_name_plural = 'Отчеты книговыдачи детским библиотекам'
+
+    def __str__(self):
+        return f"{self.library} {len(self.cafedra)}"
+
+
+class AdultVisitReport(models.Model):
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
+    date = models.DateField(null=True, verbose_name='Дата отчета')
+    qty = models.IntegerField(default=0, verbose_name='Количество')
+
+    class Meta:
+        verbose_name = 'Отчет посещений по взрослой библиотеке'
+        verbose_name_plural = 'Отчеты посещений взрослых библиотек'
+
+    def __str__(self):
+        return f"{self.library} {len(self.cafedra)}"
+
+
+class AdultBookReport(models.Model):
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
+    date = models.DateField(null=True, verbose_name='Дата отчета')
+    qty = models.IntegerField(default=0, verbose_name='Количество')
+
+    class Meta:
+        verbose_name = 'Отчет книговыдачи по взрослой библиотеке'
+        verbose_name_plural = 'Отчеты книговыдачи по взрослым библиотекам'
 
     def __str__(self):
         return f"{self.library} {len(self.cafedra)}"
