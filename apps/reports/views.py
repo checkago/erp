@@ -28,7 +28,7 @@ class DiaryView(LoginRequiredMixin, CachedViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['breadcrumb'] = {"parent": "Главная", "child": "Дневник"}
+        context['breadcrumb'] = {"parent": "Отчеты", "child": "Дневник"}
         context['adultvisitreport'] = AdultVisitReport.objects.all()
         context['adultvisitreport'] = AdultBookReport.objects.all()
         context['childvisitreport'] = ChildVisitReport.objects.all()
@@ -48,7 +48,7 @@ class EventListView(LoginRequiredMixin, CachedViewMixin, TemplateView):
         employee = Employee.objects.get(user=user)
         date_15_days_ago = timezone.now() - timedelta(days=15)
         context['events'] = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('-date')
-        context['breadcrumb'] = {"parent": "Главная", "child": "Мероприятия"}
+        context['breadcrumb'] = {"parent": "Дневник", "child": "Мероприятия"}
         context['form'] = EventForm(user=user)  # Создаем пустую форму для отображения с фильтрацией кафедр
         return context
 
