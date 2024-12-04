@@ -23,8 +23,6 @@ class CachedViewMixin:
         return cache_page(60 * 5)(view)
 
 
-@login_required(login_url="/login_home")
-@cache_page(60 * 5)
 class DiaryView(LoginRequiredMixin, CachedViewMixin, TemplateView):
     template_name = 'diary.html'  # Укажите путь к вашему шаблону
 
@@ -39,8 +37,6 @@ class DiaryView(LoginRequiredMixin, CachedViewMixin, TemplateView):
         return context
 
 
-@login_required(login_url="/login_home")
-@cache_page(60 * 5)
 class EventListView(LoginRequiredMixin, CachedViewMixin, TemplateView):
     template_name = 'events/events_list.html'
     context_object_name = 'events_list'
@@ -67,8 +63,6 @@ class EventListView(LoginRequiredMixin, CachedViewMixin, TemplateView):
             return self.render_to_response(context)
 
 
-@login_required(login_url="/login_home")
-@cache_page(60 * 5)
 class EventUpdateView(LoginRequiredMixin, CachedViewMixin, UpdateView):
     model = Event
     form_class = EventForm
