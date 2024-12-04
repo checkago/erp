@@ -1,13 +1,16 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from datetime import timedelta
 from django.urls import reverse_lazy
+from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, UpdateView, ListView, TemplateView
 from .models import Event, AdultVisitReport, AdultBookReport, ChildVisitReport, ChildBookReport
 from .forms import EventForm
 from ..core.models import Employee, Cafedra
 
-
+@login_required(login_url="/login_home")
+@cache_page(60 * 5)
 class DiaryView(TemplateView):
     template_name = 'diary.html'  # Укажите путь к вашему шаблону
 
@@ -21,7 +24,8 @@ class DiaryView(TemplateView):
         context['form'] = EventForm()
         return context
 
-
+@login_required(login_url="/login_home")
+@cache_page(60 * 5)
 class EventListView(TemplateView):
     template_name = 'events/events_list.html'
     context_object_name = 'events_list'
@@ -47,7 +51,8 @@ class EventListView(TemplateView):
             context = self.get_context_data(form=form)
             return self.render_to_response(context)
 
-
+@login_required(login_url="/login_home")
+@cache_page(60 * 5)
 class EventUpdateView(UpdateView):
     model = Event
     form_class = EventForm
