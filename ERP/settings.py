@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'apps.core',
-    'apps.reports',
+
     'widget_tweaks',
     'sass_processor',
 ]
