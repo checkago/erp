@@ -43,18 +43,18 @@ class EventListView(LoginRequiredMixin, CachedViewMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
         date_15_days_ago = timezone.now() - timedelta(days=15)
-        context['events'] = Event.objects.filter(date__gte=date_15_days_ago).order_by('-date')
-        context['form'] = EventForm()  # Создаем пустую форму для отображения
+        context['events'] = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('-date')
+        context['form'] = EventForm(user=user)  # Создаем пустую форму для отображения с фильтрацией кафедр
         return context
 
     def post(self, request, *args, **kwargs):
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, user=request.user)
         if form.is_valid():
-            user = request.user
-            employee = get_object_or_404(Employee, user=user)
             event_instance = form.save(commit=False)
-            event_instance.library = employee.branch  # Устанавливаем библиотеку
+            event_instance.library = Employee.objects.get(user=request.user).branch  # Устанавливаем библиотеку
             event_instance.save()
             return redirect(reverse_lazy('events_list'))  # Перенаправление на список событий после успешного сохранения
         else:

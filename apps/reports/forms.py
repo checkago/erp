@@ -1,5 +1,6 @@
 from django import forms
 from .models import Event
+from ..core.models import Employee, Cafedra
 
 
 class EventForm(forms.ModelForm):
@@ -30,4 +31,8 @@ class EventForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+        if user:
+            employee = Employee.objects.get(user=user)
+            self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
