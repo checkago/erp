@@ -4,6 +4,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 from .views import EventListView, DiaryView
 
+
 urlpatterns = [
     path('diary/', DiaryView.as_view(), name='diary'),
     path('events/', EventListView.as_view(), name='events_list'),
