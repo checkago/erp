@@ -38,30 +38,29 @@ class Event(models.Model):
         (EP, 'Экологическое просвещение')
     )
 
-    CHILD = 'Дети'
-    ADULT = 'Взрослые'
+    KRUJKI = 'Кружки'
+    AD = 'Активное долголетие'
     OTHER = 'Прочие'
 
     age_CHOICES = (
-        (CHILD, 'Дети'),
-        (ADULT, 'Взрослые'),
+        (KRUJKI, 'Кружки'),
+        (AD, 'Активное долголетие'),
         (OTHER, 'Прочие'),
     )
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
     cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
     name = models.CharField(max_length=250, verbose_name='Название мероприятия')
-    date = models.DateTimeField(verbose_name='Дата проведения')
+    date = models.DateField(verbose_name='Дата проведения')
     direction = models.CharField(max_length=150, choices=direction_CHOICES, default=IPN,
                                   verbose_name='Направление')
     quantity = models.IntegerField(default=0, verbose_name='Количество мероприятий')
-    age_group = models.CharField(max_length=150, choices=age_CHOICES, default=ADULT,
-                                 verbose_name='Возрастная группа')
     age_14 = models.IntegerField(default=0, verbose_name='До 14')
     age_35 = models.IntegerField(default=0, verbose_name='До 35')
-    age_54 = models.IntegerField(default=0, verbose_name='До 55')
-    age_other = models.IntegerField(default=0, verbose_name='После 55 и другие')
+    age_other = models.IntegerField(default=0, verbose_name='После 35 и другие')
     invalids = models.IntegerField(default=0, verbose_name='Инвалиды')
     out_of_station = models.IntegerField(default=0, verbose_name='Внестационар')
+    as_part = models.CharField(max_length=150, choices=age_CHOICES, default=KRUJKI,
+                                 verbose_name='В рамках')
     note = models.TextField(verbose_name='Примечание', blank=True)
 
     class Meta:

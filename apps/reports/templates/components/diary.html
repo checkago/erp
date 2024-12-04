@@ -2,7 +2,7 @@
 <div class="container-fluid email-wrap bookmark-wrap todo-wrap">
     <div class="row">
       <div class="col-xl-3 xl-30 box-col-12">
-        <div class="email-sidebar md-sidebar"><a class="btn btn-primary email-aside-toggle md-sidebar-toggle">To Do filter</a>
+        <div class="email-sidebar md-sidebar">
           <div class="email-left-aside md-sidebar-aside">
             <div class="card"> 
               <div class="card-header">
@@ -40,34 +40,12 @@
             <div class="todo">
               <div class="todo-list-wrapper">
                 <div class="todo-list-container">
-                  <div class="mark-all-tasks">
-                    <div class="mark-all-tasks-container"><span class="btn-label text-danger">Добавить сегодняшний отчет по: </span></div>
-                    <div class="todo-list-footer ms-2">
-                      <div class="add-task-btn-wrapper">
-                            <button class="btn btn-primary"><i class="icon-plus"></i> Посещения</button>
-                            <button class="btn btn-primary"><i class="icon-plus"></i> Книговыдача</button>
-                          <a href="{% url 'event_create' %}"><button class="btn btn-primary"><i class="icon-plus"></i> Мероприятия</button></a>
-                      </div>
-                    </div>
-                  </div>
                   <div class="todo-list-body">
                     <div class="todo-list-footer"> 
                       <div class="new-task-wrapper mb-4">
                         <textarea id="new-task" placeholder="Enter new task here. . ."></textarea><span class="btn btn-danger cancel-btn" id="close-task-panel">Close</span><span class="btn btn-success ms-3 add-new-task-btn" id="add-task">Add Task</span>
                       </div>
                     </div>
-                    <ul id="todo-list">
-                        {% for Event in events %}
-                      <li class="task">
-                        <div class="task-container">
-                          <h5 class="task-label">{{ Event.date }}</h5>
-                          <h5 class="task-label">{{ Event.name }}</h5>
-                          <h5 class="task-label">{{ Event.age_14 }}</h5>
-                          <h5 class="task-label">{{ Event.age_35 }}</h5>
-                        </div>
-                      </li>
-                        {% endfor %}
-                    </ul>
                     <ul id="todo-list">
                         {% for Event in events %}
                       <li class="task">
@@ -109,6 +87,42 @@
             </script>
           </div>
         </div>
+      </div>
+      <div class="box-col-12">
+          <div class="card">
+              <div class="card-body">
+                  <div class="row">
+                      <div class="col-4">
+
+                      </div>
+                      <div class="col-4">
+
+                      </div>
+                      <div class="col-4 table-responsive signal-table">
+                          <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Дата</th>
+                                  <th scope="col">Название</th>
+                                  <th scope="col">Направление</th>
+                                  <th scope="col">Количество</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {% for Event in events %}
+                                <tr>
+                                  <th scope="col">{{ Event.date }}</th>
+                                  <th scope="col">{{ Event.name }}</th>
+                                  <th scope="col">{{ Event.direction }}</th>
+                                  <th scope="col">{{ Event.qty }}</th>
+                                </tr>
+                                {% endfor %}
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
     </div>
   </div>

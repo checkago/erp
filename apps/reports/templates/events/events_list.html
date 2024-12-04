@@ -14,16 +14,15 @@
 <div class="page-body">
       {% include "layout/breadcrumb.html" %}
 
-     
-            {% include "events/components/main_events.html" %}
+     {% include "events/components/events_list_form.html" %}
 
-      
 </div>
 
 {% endblock %}
 
 {% block scriptcontent %}
 <!-- Plugins JS start-->
-<script src="{% static 'assets/js/todo/todo.js'%}"></script>
+    <script src="{% static 'assets/js/todo/todo.js'%}"></script>
+    <script src="{% static 'assets/js/todo/todo.js'%}"></script>
 <!-- Plugins JS Ends-->
 {% endblock %}

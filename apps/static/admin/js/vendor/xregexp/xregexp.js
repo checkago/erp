@@ -47,7 +47,7 @@ var _default = function _default(XRegExp) {
    *   `\p{^..}`. Token names ignore case, spaces, hyphens, and underscores. You can omit the
    *   braces for token names that are a single letter (e.g. `\pL` or `PL`).
    * - Adds flag A (astral), which enables 21-bit Unicode support.
-   * - Adds the `XRegExp.addUnicodeData` method used by others addons to provide character data.
+   * - Adds the `XRegExp.addUnicodeData` method used by other addons to provide character data.
    *
    * Unicode Base relies on externally provided Unicode character data. Official addons are
    * available to provide data for Unicode categories, scripts, and properties.
@@ -1151,7 +1151,7 @@ XRegExp._pad4 = pad4;
  *     not required to trigger the token. This registers the flags, to prevent XRegExp from
  *     throwing an 'unknown flag' error when any of the flags are used.
  *   - `reparse` {Boolean} Whether the `handler` function's output should not be treated as
- *     final, and instead be reparseable by others tokens (including the current token). Allows
+ *     final, and instead be reparseable by other tokens (including the current token). Allows
  *     token chaining or deferring.
  *   - `leadChar` {String} Single character that occurs at the beginning of any successful match
  *     of the token (not always applicable). This doesn't change the behavior of the token unless
@@ -1382,7 +1382,7 @@ XRegExp.exec = function (str, regex, pos, sticky) {
  *   - The regex object being used to traverse the string.
  * @example
  *
- * // Extracts every others digit from a string
+ * // Extracts every other digit from a string
  * const evens = [];
  * XRegExp.forEach('1a2345', /\d/, (match, i) => {
  *   if (i % 2) evens.push(+match[0]);
@@ -2241,7 +2241,7 @@ fixed.split = function (separator, limit) {
   // If 0, Infinity, or NaN: 0
   // If positive number: limit = floor(limit); if (limit >= pow(2,32)) limit -= pow(2,32);
   // If negative number: pow(2,32) - floor(abs(limit))
-  // If others: Type-convert, then use the above rules
+  // If other: Type-convert, then use the above rules
   // This line fails in very strange ways for some values of `limit` in Opera 10.5-10.63, unless
   // Opera Dragonfly is open (go figure). It works in at least Opera 9.5-10.1 and 11+
 

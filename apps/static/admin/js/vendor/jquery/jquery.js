@@ -2,7 +2,7 @@
  * jQuery JavaScript Library v3.7.1
  * https://jquery.com/
  *
- * Copyright OpenJS Foundation and others contributors
+ * Copyright OpenJS Foundation and other contributors
  * Released under the MIT license
  * https://jquery.org/license
  *
@@ -113,7 +113,7 @@ var document = window.document;
 
 				// Support: Firefox 64+, Edge 18+
 				// Some browsers don't support the "nonce" property on scripts.
-				// On the others hand, just using `getAttribute` is not enough as
+				// On the other hand, just using `getAttribute` is not enough as
 				// the `nonce` attribute is reset to an empty string whenever it
 				// becomes browsing-context connected.
 				// See https://github.com/whatwg/html/issues/2369
@@ -528,7 +528,7 @@ jQuery.extend( {
 	// A global GUID counter for objects
 	guid: 1,
 
-	// jQuery.support is not used in Core but others projects attach their
+	// jQuery.support is not used in Core but other projects attach their
 	// properties to it so it needs to exist.
 	support: support
 } );
@@ -1592,7 +1592,7 @@ Expr = jQuery.expr = {
 				);
 				match[ 5 ] = +( ( match[ 7 ] + match[ 8 ] ) || match[ 3 ] === "odd" );
 
-			// others types prohibit arguments
+			// other types prohibit arguments
 			} else if ( match[ 3 ] ) {
 				find.error( match[ 0 ] );
 			}
@@ -2691,7 +2691,7 @@ support.sortStable = expando.split( "" ).sort( sortOrder ).join( "" ) === expand
 setDocument();
 
 // Support: Android <=4.0 - 4.1+
-// Detached nodes confoundingly follow *each others*
+// Detached nodes confoundingly follow *each other*
 support.sortDetached = assert( function( el ) {
 
 	// Should return 1, but returns 4 (following)
@@ -3533,7 +3533,7 @@ jQuery.extend( {
 											);
 										}
 
-									// Handle all others returned values
+									// Handle all other returned values
 									} else {
 
 										// Only substitute handlers pass on context
@@ -4678,7 +4678,7 @@ var wrapMap = {
 
 	// XHTML parsers do not magically insert elements in the
 	// same way that tag soup parsers do. So we cannot shorten
-	// this by omitting <tbody> or others required elements.
+	// this by omitting <tbody> or other required elements.
 	thead: [ 1, "<table>", "</table>" ],
 	col: [ 2, "<table><colgroup>", "</colgroup></table>" ],
 	tr: [ 2, "<table><tbody>", "</tbody></table>" ],
@@ -5324,7 +5324,7 @@ jQuery.event = {
 // Ensure the presence of an event listener that handles manually-triggered
 // synthetic events by interrupting progress until reinvoked in response to
 // *native* events that it fires directly, ensuring that state changes have
-// already occurred before others listeners are invoked.
+// already occurred before other listeners are invoked.
 function leverageNative( el, type, isSetup ) {
 
 	// Missing `isSetup` indicates a trigger call, which must force setup through jQuery.event.add
@@ -5544,7 +5544,7 @@ jQuery.each( { focus: "focusin", blur: "focusout" }, function( type, delegateTyp
 			// Support: IE 11+
 			// Attach a single focusin/focusout handler on the document while someone wants
 			// focus/blur. This is because the former are synchronous in IE while the latter
-			// are async. In others browsers, all those handlers are invoked synchronously.
+			// are async. In other browsers, all those handlers are invoked synchronously.
 
 			// `handle` from private data would already wrap the event, but we need
 			// to change the `type` here.
@@ -7258,7 +7258,7 @@ function defaultPrefilter( elem, props, opts ) {
 				if ( value === "show" && dataShow && dataShow[ prop ] !== undefined ) {
 					hidden = true;
 
-				// Ignore all others no-op show/hide data
+				// Ignore all other no-op show/hide data
 				} else {
 					continue;
 				}
@@ -10660,7 +10660,7 @@ jQuery.trim = function( text ) {
 
 
 
-// Register as a named AMD module, since jQuery can be concatenated with others
+// Register as a named AMD module, since jQuery can be concatenated with other
 // files that may use define, but not via a proper concatenation script that
 // understands anonymous AMD modules. A named AMD is safest and most robust
 // way to register. Lowercase jquery is used because AMD module names are

@@ -155,7 +155,7 @@
         // if downcode doesn't hit, the char will be stripped here
         if (allowUnicode) {
             // Keep Unicode letters including both lowercase and uppercase
-            // characters, whitespace, and dash; remove others characters.
+            // characters, whitespace, and dash; remove other characters.
             s = XRegExp.replace(s, XRegExp('[^-_\\p{L}\\p{N}\\s]', 'g'), '');
         } else {
             s = s.replace(/[^-\w\s]/g, ''); // remove unneeded chars
