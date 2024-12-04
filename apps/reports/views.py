@@ -9,9 +9,23 @@ from .models import Event, AdultVisitReport, AdultBookReport, ChildVisitReport, 
 from .forms import EventForm
 from ..core.models import Employee, Cafedra
 
+
+class LoginRequiredMixin:
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super().as_view(**initkwargs)
+        return login_required(view)
+
+class CachedViewMixin:
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super().as_view(**initkwargs)
+        return cache_page(60 * 5)(view)
+
+
 @login_required(login_url="/login_home")
 @cache_page(60 * 5)
-class DiaryView(TemplateView):
+class DiaryView(LoginRequiredMixin, CachedViewMixin, TemplateView):
     template_name = 'diary.html'  # Укажите путь к вашему шаблону
 
     def get_context_data(self, **kwargs):
@@ -24,9 +38,10 @@ class DiaryView(TemplateView):
         context['form'] = EventForm()
         return context
 
+
 @login_required(login_url="/login_home")
 @cache_page(60 * 5)
-class EventListView(TemplateView):
+class EventListView(LoginRequiredMixin, CachedViewMixin, TemplateView):
     template_name = 'events/events_list.html'
     context_object_name = 'events_list'
 
@@ -51,9 +66,10 @@ class EventListView(TemplateView):
             context = self.get_context_data(form=form)
             return self.render_to_response(context)
 
+
 @login_required(login_url="/login_home")
 @cache_page(60 * 5)
-class EventUpdateView(UpdateView):
+class EventUpdateView(LoginRequiredMixin, CachedViewMixin, UpdateView):
     model = Event
     form_class = EventForm
     template_name = ''
