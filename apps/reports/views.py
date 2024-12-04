@@ -16,6 +16,7 @@ class LoginRequiredMixin:
         view = super().as_view(**initkwargs)
         return login_required(view)
 
+
 class CachedViewMixin:
     @classmethod
     def as_view(cls, **initkwargs):
@@ -23,7 +24,7 @@ class CachedViewMixin:
         return cache_page(60 * 5)(view)
 
 
-class DiaryView(LoginRequiredMixin, CachedViewMixin, TemplateView):
+class DiaryView(LoginRequiredMixin, TemplateView):
     template_name = 'diary.html'  # Укажите путь к вашему шаблону
 
     def get_context_data(self, **kwargs):
@@ -38,7 +39,7 @@ class DiaryView(LoginRequiredMixin, CachedViewMixin, TemplateView):
         return context
 
 
-class EventListView(LoginRequiredMixin, CachedViewMixin, TemplateView):
+class EventListView(LoginRequiredMixin, TemplateView):
     template_name = 'events/events_list.html'
     context_object_name = 'events_list'
 
