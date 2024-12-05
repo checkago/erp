@@ -123,6 +123,7 @@
                                 <th>До 35</th>
                                 <th>Прочие</th>
                                 <th>В рамках</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -134,6 +135,16 @@
                                 <th>{{ Event.age_35}}</th>
                                 <th>{{ Event.age_other}}</th>
                                 <th>{{ Event.as_part}}</th>
+                                <th class="float-end">
+                                    <button type="button" class="btn text-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editEventModal"
+                                            data-id="{{ event.id }}"
+                                            data-name="{{ event.name }}"
+                                            data-date="{{ event.date|date:'Y-m-d' }}">
+                                        <i data-feather="edit"></i>
+                                    </button>
+                                </th>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -144,3 +155,92 @@
       </div>
     </div>
   </div>
+
+<div class="modal fade" id="editEventModal" tabindex="-1" aria-labelledby="editEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editEventModalLabel">Редактировать запись о мероприятии</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" class="theme-form">
+                        {% csrf_token %}
+
+                        <div class="row mb-3 g-3">
+                            <div class="col-md-2">
+                                <label for="id_cafedra" class="form-label">Кафедра</label>
+                                {{ form.cafedra }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_date" class="form-label">Дата</label>
+                                {{ form.date }}
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="id_name" class="form-label">Название события</label>
+                                {{ form.name }}
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="id_direction" class="form-label">Направление</label>
+                                {{ form.direction }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_quantity" class="form-label">Кол. мероприятий</label>
+                                {{ form.quantity }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_age_14" class="form-label">До 14 лет</label>
+                                {{ form.age_14 }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_age_35" class="form-label">До 35 лет</label>
+                                {{ form.age_35 }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_age_other" class="form-label">Прочие</label>
+                                {{ form.age_other }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_invalids" class="form-label">Инвалиды</label>
+                                {{ form.invalids }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_out_of_station" class="form-label">Внестационар</label>
+                                {{ form.out_of_station }}
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="id_as_part" class="form-label">В рамках</label>
+                                {{ form.as_part }}
+                            </div>
+                            <div class="col-md-1">
+                                <label for="id_paid" class="form-check-label">Платное</label>
+                                {{ form.paid }}
+                            </div>
+
+                            <!-- Поле заметки и кнопка отправки в одном ряду -->
+                            <div class='col-md-8'>
+                                <label for='id_note' class='form-label'>Примечание</label>
+                                {{ form.note }}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" form="editEventForm" class="btn btn-primary">Сохранить изменения</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

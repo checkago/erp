@@ -24,5 +24,21 @@
 <!-- Plugins JS start-->
     <script src="{% static 'assets/js/todo/todo.js'%}"></script>
     <script src="{% static 'assets/js/todo/todo.js'%}"></script>
+
+    <script>
+    // Обработчик события для открытия модального окна и заполнения формы данными события
+    $('#editEventModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Кнопка, которая открывает модальное окно
+        var id = button.data('id'); // Извлекаем данные ID события
+        var name = button.data('name'); // Извлекаем название события
+        var date = button.data('date'); // Извлекаем дату события
+
+        // Заполняем поля формы данными события
+        var modal = $(this);
+        modal.find('#event_id').val(id); // Устанавливаем ID события в скрытое поле
+        modal.find('[name="name"]').val(name); // Устанавливаем название события
+        modal.find('[name="date"]').val(date); // Устанавливаем дату события
+    });
+    </script>
 <!-- Plugins JS Ends-->
 {% endblock %}

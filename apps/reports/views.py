@@ -54,21 +54,32 @@ class EventListView(LoginRequiredMixin, TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
+        if 'event_id' in request.POST:
+            # Обработка обновления события
+            event_id = request.POST['event_id']
+            event_instance = get_object_or_404(Event, id=event_id)
+
+            form = EventForm(request.POST, instance=event_instance, user=request.user)
+
+            if form.is_valid():
+                form.save()
+                return redirect(
+                    reverse_lazy('events_list'))  # Перенаправление на список событий после успешного обновления
+
+        # Обработка создания нового события
         form = EventForm(request.POST, user=request.user)
+
         if form.is_valid():
             event_instance = form.save(commit=False)
             event_instance.library = Employee.objects.get(user=request.user).branch  # Устанавливаем библиотеку
             event_instance.save()
             return redirect(reverse_lazy('events_list'))  # Перенаправление на список событий после успешного сохранения
+
         else:
             # Если форма не валидна, возвращаем контекст с ошибками
             context = self.get_context_data(form=form)
             return self.render_to_response(context)
 
-
-class EventUpdateView(LoginRequiredMixin, CachedViewMixin, UpdateView):
-    model = Event
-    form_class = EventForm
-    template_name = ''
-    success_url = '/events/'  # URL to redirect after successful update
+    def get_event(self, event_id):
+        return get_object_or_404(Event, id=event_id)
 
