@@ -26,50 +26,41 @@
     <script src="{% static 'assets/js/todo/todo.js'%}"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var editEventModal = document.getElementById('editEventModal');
+// jQuery для передачи данных в модальное окно
+$(document).ready(function() {
+    $('.open-modal').on('click', function() {
+        var id = $(this).data('id');
+        var cafedra = $(this).data('cafedra');
+        var name = $(this).data('name');
+        var date = $(this).data('date');
+        var direction = $(this).data('direction');
+        var quantity = $(this).data('quantity');
+        var age_14 = $(this).data('age_14');
+        var age_35 = $(this).data('age_35');
+        var age_other = $(this).data('age_other');
+        var invalids = $(this).data('invalids');
+        var out_of_station = $(this).data('out_of_station');
+        var as_part = $(this).data('as_part');
+        var paid = $(this).data('paid') === 'true';
+        var note = $(this).data('note');
 
-        editEventModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget; // Кнопка, которая открыла модальное окно
+        // Заполняем поля формы
+        $('#id_cafedra').val(cafedra); // Устанавливаем значение кафедры
+        $('#id_name').val(name);
+        $('#id_date').val(date);
 
-            // Получаем данные из атрибутов кнопки
-            var id = button.getAttribute('data-id');
-            var cafedra = button.getAttribute('data-cafedra');
-            var name = button.getAttribute('data-name');
-            var date = button.getAttribute('data-date');
-            var direction = button.getAttribute('data-direction');
-            var quantity = button.getAttribute('data-quantity');
-            var age_14 = button.getAttribute('data-age_14');
-            var age_35 = button.getAttribute('data-age_35');
-            var age_other = button.getAttribute('data-age_other');
-            var invalids = button.getAttribute('data-invalids');
-            var out_of_station = button.getAttribute('data-out_of_station');
-            var as_part = button.getAttribute('data-as_part');
-            var paid = button.getAttribute('data-paid') === 'true'; // Преобразуем строку в булево значение
-            var note = button.getAttribute('data-note');
+        // Устанавливаем другие поля аналогично...
 
-            // Заполняем поля формы
-            editEventModal.querySelector('#id_cafedra').value = cafedra;
-            editEventModal.querySelector('#id_name').value = name;
-            editEventModal.querySelector('#id_date').value = date;
-            editEventModal.querySelector('#id_direction').value = direction;
-            editEventModal.querySelector('#id_quantity').value = quantity;
-            editEventModal.querySelector('#id_age_14').value = age_14;
-            editEventModal.querySelector('#id_age_35').value = age_35;
-            editEventModal.querySelector('#id_age_other').value = age_other;
-            editEventModal.querySelector('#id_invalids').value = invalids;
-            editEventModal.querySelector('#id_out_of_station').value = out_of_station;
-            editEventModal.querySelector('#id_as_part').value = as_part;
-            editEventModal.querySelector('#id_paid').checked = paid;
-            editEventModal.querySelector('#id_note').value = note;
+        // Устанавливаем скрытое поле для ID события
+        $('[name=pk]').val(id);
 
-            // Устанавливаем скрытое поле для ID события
-            editEventModal.querySelector('[name="pk"]').value = id;
+        // Устанавливаем action для формы
+        $('#eventForm').attr('action', "{% url 'update_event' pk='0' %}".replace("0", id));
 
-            // Устанавливаем action для формы
-            editEventModal.querySelector('#eventForm').action = "{% url 'update_event' pk='0' %}".replace("0", id);
-        });
+        // Открываем модальное окно
+        $('#editEventModal').modal('show');
     });
+});
 </script>
 <!-- Plugins JS Ends-->
 {% endblock %}

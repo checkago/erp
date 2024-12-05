@@ -65,6 +65,8 @@ class EventListView(LoginRequiredMixin, TemplateView):
                 return redirect(
                     reverse_lazy('events_list'))  # Перенаправление на список событий после успешного обновления
 
+            return self.get(request, *args, **kwargs)
+
         # Обработка создания нового события
         form = EventForm(request.POST, user=request.user)
 
