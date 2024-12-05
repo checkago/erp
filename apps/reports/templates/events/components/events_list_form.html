@@ -140,7 +140,7 @@
                                             data-bs-toggle="modal"
                                             data-bs-target="#editEventModal"
                                             data-id="{{ Event.id }}"
-                                            data-cafedra.id="{{ Event.cafedra.id }}"
+                                            data-cafedra="{{ Event.cafedra.id }}"
                                             data-name="{{ Event.name }}"
                                             data-date="{{ Event.date|date:'Y-m-d' }}"
                                             data-direction="{{ Event.direction }}"
@@ -181,7 +181,11 @@
                         <div class="row mb-3 g-3">
                             <div class="col-md-2">
                                 <label for="id_cafedra" class="form-label">Кафедра</label>
-                                {{ form.cafedra }}
+                                <select id="id_cafedra" name="cafedra" class="form-select">
+                                    {% for cafedra in form.cafedra.field.queryset %}
+                                        <option value="{{ cafedra.id }}">{{ cafedra.name }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
 
                             <div class="col-md-2">
