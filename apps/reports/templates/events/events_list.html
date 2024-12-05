@@ -34,6 +34,7 @@
 
             // Получаем данные из атрибутов кнопки
             var id = button.getAttribute('data-id');
+            var cafedra = button.getAttribute('data-cafedra');
             var name = button.getAttribute('data-name');
             var date = button.getAttribute('data-date');
             var direction = button.getAttribute('data-direction');
@@ -48,6 +49,7 @@
             var note = button.getAttribute('data-note');
 
             // Заполняем поля формы
+            editEventModal.querySelector('#id_cafedra').value = cafedra;
             editEventModal.querySelector('#id_name').value = name;
             editEventModal.querySelector('#id_date').value = date;
             editEventModal.querySelector('#id_direction').value = direction;
@@ -62,7 +64,7 @@
             editEventModal.querySelector('#id_note').value = note;
 
             // Устанавливаем скрытое поле для ID события
-            editEventModal.querySelector('[name="event_id"]').value = id;
+            editEventModal.querySelector('[name="pk"]').value = id;
 
             // Устанавливаем action для формы
             editEventModal.querySelector('#eventForm').action = "{% url 'update_event' pk='0' %}".replace("0", id);
