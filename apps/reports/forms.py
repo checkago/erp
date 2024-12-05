@@ -12,22 +12,22 @@ class EventForm(forms.ModelForm):
                   'age_35', 'age_other',
                   'invalids', 'out_of_station', 'as_part', 'paid', 'note']
         widgets = {
-            'cafedra': forms.Select(attrs={'class': 'form-control'}),
+            'cafedra': forms.Select(attrs={'class': 'form-select'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'date': forms.DateInput(attrs={
                 'class': 'datepicker-here form-control digits',
                 'type': 'date',
                 'data-date-format': 'mm.dd.yyyy'
             }),
-            'direction': forms.Select(attrs={'class': 'form-control'}),
+            'direction': forms.Select(attrs={'class': 'form-select'}),
             'quantity': forms.NumberInput(attrs={'class': 'form-control'}),
             'age_14': forms.NumberInput(attrs={'class': 'form-control'}),
             'age_35': forms.NumberInput(attrs={'class': 'form-control'}),
             'age_other': forms.NumberInput(attrs={'class': 'form-control'}),
             'invalids': forms.NumberInput(attrs={'class': 'form-control'}),
             'out_of_station': forms.NumberInput(attrs={'class': 'form-control'}),
-            'as_part': forms.Select(attrs={'class': 'form-control'}),
-            'paid': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'as_part': forms.Select(attrs={'class': 'form-select'}),
+            'paid': forms.CheckboxInput(attrs={'class': 'form-check-input', 'type': 'checkbox'}),
             'note': forms.Textarea(attrs={'class': 'form-control', 'rows': '1'}),
         }
 
