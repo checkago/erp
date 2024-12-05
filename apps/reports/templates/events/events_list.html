@@ -67,7 +67,7 @@
             editEventModal.querySelector('[name="pk"]').value = id;
 
             // Устанавливаем action для формы
-            editEventModal.querySelector('#eventForm').action = "{% url 'update_event' pk='0' %}".replace("0", id);
+            editEventModal.querySelector('#EventForm').action = "{% url 'update_event' pk='0' %}".replace("0", id);
         });
     });
 </script>
