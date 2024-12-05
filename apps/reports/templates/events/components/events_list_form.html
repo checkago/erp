@@ -94,11 +94,12 @@
                     </div>
                     <div class="col-md-2">
                         <label for="id_paid" class="form-check-label">Платное</label>
+                        <p></p>
                         {{ form.paid }}
                     </div>
 
                     <!-- Поле заметки и кнопка отправки в одном ряду -->
-                    <div class='col-md-8'>
+                    <div class='col-md-7'>
                         <label for='id_note' class='form-label'>Примечание</label>
                         {{ form.note }}
                     </div>
@@ -237,7 +238,7 @@
                                 <label for="id_as_part" class="form-label">В рамках</label>
                                 {{ form.as_part }}
                             </div>
-                            <div class="col-md-1">
+                            <div class="col-md-2">
                                 <label for="id_paid" class="form-check-label">Платное</label>
                                 <p></p>
                                 <input type="checkbox" name="paid" class="form-check-input" id="id_paid" {% if form.paid.value %}checked{% endif %}>
