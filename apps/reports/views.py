@@ -43,28 +43,30 @@ class DiaryView(LoginRequiredMixin, TemplateView):
 class EventListView(LoginRequiredMixin, View):
     template_name = 'events/events_list.html'
 
-    def get_context_data(self):
-        user = self.request.user
+    def get(self, request, *args, **kwargs):
+        user = request.user
         employee = Employee.objects.get(user=user)
         date_15_days_ago = timezone.now() - timedelta(days=15)
         events = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('-date')
-        return {'events': events}
+        context = {
+            'events': events,
+            'breadcrumb': {"parent": "Дневник", "child": "Мероприятия"},
+            'form': EventForm(user=user)
+        }
+        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         if 'event_id' in request.POST:
-            # Обработка обновления события
             event_id = request.POST['event_id']
-            event_instance = get_object_or_404(Event, pk=event_id)  # Используем pk
+            event_instance = get_object_or_404(Event, pk=event_id)
 
             form = EventForm(request.POST, instance=event_instance)
-
             if form.is_valid():
                 form.save()
-                return redirect(reverse_lazy('events_list'))  # Перенаправление на список событий после успешного обновления
+                return redirect(reverse_lazy('events_list'))
 
-        # Если форма не валидна или нет event_id, возвращаем контекст с ошибками
-        context = self.get_context_data()
-        return self.render_to_response(context)
+        # Если форма не валидна или нет event_id
+        return self.get(request, *args, **kwargs)  # Возвращаем контекст с ошибками
 
 class EventUpdateView(UpdateView):
     model = Event
