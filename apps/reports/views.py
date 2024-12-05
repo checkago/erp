@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from datetime import timedelta
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, UpdateView, ListView, TemplateView
 from .models import Event, AdultVisitReport, AdultBookReport, ChildVisitReport, ChildBookReport
