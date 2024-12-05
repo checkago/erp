@@ -83,3 +83,12 @@ class EventListView(LoginRequiredMixin, TemplateView):
     def get_event(self, event_id):
         return get_object_or_404(Event, id=event_id)
 
+
+class EventUpdateView(UpdateView):
+    model = Event
+    fields = ['cafedra', 'name', 'date', 'direction', 'quantity',
+              'as_part', 'age_14', 'age_35', 'age_other',
+              'invalids', 'out_of_station', 'paid', 'note']
+    template_name = 'events/events_list.html'
+    success_url = reverse_lazy('events:events_list')
+
