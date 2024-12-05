@@ -39,50 +39,31 @@ class DiaryView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class EventListView(LoginRequiredMixin, TemplateView):
+class EventListView(LoginRequiredMixin, View):
     template_name = 'events/events_list.html'
-    context_object_name = 'events_list'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_context_data(self):
         user = self.request.user
         employee = Employee.objects.get(user=user)
         date_15_days_ago = timezone.now() - timedelta(days=15)
-        context['events'] = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('-date')
-        context['breadcrumb'] = {"parent": "Дневник", "child": "Мероприятия"}
-        context['form'] = EventForm(user=user)  # Создаем пустую форму для отображения с фильтрацией кафедр
-        return context
+        events = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('-date')
+        return {'events': events}
 
     def post(self, request, *args, **kwargs):
         if 'event_id' in request.POST:
             # Обработка обновления события
             event_id = request.POST['event_id']
-            event_instance = get_object_or_404(Event, id=event_id)
+            event_instance = get_object_or_404(Event, pk=event_id)  # Используем pk
 
-            form = EventForm(request.POST, instance=event_instance, user=request.user)
+            form = EventForm(request.POST, instance=event_instance)
 
             if form.is_valid():
                 form.save()
-                return redirect(
-                    reverse_lazy('events_list'))  # Перенаправление на список событий после успешного обновления
+                return redirect(reverse_lazy('events_list'))  # Перенаправление на список событий после успешного обновления
 
-        # Обработка создания нового события
-        form = EventForm(request.POST, user=request.user)
-
-        if form.is_valid():
-            event_instance = form.save(commit=False)
-            event_instance.library = Employee.objects.get(user=request.user).branch  # Устанавливаем библиотеку
-            event_instance.save()
-            return redirect(reverse_lazy('events_list'))  # Перенаправление на список событий после успешного сохранения
-
-        else:
-            # Если форма не валидна, возвращаем контекст с ошибками
-            context = self.get_context_data(form=form)
-            return self.render_to_response(context)
-
-    def get_event(self, event_id):
-        return get_object_or_404(Event, id=event_id)
-
+        # Если форма не валидна или нет event_id, возвращаем контекст с ошибками
+        context = self.get_context_data()
+        return self.render_to_response(context)
 
 class EventUpdateView(UpdateView):
     model = Event
