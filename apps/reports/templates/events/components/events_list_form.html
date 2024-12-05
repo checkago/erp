@@ -96,7 +96,6 @@
                         <div class="form-check">
                                 {{ form.paid }}
                                 <label for="id_paid" class="form-check-label">Платное</label>
-                            </div>
                         </div>
                     </div>
 
@@ -242,9 +241,8 @@
                             </div>
                             <div class="col-md-2">
                                 <div class="form-check">
-                                        <input type="checkbox" name="paid" class="form-check-input" id="id_paid" {% if form.paid.value %}checked{% endif %}>
-                                        <label for="id_paid" class="form-check-label">Платное</label>
-                                    </div>
+                                    <input type="checkbox" name="paid" class="form-check-input" id="id_paid" {% if form.paid.value %}checked{% endif %}>
+                                    <label for="id_paid" class="form-check-label">Платное</label>
                                 </div>
                             </div>
 
