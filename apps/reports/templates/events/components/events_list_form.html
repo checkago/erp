@@ -141,7 +141,17 @@
                                             data-bs-target="#editEventModal"
                                             data-id="{{ Event.id }}"
                                             data-name="{{ Event.name }}"
-                                            data-date="{{ Event.date|date:'Y-m-d' }}">
+                                            data-date="{{ Event.date|date:'Y-m-d' }}"
+                                            data-direction="{{ Event.direction }}"
+                                            data-quantity="{{ Event.quantity }}"
+                                            data-age_14="{{ Event.age_14 }}"
+                                            data-age_35="{{ Event.age_35 }}"
+                                            data-age_other="{{ Event.age_other }}"
+                                            data-invalids="{{ Event.invalids }}"
+                                            data-out_of_station="{{ Event.out_of_station }}"
+                                            data-as_part="{{ Event.as_part }}"
+                                            data-paid="{{ Event.paid }}"
+                                            data-note="{{ Event.note }}">
                                         <i data-feather="edit"></i>
                                     </button>
                                 </th>
@@ -165,6 +175,7 @@
                 </div>
                  <form method="post" class="theme-form">
                         {% csrf_token %}
+                    <input type="hidden" name="event_id" value="">
                     <div class="modal-body">
                             <div class="row mb-3 g-3">
                                 <div class="col-md-2">
