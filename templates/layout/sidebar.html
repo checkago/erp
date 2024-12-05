@@ -1,3 +1,4 @@
+{% load permission_tags %}
 {% load static %}
 {% load sass_tags %}
 <!-- Page Sidebar Start-->
@@ -138,8 +139,12 @@
                         </svg>
                         <span class="">Отчеты</span></a>
                         <ul class="sidebar-submenu">
-                            <li><a href="{% url 'diary' %}">Дневник</a></li>
-                            <li><a href="#">Дневник свод</a></li>
+                            {% if request.user|has_group:'Администраторы' or request.user|has_group:'Сотрудники библиотек' %}
+                                <li><a href="{% url 'diary' %}">Дневник</a></li>
+                            {% endif %}
+                            {% if request.user|has_group:'Администраторы' or request.user|has_group:'Методисты' %}
+                                <li><a href="#">Дневник свод</a></li>
+                            {% endif %}
                         </ul>
                     </li>
 

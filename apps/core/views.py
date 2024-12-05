@@ -13,7 +13,7 @@ from apps.core.serializers import EmployeeSerializer
 
 
 @login_required(login_url="/login_home")
-@cache_page(60 * 5)
+# @cache_page(60 * 5)
 def index(request):
     context = {"breadcrumb": {"parent": "Главная", "child": "Рабочий стол"}, "jsFunction": 'startTime()'}
     return render(request, "general/dashboard/index.html", context)
@@ -68,7 +68,7 @@ def signup_home(request):
 
 
 @login_required(login_url="/login_home")
-@cache_page(60 * 5)
+# @cache_page(60 * 5)
 def employee_list_view(request):
     employees = Employee.objects.all()
     context = {"breadcrumb": {"parent": "Главная", "child": "Сотрудники"}, 'employees': employees}
@@ -81,7 +81,7 @@ class EmployeeListView(generics.ListAPIView):
 
 
 @login_required(login_url="/login_home")
-@cache_page(60 * 5)
+# @cache_page(60 * 5)
 def branch_list_view(request):
     branches = Branch.objects.all().order_by('short_name')
     context = {"breadcrumb": {"parent": "Главная", "child": "Филиалы"}, 'branches': branches}
