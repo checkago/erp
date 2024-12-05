@@ -136,7 +136,7 @@
                                 <th>{{ Event.age_35}}</th>
                                 <th>{{ Event.age_other}}</th>
                                 <th>{{ Event.as_part}}</th>
-                                <th>{% if Event.paid %}<i class="fa-solid fa-ruble-sign"></i>{% else %}{% endif %}</th>
+                                <th>{% if Event.paid == True %}<i class="fa-solid fa-ruble-sign"></i>{% else %}{% endif %}</th>
                                 <th class="float-end">
                                     <button type="button" class="btn text-primary"
                                             data-bs-toggle="modal"
