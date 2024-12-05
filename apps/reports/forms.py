@@ -9,8 +9,7 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ['cafedra', 'name', 'date', 'direction',
                   'quantity', 'as_part', 'age_14',
-                  'age_35', 'age_other',
-                  'invalids', 'out_of_station', 'as_part', 'paid', 'note']
+                  'age_35', 'age_other', 'invalids', 'out_of_station', 'as_part', 'paid', 'note']
         widgets = {
             'cafedra': forms.Select(attrs={'class': 'form-select'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
