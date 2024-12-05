@@ -241,7 +241,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label for="id_paid" class="form-check-label">Платное</label>
-                                <input type='checkbox' name='paid' class='form-check-input' id='id_paid'>
+                                <input type="checkbox" name="paid" class="form-check-input" id="id_paid" {% if form.paid.value %}checked{% endif %}>
                             </div>
 
                             <!-- Поле заметки и кнопка отправки в одном ряду -->
