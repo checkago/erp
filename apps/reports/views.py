@@ -54,10 +54,9 @@ class EventListView(LoginRequiredMixin, TemplateView):
         return context
 
     def post(self, request, *args, **kwargs):
-        if 'event_id' in request.POST:
-            # Обработка обновления события
-            event_id = request.POST['event_id']
-            event_instance = get_object_or_404(Event, id=event_id)
+        if 'pk' in request.POST:  # Проверяем наличие pk в POST-запросе
+            pk = request.POST['pk']  # Получаем значение pk
+            event_instance = get_object_or_404(Event, pk=pk)
 
             form = EventForm(request.POST, instance=event_instance, user=request.user)
 
@@ -80,8 +79,8 @@ class EventListView(LoginRequiredMixin, TemplateView):
             context = self.get_context_data(form=form)
             return self.render_to_response(context)
 
-    def get_event(self, event_id):
-        return get_object_or_404(Event, id=event_id)
+    def get_event(self, pk):
+        return get_object_or_404(Event, pk=pk)
 
 
 class EventUpdateView(UpdateView):
