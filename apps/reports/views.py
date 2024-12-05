@@ -1,9 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from datetime import timedelta
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, UpdateView, ListView, TemplateView
 from .models import Event, AdultVisitReport, AdultBookReport, ChildVisitReport, ChildBookReport
@@ -40,39 +39,47 @@ class DiaryView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class EventListView(LoginRequiredMixin, View):
+class EventListView(LoginRequiredMixin, TemplateView):
     template_name = 'events/events_list.html'
+    context_object_name = 'events_list'
 
-    def get(self, request, *args, **kwargs):
-        user = request.user
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
         employee = Employee.objects.get(user=user)
         date_15_days_ago = timezone.now() - timedelta(days=15)
-        events = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('-date')
-        context = {
-            'events': events,
-            'breadcrumb': {"parent": "Дневник", "child": "Мероприятия"},
-            'form': EventForm(user=user)
-        }
-        return render(request, self.template_name, context)
+        context['events'] = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('-date')
+        context['breadcrumb'] = {"parent": "Дневник", "child": "Мероприятия"}
+        context['form'] = EventForm(user=user)  # Создаем пустую форму для отображения с фильтрацией кафедр
+        return context
 
     def post(self, request, *args, **kwargs):
         if 'event_id' in request.POST:
+            # Обработка обновления события
             event_id = request.POST['event_id']
-            event_instance = get_object_or_404(Event, pk=event_id)
+            event_instance = get_object_or_404(Event, id=event_id)
 
-            form = EventForm(request.POST, instance=event_instance)
+            form = EventForm(request.POST, instance=event_instance, user=request.user)
+
             if form.is_valid():
                 form.save()
-                return redirect(reverse_lazy('events_list'))
+                return redirect(
+                    reverse_lazy('events_list'))  # Перенаправление на список событий после успешного обновления
 
-        # Если форма не валидна или нет event_id
-        return self.get(request, *args, **kwargs)  # Возвращаем контекст с ошибками
+        # Обработка создания нового события
+        form = EventForm(request.POST, user=request.user)
 
-class EventUpdateView(UpdateView):
-    model = Event
-    fields = ['cafedra', 'name', 'date', 'direction', 'quantity',
-              'as_part', 'age_14', 'age_35', 'age_other',
-              'invalids', 'out_of_station', 'paid', 'note']
-    template_name = 'events/events_list.html'
-    success_url = reverse_lazy('events:events_list')
+        if form.is_valid():
+            event_instance = form.save(commit=False)
+            event_instance.library = Employee.objects.get(user=request.user).branch  # Устанавливаем библиотеку
+            event_instance.save()
+            return redirect(reverse_lazy('events_list'))  # Перенаправление на список событий после успешного сохранения
+
+        else:
+            # Если форма не валидна, возвращаем контекст с ошибками
+            context = self.get_context_data(form=form)
+            return self.render_to_response(context)
+
+    def get_event(self, event_id):
+        return get_object_or_404(Event, id=event_id)
 
