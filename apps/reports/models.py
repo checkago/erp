@@ -53,7 +53,7 @@ class Event(models.Model):
     date = models.DateField(verbose_name='Дата проведения')
     direction = models.CharField(max_length=150, choices=direction_CHOICES, default=IPN,
                                   verbose_name='Направление')
-    quantity = models.IntegerField(default=0, verbose_name='Количество мероприятий')
+    quantity = models.IntegerField(default=1, verbose_name='Количество мероприятий')
     age_14 = models.IntegerField(default=0, verbose_name='До 14')
     age_35 = models.IntegerField(default=0, verbose_name='До 35')
     age_other = models.IntegerField(default=0, verbose_name='После 35 и другие')
