@@ -26,7 +26,7 @@ class EventForm(forms.ModelForm):
             'invalids': forms.NumberInput(attrs={'class': 'form-control'}),
             'out_of_station': forms.NumberInput(attrs={'class': 'form-control'}),
             'as_part': forms.Select(attrs={'class': 'form-select'}),
-            'paid': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'paid': forms.CheckboxInput(attrs={'class': 'form-check-input checkbox-shadow'}),
             'note': forms.Textarea(attrs={'class': 'form-control', 'rows': '1'}),
         }
 
