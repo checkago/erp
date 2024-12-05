@@ -174,7 +174,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
                 <div class="modal-body">
-                    <form method="post" action="{% url 'update_event' pk=event.id %}"  class="theme-form">
+                    <form method="post" action="{% url 'update_event' pk=Event.id %}"  class="theme-form">
                     {% csrf_token %}
                     <input type="hidden" name="event_id" value="{{ Event.id }}">
                         <div class="row mb-3 g-3">
