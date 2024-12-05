@@ -10,7 +10,7 @@ class EventForm(forms.ModelForm):
         fields = ['cafedra', 'name', 'date', 'direction',
                   'quantity', 'as_part', 'age_14',
                   'age_35', 'age_other',
-                  'invalids', 'out_of_station', 'note']
+                  'invalids', 'out_of_station', 'as_part', 'paid', 'note']
         widgets = {
             'cafedra': forms.Select(attrs={'class': 'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -27,6 +27,7 @@ class EventForm(forms.ModelForm):
             'invalids': forms.NumberInput(attrs={'class': 'form-control'}),
             'out_of_station': forms.NumberInput(attrs={'class': 'form-control'}),
             'as_part': forms.Select(attrs={'class': 'form-control'}),
+            'paid': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'note': forms.Textarea(attrs={'class': 'form-control', 'rows': '1'}),
         }
 
