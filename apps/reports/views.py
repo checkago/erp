@@ -91,5 +91,5 @@ class EventUpdateView(UpdateView):
               'as_part', 'age_14', 'age_35', 'age_other',
               'invalids', 'out_of_station', 'paid', 'note']
     template_name = 'events/events_list.html'
-    success_url = reverse_lazy('events/events_list')
+    success_url = reverse_lazy('events_list')
 
