@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
 from datetime import timedelta
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, UpdateView, ListView, TemplateView
 from .models import Event, AdultVisitReport, AdultBookReport, ChildVisitReport, ChildBookReport
@@ -85,11 +86,22 @@ class EventListView(LoginRequiredMixin, TemplateView):
         return get_object_or_404(Event, pk=pk)
 
 
-class EventUpdateView(UpdateView):
-    model = Event
-    fields = ['cafedra', 'name', 'date', 'direction', 'quantity',
-              'as_part', 'age_14', 'age_35', 'age_other',
-              'invalids', 'out_of_station', 'paid', 'note']
-    template_name = 'events/events_list.html'
-    success_url = reverse_lazy('events_list')
+class EventUpdateView(View):
+    def post(self, request, *args, **kwargs):
+        if 'pk' in request.POST:  # Проверяем наличие pk в POST-запросе
+            pk = request.POST['pk']  # Получаем значение pk
+            event_instance = get_object_or_404(Event, pk=pk)  # Получаем объект события по pk
+
+            # Обработка состояния чекбокса "paid"
+            paid_status = 'paid' in request.POST  # Проверяем наличие ключа 'paid' в POST-запросе
+
+            form_data = request.POST.copy()
+            form_data['paid'] = paid_status  # Устанавливаем состояние чекбокса
+
+            form = EventForm(form_data, instance=event_instance)  # Создаем форму с текущими данными события
+            if form.is_valid():  # Проверяем валидность формы
+                form.save()  # Сохраняем изменения
+                return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного обновления
+
+        return redirect('events_list')  # Перенаправляем на список событий или обрабатываем ошибку
 
