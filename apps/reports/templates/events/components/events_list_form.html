@@ -173,10 +173,10 @@
                 <h5 class="modal-title" id="editEventModalLabel">Редактировать запись о мероприятии</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+             <form method="post" action="" class="theme-form">
+                {% csrf_token %}
+                <input type="hidden" name="event_id" value="">
                 <div class="modal-body">
-                    <form method="post" action="" class="theme-form">
-                    {% csrf_token %}
-                    <input type="hidden" name="event_id" value="">
                         <div class="row mb-3 g-3">
                             <div class="col-md-2">
                                 <label for="id_cafedra" class="form-label">Кафедра</label>
@@ -243,12 +243,12 @@
                                 {{ form.note }}
                             </div>
                         </div>
-                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
                     <button type="submit" form="EventForm" class="btn btn-primary">Сохранить изменения</button>
                 </div>
+             </form>
         </div>
     </div>
 </div>
