@@ -17,6 +17,7 @@ $badge-light-color: #52526c;
 $light-gray : #ecf3fa;
 $light-widget-border: #EFEEFF;
 $light-semi-gray :#efefef;
+$light-custom-gray :#adadad;
 $font-gray-color: #6C757D;
 $dark-light :$theme-font-color;
 $dark-gray: #898989;
@@ -209,7 +210,7 @@ $form-placeholder-color : $dark-gray;
 $form-placeholder-font-size : 14px;
 $form-placeholder-letter-spacing : 1px;
 $form-placeholder-font-weight : 100;
-$form-input-border-color : $light-semi-gray;
+$form-input-border-color : $light-custom-gray;
 $form-input-bg-color : $white;
 
 //Tour settings

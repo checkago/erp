@@ -92,6 +92,8 @@ class Branch(models.Model):
     mail_address = models.CharField(max_length=250, blank=True, verbose_name='Адрес почтовый')
     email = models.EmailField(max_length=250, blank=True, verbose_name='Email')
     phone = models.CharField(max_length=20, blank=True, verbose_name='Телефон')
+    adult = models.BooleanField(default=False, blank=True, verbose_name='Взрослая библиотека')
+    child = models.BooleanField(default=False, blank=True, verbose_name='Детская')
 
     class Meta:
         verbose_name = 'Филиал'
