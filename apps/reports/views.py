@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
 from django.utils import timezone
@@ -42,32 +44,67 @@ class DiaryView(LoginRequiredMixin, TemplateView):
 
 class EventListView(LoginRequiredMixin, TemplateView):
     template_name = 'events/events_list.html'
-    context_object_name = 'events_list'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         employee = Employee.objects.get(user=user)
+
+        # Получаем события за последние 15 дней
         date_15_days_ago = timezone.now() - timedelta(days=15)
-        context['events'] = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('-date')
-        context['breadcrumb'] = {"parent": "Дневник", "child": "Мероприятия"}
-        context['form'] = EventForm(user=user)  # Создаем пустую форму для отображения с фильтрацией кафедр
+        events = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('date')
+
+        # Подготавливаем данные для графика
+        dates = []
+        quantity_data = []
+        age_14_data = []
+        age_35_data = []
+        age_other_data = []
+        total_age_data = []
+
+        day_count = defaultdict(lambda: {
+            'quantity': 0,
+            'age_14': 0,
+            'age_35': 0,
+            'age_other': 0
+        })
+
+        for event in events:
+            day_str = event.date.strftime('%Y-%m-%d')
+            day_count[day_str]['quantity'] += event.quantity
+            day_count[day_str]['age_14'] += event.age_14
+            day_count[day_str]['age_35'] += event.age_35
+            day_count[day_str]['age_other'] += event.age_other
+
+        for date, counts in sorted(day_count.items()):
+            dates.append(date)
+            quantity_data.append(counts['quantity'])
+            age_14_data.append(counts['age_14'])
+            age_35_data.append(counts['age_35'])
+            age_other_data.append(counts['age_other'])
+            total_age_data.append(counts['age_14'] + counts['age_35'] + counts['age_other'])
+
+        # Логируем данные для отладки
+        print("Dates:", dates)
+        print("Quantity Data:", quantity_data)
+        print("Age 14 Data:", age_14_data)
+        print("Age 35 Data:", age_35_data)
+        print("Age Other Data:", age_other_data)
+        print("Total Age Data:", total_age_data)
+
+        context['events'] = events
+        context['dates'] = dates
+        context['quantity_data'] = quantity_data
+        context['age_14_data'] = age_14_data
+        context['age_35_data'] = age_35_data
+        context['age_other_data'] = age_other_data
+        context['total_age_data'] = total_age_data
+
+        context['form'] = EventForm(user=user)
+
         return context
 
     def post(self, request, *args, **kwargs):
-        if 'pk' in request.POST:  # Проверяем наличие pk в POST-запросе
-            pk = request.POST['pk']  # Получаем значение pk
-            event_instance = get_object_or_404(Event, pk=pk)
-
-            form = EventForm(request.POST, instance=event_instance, user=request.user)
-
-            if form.is_valid():
-                form.save()
-                return redirect(
-                    reverse_lazy('events_list'))  # Перенаправление на список событий после успешного обновления
-
-            return self.get(request, *args, **kwargs)
-
         # Обработка создания нового события
         form = EventForm(request.POST, user=request.user)
 
@@ -81,9 +118,6 @@ class EventListView(LoginRequiredMixin, TemplateView):
             # Если форма не валидна, возвращаем контекст с ошибками
             context = self.get_context_data(form=form)
             return self.render_to_response(context)
-
-    def get_event(self, pk):
-        return get_object_or_404(Event, pk=pk)
 
 
 class EventUpdateView(View):
