@@ -9,7 +9,7 @@ from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, UpdateView, ListView, TemplateView
 from .models import Event, AdultVisitReport, AdultBookReport, ChildVisitReport, ChildBookReport
-from .forms import EventForm
+from .forms import EventForm, ChildBookReportForm
 from ..core.models import Employee, Cafedra
 
 
@@ -138,4 +138,76 @@ class EventUpdateView(View):
                 return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного обновления
 
         return redirect('events_list')  # Перенаправляем на список событий или обрабатываем ошибку
+
+
+class ChildBookListView(LoginRequiredMixin, TemplateView):
+    template_name = 'books/childbooks_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
+
+        # Получаем события за последние 15 дней
+        date_15_days_ago = timezone.now() - timedelta(days=15)
+        reports = ChildBookReport.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('date')
+
+        # Подготавливаем данные для графика (если необходимо)
+        dates = []
+        quantity_data = []
+        qty_books_14_data = []
+        age_35_data = []
+        age_other_data = []
+        total_age_data = []
+
+        day_count = defaultdict(lambda: {
+            'quantity': 0,
+            # Добавьте остальные поля по необходимости
+        })
+
+        for report in reports:
+            day_str = report.date.strftime('%Y-%m-%d')
+            day_count[day_str]['quantity'] += report.qty_books_14  # Пример использования поля
+
+        for date, counts in sorted(day_count.items()):
+            dates.append(date)
+            quantity_data.append(counts['quantity'])
+            # Заполните остальные данные по необходимости
+
+        context['reports'] = reports  # Измените на reports
+        context['dates'] = dates
+        context['quantity_data'] = quantity_data
+        # Добавьте остальные данные по необходимости
+
+        context['form'] = ChildBookReportForm(user=user)  # Используйте новую форму
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('pk'):  # Проверяем наличие pk в POST-запросе для редактирования
+            pk = request.POST['pk']
+            report_instance = get_object_or_404(ChildBookReport, pk=pk)
+
+            form = ChildBookReportForm(request.POST, instance=report_instance)  # Создаем форму с текущими данными события
+
+            if form.is_valid():
+                form.save()
+                return redirect(reverse_lazy('events_list'))  # Перенаправление на список событий после успешного обновления
+
+            else:
+                context = self.get_context_data(form=form)
+                return self.render_to_response(context)
+
+        else:  # Обработка создания нового события
+            form = ChildBookReportForm(request.POST)
+
+            if form.is_valid():
+                report_instance = form.save(commit=False)
+                report_instance.library = Employee.objects.get(user=request.user).branch  # Устанавливаем библиотеку
+                report_instance.save()
+                return redirect(reverse_lazy('events_list'))  # Перенаправление на список событий после успешного сохранения
+
+            else:
+                context = self.get_context_data(form=form)
+                return self.render_to_response(context)
 

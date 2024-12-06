@@ -1,5 +1,5 @@
 from django import forms
-from .models import Event
+from .models import Event, ChildBookReport
 from ..core.models import Employee, Cafedra
 
 
@@ -36,3 +36,26 @@ class EventForm(forms.ModelForm):
         if user:
             employee = Employee.objects.get(user=user)
             self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
+
+
+class ChildBookReportForm(forms.ModelForm):
+    class Meta:
+        model = ChildBookReport
+        fields = [
+            'cafedra', 'date', 'qty_books_14', 'qty_books_30',
+            'qty_books_other', 'qty_books_part_opl',
+            'qty_books_part_enm', 'qty_books_part_tech',
+            'qty_books_part_sh', 'qty_books_part_si',
+            'qty_books_part_yl', 'qty_books_part_hl',
+            'qty_books_part_dl', 'qty_books_part_other',
+            'qty_books_part_audio', 'qty_books_part_krai',
+            'qty_books_reference_14', 'qty_books_reference_30',
+            'qty_books_reference_other', 'qty_books_reference_online',
+            'note'
+        ]
+        widgets = {
+            'cafedra': forms.Select(attrs={'class': 'form-select'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            # Добавьте остальные поля с соответствующими виджетами
+            'note': forms.Textarea(attrs={'class': 'form-control'}),
+        }
