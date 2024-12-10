@@ -119,7 +119,7 @@
             var invalids = button.data('invalids');
             var outOfStation = button.data('out-of-station');
             var asPart = button.data('as-part');
-            var paid = button.data('paid') === 'true'; // Проверяем состояние чекбокса
+            var paid = button.data('paid'); // Получаем состояние чекбокса (true/false)
             var note = button.data('note');
 
             // Заполняем поля формы данными объекта
