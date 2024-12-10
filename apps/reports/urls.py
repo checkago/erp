@@ -11,7 +11,7 @@ urlpatterns = [
     path('books/', EventListView.as_view(), name='books_list'),
     path('books/update/<int:pk>/', EventUpdateView.as_view(), name='update_books'),
     path('events/', EventListView.as_view(), name='events_list'),
-    path('events/update/<int:pk>/', EventUpdateView.as_view(), name='update_event'),
+    path('events/update/<int:id>/', EventUpdateView.as_view(), name='update_event'),
 ]
 
 

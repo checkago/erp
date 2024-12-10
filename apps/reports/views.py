@@ -121,16 +121,16 @@ class EventListView(LoginRequiredMixin, TemplateView):
 
 
 class EventUpdateView(View):
-    def get(self, request, pk):
-        # Получаем объект события по pk
-        event_instance = get_object_or_404(Event, pk=pk)
+    def get(self, request, id):
+        # Получаем объект события по id
+        event_instance = get_object_or_404(Event, id=id)
         form = EventForm(instance=event_instance, user=request.user)  # Создаем форму с текущими данными события
 
-        return render(request, 'events/event_update.html', {'form': form})
+        return render(request, 'events/events_list.html', {'form': form})
 
-    def post(self, request, pk):
-        # Получаем объект события по pk
-        event_instance = get_object_or_404(Event, pk=pk)
+    def post(self, request, id):
+        # Получаем объект события по id
+        event_instance = get_object_or_404(Event, id=id)
 
         # Создаем форму с текущими данными события и передаем данные из POST-запроса
         form = EventForm(request.POST, instance=event_instance, user=request.user)
@@ -139,7 +139,7 @@ class EventUpdateView(View):
             form.save()  # Сохраняем изменения в существующем объекте
             return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного обновления
 
-        return render(request, 'events/event_update.html', {'form': form})  # Возвращаем форму с ошибками
+        return render(request, 'events/events_list.html', {'form': form})  # Возвращаем форму с ошибками
 
 
 class ChildBookListView(LoginRequiredMixin, TemplateView):
