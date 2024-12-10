@@ -122,7 +122,8 @@ class EventListView(LoginRequiredMixin, TemplateView):
 
 class EventUpdateView(View):
     def post(self, request, *args, **kwargs):
-        if 'pk' in request.POST:  # Проверяем наличие pk в POST-запросе
+        # Проверяем наличие pk в POST-запросе
+        if 'pk' in request.POST:
             pk = request.POST['pk']  # Получаем значение pk
             event_instance = get_object_or_404(Event, pk=pk)  # Получаем объект события по pk
 
@@ -130,7 +131,7 @@ class EventUpdateView(View):
             form = EventForm(request.POST, instance=event_instance)
 
             if form.is_valid():  # Проверяем валидность формы
-                form.save()  # Сохраняем изменения
+                form.save()  # Сохраняем изменения в существующем объекте
                 return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного обновления
 
         return redirect('events_list')  # Перенаправляем на список событий или обрабатываем ошибку
