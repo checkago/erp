@@ -126,7 +126,9 @@ class EventUpdateView(View):
             pk = request.POST['pk']  # Получаем значение pk
             event_instance = get_object_or_404(Event, pk=pk)  # Получаем объект события по pk
 
-            form = EventForm(request.POST, instance=event_instance)  # Создаем форму с текущими данными события
+            # Создаем форму с текущими данными события
+            form = EventForm(request.POST, instance=event_instance)
+
             if form.is_valid():  # Проверяем валидность формы
                 form.save()  # Сохраняем изменения
                 return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного обновления
