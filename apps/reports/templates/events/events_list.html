@@ -104,6 +104,7 @@
     </script>
 
     <script>
+        // Обработчик события для открытия модального окна редактирования
         $(document).on('click', '.edit-event', function() {
             // Получаем данные из кнопки
             var button = $(this);
@@ -128,12 +129,11 @@
             $('#id_note').val(button.data('note'));
 
             // Устанавливаем скрытое поле с ID объекта (если используете модальное окно)
-            $('input[name="pk"]').val(button.data('id'));
+            $('input[name="id"]').val(button.data('id'));
 
             // Открываем модальное окно
             $('#addEventModal').modal('show');
         });
-
     </script>
 
 <!-- Plugins JS Ends-->
