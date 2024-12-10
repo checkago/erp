@@ -129,6 +129,7 @@ class EventUpdateView(View):
             # Обработка состояния чекбокса "paid"
             paid_status = 'paid' in request.POST  # Проверяем наличие ключа 'paid' в POST-запросе
 
+            form_data = request.POST
             form_data['paid'] = paid_status  # Устанавливаем состояние чекбокса
 
             form = EventForm(form_data, instance=event_instance)  # Создаем форму с текущими данными события
