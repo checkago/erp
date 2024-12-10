@@ -137,7 +137,7 @@ class EventUpdateView(View):
             invalids = request.POST.get('invalids')
             out_of_station = request.POST.get('out_of_station')
             as_part = request.POST.get('as_part')
-            paid = 'paid' in request.POST  # Проверяем состояние чекбокса
+            paid = request.POST.get('paid')  # Проверяем состояние чекбокса
             note = request.POST.get('note')
 
             # Выполняем обновление объекта с помощью метода update()
