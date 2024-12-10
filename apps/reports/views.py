@@ -126,28 +126,17 @@ class EventUpdateView(View):
             pk = request.POST['pk']  # Получаем значение pk
             event_instance = get_object_or_404(Event, pk=pk)  # Получаем объект события по pk
 
-            # Получаем данные из POST-запроса
-            form_data = {
-                'cafedra': request.POST.get('cafedra'),
-                'name': request.POST.get('name'),
-                'date': request.POST.get('date'),
-                'direction': request.POST.get('direction'),
-                'quantity': request.POST.get('quantity'),
-                'age_14': request.POST.get('age_14'),
-                'age_35': request.POST.get('age_35'),
-                'age_other': request.POST.get('age_other'),
-                'invalids': request.POST.get('invalids'),
-                'out_of_station': request.POST.get('out_of_station'),
-                'as_part': request.POST.get('as_part'),
-                'paid': 'paid' in request.POST,  # Проверяем состояние чекбокса
-                'note': request.POST.get('note')
-            }
+            # Создаем форму с текущими данными события
+            form = EventForm(request.POST, instance=event_instance)
 
-            # Обновляем объект с помощью метода update()
-            updated_count = Event.objects.filter(pk=pk).update(**form_data)
-
-            if updated_count > 0:  # Если обновление произошло
+            if form.is_valid():  # Проверяем валидность формы
+                form.save()  # Сохраняем изменения в существующем объекте
                 return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного обновления
+
+            else:
+                print(form.errors)  # Логируем ошибки формы для отладки
+
+        return redirect('events_list')  # Перенаправляем на список событий или обрабатываем ошибку
 
 
 class ChildBookListView(LoginRequiredMixin, TemplateView):
