@@ -91,7 +91,7 @@
                                 <th class="float-end">
                                     <button type="button" class="btn text-primary edit-event"
                                         data-id="{{ Event.id }}"
-                                        data-cafedra="{{ Event.cafedra.id }}"
+                                        data-cafedra="{% if Event.cafedra %}{{ Event.cafedra.id }}{% else %}null{% endif %}"
                                         data-name="{{ Event.name }}"
                                         data-date="{{ Event.date|date:'Y-m-d' }}"
                                         data-direction="{{ Event.direction }}"
@@ -102,7 +102,7 @@
                                         data-invalids="{{ Event.invalids }}"
                                         data-out-of-station="{{ Event.out_of_station }}"
                                         data-as-part="{{ Event.as_part }}"
-                                        data-paid="{{ Event.paid }}"
+                                        data-paid="{% if Event.paid %}true{% else %}false{% endif %}"
                                         data-note="{{ Event.note }}">
                                         <i data-feather="edit"></i>
                                     </button>
