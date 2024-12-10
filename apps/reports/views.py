@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from datetime import timedelta
 from django.urls import reverse_lazy
@@ -121,33 +121,25 @@ class EventListView(LoginRequiredMixin, TemplateView):
 
 
 class EventUpdateView(View):
-    def post(self, request, *args, **kwargs):
-        if 'pk' in request.POST:  # Проверяем наличие pk в POST-запросе
-            pk = request.POST['pk']  # Получаем значение pk
-            event_instance = get_object_or_404(Event, pk=pk)  # Получаем объект события по pk
+    def get(self, request, pk):
+        # Получаем объект события по pk
+        event_instance = get_object_or_404(Event, pk=pk)
+        form = EventForm(instance=event_instance, user=request.user)  # Создаем форму с текущими данными события
 
-            # Получаем данные из POST-запроса
-            form_data = {
-                'cafedra': request.POST.get('cafedra'),
-                'name': request.POST.get('name'),
-                'date': request.POST.get('date'),
-                'direction': request.POST.get('direction'),
-                'quantity': request.POST.get('quantity'),
-                'age_14': request.POST.get('age_14'),
-                'age_35': request.POST.get('age_35'),
-                'age_other': request.POST.get('age_other'),
-                'invalids': request.POST.get('invalids'),
-                'out_of_station': request.POST.get('out_of_station'),
-                'as_part': request.POST.get('as_part'),
-                'paid': 'paid' in request.POST,  # Проверяем состояние чекбокса
-                'note': request.POST.get('note')
-            }
+        return render(request, 'events/event_update.html', {'form': form})
 
-            # Обновляем объект с помощью метода update()
-            updated_count = Event.objects.filter(pk=pk).update(**form_data)
+    def post(self, request, pk):
+        # Получаем объект события по pk
+        event_instance = get_object_or_404(Event, pk=pk)
 
-            if updated_count > 0:  # Если обновление произошло
-                return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного обновления
+        # Создаем форму с текущими данными события и передаем данные из POST-запроса
+        form = EventForm(request.POST, instance=event_instance, user=request.user)
+
+        if form.is_valid():  # Проверяем валидность формы
+            form.save()  # Сохраняем изменения в существующем объекте
+            return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного обновления
+
+        return render(request, 'events/event_update.html', {'form': form})  # Возвращаем форму с ошибками
 
 
 class ChildBookListView(LoginRequiredMixin, TemplateView):

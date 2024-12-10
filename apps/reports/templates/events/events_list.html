@@ -107,42 +107,28 @@
         $(document).on('click', '.edit-event', function() {
             // Получаем данные из кнопки
             var button = $(this);
-            var id = button.data('id');
-            var cafedra = button.data('cafedra');
-            var name = button.data('name');
-            var date = button.data('date');
-            var direction = button.data('direction');
-            var quantity = button.data('quantity');
-            var age14 = button.data('age-14');
-            var age35 = button.data('age-35');
-            var ageOther = button.data('age-other');
-            var invalids = button.data('invalids');
-            var outOfStation = button.data('out-of-station');
-            var asPart = button.data('as-part');
-            var paid = button.data('paid'); // Получаем состояние чекбокса (true/false)
-            var note = button.data('note');
 
             // Заполняем поля формы данными объекта
-            $('#id_cafedra').val(cafedra);
-            $('#id_name').val(name);
-            $('#id_date').val(date);
-            $('#id_direction').val(direction);
-            $('#id_quantity').val(quantity);
-            $('#id_age_14').val(age14);
-            $('#id_age_35').val(age35);
-            $('#id_age_other').val(ageOther);
-            $('#id_invalids').val(invalids);
-            $('#id_out_of_station').val(outOfStation);
-            $('#id_as_part').val(asPart);
+            $('#id_cafedra').val(button.data('cafedra'));
+            $('#id_name').val(button.data('name'));
+            $('#id_date').val(button.data('date'));
+            $('#id_direction').val(button.data('direction'));
+            $('#id_quantity').val(button.data('quantity'));
+            $('#id_age_14').val(button.data('age-14'));
+            $('#id_age_35').val(button.data('age-35'));
+            $('#id_age_other').val(button.data('age-other'));
+            $('#id_invalids').val(button.data('invalids'));
+            $('#id_out_of_station').val(button.data('out-of-station'));
+            $('#id_as_part').val(button.data('as-part'));
 
             // Устанавливаем состояние чекбокса
-            $('#id_paid').prop('checked', paid); // Устанавливаем состояние чекбокса в соответствии с данными
+            $('#id_paid').prop('checked', button.data('paid') === 'true');
 
             // Заполняем поле заметки
-            $('#id_note').val(note);
+            $('#id_note').val(button.data('note'));
 
             // Устанавливаем скрытое поле с ID объекта
-            $('input[name="pk"]').val(id);
+            $('input[name="pk"]').val(button.data('id'));
 
             // Открываем модальное окно
             $('#addEventModal').modal('show');
