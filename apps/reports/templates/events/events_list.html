@@ -104,7 +104,6 @@
     </script>
 
     <script>
-        // Обработчик события для открытия модального окна редактирования
         $(document).on('click', '.edit-event', function() {
             // Получаем данные из кнопки
             var button = $(this);
@@ -120,7 +119,7 @@
             var invalids = button.data('invalids');
             var outOfStation = button.data('out-of-station');
             var asPart = button.data('as-part');
-            var paid = button.data('paid') ? 'checked' : '';
+            var paid = button.data('paid'); // Получаем состояние чекбокса (true/false)
             var note = button.data('note');
 
             // Заполняем поля формы данными объекта
@@ -137,7 +136,7 @@
             $('#id_as_part').val(asPart);
 
             // Устанавливаем состояние чекбокса
-            $('#id_paid').prop('checked', paid === 'checked');
+            $('#id_paid').prop('checked', paid); // Устанавливаем состояние чекбокса в соответствии с данными
 
             // Заполняем поле заметки
             $('#id_note').val(note);
