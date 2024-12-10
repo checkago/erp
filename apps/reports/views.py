@@ -126,13 +126,7 @@ class EventUpdateView(View):
             pk = request.POST['pk']  # Получаем значение pk
             event_instance = get_object_or_404(Event, pk=pk)  # Получаем объект события по pk
 
-            # Обработка состояния чекбокса "paid"
-            paid_status = 'paid' in request.POST  # Проверяем наличие ключа 'paid' в POST-запросе
-
-            form_data = request.POST
-            form_data['paid'] = paid_status  # Устанавливаем состояние чекбокса
-
-            form = EventForm(form_data, instance=event_instance)  # Создаем форму с текущими данными события
+            form = EventForm(request.POST, instance=event_instance)  # Создаем форму с текущими данными события
             if form.is_valid():  # Проверяем валидность формы
                 form.save()  # Сохраняем изменения
                 return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного обновления
