@@ -1,0 +1,123 @@
+{% load static %}
+<div class="container-fluid email-wrap bookmark-wrap todo-wrap">
+    <div class="row flex-row">
+      <div class="col-xl-3 xl-30 box-col-12">
+        <div class="email-sidebar md-sidebar">
+          <div class="email-left-aside md-sidebar-aside">
+            <div class="card">
+              <div class="card-header">
+                <div class="email-app-sidebar left-bookmark custom-scrollbar">
+                  <div class="align-items-center">
+                    <div class="flex-grow-1">
+                      <h4 class="f-w-600 text-primary"> Разделы дневника</h4>
+                    </div>
+                  </div>
+                </div>
+              </div>
+                <div class="card-body">
+                    <div class="email-app-sidebar left-bookmark custom-scrollbar">
+                        <ul class="nav main-menu">
+                            <div class="div"></div>
+                            <li class="nav-item"><a href="#"><span class="iconbg badge-light-success"><i data-feather="file-text"></i></span><span class="title ms-2">Регистрация/Посещения</span></a></li>
+                            <li class="nav-item"><a href="#"><span class="iconbg badge-light-danger"><i data-feather="book-open"></i></span><span class="title ms-2">Книговыдача</span></a></li>
+                            <li class="nav-item"><a href="{% url 'events_list' %}"><span class="iconbg badge-light-info"><i data-feather="users"></i></span><span class="title ms-2">Массовые мероприятия</span></a></li>
+                            <li class="nav-item">
+                              <button class="btn-info-gradien badge-light d-block btn-mail w-100"><i class="me-2" data-feather="check-circle"> </i>Сформировать отчет</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-9 xl-70 box-col-12">
+        <div class="card">
+          <div class="card-header">
+                <div class="col-4"><h4>Форма мероприятия</h4></div>
+            </div>
+            <div class="card-body">
+                <form method="post" id="EventForm" class="theme-form">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="row mb-3 g-3">
+                            <div class="col-md-2">
+                                <label for="id_cafedra" class="form-label">Кафедра</label>
+                                {{ form.cafedra }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_date" class="form-label">Дата</label>
+                                {{ form.date }}
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="id_name" class="form-label">Название события</label>
+                                {{ form.name }}
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="id_direction" class="form-label">Направление</label>
+                                {{ form.direction }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_quantity" class="form-label">Кол. мероприятий</label>
+                                {{ form.quantity }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_age_14" class="form-label">До 14 лет</label>
+                                {{ form.age_14 }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_age_35" class="form-label">До 35 лет</label>
+                                {{ form.age_35 }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_age_other" class="form-label">Прочие</label>
+                                {{ form.age_other }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_invalids" class="form-label">Инвалиды</label>
+                                {{ form.invalids }}
+                            </div>
+
+                            <div class="col-md-2">
+                                <label for="id_out_of_station" class="form-label">Внестационар</label>
+                                {{ form.out_of_station }}
+                            </div>
+
+                            <!-- Поле для выбора платного мероприятия -->
+                            <div class='col-md-3'>
+                                <label for='id_as_part' class='form-label'>В рамках</label>
+                                {{ form.as_part }}
+                            </div>
+
+                            <!-- Поле для выбора платного мероприятия -->
+                            <div class='col-md-2'>
+                                <div class='form-check'>
+                                    <label class='form-check-label' for='id_paid'>Платное</label>
+                                    {{ form.paid }}
+                                </div>
+                            </div>
+
+                            <div class='col-md-7'>
+                                <label for='id_note' class='form-label'>Примечание</label>
+                                {{ form.note }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{% url 'events_list' %}" class="btn btn-secondary">Закрыть</a>
+                        <button type="submit" form="EventForm" class="btn btn-primary">Сохранить изменения</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>

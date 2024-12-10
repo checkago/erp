@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
-from .views import EventListView, DiaryView, EventUpdateView
+from .views import EventListView, DiaryView, EventUpdateView, EventCreateView
 
 urlpatterns = [
     path('diary/', DiaryView.as_view(), name='diary'),
@@ -11,7 +11,8 @@ urlpatterns = [
     path('books/', EventListView.as_view(), name='books_list'),
     path('books/update/<int:pk>/', EventUpdateView.as_view(), name='update_books'),
     path('events/', EventListView.as_view(), name='events_list'),
-    path('events/update/<int:id>/', EventUpdateView.as_view(), name='update_event'),
+    path('event/create/', EventCreateView.as_view(), name='event_create'),  # Путь для создания события
+    path('event/update/<int:id>/', EventUpdateView.as_view(), name='event_update'),  # Путь для обновления события
 ]
 
 

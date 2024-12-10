@@ -104,42 +104,37 @@ class EventListView(LoginRequiredMixin, TemplateView):
 
         return context
 
-    def post(self, request, *args, **kwargs):
-        # Обработка создания нового события
-        form = EventForm(request.POST, user=request.user)
 
-        if form.is_valid():
-            event_instance = form.save(commit=False)
-            event_instance.library = Employee.objects.get(user=request.user).branch  # Устанавливаем библиотеку
-            event_instance.save()
-            return redirect(reverse_lazy('events_list'))  # Перенаправление на список событий после успешного сохранения
+class EventCreateView(View):
+    def get(self, request):
+        form = EventForm(user=request.user)  # Создаем пустую форму
+        return render(request, 'events/event_form.html', {'form': form})
 
-        else:
-            # Если форма не валидна, возвращаем контекст с ошибками
-            context = self.get_context_data(form=form)
-            return self.render_to_response(context)
+    def post(self, request):
+        form = EventForm(request.POST, user=request.user)  # Создаем форму с данными из POST-запроса
+
+        if form.is_valid():  # Проверяем валидность формы
+            form.save()  # Сохраняем новый объект
+            return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного создания
+
+        return render(request, 'events/event_form.html', {'form': form})  # Возвращаем форму с ошибками
 
 
 class EventUpdateView(View):
     def get(self, request, id):
-        # Получаем объект события по id
-        event_instance = get_object_or_404(Event, id=id)
+        event_instance = get_object_or_404(Event, id=id)  # Получаем объект события по id
         form = EventForm(instance=event_instance, user=request.user)  # Создаем форму с текущими данными события
-
-        return render(request, 'events/events_list.html', {'form': form})
+        return render(request, 'events/event_form.html', {'form': form})
 
     def post(self, request, id):
-        # Получаем объект события по id
-        event_instance = get_object_or_404(Event, id=id)
-
-        # Создаем форму с текущими данными события и передаем данные из POST-запроса
-        form = EventForm(request.POST, instance=event_instance, user=request.user)
+        event_instance = get_object_or_404(Event, id=id)  # Получаем объект события по id
+        form = EventForm(request.POST, instance=event_instance, user=request.user)  # Передаем данные из POST-запроса
 
         if form.is_valid():  # Проверяем валидность формы
             form.save()  # Сохраняем изменения в существующем объекте
             return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного обновления
 
-        return render(request, 'events/events_list.html', {'form': form})  # Возвращаем форму с ошибками
+        return render(request, 'events/event_form.html', {'form': form})  # Возвращаем форму с ошибками
 
 
 class ChildBookListView(LoginRequiredMixin, TemplateView):
