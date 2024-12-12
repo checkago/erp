@@ -139,14 +139,10 @@
                         </svg>
                         <span class="">Отчеты</span></a>
                         <ul class="sidebar-submenu">
-                            {% if request.user|has_group:'Сотрудники библиотек' %}
+                            {% if request.user|has_group:'Администрация' or request.user|has_group:'Сотрудники библиотек' %}
                                 <li><a href="{% url 'diary' %}">Дневник</a></li>
                             {% endif %}
-                            {% if request.user|has_group:'Методисты' %}
-                                <li><a href="#">Дневник свод</a></li>
-                            {% endif %}
-                            {% if request.user|has_group:'Администраторы' %}
-                                <li><a href="{% url 'diary' %}">Дневник</a></li>
+                            {% if request.user|has_group:'Администрация' or request.user|has_group:'Методисты' %}
                                 <li><a href="#">Дневник свод</a></li>
                             {% endif %}
                         </ul>
