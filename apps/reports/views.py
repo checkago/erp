@@ -105,7 +105,7 @@ class EventListView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class EventCreateView(View):
+class EventCreateView(LoginRequiredMixin, View):
     def get(self, request):
         form = EventForm(user=request.user)  # Создаем пустую форму
         return render(request, 'events/event_form.html', {'form': form})
@@ -120,7 +120,7 @@ class EventCreateView(View):
         return render(request, 'events/event_form.html', {'form': form})  # Возвращаем форму с ошибками
 
 
-class EventUpdateView(View):
+class EventUpdateView(LoginRequiredMixin, View):
     def get(self, request, id):
         event_instance = get_object_or_404(Event, id=id)  # Получаем объект события по id
         form = EventForm(instance=event_instance, user=request.user)  # Создаем форму с текущими данными события
