@@ -5,7 +5,7 @@ from apps.reports.models import Event, AdultVisitReport, AdultBookReport, ChildB
 
 class EventAdmin(admin.ModelAdmin):
     list_display = ('cafedra', 'date', 'name', 'direction')
-    list_filter = ('date', 'branch', 'cafedra', 'groups')
+    list_filter = ('date', 'cafedra', 'groups')
 
 
 class AdultVisitReportAdmin(admin.ModelAdmin):
