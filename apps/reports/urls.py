@@ -2,14 +2,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
-from .views import EventListView, DiaryView, EventUpdateView, EventCreateView
+from .views import EventListView, DiaryView, EventUpdateView, EventCreateView, AdultBookReportListView, \
+    AdultBookReportCreateView, AdultBookReportUpdateView, AdultVisitReportListView, AdultVisitReportCreateView, \
+    AdultVisitReportUpdateView
 
 urlpatterns = [
     path('diary/', DiaryView.as_view(), name='diary'),
-    path('visits/', EventListView.as_view(), name='visits_list'),
-    path('visits/update/<int:pk>/', EventUpdateView.as_view(), name='update_visits'),
-    path('books/', EventListView.as_view(), name='books_list'),
-    path('books/update/<int:pk>/', EventUpdateView.as_view(), name='update_books'),
+    path('visits/adult/', AdultVisitReportListView.as_view(), name='adult_visits_list'),
+    path('visits/adult/create/', AdultVisitReportCreateView.as_view(), name='adult_visits_create'),
+    path('visits/adult/update/<int:pk>/', AdultVisitReportUpdateView.as_view(), name='adult_visits_update'),
+    path('books/adult/', AdultBookReportListView.as_view(), name='adult_books_list'),
+    path('books/adult/create/', AdultBookReportCreateView.as_view(), name='adult_books_create'),
+    path('books/adult/update/<int:pk>/', AdultBookReportUpdateView.as_view(), name='adult_books_update'),
     path('events/', EventListView.as_view(), name='events_list'),
     path('event/create/', EventCreateView.as_view(), name='event_create'),  # Путь для создания события
     path('event/update/<int:id>/', EventUpdateView.as_view(), name='event_update'),  # Путь для обновления события

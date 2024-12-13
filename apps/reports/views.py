@@ -9,7 +9,7 @@ from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, UpdateView, ListView, TemplateView
 from .models import Event, AdultVisitReport, AdultBookReport, ChildVisitReport, ChildBookReport
-from .forms import EventForm, ChildBookReportForm
+from .forms import EventForm, AdultBookReportForm, AdultVisitReportForm
 from ..core.models import Employee, Cafedra
 
 
@@ -140,74 +140,64 @@ class EventUpdateView(LoginRequiredMixin, View):
         return render(request, 'events/event_form.html', {'form': form})
 
 
-class ChildBookListView(LoginRequiredMixin, TemplateView):
-    template_name = 'books/childbooks_list.html'
+class AdultBookReportListView(LoginRequiredMixin, ListView):
+    model = AdultBookReport
+    template_name = 'adult/adultvisits_list.html'
+    context_object_name = 'reports'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_queryset(self):
         user = self.request.user
         employee = Employee.objects.get(user=user)
+        return AdultBookReport.objects.filter(library=employee.branch)
 
-        # Получаем события за последние 15 дней
-        date_15_days_ago = timezone.now() - timedelta(days=15)
-        reports = ChildBookReport.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('date')
 
-        # Подготавливаем данные для графика (если необходимо)
-        dates = []
-        quantity_data = []
-        qty_books_14_data = []
-        age_35_data = []
-        age_other_data = []
-        total_age_data = []
+class AdultBookReportCreateView(LoginRequiredMixin, CreateView):
+    model = AdultBookReport
+    form_class = AdultBookReportForm
+    template_name = 'adult/adult_book_form.html'
 
-        day_count = defaultdict(lambda: {
-            'quantity': 0,
-            # Добавьте остальные поля по необходимости
-        })
+    def form_valid(self, form):
+        form.instance.library = Employee.objects.get(user=self.request.user).branch
+        return super().form_valid(form)
 
-        for report in reports:
-            day_str = report.date.strftime('%Y-%m-%d')
-            day_count[day_str]['quantity'] += report.qty_books_14  # Пример использования поля
 
-        for date, counts in sorted(day_count.items()):
-            dates.append(date)
-            quantity_data.append(counts['quantity'])
-            # Заполните остальные данные по необходимости
+class AdultBookReportUpdateView(LoginRequiredMixin, UpdateView):
+    model = AdultBookReport
+    form_class = AdultBookReportForm
+    template_name = 'adult/adult_book_form.html'
 
-        context['reports'] = reports  # Измените на reports
-        context['dates'] = dates
-        context['quantity_data'] = quantity_data
-        # Добавьте остальные данные по необходимости
+    def form_valid(self, form):
+        form.instance.library = Employee.objects.get(user=self.request.user).branch
+        return super().form_valid(form)
 
-        context['form'] = ChildBookReportForm(user=user)  # Используйте новую форму
 
-        return context
+class AdultVisitReportListView(LoginRequiredMixin, ListView):
+    model = AdultVisitReport
+    template_name = 'adult/adultvisits_list.html'
+    context_object_name = 'reports'
 
-    def post(self, request, *args, **kwargs):
-        if request.POST.get('pk'):  # Проверяем наличие pk в POST-запросе для редактирования
-            pk = request.POST['pk']
-            report_instance = get_object_or_404(ChildBookReport, pk=pk)
+    def get_queryset(self):
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
+        return AdultVisitReport.objects.filter(library=employee.branch)
 
-            form = ChildBookReportForm(request.POST, instance=report_instance)  # Создаем форму с текущими данными события
 
-            if form.is_valid():
-                form.save()
-                return redirect(reverse_lazy('events_list'))  # Перенаправление на список событий после успешного обновления
+class AdultVisitReportCreateView(LoginRequiredMixin, CreateView):
+    model = AdultVisitReport
+    form_class = AdultVisitReportForm
+    template_name = 'adult/adult_visit_form.html'
 
-            else:
-                context = self.get_context_data(form=form)
-                return self.render_to_response(context)
+    def form_valid(self, form):
+        form.instance.library = Employee.objects.get(user=self.request.user).branch
+        return super().form_valid(form)
 
-        else:  # Обработка создания нового события
-            form = ChildBookReportForm(request.POST)
 
-            if form.is_valid():
-                report_instance = form.save(commit=False)
-                report_instance.library = Employee.objects.get(user=request.user).branch  # Устанавливаем библиотеку
-                report_instance.save()
-                return redirect(reverse_lazy('events_list'))  # Перенаправление на список событий после успешного сохранения
+class AdultVisitReportUpdateView(LoginRequiredMixin, UpdateView):
+    model = AdultVisitReport
+    form_class = AdultVisitReportForm
+    template_name = 'adult/adult_visit_form.html'
 
-            else:
-                context = self.get_context_data(form=form)
-                return self.render_to_response(context)
+    def form_valid(self, form):
+        form.instance.library = Employee.objects.get(user=self.request.user).branch
+        return super().form_valid(form)
 
