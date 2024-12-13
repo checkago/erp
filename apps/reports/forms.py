@@ -13,8 +13,9 @@ class EventForm(forms.ModelForm):
         widgets = {
             'cafedra': forms.Select(attrs={'class': 'form-select'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'date': forms.DateInput(attrs={
+            'date': forms.TextInput(attrs={
                 'class': 'datepicker-here form-control digits',
+                'type': 'date',
                 'data-date-format': 'mm.dd.yyyy'
             }),
             'direction': forms.Select(attrs={'class': 'form-select'}),

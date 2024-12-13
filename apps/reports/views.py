@@ -47,12 +47,13 @@ class EventListView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['breadcrumb'] = {"parent": "Дневник", "child": "Мероприятия"}
         user = self.request.user
         employee = Employee.objects.get(user=user)
 
         # Получаем события за последние 15 дней
         date_15_days_ago = timezone.now() - timedelta(days=15)
-        events = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('date')
+        events = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('-date')[:15]
 
         # Подготавливаем данные для графика
         dates = []
@@ -111,13 +112,14 @@ class EventCreateView(LoginRequiredMixin, View):
         return render(request, 'events/event_form.html', {'form': form})
 
     def post(self, request):
-        form = EventForm(request.POST, user=request.user)  # Создаем форму с данными из POST-запроса
-
-        if form.is_valid():  # Проверяем валидность формы
-            form.save()  # Сохраняем новый объект
-            return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного создания
-
-        return render(request, 'events/event_form.html', {'form': form})  # Возвращаем форму с ошибками
+        form = EventForm(request.POST, user=request.user)
+        if form.is_valid():
+            event = form.save(commit=False)  # Не сохраняем объект сразу
+            employee = Employee.objects.get(user=request.user)
+            event.library = employee.branch  # Устанавливаем библиотеку
+            event.save()  # Сохраняем объект
+            return redirect(reverse_lazy('events_list'))
+        return render(request, 'events/event_form.html', {'form': form})
 
 
 class EventUpdateView(LoginRequiredMixin, View):
@@ -127,14 +129,15 @@ class EventUpdateView(LoginRequiredMixin, View):
         return render(request, 'events/event_form.html', {'form': form})
 
     def post(self, request, id):
-        event_instance = get_object_or_404(Event, id=id)  # Получаем объект события по id
-        form = EventForm(request.POST, instance=event_instance, user=request.user)  # Передаем данные из POST-запроса
-
-        if form.is_valid():  # Проверяем валидность формы
-            form.save()  # Сохраняем изменения в существующем объекте
-            return redirect(reverse_lazy('events_list'))  # Перенаправляем на список событий после успешного обновления
-
-        return render(request, 'events/event_form.html', {'form': form})  # Возвращаем форму с ошибками
+        event_instance = get_object_or_404(Event, id=id)
+        form = EventForm(request.POST, instance=event_instance, user=request.user)
+        if form.is_valid():
+            event = form.save(commit=False)  # Не сохраняем объект сразу
+            employee = Employee.objects.get(user=request.user)
+            event.library = employee.branch  # Устанавливаем библиотеку
+            event.save()  # Сохраняем объект
+            return redirect(reverse_lazy('events_list'))
+        return render(request, 'events/event_form.html', {'form': form})
 
 
 class ChildBookListView(LoginRequiredMixin, TemplateView):
