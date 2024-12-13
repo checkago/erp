@@ -141,9 +141,15 @@
                         <ul class="sidebar-submenu">
                             {% if request.user|has_group:'Администрация' or request.user|has_group:'Сотрудники библиотек' %}
                                 <li><a href="{% url 'diary' %}">Дневник</a></li>
+                                <!-- Отладочная информация -->
+                                <li>Пользователь: {{ request.user.username }} (Суперюзер: {{ request.user.is_superuser }})</li>
+                                <li>Группы: {{ request.user.groups.all }}</li>
                             {% endif %}
                             {% if request.user|has_group:'Администрация' or request.user|has_group:'Методисты' %}
                                 <li><a href="#">Дневник свод</a></li>
+                                <!-- Отладочная информация -->
+                                <li>Пользователь: {{ request.user.username }} (Суперюзер: {{ request.user.is_superuser }})</li>
+                                <li>Группы: {{ request.user.groups.all }}</li>
                             {% endif %}
                         </ul>
                     </li>
