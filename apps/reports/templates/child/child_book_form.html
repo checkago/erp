@@ -14,7 +14,7 @@
 <div class="page-body">
       {% include "layout/breadcrumb.html" %}
 
-     {% include "events/components/events_list_chart.html" %}
+     {% include "child/components/child_book_form.html" %}
 
 </div>
 
@@ -22,9 +22,11 @@
 
 {% block scriptcontent %}
 <!-- Plugins JS start-->
-    <script src="{% static 'assets/js/todo/todo.js'%}"></script>
+    <script src="{% static 'assets/js/todo/todo.js' %}"></script>
+    <script src="{% static 'assets/js/todo/todo.js' %}"></script>
     <script src="{% static 'assets/js/chart/apex-chart/apex-chart.js' %}"></script>
     <script>
+
 
         // Подготовка данных для графика из контекста Django
         var options = {
