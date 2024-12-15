@@ -27,11 +27,9 @@
 <script src="{% static 'assets/js/todo/todo.js'%}"></script>
  <script src="{% static 'assets/js/chart/apex-chart/apex-chart.js' %}"></script>
     <script>
-
-
-        // Подготовка данных для графика из контекста Django
-        var options = {
-            chart: {
+    // Подготовка данных для графика из контекста Django
+    var options = {
+        chart: {
                 locales: [{
                     "name": "ru",
                     "options": {
@@ -67,40 +65,40 @@
                     locale: 'ru'  // Устанавливаем язык панели инструментов на русский
                 }
             },
-            series: [
-                {
-                    name: 'Количество мероприятий',
-                    type: 'column',
-                    data: {{ quantity_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
-                },
-                {
-                    name: 'До 14 лет',
-                    type: 'column',
-                    data: {{ age_14_data|safe }} // Данные по возрасту до 14 лет за дни (столбцы)
-                },
-                {
-                    name: 'До 35 лет',
-                    type: 'column',
-                    data: {{ age_35_data|safe }} // Данные по возрасту до 35 лет за дни (столбцы)
-                },
-                {
-                    name: 'После 35 лет',
-                    type: 'column',
-                    data: {{ age_other_data|safe }} // Данные по остальным возрастам за дни (столбцы)
-                },
-                {
-                    name: 'Общее количество участников',
-                    type: 'line',
-                    data: {{ total_age_data|safe }} // Общее количество участников за дни (линия)
-                }
-            ],
-            xaxis: {
+        series: [
+            {
+                name: 'Количество книг до 14 лет',
+                type: 'column',
+                data: {{ qty_books_14_data|safe }} // Данные по количеству книг до 14 лет за дни (столбцы)
+            },
+            {
+                name: 'Количество книг до 30 лет',
+                type: 'column',
+                data: {{ qty_books_30_data|safe }} // Данные по количеству книг до 30 лет за дни (столбцы)
+            },
+            {
+                name: 'Количество книг после 30 лет',
+                type: 'column',
+                data: {{ qty_books_other_data|safe }} // Данные по количеству книг после 30 лет за дни (столбцы)
+            },
+            {
+                name: 'Общее количество книг',
+                type: 'line',
+                data: {{ total_books_data|safe }} // Общее количество книг за дни (линия)
+            },
+            {
+                name: 'Общее количество справочников',
+                type: 'line',
+                data: {{ total_references_data|safe }} // Общее количество справочников за дни (линия)
+            }
+        ],
+        xaxis: {
                 categories: {{ dates|safe }}, // Даты на оси X (по дням)
             },
-        };
+    };
 
-        // Инициализация и рендеринг графика
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
-    </script>
+    // Инициализация и рендеринг графика
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+</script>
 {% endblock %}

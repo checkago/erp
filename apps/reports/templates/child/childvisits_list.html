@@ -152,20 +152,8 @@
                 data: {{ total_events_data|safe }} // Общее количество мероприятий за дни (линия)
             }
         ],
-        xAxis: {
-            type: 'datetime',
-            dateTimeLabelFormats: {
-                day: '%d %b %Y, %A', // ex- 01 Jan 2023, Sunday
-                week: '%d %b %Y, %A', // ex- 01 Jan 2023, Sunday
-                month: '%b %Y', // ex- Jan 2023
-            },
-            startOnTick: true,
-            endOnTick: true,
-            showLastLabel: true,
-            labels: {
-                rotation: -45,
-                align: 'right'
-            }
+        xaxis: {
+                categories: {{ dates|safe }}, // Даты на оси X (по дням)
         },
     };
 

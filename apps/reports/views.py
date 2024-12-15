@@ -71,7 +71,7 @@ class EventListView(LoginRequiredMixin, TemplateView):
         })
 
         for event in events:
-            day_str = event.date.strftime('%Y-%m-%d')
+            day_str = event.date.strftime('%d.%m.%Y')
             day_count[day_str]['quantity'] += event.quantity
             day_count[day_str]['age_14'] += event.age_14
             day_count[day_str]['age_35'] += event.age_35
@@ -213,7 +213,7 @@ class AdultVisitReportListView(LoginRequiredMixin, ListView):
         })
 
         for visit in visits:
-            day_str = visit.date.strftime('%Y-%m-%d')
+            day_str = visit.date.strftime('%d.%m.%Y')
             day_count[day_str]['qty_reg_35'] += visit.qty_reg_35
             day_count[day_str]['qty_reg_other'] += visit.qty_reg_other
             day_count[day_str]['qty_reg_invalid'] += visit.qty_reg_invalid
@@ -353,7 +353,7 @@ class AdultBookReportListView(LoginRequiredMixin, ListView):
         })
 
         for report in reports:
-            day_str = report.date.strftime('%Y-%m-%d')
+            day_str = report.date.strftime('%d.%m.%Y')
             day_count[day_str]['qty_books_14'] += report.qty_books_14
             day_count[day_str]['qty_books_35'] += report.qty_books_35
             day_count[day_str]['qty_books_invalid'] += report.qty_books_invalid
@@ -374,8 +374,7 @@ class AdultBookReportListView(LoginRequiredMixin, ListView):
             day_count[day_str]['qty_books_reference_online'] += report.qty_books_reference_online
 
         for date, counts in sorted(day_count.items()):
-            timestamp = int(datetime.strptime(date, '%Y-%m-%d').timestamp() * 1000)
-            dates.append(timestamp)
+            dates.append(date)
             qty_books_14_data.append(counts['qty_books_14'])
             qty_books_35_data.append(counts['qty_books_35'])
             qty_books_invalid_data.append(counts['qty_books_invalid'])
@@ -509,7 +508,7 @@ class ChildVisitReportListView(LoginRequiredMixin, ListView):
         })
 
         for visit in visits:
-            day_str = visit.date.strftime('%Y-%m-%d')
+            day_str = visit.date.strftime('%d.%m.%Y')
             day_count[day_str]['qty_reg_7'] += visit.qty_reg_7
             day_count[day_str]['qty_reg_14'] += visit.qty_reg_14
             day_count[day_str]['qty_reg_30'] += visit.qty_reg_30
@@ -526,8 +525,7 @@ class ChildVisitReportListView(LoginRequiredMixin, ListView):
             day_count[day_str]['qty_events_out_station'] += visit.qty_events_out_station
 
         for date, counts in sorted(day_count.items()):
-            timestamp = int(datetime.strptime(date, '%Y-%m-%d').timestamp() * 1000)
-            dates.append(timestamp)
+            dates.append(date)
             qty_reg_7_data.append(counts['qty_reg_7'])
             qty_reg_14_data.append(counts['qty_reg_14'])
             qty_reg_30_data.append(counts['qty_reg_30'])
@@ -650,7 +648,7 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
         })
 
         for report in reports:
-            day_str = report.date.strftime('%Y-%m-%d')
+            day_str = report.date.strftime('%d.%m.%Y')
             day_count[day_str]['qty_books_14'] += report.qty_books_14
             day_count[day_str]['qty_books_30'] += report.qty_books_30
             day_count[day_str]['qty_books_other'] += report.qty_books_other
@@ -671,8 +669,7 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
             day_count[day_str]['qty_books_reference_online'] += report.qty_books_reference_online
 
         for date, counts in sorted(day_count.items()):
-            timestamp = int(datetime.strptime(date, '%Y-%m-%d').timestamp() * 1000)
-            dates.append(timestamp)
+            dates.append(date)
             qty_books_14_data.append(counts['qty_books_14'])
             qty_books_30_data.append(counts['qty_books_30'])
             qty_books_other_data.append(counts['qty_books_other'])
