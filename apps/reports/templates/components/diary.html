@@ -7,37 +7,9 @@
       <div class="col-xl-9 xl-70 box-col-12 d-flex">
         <div class="card">
           <div class="card-header">
-              <h4>Таблица записей</h4>
+              <h4>Сводная информация</h4>
           </div>
           <div class="card-body">
-            <div class="todo">
-              <div class="todo-list-wrapper">
-                <div class="todo-list-container">
-                  <div class="todo-list-body">
-                    <div class="todo-list-footer"> 
-                      <div class="new-task-wrapper mb-4">
-                        <textarea id="new-task" placeholder="Enter new task here. . ."></textarea><span class="btn btn-danger cancel-btn" id="close-task-panel">Close</span><span class="btn btn-success ms-3 add-new-task-btn" id="add-task">Add Task</span>
-                      </div>
-                    </div>
-                    <ul id="todo-list">
-                        {% for Event in events %}
-                      <li class="task">
-                        <div class="task-container">
-                          <h5 class="task-label">{{ Event.date }}</h5>
-                          <h5 class="task-label">{{ Event.name }}</h5>
-                          <h5 class="task-label">{{ Event.age_14 }}</h5>
-                          <h5 class="task-label">{{ Event.age_35 }}</h5>
-                        </div>
-                      </li>
-                        {% endfor %}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="notification-popup hide">
-                <p><span class="task"></span><span class="notification-text"></span></p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -45,34 +17,7 @@
           <div class="card">
               <div class="card-body">
                   <div class="row">
-                      <div class="col-4">
 
-                      </div>
-                      <div class="col-4">
-
-                      </div>
-                      <div class="col-4 table-responsive signal-table">
-                          <table class="table table-hover">
-                              <thead>
-                                <tr>
-                                  <th scope="col">Дата</th>
-                                  <th scope="col">Название</th>
-                                  <th scope="col">Направление</th>
-                                  <th scope="col">Количество</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {% for Event in events %}
-                                <tr>
-                                  <th scope="col">{{ Event.date }}</th>
-                                  <th scope="col">{{ Event.name }}</th>
-                                  <th scope="col">{{ Event.direction }}</th>
-                                  <th scope="col">{{ Event.qty }}</th>
-                                </tr>
-                                {% endfor %}
-                              </tbody>
-                          </table>
-                      </div>
                   </div>
               </div>
           </div>

@@ -28,51 +28,51 @@
             </div>
             <div class="card-body">
                 <div class="card basic_table">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="table-warning">
-                            <tr>
-                                <th>Дата</th>
-                                <th>Кол.</th>
-                                <th>Наименование</th>
-                                <th>Направление</th>
-                                <th>До 14</th>
-                                <th>До 35</th>
-                                <th>Прочие</th>
-                                <th>Инвалиды</th>
-                                <th>Внестационар</th>
-                                <th>В рамках</th>
-                                <th>Платно</th>
-                                <th>Изменить</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for Event in events %}
-                            <tr>
-                                <th>{{ Event.date|date:"d.m.Y" }}</th>
-                                <th>{{ Event.quantity }}</th>
-                                <th>{{ Event.name }}</th>
-                                <th>{{ Event.direction }}</th>
-                                <th>{{ Event.age_14}}</th>
-                                <th>{{ Event.age_35}}</th>
-                                <th>{{ Event.age_other}}</th>
-                                <th>{{ Event.invalids}}</th>
-                                <th>{{ Event.out_of_station}}</th>
-                                <th>{{ Event.as_part}}</th>
-                                <th>{% if Event.paid == True %}<i class="fa fa-ruble fa-2x"></i>{% else %}{% endif %}</th>
-                                <th>
-                                    <a class="float-end" href="{% url 'event_update' Event.id %}">
-                                        <i data-feather="edit"></i>
-                                    </a>
-                                </th>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-warning">
+                                    <tr>
+                                        <th>Дата</th>
+                                        <th>Кол.</th>
+                                        <th>Наименование</th>
+                                        <th>Направление</th>
+                                        <th>До 14</th>
+                                        <th>До 35</th>
+                                        <th>Прочие</th>
+                                        <th>Инвалиды</th>
+                                        <th>Внестационар</th>
+                                        <th>В рамках</th>
+                                        <th>Платно</th>
+                                        <th>Изменить</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for Event in events %}
+                                    <tr>
+                                        <th>{{ Event.date|date:"d.m.Y" }}</th>
+                                        <th>{{ Event.quantity }}</th>
+                                        <th>{{ Event.name }}</th>
+                                        <th>{{ Event.direction }}</th>
+                                        <th>{{ Event.age_14}}</th>
+                                        <th>{{ Event.age_35}}</th>
+                                        <th>{{ Event.age_other}}</th>
+                                        <th>{{ Event.invalids}}</th>
+                                        <th>{{ Event.out_of_station}}</th>
+                                        <th>{{ Event.as_part}}</th>
+                                        <th>{% if Event.paid == True %}<i class="fa fa-ruble fa-2x"></i>{% else %}{% endif %}</th>
+                                        <th>
+                                            <a class="float-end" href="{% url 'event_update' Event.id %}">
+                                                <i data-feather="edit"></i>
+                                            </a>
+                                        </th>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
             </div>
         </div>
     </div>
