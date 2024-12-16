@@ -84,9 +84,6 @@ class AdultBookReportForm(forms.ModelForm):
         if user:
             employee = Employee.objects.get(user=user)
             self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
-            self.initial['library'] = employee.branch
-            self.fields['library'].widget.attrs['disabled'] = True
-            self.fields['library'].widget.attrs['readonly'] = True
 
 
 class AdultVisitReportForm(forms.ModelForm):
@@ -124,9 +121,6 @@ class AdultVisitReportForm(forms.ModelForm):
         if user:
             employee = Employee.objects.get(user=user)
             self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
-            self.initial['library'] = employee.branch
-            self.fields['library'].widget.attrs['disabled'] = True
-            self.fields['library'].widget.attrs['readonly'] = True
 
 
 class ChildVisitReportForm(forms.ModelForm):
