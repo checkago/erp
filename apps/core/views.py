@@ -1,6 +1,6 @@
-from django.contrib.auth import logout, authenticate, login
+from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -8,7 +8,8 @@ from django.contrib import messages
 from django.views.decorators.cache import cache_page
 from rest_framework import generics
 
-from apps.core.models import Employee, Branch
+from apps.core.forms import ErpUserForm, EmployeeForm
+from apps.core.models import Employee, Branch, Position
 from apps.core.serializers import EmployeeSerializer
 
 
@@ -86,3 +87,47 @@ def branch_list_view(request):
     branches = Branch.objects.all().order_by('short_name')
     context = {"breadcrumb": {"parent": "Главная", "child": "Филиалы"}, 'branches': branches}
     return render(request, 'branch_list.html', context=context)
+
+
+def user_profile(request):
+    user = request.user
+    employee = Employee.objects.get(user=user)
+    positions = Position.objects.all()
+
+    if request.method == 'POST':
+        user_form = ErpUserForm(request.POST, instance=user)
+        employee_form = EmployeeForm(request.POST, instance=employee)
+
+        if user_form.is_valid() and employee_form.is_valid():
+            user_form.save()
+            employee_form.save()
+            return redirect('user_profile')
+    else:
+        user_form = ErpUserForm(instance=user)
+        employee_form = EmployeeForm(instance=employee)
+
+    password_form = PasswordChangeForm(user)
+
+    context = {
+        'user': user,
+        'employee': employee,
+        'positions': positions,
+        'user_form': user_form,
+        'employee_form': employee_form,
+        'password_form': password_form,
+    }
+
+    return render(request, 'user_profile.html', context)
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect('user_profile')
+    else:
+        form = PasswordChangeForm(request.user)
+
+    return render(request, 'user_profile.html', {'form': form})
