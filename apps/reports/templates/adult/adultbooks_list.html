@@ -25,5 +25,100 @@
 {% block scriptcontent %}
 <!-- Plugins JS start-->
 <script src="{% static 'assets/js/todo/todo.js'%}"></script>
-<!-- Plugins JS Ends-->
+<script src="{% static 'assets/js/chart/apex-chart/apex-chart.js' %}"></script>
+<script>
+    // Подготовка данных для графика из контекста Django
+    var options = {
+        chart: {
+            locales: [{
+                "name": "ru",
+                "options": {
+                    "months": ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+                    "shortMonths": ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+                    "days": ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
+                    "shortDays": ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+                    "toolbar": {
+                        "exportToSVG": "Экспорт в SVG",
+                        "exportToPNG": "Экспорт в PNG",
+                        "exportToCSV": "Экспорт в CSV",
+                        "menu": "Меню",
+                        "selection": "Выбор",
+                        "selectionZoom": "Масштабирование выбора",
+                        "zoomIn": "Увеличить",
+                        "zoomOut": "Уменьшить",
+                        "pan": "Перемещение",
+                        "reset": "Сброс"
+                    }
+                }
+            }],
+            defaultLocale: 'ru',
+            height: 350,
+            type: 'line', // Основной тип графика (линейный)
+            toolbar: {
+                show: true,
+                tools: {
+                    download: true,
+                    selection: true,
+                    zoom: true,
+                    reset: true,
+                },
+                locale: 'ru'  // Устанавливаем язык панели инструментов на русский
+            }
+        },
+        series: [
+            {
+                name: 'Книговыдача (14+)',
+                type: 'column',
+                data: {{ qty_books_14_data|safe }} // Данные по книговыдаче за дни (столбцы)
+            },
+            {
+                name: 'Книговыдача (35+)',
+                type: 'column',
+                data: {{ qty_books_35_data|safe }} // Данные по книговыдаче за дни (столбцы)
+            },
+            {
+                name: 'Книговыдача (Инвалиды)',
+                type: 'column',
+                data: {{ qty_books_invalid_data|safe }} // Данные по книговыдаче за дни (столбцы)
+            },
+            {
+                name: 'Общее количество книговыдачи',
+                type: 'line',
+                data: {{ total_books_data|safe }} // Общее количество книговыдачи за дни (линия)
+            },
+            {
+                name: 'Справки (14+)',
+                type: 'column',
+                data: {{ qty_books_reference_14_data|safe }} // Данные по справкам за дни (столбцы)
+            },
+            {
+                name: 'Справки (35+)',
+                type: 'column',
+                data: {{ qty_books_reference_35_data|safe }} // Данные по справкам за дни (столбцы)
+            },
+            {
+                name: 'Справки (Инвалиды)',
+                type: 'column',
+                data: {{ qty_books_reference_invalid_data|safe }} // Данные по справкам за дни (столбцы)
+            },
+            {
+                name: 'Общее количество справок',
+                type: 'line',
+                data: {{ total_references_data|safe }} // Общее количество справок за дни (линия)
+            }
+        ],
+        xaxis: {
+            type: 'datetime',
+            categories: {{ dates|safe }}, // Даты на оси X (по дням)
+            labels: {
+                rotation: -45,
+                align: 'right'
+            }
+        }
+    };
+
+    // Инициализация и рендеринг графика
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+</script>
 {% endblock %}

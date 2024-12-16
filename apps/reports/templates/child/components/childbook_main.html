@@ -1,99 +1,98 @@
 {% load static %}
-<div class="container-fluid email-wrap bookmark-wrap todo-wrap">
-    <div class="row">
-      <div class="col-xl-3 xl-30 box-col-12">
-        <div class="email-sidebar md-sidebar"><a class="btn btn-primary email-aside-toggle md-sidebar-toggle">To Do filter</a>
-          <div class="email-left-aside md-sidebar-aside">
-            <div class="card"> 
-              <div class="card-header">
-                <div class="email-app-sidebar left-bookmark custom-scrollbar">
-                  <div class="d-flex align-items-center">
-                    <div class="flex-grow-1"> 
-                      <h4 class="f-w-600 text-primary"> Разделы дневника</h4>
-                    </div>
-                  </div>
-                </div>
-              </div>
-                <div class="card-body">
-                    <div class="email-app-sidebar left-bookmark custom-scrollbar">
-                        <ul class="nav main-menu">
-                            <div class="div"></div>
-                            <li class="nav-item"><a href="#"><span class="iconbg badge-light-success"><i data-feather="file-text"></i></span><span class="title ms-2">Регистрация/Посещения</span></a></li>
-                            <li class="nav-item"><a href="#"><span class="iconbg badge-light-danger"><i data-feather="book-open"></i></span><span class="title ms-2">Книговыдача</span></a></li>
-                            <li class="nav-item"><a href="{% url 'event_create' %}"><span class="iconbg badge-light-info"><i data-feather="users"></i></span><span class="title ms-2">Массовые мероприятия</span></a></li>
-                            <li class="nav-item">
-                              <button class="btn-primary badge-light d-block btn-mail w-100"><i class="me-2" data-feather="check-circle"> </i>Сформировать отчет</button>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-          </div>
-        </div>
-      </div>
+<div class="container-fluid email-wrap todo-wrap">
+    <div class="row flex-row">
+
+      {% include 'components/diary_sidebar.html' %}
+
       <div class="col-xl-9 xl-70 box-col-12">
         <div class="card">
-          <div class="card-header">
-            <h3 class="mb-0">To-Do</h3>
-          </div>
           <div class="card-body">
-            <div class="todo">
-              <div class="todo-list-wrapper">
-                <div class="todo-list-container">
-                  <div class="mark-all-tasks">
-                    <div class="mark-all-tasks-container"><span class="mark-all-btn" id="mark-all-finished" role="button"><span class="btn-label">Mark all as finished</span><span class="action-box completed"><i class="icon"><i class="icon-check"></i></i></span></span><span class="mark-all-btn move-down" id="mark-all-incomplete" role="button"><span class="btn-label">Mark all as Incomplete</span><span class="action-box"><i class="icon"><i class="icon-check"></i></i></span></span></div>
-                    <div class="todo-list-footer ms-2">
-                      <div class="add-task-btn-wrapper"><span class="add-task-btn">
-                          <button class="btn btn-primary"><i class="icon-plus"></i> Add new task</button></span></div>
-                    </div>
-                  </div>
-                  <div class="todo-list-body">
-                    <div class="todo-list-footer"> 
-                      <div class="new-task-wrapper mb-4">
-                        <textarea id="new-task" placeholder="Enter new task here. . ."></textarea><span class="btn btn-danger cancel-btn" id="close-task-panel">Close</span><span class="btn btn-success ms-3 add-new-task-btn" id="add-task">Add Task</span>
-                      </div>
-                    </div>
-                    <ul id="todo-list">
-                        {% for Event in events %}
-                      <li class="task">
-                        <div class="task-container">
-                          <h4 class="task-label">Check validation involves making sure all your tags are properly closed and nested.</h4>
-                          <div class="d-flex align-items-center gap-4"><span class="badge badge-light-primary">In Progress</span>
-                            <h5 class="assign-name m-0">10 Nov</h5><span class="task-action-btn"><span class="action-box large delete-btn" title="Delete Task"><i class="icon"><i class="icon-trash"></i></i></span><span class="action-box large complete-btn" title="Mark Complete"><i class="icon"><i class="icon-check"></i></i></span></span>
-                          </div>
-                        </div>
-                      </li>
-                        {% endfor %}
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="notification-popup hide">
-                <p><span class="task"></span><span class="notification-text"></span></p>
-              </div>
-            </div>
-            <!-- HTML Template for tasks-->
-            <script id="task-template" type="tect/template">
-              <li class="task">
-                <div class="task-container">
-                  <h4 class="task-label"></h4>
-                  <div class="d-flex align-items-center gap-4">
-                    <span class="badge badge-light-danger">Pending</span>
-                    <h5 class="assign-name">16 Jan</h5>
-                    <span class="task-action-btn">
-                      <span class="action-box large delete-btn" title="Delete Task">
-                        <i class="icon"><i class="icon-trash"></i></i>
-                      </span>
-                      <span class="action-box large complete-btn" title="Mark Complete">
-                        <i class="icon"><i class="icon-check"></i></i>
-                      </span>
-                    </span>
-                  </div>
-                </div>
-              </li>
-            </script>
+            <div id="chart"> </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-4"><h4>Таблица книговыдачи</h4></div>
+                    <div class="col-2"></div>
+                    <div class="col-2"></div>
+                    <div class="col-4">
+                        <a href="{% url 'child_books_create' %}" class="btn btn-lg btn-primary d-flex float-end">
+                            <i class="me-2"  data-feather="plus-square"> </i> Добавить книговыдачу в дневник
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="card basic_table">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-warning">
+                                    <tr>
+                                        <th>Дата отчета</th>
+                                        <th>Книговыдача (До 14)</th>
+                                        <th>Книговыдача (15-30)</th>
+                                        <th>Книговыдача (Прочие)</th>
+                                        <th>Общ.-политтич.лит-ра</th>
+                                        <th>Естеств. Науки. Медицина</th>
+                                        <th>Техника</th>
+                                        <th>Сельское хозяйство</th>
+                                        <th>Спорт. Искусство</th>
+                                        <th>Языкознание. Литературоведение</th>
+                                        <th>Художественная лит-ра</th>
+                                        <th>Детская литература</th>
+                                        <th>Прочие(в т.ч. журналы)</th>
+                                        <th>Аудиокниги</th>
+                                        <th>Краеведение(в том числе)</th>
+                                        <th>Справки (14)</th>
+                                        <th>Справки (30)</th>
+                                        <th>Справки (Прочие)</th>
+                                        <th>Справки (Удаленно)</th>
+                                        <th>Примечание</th>
+                                        <th>Изменить</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for report in reports %}
+                                    <tr>
+                                        <td>{{ report.date|date:"d.m.Y" }}</td>
+                                        <td>{{ report.qty_books_14 }}</td>
+                                        <td>{{ report.qty_books_30 }}</td>
+                                        <td>{{ report.qty_books_other }}</td>
+                                        <td>{{ report.qty_books_part_opl }}</td>
+                                        <td>{{ report.qty_books_part_enm }}</td>
+                                        <td>{{ report.qty_books_part_tech }}</td>
+                                        <td>{{ report.qty_books_part_sh }}</td>
+                                        <td>{{ report.qty_books_part_si }}</td>
+                                        <td>{{ report.qty_books_part_yl }}</td>
+                                        <td>{{ report.qty_books_part_hl }}</td>
+                                        <td>{{ report.qty_books_part_dl }}</td>
+                                        <td>{{ report.qty_books_part_other }}</td>
+                                        <td>{{ report.qty_books_part_audio }}</td>
+                                        <td>{{ report.qty_books_part_krai }}</td>
+                                        <td>{{ report.qty_books_reference_14 }}</td>
+                                        <td>{{ report.qty_books_reference_30 }}</td>
+                                        <td>{{ report.qty_books_reference_other }}</td>
+                                        <td>{{ report.qty_books_reference_online }}</td>
+                                        <td>{{ report.note }}</td>
+                                        <td>
+                                            <a class="float-end" href="{% url 'child_books_update' report.id %}">
+                                                <i data-feather="edit"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
   </div>

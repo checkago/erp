@@ -10,7 +10,7 @@
                 <div class="col-4"><h4>Форма мероприятия</h4></div>
             </div>
             <div class="card-body">
-                <form method="post" id="AdultBookForm" class="theme-form">
+                <form method="post" id="ChildBookReportForm" class="theme-form">
                     {% csrf_token %}
                     <div class="modal-body">
 
@@ -36,18 +36,21 @@
                                     <legend class="text-warning">Книговыдача</legend>
                                     <div class="row mb-3 g-3">
                                         <div class="col-md-3">
-                                            <label for="id_qty_books_14" class="form-label">Книговыдача (14+)</label>
+                                            <label for="id_qty_books_14" class="form-label">Книговыдача (До 14)</label>
                                             {{ form.qty_books_14 }}
                                         </div>
                                         <div class="col-md-3">
-                                            <label for="id_qty_books_35" class="form-label">Книговыдача (35+)</label>
-                                            {{ form.qty_books_35 }}
+                                            <label for="id_qty_books_30" class="form-label">Книговыдача (15-30)</label>
+                                            {{ form.qty_books_30 }}
                                         </div>
                                         <div class="col-md-3">
-                                            <label for="id_qty_books_invalid" class="form-label">Книговыдача (Инвалиды)</label>
-                                            {{ form.qty_books_invalid }}
+                                            <label for="id_qty_books_other" class="form-label">Книговыдача (Прочие)</label>
+                                            {{ form.qty_books_other }}
                                         </div>
                                     </div>
+                                </fieldset>
+                                <fieldset>
+                                    <legend class="text-success">В том числе</legend>
                                     <div class="row mb-3 g-3">
                                         <div class="col-md-3">
                                             <label for="id_qty_books_part_opl" class="form-label">Общ.-политтич.лит-ра</label>
@@ -107,16 +110,16 @@
                             <legend class="text-info">Справки</legend>
                             <div class="row mb-3 g-3">
                                 <div class="col-md-3">
-                                    <label for="id_qty_books_reference_14" class="form-label">Справки (14+)</label>
+                                    <label for="id_qty_books_reference_14" class="form-label">Справки (До 14)</label>
                                     {{ form.qty_books_reference_14 }}
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="id_qty_books_reference_35" class="form-label">Справки (35+)</label>
-                                    {{ form.qty_books_reference_35 }}
+                                    <label for="id_qty_books_reference_30" class="form-label">Справки (15-30)</label>
+                                    {{ form.qty_books_reference_30 }}
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="id_qty_books_reference_invalid" class="form-label">Справки (Инвалиды)</label>
-                                    {{ form.qty_books_reference_invalid }}
+                                    <label for="id_qty_books_reference_other" class="form-label">Справки (Прочие)</label>
+                                    {{ form.qty_books_reference_other }}
                                 </div>
                                 <div class="col-md-3">
                                     <label for="id_qty_books_reference_online" class="form-label">Справки (Удаленно)</label>
@@ -133,8 +136,8 @@
 
                     </div>
                     <div class="modal-footer">
-                        <a href="{% url 'adult_books_list' %}" class="btn btn-secondary">Закрыть</a>
-                        <button type="submit" form="AdultBookForm" class="btn btn-primary">Сохранить изменения</button>
+                        <a href="{% url 'child_books_list' %}" class="btn btn-secondary">Закрыть</a>
+                        <button type="submit" form="ChildBookReportForm" class="btn btn-primary">Сохранить изменения</button>
                     </div>
                 </form>
 

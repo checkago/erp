@@ -25,5 +25,116 @@
 {% block scriptcontent %}
 <!-- Plugins JS start-->
 <script src="{% static 'assets/js/todo/todo.js'%}"></script>
-<!-- Plugins JS Ends-->
+<script src="{% static 'assets/js/chart/apex-chart/apex-chart.js' %}"></script>
+<script>
+    // Подготовка данных для графика из контекста Django
+    var options = {
+        chart: {
+            locales: [{
+                "name": "ru",
+                "options": {
+                    "months": ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+                    "shortMonths": ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"],
+                    "days": ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"],
+                    "shortDays": ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+                    "toolbar": {
+                        "exportToSVG": "Экспорт в SVG",
+                        "exportToPNG": "Экспорт в PNG",
+                        "exportToCSV": "Экспорт в CSV",
+                        "menu": "Меню",
+                        "selection": "Выбор",
+                        "selectionZoom": "Масштабирование выбора",
+                        "zoomIn": "Увеличить",
+                        "zoomOut": "Уменьшить",
+                        "pan": "Перемещение",
+                        "reset": "Сброс"
+                    }
+                }
+            }],
+            defaultLocale: 'ru',
+            height: 350,
+            type: 'line', // Основной тип графика (линейный)
+            toolbar: {
+                show: true,
+                tools: {
+                    download: true,
+                    selection: true,
+                    zoom: true,
+                    reset: true,
+                },
+                locale: 'ru'  // Устанавливаем язык панели инструментов на русский
+            }
+        },
+        series: [
+            {
+                name: 'Новые (Молодежь 14-35)',
+                type: 'column',
+                data: {{ qty_reg_35_data|safe }} // Данные по количеству регистраций за дни (столбцы)
+            },
+            {
+                name: 'Новые (Прочие 35+)',
+                type: 'column',
+                data: {{ qty_reg_other_data|safe }} // Данные по количеству регистраций за дни (столбцы)
+            },
+            {
+                name: 'Новые (Инвалиды)',
+                type: 'column',
+                data: {{ qty_reg_invalid_data|safe }} // Данные по количеству регистраций за дни (столбцы)
+            },
+            {
+                name: 'Посещение (Молодежь 15-35)',
+                type: 'column',
+                data: {{ qty_visited_35_data|safe }} // Данные по количеству посещений за дни (столбцы)
+            },
+            {
+                name: 'Посещение (Прочие 35+)',
+                type: 'column',
+                data: {{ qty_visited_other_data|safe }} // Данные по количеству посещений за дни (столбцы)
+            },
+            {
+                name: 'Посещение (Инвалиды)',
+                type: 'column',
+                data: {{ qty_visited_invalids_data|safe }} // Данные по количеству посещений за дни (столбцы)
+            },
+            {
+                name: 'Мероприятия (Молодежь 14-35)',
+                type: 'column',
+                data: {{ qty_events_35_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
+            },
+            {
+                name: 'Мероприятия (Прочие 35+)',
+                type: 'column',
+                data: {{ qty_events_other_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
+            },
+            {
+                name: 'Мероприятия (Инвалиды)',
+                type: 'column',
+                data: {{ qty_events_invalids_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
+            },
+            {
+                name: 'Общее количество регистраций',
+                type: 'line',
+                data: {{ total_reg_data|safe }} // Общее количество регистраций за дни (линия)
+            },
+            {
+                name: 'Общее количество посещений',
+                type: 'line',
+                data: {{ total_visited_data|safe }} // Общее количество посещений за дни (линия)
+            },
+            {
+                name: 'Общее количество мероприятий',
+                type: 'line',
+                data: {{ total_events_data|safe }} // Общее количество мероприятий за дни (линия)
+            }
+        ],
+        xaxis: {
+            categories: {{ dates|safe }}, // Даты на оси X (по дням)
+        },
+    };
+
+    // Инициализация и рендеринг графика
+    var chart = new ApexCharts(document.querySelector("#chart"), options);
+    chart.render();
+</script>
+
 {% endblock %}
