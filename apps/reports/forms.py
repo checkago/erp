@@ -27,7 +27,7 @@ class EventForm(forms.ModelForm):
             'out_of_station': forms.NumberInput(attrs={'class': 'form-control'}),
             'as_part': forms.Select(attrs={'class': 'form-select'}),
             'paid': forms.TextInput(attrs={
-                'class': 'checkbox_animated',
+                'class': 'checkbox_animated float-center',
                 'type': 'checkbox',
             }),
             'note': forms.Textarea(attrs={'class': 'form-control', 'rows': '1'}),
