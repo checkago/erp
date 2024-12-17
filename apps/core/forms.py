@@ -7,8 +7,14 @@ class ErpUserForm(forms.ModelForm):
         model = ErpUser
         fields = ('first_name', 'last_name', 'email', 'avatar', 'bio')
 
+        widgets = {
+            'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': '2'}),
+        }
+
 
 class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
-        fields = ('position', 'branch', 'phone', 'start_date', 'end_date')
+        fields = ('phone',)
+
+
