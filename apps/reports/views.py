@@ -156,15 +156,29 @@ class AdultBookReportCreateView(LoginRequiredMixin, CreateView):
     form_class = AdultBookReportForm
     template_name = 'adult/adult_book_form.html'
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
         return super().form_valid(form)
+
+
+    def get_success_url(self):
+        return reverse_lazy('adult_visits_list')
 
 
 class AdultBookReportUpdateView(LoginRequiredMixin, UpdateView):
     model = AdultBookReport
     form_class = AdultBookReportForm
     template_name = 'adult/adult_book_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
@@ -276,6 +290,11 @@ class AdultVisitReportCreateView(LoginRequiredMixin, CreateView):
     form_class = AdultVisitReportForm
     template_name = 'adult/adult_visit_form.html'
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
         return super().form_valid(form)
@@ -288,6 +307,11 @@ class AdultVisitReportUpdateView(LoginRequiredMixin, UpdateView):
     model = AdultVisitReport
     form_class = AdultVisitReportForm
     template_name = 'adult/adult_visit_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
@@ -435,6 +459,11 @@ class AdultBookReportCreateView(LoginRequiredMixin, CreateView):
     form_class = AdultBookReportForm
     template_name = 'adult/adult_book_form.html'
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
         return super().form_valid(form)
@@ -447,6 +476,11 @@ class AdultBookReportUpdateView(LoginRequiredMixin, UpdateView):
     model = AdultBookReport
     form_class = AdultBookReportForm
     template_name = 'adult/adult_book_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
@@ -571,6 +605,11 @@ class ChildVisitReportCreateView(LoginRequiredMixin, CreateView):
     form_class = ChildVisitReportForm
     template_name = 'child/child_visit_form.html'
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
         return super().form_valid(form)
@@ -583,6 +622,11 @@ class ChildVisitReportUpdateView(LoginRequiredMixin, UpdateView):
     model = ChildVisitReport
     form_class = ChildVisitReportForm
     template_name = 'child/child_visit_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
@@ -731,6 +775,11 @@ class ChildBookReportCreateView(LoginRequiredMixin, CreateView):
     template_name = 'child/child_book_form.html'
     success_url = reverse_lazy('child_books_list')
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
         return super().form_valid(form)
@@ -741,6 +790,11 @@ class ChildBookReportUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ChildBookReportForm
     template_name = 'child/child_book_form.html'
     success_url = reverse_lazy('child_books_list')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch

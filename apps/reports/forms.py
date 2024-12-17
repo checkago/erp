@@ -26,7 +26,7 @@ class EventForm(forms.ModelForm):
             'invalids': forms.NumberInput(attrs={'class': 'form-control'}),
             'out_of_station': forms.NumberInput(attrs={'class': 'form-control'}),
             'as_part': forms.Select(attrs={'class': 'form-select'}),
-            'paid': forms.TextInput(attrs={
+            'paid': forms.CheckboxInput(attrs={
                 'class': 'checkbox_animated float-center',
                 'type': 'checkbox',
             }),
@@ -53,8 +53,9 @@ class AdultBookReportForm(forms.ModelForm):
                   'note']
         widgets = {
             'cafedra': forms.Select(attrs={'class': 'form-select'}),
-            'date': forms.DateInput(attrs={
+            'date': forms.TextInput(attrs={
                 'class': 'datepicker-here form-control digits',
+                'type': 'date',
                 'data-date-format': 'mm.dd.yyyy'
             }),
             'qty_books_14': forms.NumberInput(attrs={'class': 'form-control'}),
