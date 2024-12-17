@@ -152,6 +152,7 @@ class AdultVisitReportListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['breadcrumb'] = {"parent": "Посещения", "child": "Взрослая"}
         visits = self.get_queryset()
 
         # Подготавливаем данные для графика
@@ -288,6 +289,7 @@ class AdultBookReportListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['breadcrumb'] = {"parent": "Книговыдача", "child": "Взрослая"}
         reports = self.get_queryset()
 
         # Подготавливаем данные для графика
@@ -460,6 +462,7 @@ class ChildVisitReportListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['breadcrumb'] = {"parent": "Посещения", "child": "Детская"}
         visits = self.get_queryset()
 
         # Подготавливаем данные для графика
@@ -606,6 +609,7 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context['breadcrumb'] = {"parent": "Книговыдача", "child": "Взрослая"}
         reports = self.get_queryset()
 
         # Подготавливаем данные для графика
