@@ -140,51 +140,6 @@ class EventUpdateView(LoginRequiredMixin, View):
         return render(request, 'events/event_form.html', {'form': form})
 
 
-class AdultBookReportListView(LoginRequiredMixin, ListView):
-    model = AdultBookReport
-    template_name = 'adult/adultvisits_list.html'
-    context_object_name = 'reports'
-
-    def get_queryset(self):
-        user = self.request.user
-        employee = Employee.objects.get(user=user)
-        return AdultBookReport.objects.filter(library=employee.branch)
-
-
-class AdultBookReportCreateView(LoginRequiredMixin, CreateView):
-    model = AdultBookReport
-    form_class = AdultBookReportForm
-    template_name = 'adult/adult_book_form.html'
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
-
-    def form_valid(self, form):
-        form.instance.library = Employee.objects.get(user=self.request.user).branch
-        return super().form_valid(form)
-
-
-    def get_success_url(self):
-        return reverse_lazy('adult_visits_list')
-
-
-class AdultBookReportUpdateView(LoginRequiredMixin, UpdateView):
-    model = AdultBookReport
-    form_class = AdultBookReportForm
-    template_name = 'adult/adult_book_form.html'
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
-
-    def form_valid(self, form):
-        form.instance.library = Employee.objects.get(user=self.request.user).branch
-        return super().form_valid(form)
-
-
 class AdultVisitReportListView(LoginRequiredMixin, ListView):
     model = AdultVisitReport
     template_name = 'adult/adultvisits_list.html'
@@ -316,6 +271,9 @@ class AdultVisitReportUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('adult_visits_list')
 
 
 class AdultBookReportListView(LoginRequiredMixin, ListView):
@@ -632,6 +590,9 @@ class ChildVisitReportUpdateView(LoginRequiredMixin, UpdateView):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
         return super().form_valid(form)
 
+    def get_success_url(self):
+        return reverse_lazy('child_visits_list')
+
 
 class ChildBookReportListView(LoginRequiredMixin, ListView):
     model = ChildBookReport
@@ -784,6 +745,9 @@ class ChildBookReportCreateView(LoginRequiredMixin, CreateView):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
         return super().form_valid(form)
 
+    def get_success_url(self):
+        return reverse_lazy('child_books_list')
+
 
 class ChildBookReportUpdateView(LoginRequiredMixin, UpdateView):
     model = ChildBookReport
@@ -799,4 +763,7 @@ class ChildBookReportUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('child_books_list')
 
