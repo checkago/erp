@@ -32,7 +32,7 @@
                         <!-- Группа регистрации новых посетителей -->
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <fieldset>
+                                <fieldset class="border border-2 border-warning p-4 mb-2">
                                     <legend class="text-warning">Регистрация новых посетителей</legend>
                                     <div class="row mb-3 g-3">
                                         <div class="col-md-3">
@@ -59,9 +59,9 @@
                         <!-- Группа посещения библиотеки -->
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <fieldset>
+                                <fieldset class="border border-2 border-info p-4 mb-2">
                                     <legend class="text-info">Посещение библиотеки</legend>
-                                    <div class="row mb-3 g-3">
+                                    <div class="row mb-2 g-3">
                                         <div class="col-md-3">
                                             <label for="id_qty_visited_14" class="form-label">Посещение (Остальные - 14)</label>
                                             {{ form.qty_visited_14 }}
@@ -88,7 +88,7 @@
                         </div>
 
                         <!-- Группа посещение мероприятий -->
-                        <fieldset>
+                        <fieldset class="border border-2 border-success p-4 mb-2">
                             <legend class="text-success">Посещение мероприятий</legend>
                             <div class="row mb-3 g-3">
                                 <div class="col-md-2">
@@ -120,12 +120,11 @@
                                     {{ form.qty_paid }}
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <label for="id_note" class="form-label">Примечание</label>
-                                {{ form.note }}
-                            </div>
                         </fieldset>
-
+                        <div class="col-md-6">
+                            <label for="id_note" class="form-label">Примечание</label>
+                            {{ form.note }}
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <a href="{% url 'child_visits_list' %}" class="btn btn-secondary">Закрыть</a>

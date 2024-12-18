@@ -32,7 +32,7 @@
                         <!-- Группа книговыдачи -->
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <fieldset>
+                                <fieldset class="border border-2 border-warning p-4 mb-1">
                                     <legend class="text-warning">Книговыдача</legend>
                                     <div class="row mb-3 g-3">
                                         <div class="col-md-3">
@@ -48,9 +48,9 @@
                                             {{ form.qty_books_other }}
                                         </div>
                                     </div>
-                                </fieldset>
-                                <fieldset>
-                                    <legend class="text-success">В том числе</legend>
+                                    {% if mod_lib %}
+                                    <h5>В том числе по отраслям</h5>
+                                        <hr>
                                     <div class="row mb-3 g-3">
                                         <div class="col-md-3">
                                             <label for="id_qty_books_part_opl" class="form-label">Общ.-политтич.лит-ра</label>
@@ -75,7 +75,7 @@
                                             {{ form.qty_books_part_si }}
                                         </div>
                                         <div class="col-md-3">
-                                            <label for="id_qty_books_part_yl" class="form-label">Языкознание. Литературоведение</label>
+                                            <label for="id_qty_books_part_yl" class="form-label">Языкознание. Лит-ведение</label>
                                             {{ form.qty_books_part_yl }}
                                         </div>
                                         <div class="col-md-3">
@@ -101,12 +101,13 @@
                                             {{ form.qty_books_part_krai }}
                                         </div>
                                     </div>
+                                    {% endif %}
                                 </fieldset>
                             </div>
                         </div>
 
                         <!-- Группа справок -->
-                        <fieldset>
+                        <fieldset class="border border-2 border-info p-4 mb-2">
                             <legend class="text-info">Справки</legend>
                             <div class="row mb-3 g-3">
                                 <div class="col-md-3">
@@ -129,7 +130,7 @@
                         </fieldset>
 
                         <!-- Примечание -->
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="id_note" class="form-label">Примечание</label>
                             {{ form.note }}
                         </div>

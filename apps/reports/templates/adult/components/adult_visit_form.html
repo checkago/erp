@@ -77,7 +77,7 @@
                             </div>
                         </div>
                         <!-- Группа посещение мероприятий -->
-                        <fieldset class="border border-2 p-4 border-success">
+                        <fieldset class="border border-2 p-4 border-success mb-2">
                             <legend class="text-success">Посещение мероприятий</legend>
                             <div class="row mb-3 g-3">
                                 <div class="col-md-2">
@@ -105,11 +105,11 @@
                                     {{ form.qty_paid }}
                                 </div>
                             </div>
-                            <div class="col-md-7">
-                                <label for="id_note" class="form-label">Примечание</label>
-                                {{ form.note }}
-                            </div>
                         </fieldset>
+                        <div class="col-md-6">
+                            <label for="id_note" class="form-label">Примечание</label>
+                            {{ form.note }}
+                        </div>
 
                     </div>
                     <div class="modal-footer">

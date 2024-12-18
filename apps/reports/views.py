@@ -538,7 +538,6 @@ class ChildVisitReportListView(LoginRequiredMixin, ListView):
             day_count[day_str]['qty_visited_35'] += visit.qty_visited_35
             day_count[day_str]['qty_visited_other'] += visit.qty_visited_other
             day_count[day_str]['qty_visited_invalids'] += visit.qty_visited_invalids
-            day_count[day_str]['qty_visited_prlib'] += visit.qty_visited_prlib
             day_count[day_str]['qty_visited_out_station'] += visit.qty_visited_out_station
             day_count[day_str]['qty_events_14'] += visit.qty_events_14
             day_count[day_str]['qty_events_35'] += visit.qty_events_35
@@ -552,12 +551,10 @@ class ChildVisitReportListView(LoginRequiredMixin, ListView):
             qty_reg_14_data.append(counts['qty_reg_14'])
             qty_reg_30_data.append(counts['qty_reg_30'])
             qty_reg_other_data.append(counts['qty_reg_other'])
-            qty_reg_prlib_data.append(counts['qty_reg_prlib'])
             qty_visited_14_data.append(counts['qty_visited_14'])
             qty_visited_35_data.append(counts['qty_visited_35'])
             qty_visited_other_data.append(counts['qty_visited_other'])
             qty_visited_invalids_data.append(counts['qty_visited_invalids'])
-            qty_visited_prlib_data.append(counts['qty_visited_prlib'])
             qty_visited_out_station_data.append(counts['qty_visited_out_station'])
             qty_events_14_data.append(counts['qty_events_14'])
             qty_events_35_data.append(counts['qty_events_35'])
@@ -638,6 +635,10 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+        context['mod_lib'] = branch.mod_lib
         context['breadcrumb'] = {"parent": "Книговыдача", "child": "Взрослая"}
         reports = self.get_queryset()
 
@@ -646,8 +647,6 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
         qty_books_14_data = []
         qty_books_30_data = []
         qty_books_other_data = []
-        qty_books_neb_data = []
-        qty_books_prlib_data = []
         qty_books_part_opl_data = []
         qty_books_part_enm_data = []
         qty_books_part_tech_data = []
@@ -670,8 +669,6 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
             'qty_books_14': 0,
             'qty_books_30': 0,
             'qty_books_other': 0,
-            'qty_books_neb': 0,
-            'qty_books_prlib': 0,
             'qty_books_part_opl': 0,
             'qty_books_part_enm': 0,
             'qty_books_part_tech': 0,
@@ -694,8 +691,6 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
             day_count[day_str]['qty_books_14'] += report.qty_books_14
             day_count[day_str]['qty_books_30'] += report.qty_books_30
             day_count[day_str]['qty_books_other'] += report.qty_books_other
-            day_count[day_str]['qty_books_neb'] += report.qty_books_neb
-            day_count[day_str]['qty_books_prlib'] += report.qty_books_prlib
             day_count[day_str]['qty_books_part_opl'] += report.qty_books_part_opl
             day_count[day_str]['qty_books_part_enm'] += report.qty_books_part_enm
             day_count[day_str]['qty_books_part_tech'] += report.qty_books_part_tech
@@ -717,8 +712,6 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
             qty_books_14_data.append(counts['qty_books_14'])
             qty_books_30_data.append(counts['qty_books_30'])
             qty_books_other_data.append(counts['qty_books_other'])
-            qty_books_neb_data.append(counts['qty_books_neb'])
-            qty_books_prlib_data.append(counts['qty_books_prlib'])
             qty_books_part_opl_data.append(counts['qty_books_part_opl'])
             qty_books_part_enm_data.append(counts['qty_books_part_enm'])
             qty_books_part_tech_data.append(counts['qty_books_part_tech'])
@@ -777,6 +770,14 @@ class ChildBookReportCreateView(LoginRequiredMixin, CreateView):
     template_name = 'child/child_book_form.html'
     success_url = reverse_lazy('child_books_list')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+        context['mod_lib'] = branch.mod_lib
+        return context
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
@@ -795,6 +796,14 @@ class ChildBookReportUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ChildBookReportForm
     template_name = 'child/child_book_form.html'
     success_url = reverse_lazy('child_books_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+        context['mod_lib'] = branch.mod_lib
+        return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

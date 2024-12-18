@@ -57,6 +57,8 @@
                                         </div>
                                     </div>
                                     {% if mod_lib %}
+                                    <h5 class="text-primary">В том числе по отраслям</h5>
+                                        <hr>
                                     <div class="row mb-3 g-3">
                                         <div class="col-md-3">
                                             <label for="id_qty_books_part_opl" class="form-label">Общ.-политтич.лит-ра</label>
@@ -81,7 +83,7 @@
                                             {{ form.qty_books_part_si }}
                                         </div>
                                         <div class="col-md-3">
-                                            <label for="id_qty_books_part_yl" class="form-label">Языкознание. Литературоведение</label>
+                                            <label for="id_qty_books_part_yl" class="form-label">Языкознание. Лит-ведение</label>
                                             {{ form.qty_books_part_yl }}
                                         </div>
                                         <div class="col-md-3">
@@ -136,7 +138,7 @@
                         </fieldset>
 
                         <!-- Примечание -->
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label for="id_note" class="form-label">Примечание</label>
                             {{ form.note }}
                         </div>
