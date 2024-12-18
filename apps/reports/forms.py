@@ -44,8 +44,8 @@ class EventForm(forms.ModelForm):
 class AdultBookReportForm(forms.ModelForm):
     class Meta:
         model = AdultBookReport
-        fields = ['cafedra', 'date', 'qty_books_14', 'qty_books_35', 'qty_books_invalid',
-                  'qty_books_part_opl', 'qty_books_part_enm', 'qty_books_part_tech',
+        fields = ['cafedra', 'date', 'qty_books_14', 'qty_books_35', 'qty_books_invalid', 'qty_books_туи',
+                  'qty_books_prlib', 'qty_books_part_opl', 'qty_books_part_enm', 'qty_books_part_tech',
                   'qty_books_part_sh', 'qty_books_part_si', 'qty_books_part_yl',
                   'qty_books_part_hl', 'qty_books_part_dl', 'qty_books_part_other',
                   'qty_books_part_audio', 'qty_books_part_krai', 'qty_books_reference_14',
@@ -92,8 +92,8 @@ class AdultBookReportForm(forms.ModelForm):
 class AdultVisitReportForm(forms.ModelForm):
     class Meta:
         model = AdultVisitReport
-        fields = ['cafedra', 'date', 'qty_reg_35', 'qty_reg_other', 'qty_reg_invalid',
-                  'qty_visited_35', 'qty_visited_other', 'qty_visited_invalids',
+        fields = ['cafedra', 'date', 'qty_reg_35', 'qty_reg_other', 'qty_reg_invalid', 'qty_reg_prlib',
+                  'qty_visited_35', 'qty_visited_other', 'qty_visited_invalids', 'qty_visited_prlib',
                   'qty_events_35', 'qty_events_other', 'qty_events_invalids',
                   'qty_events_out_station', 'qty_online_requests', 'qty_paid', 'note']
         widgets = {
