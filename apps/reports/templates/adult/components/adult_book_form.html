@@ -16,7 +16,7 @@
 
                         <!-- Группа регистрации -->
                         <fieldset>
-                            <legend></legend>
+                            <legend>Данные</legend>
                             <div class="row mb-3 g-3">
                                 <div class="col-md-3">
                                     <label for="id_cafedra" class="form-label">Кафедра</label>
@@ -32,7 +32,7 @@
                         <!-- Группа книговыдачи -->
                         <div class="row mb-3">
                             <div class="col-md-12">
-                                <fieldset>
+                                <fieldset class="border border-2 border-warning p-4 mb-1">
                                     <legend class="text-warning">Книговыдача</legend>
                                     <div class="row mb-3 g-3">
                                         <div class="col-md-3">
@@ -56,6 +56,7 @@
                                             {{ form.qty_books_prlib }}
                                         </div>
                                     </div>
+                                    {% if mod_lib %}
                                     <div class="row mb-3 g-3">
                                         <div class="col-md-3">
                                             <label for="id_qty_books_part_opl" class="form-label">Общ.-политтич.лит-ра</label>
@@ -106,12 +107,13 @@
                                             {{ form.qty_books_part_krai }}
                                         </div>
                                     </div>
+                                    {% endif %}
                                 </fieldset>
                             </div>
                         </div>
 
                         <!-- Группа справок -->
-                        <fieldset>
+                        <fieldset class="border border-2 border-info p-4 mb-1">
                             <legend class="text-info">Справки</legend>
                             <div class="row mb-3 g-3">
                                 <div class="col-md-3">

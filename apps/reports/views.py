@@ -285,10 +285,15 @@ class AdultBookReportListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         employee = Employee.objects.get(user=user)
+
         return AdultBookReport.objects.filter(library=employee.branch).order_by('-date')[:15]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+        context['mod_lib'] = branch.mod_lib
         context['breadcrumb'] = {"parent": "Книговыдача", "child": "Взрослая"}
         reports = self.get_queryset()
 
@@ -419,6 +424,14 @@ class AdultBookReportCreateView(LoginRequiredMixin, CreateView):
     form_class = AdultBookReportForm
     template_name = 'adult/adult_book_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+        context['mod_lib'] = branch.mod_lib
+        return context
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
@@ -436,6 +449,14 @@ class AdultBookReportUpdateView(LoginRequiredMixin, UpdateView):
     model = AdultBookReport
     form_class = AdultBookReportForm
     template_name = 'adult/adult_book_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+        context['mod_lib'] = branch.mod_lib
+        return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()

@@ -41,75 +41,78 @@
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="row mb-3 g-3">
-                            <div class="col-md-2">
-                                <label for="id_cafedra" class="form-label">Кафедра</label>
-                                {{ form.cafedra }}
-                            </div>
+                                <div class="col-md-2">
+                                    <label for="id_cafedra" class="form-label">Кафедра</label>
+                                    {{ form.cafedra }}
+                                </div>
 
-                            <div class="col-md-2">
-                                <label for="id_date" class="form-label">Дата</label>
-                                {{ form.date }}
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="id_name" class="form-label">Название события</label>
-                                {{ form.name }}
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="id_direction" class="form-label">Направление</label>
-                                {{ form.direction }}
-                            </div>
-
-                            <div class="col-md-2">
-                                <label for="id_quantity" class="form-label">Кол. мероприятий</label>
-                                {{ form.quantity }}
-                            </div>
-
-                            <div class="col-md-2">
-                                <label for="id_age_14" class="form-label">До 14 лет</label>
-                                {{ form.age_14 }}
-                            </div>
-
-                            <div class="col-md-2">
-                                <label for="id_age_35" class="form-label">До 35 лет</label>
-                                {{ form.age_35 }}
-                            </div>
-
-                            <div class="col-md-2">
-                                <label for="id_age_other" class="form-label">Прочие</label>
-                                {{ form.age_other }}
-                            </div>
-
-                            <div class="col-md-2">
-                                <label for="id_invalids" class="form-label">Инвалиды</label>
-                                {{ form.invalids }}
-                            </div>
-
-                            <div class="col-md-2">
-                                <label for="id_out_of_station" class="form-label">Внестационар</label>
-                                {{ form.out_of_station }}
-                            </div>
-
-                            <!-- Поле для выбора платного мероприятия -->
-                            <div class='col-md-3'>
-                                <label for='id_as_part' class='form-label'>В рамках</label>
-                                {{ form.as_part }}
-                            </div>
-
-                            <!-- Поле для выбора платного мероприятия -->
-                            <div class='col-md-2 text-center'>
-                                <div class='d-inline-block'>
-                                    <label class='form-check-label mb-3' for='id_paid'>Платное</label>
-                                    <br class="mb-1">
-                                    {{ form.paid }}
+                                <div class="col-md-2">
+                                    <label for="id_date" class="form-label">Дата</label>
+                                    {{ form.date }}
                                 </div>
                             </div>
+                            </fieldset>
+                            <fieldset class="border border-2 border-info p-4 mb-2">
+                                <div class="row mb-3 g-3">
+                                    <div class="col-md-4">
+                                        <label for="id_name" class="form-label">Название события</label>
+                                        {{ form.name }}
+                                    </div>
 
-                            <div class='col-md-7'>
+                                    <div class="col-md-4">
+                                        <label for="id_direction" class="form-label">Направление</label>
+                                        {{ form.direction }}
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label for="id_quantity" class="form-label">Кол. мероприятий</label>
+                                        {{ form.quantity }}
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label for="id_age_14" class="form-label">До 14 лет</label>
+                                        {{ form.age_14 }}
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label for="id_age_35" class="form-label">До 35 лет</label>
+                                        {{ form.age_35 }}
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label for="id_age_other" class="form-label">Прочие</label>
+                                        {{ form.age_other }}
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label for="id_invalids" class="form-label">Инвалиды</label>
+                                        {{ form.invalids }}
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <label for="id_out_of_station" class="form-label">Внестационар</label>
+                                        {{ form.out_of_station }}
+                                    </div>
+
+                                    <div class='col-md-3'>
+                                        <label for='id_as_part' class='form-label'>В рамках</label>
+                                        {{ form.as_part }}
+                                    </div>
+
+                                    <div class='col-md-2 text-center align-text-bottom'>
+                                        <div class='d-block mt-2'>
+                                            <span><br></span>
+                                            {{ form.paid }}
+                                            <label class="btn btn-outline-primary" for='paid'>Платное</label>
+                                        </div>
+                                    </div>
+
+                                    <div class='col-md-7'>
                                 <label for='id_note' class='form-label'>Примечание</label>
                                 {{ form.note }}
                             </div>
+                                </div>
+                            </fieldset>
                         </div>
                     </div>
                     <div class="modal-footer">
