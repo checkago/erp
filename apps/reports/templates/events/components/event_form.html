@@ -41,18 +41,19 @@
                     {% csrf_token %}
                     <div class="modal-body">
                         <div class="row mb-3 g-3">
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <label for="id_cafedra" class="form-label">Кафедра</label>
                                     {{ form.cafedra }}
                                 </div>
 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <label for="id_date" class="form-label">Дата</label>
                                     {{ form.date }}
                                 </div>
                             </div>
                             </fieldset>
                             <fieldset class="border border-2 border-info p-4 mb-2">
+                                <legend>Данные о мероприятиях</legend>
                                 <div class="row mb-3 g-3">
                                     <div class="col-md-4">
                                         <label for="id_name" class="form-label">Название события</label>
