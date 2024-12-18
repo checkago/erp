@@ -170,54 +170,6 @@ class ChildVisitReportForm(forms.ModelForm):
             self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
 
 
-class AdultBookReportForm(forms.ModelForm):
-    class Meta:
-        model = AdultBookReport
-        fields = ['cafedra', 'date', 'qty_books_14', 'qty_books_35', 'qty_books_invalid',
-                  'qty_books_part_opl', 'qty_books_part_enm', 'qty_books_part_tech',
-                  'qty_books_part_sh', 'qty_books_part_si', 'qty_books_part_yl',
-                  'qty_books_part_hl', 'qty_books_part_dl', 'qty_books_part_other',
-                  'qty_books_part_audio', 'qty_books_part_krai', 'qty_books_reference_14',
-                  'qty_books_reference_35', 'qty_books_reference_invalid', 'qty_books_reference_online',
-                  'note']
-        widgets = {
-            'cafedra': forms.Select(attrs={'class': 'form-select'}),
-            'date': forms.TextInput(attrs={
-                'class': 'datepicker-here form-control digits',
-                'type': 'date',
-                'data-date-format': 'mm.dd.yyyy'
-            }),
-            'qty_books_14': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_35': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_invalid': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_neb': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_prlib': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_part_opl': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_part_enm': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_part_tech': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_part_sh': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_part_si': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_part_yl': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_part_hl': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_part_dl': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_part_other': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_part_audio': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_part_krai': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_reference_14': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_reference_35': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_reference_invalid': forms.NumberInput(attrs={'class': 'form-control'}),
-            'qty_books_reference_online': forms.NumberInput(attrs={'class': 'form-control'}),
-            'note': forms.Textarea(attrs={'class': 'form-control', 'rows': '1'}),
-        }
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
-        if user:
-            employee = Employee.objects.get(user=user)
-            self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
-
-
 class ChildBookReportForm(forms.ModelForm):
     class Meta:
         model = ChildBookReport
