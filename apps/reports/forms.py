@@ -44,7 +44,7 @@ class EventForm(forms.ModelForm):
 class AdultBookReportForm(forms.ModelForm):
     class Meta:
         model = AdultBookReport
-        fields = ['cafedra', 'date', 'qty_books_14', 'qty_books_35', 'qty_books_invalid', 'qty_books_туи',
+        fields = ['cafedra', 'date', 'qty_books_14', 'qty_books_35', 'qty_books_invalid', 'qty_books_neb',
                   'qty_books_prlib', 'qty_books_part_opl', 'qty_books_part_enm', 'qty_books_part_tech',
                   'qty_books_part_sh', 'qty_books_part_si', 'qty_books_part_yl',
                   'qty_books_part_hl', 'qty_books_part_dl', 'qty_books_part_other',
