@@ -134,9 +134,9 @@ class AdultVisitReportForm(forms.ModelForm):
 class ChildVisitReportForm(forms.ModelForm):
     class Meta:
         model = ChildVisitReport
-        fields = ['cafedra', 'date', 'qty_reg_7', 'qty_reg_14', 'qty_reg_30', 'qty_reg_other',
+        fields = ['cafedra', 'date', 'qty_reg_7', 'qty_reg_14', 'qty_reg_30', 'qty_reg_other', 'qty_reg_prlib',
                   'qty_visited_14', 'qty_visited_35', 'qty_visited_other', 'qty_visited_invalids',
-                  'qty_visited_out_station', 'qty_events_14', 'qty_events_35', 'qty_events_other',
+                  'qty_visited_out_station', 'qty_visited_prlib', 'qty_events_14', 'qty_events_35', 'qty_events_other',
                   'qty_events_invalids', 'qty_events_out_station', 'qty_online_requests', 'qty_paid', 'note']
         widgets = {
             'cafedra': forms.Select(attrs={'class': 'form-select border border-1 border-dark'}),
@@ -155,6 +155,7 @@ class ChildVisitReportForm(forms.ModelForm):
             'qty_visited_other': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_visited_invalids': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_visited_out_station': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
+            'qty_visited_prlib': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_events_14': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_events_35': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_events_other': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
@@ -176,7 +177,8 @@ class ChildVisitReportForm(forms.ModelForm):
 class ChildBookReportForm(forms.ModelForm):
     class Meta:
         model = ChildBookReport
-        fields = ['cafedra', 'date', 'qty_books_14', 'qty_books_30', 'qty_books_other', 'qty_books_neb', 'qty_books_prlib',
+        fields = ['cafedra', 'date', 'qty_books_14', 'qty_books_30', 'qty_books_other', 'qty_books_neb',
+                  'qty_books_prlib',
                   'qty_books_part_opl', 'qty_books_part_enm', 'qty_books_part_tech',
                   'qty_books_part_sh', 'qty_books_part_si', 'qty_books_part_yl',
                   'qty_books_part_hl', 'qty_books_part_dl', 'qty_books_part_other',
