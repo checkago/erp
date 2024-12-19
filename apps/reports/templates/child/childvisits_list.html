@@ -67,8 +67,10 @@
             csv: {
                 filename: 'data',
                 columnDelimiter: ',',
-                headerCategory: 'Дата'
-            }
+                headerCategory: function() {
+                  return 'Дата';
+                }
+              }
         },
         series: [
             {
