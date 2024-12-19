@@ -154,8 +154,8 @@
   </div>
 <script>
     const qtyBooks14 = document.getElementById('id_qty_books_14');
-    const qtyBooks35 = document.getElementById('id_qty_books_30');
-    const qtyBooksInvalid = document.getElementById('qty_books_other');
+    const qtyBooks30 = document.getElementById('id_qty_books_30');
+    const qtyBooksOther = document.getElementById('qty_books_other');
     const qtyBooksNeb = document.getElementById('id_qty_books_neb');
     const qtyBooksPrlib = document.getElementById('id_qty_books_prlib');
 
@@ -176,7 +176,7 @@
 
     // Функция для расчета суммы
     function calculateSum() {
-        const sum = parseInt(qtyBooks14.value) + parseInt(qtyBooks35.value) + parseInt(qtyBooksInvalid.value) + parseInt(qtyBooksNeb.value) + parseInt(qtyBooksPrlib.value);
+        const sum = parseInt(qtyBooks14.value) + parseInt(qtyBooks30.value) + parseInt(qtyBooksOther.value) + parseInt(qtyBooksNeb.value) + parseInt(qtyBooksPrlib.value);
         const sumPart = parseInt(qtyBooksPartOpl.value) + parseInt(qtyBooksPartEnm.value) + parseInt(qtyBooksPartTech.value) + parseInt(qtyBooksPartSh.value) + parseInt(qtyBooksPartSi.value) + parseInt(qtyBooksPartYl.value) + parseInt(qtyBooksPartHl.value) + parseInt(qtyBooksPartDl.value) + parseInt(qtyBooksPartOther.value) + parseInt(qtyBooksPartAudio.value) + parseInt(qtyBooksPartKrai.value);
         const result = sum - sumPart;
         sumElement.innerText = `Контроль: ${result}`;
@@ -184,8 +184,8 @@
 
     // Добавляем обработчики событий для полей
     qtyBooks14.addEventListener('input', calculateSum);
-    qtyBooks35.addEventListener('input', calculateSum);
-    qtyBooksInvalid.addEventListener('input', calculateSum);
+    qtyBooks30.addEventListener('input', calculateSum);
+    qtyBooksOther.addEventListener('input', calculateSum);
     qtyBooksNeb.addEventListener('input', calculateSum);
     qtyBooksPrlib.addEventListener('input', calculateSum);
 
