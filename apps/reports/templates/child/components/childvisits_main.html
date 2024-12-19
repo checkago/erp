@@ -53,6 +53,7 @@
                                         <th>Общее количество регистраций</th>
                                         <th>Общее количество посещений</th>
                                         <th>Общее количество мероприятий</th>
+                                        <th>Изменить</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -75,6 +76,11 @@
                                         <td>{{ visit.qty_events_other }}</td>
                                         <td>{{ visit.qty_events_invalids }}</td>
                                         <td>{{ visit.qty_events_out_station }}</td>
+                                        <td>
+                                            <a class="float-end" href="{% url 'child_visits_update' report.id %}">
+                                                <i data-feather="edit"></i>
+                                            </a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
