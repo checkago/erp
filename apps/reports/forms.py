@@ -1,6 +1,6 @@
 from django import forms
 from .models import Event, ChildBookReport, AdultBookReport, AdultVisitReport, ChildVisitReport
-from ..core.models import Employee, Cafedra
+from apps.core.models import Employee, Cafedra
 
 
 class EventForm(forms.ModelForm):
@@ -176,7 +176,7 @@ class ChildVisitReportForm(forms.ModelForm):
 class ChildBookReportForm(forms.ModelForm):
     class Meta:
         model = ChildBookReport
-        fields = ['cafedra', 'date', 'qty_books_14', 'qty_books_30', 'qty_books_other',
+        fields = ['cafedra', 'date', 'qty_books_14', 'qty_books_30', 'qty_books_other', 'qty_books_neb', 'qty_books_prlib',
                   'qty_books_part_opl', 'qty_books_part_enm', 'qty_books_part_tech',
                   'qty_books_part_sh', 'qty_books_part_si', 'qty_books_part_yl',
                   'qty_books_part_hl', 'qty_books_part_dl', 'qty_books_part_other',
@@ -193,6 +193,8 @@ class ChildBookReportForm(forms.ModelForm):
             'qty_books_14': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_30': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_other': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
+            'qty_books_neb': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
+            'qty_books_prlib': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_part_opl': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_part_enm': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_part_tech': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
