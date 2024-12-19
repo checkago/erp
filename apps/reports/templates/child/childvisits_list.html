@@ -153,14 +153,14 @@
             }
         ],
         xaxis: {
-                categories: {{ dates|safe }},
-            type: 'datetime',
-              format: 'dd MMM yyyy, DDD', // формат даты и дня недели
-              tooltip: {
-                format: 'dd MMM yyyy, DDD' // формат даты и дня недели в подсказке
-              }
-
-        },
+          categories: {{ dates|safe }},
+          tickFormatter: function(val, index) {
+            var date = new Date(val);
+            var day = date.toLocaleString('ru', { weekday: 'long' });
+            var formattedDate = date.toLocaleString('ru', { day: '2-digit', month: 'short', year: 'numeric' });
+            return formattedDate + ', ' + day;
+          }
+        }
     };
 
     // Инициализация и рендеринг графика
