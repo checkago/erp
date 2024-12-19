@@ -129,6 +129,9 @@
         ],
        xaxis: {
           categories: {{ dates|safe }},
+           title: {
+            text: 'Дата'
+          },
           labels: {
             formatter: function(val, index) {
               if (typeof val === 'string') {
