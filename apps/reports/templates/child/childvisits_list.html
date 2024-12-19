@@ -30,11 +30,6 @@
     // Подготовка данных для графика из контекста Django
     var options = {
         chart: {
-            csv: {
-                filename: 'data',
-                columnDelimiter: ',',
-                headerCategory: 'Дата'
-              },
             locales: [{
                 "name": "ru",
                 "options": {
@@ -68,6 +63,11 @@
                     reset: true,
                 },
                 locale: 'ru'  // Устанавливаем язык панели инструментов на русский
+            },
+            csv: {
+                filename: 'data',
+                columnDelimiter: ',',
+                headerCategory: 'Дата'
             }
         },
         series: [
