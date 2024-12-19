@@ -2,13 +2,13 @@ from django.contrib.auth import logout, authenticate, login, update_session_auth
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.decorators.cache import cache_page
 from rest_framework import generics
 
-from apps.core.forms import ErpUserForm, EmployeeForm
+from apps.core.forms import ErpUserForm, EmployeeForm, CafedraForm
 from apps.core.models import Employee, Branch, Position
 from apps.core.serializers import EmployeeSerializer
 
@@ -89,6 +89,20 @@ def branch_list_view(request):
     return render(request, 'branch_list.html', context=context)
 
 
+@login_required
+def branch_detail(request, pk):
+    branch = Branch.objects.get(pk=pk)
+    user = request.user
+    employee = Employee.objects.filter(user=user, branch=branch).first()
+    if employee is None:
+        return HttpResponseForbidden()
+    cafedra_form = CafedraForm()
+    context = {
+        'cafedra_form': cafedra_form
+    }
+    return render(request, 'branch_detail.html', context)
+
+
 def user_profile(request):
     user = request.user
     employee = Employee.objects.get(user=user)
@@ -131,3 +145,6 @@ def change_password(request):
         form = PasswordChangeForm(request.user)
 
     return render(request, 'user_profile.html', {'form': form})
+
+
+
