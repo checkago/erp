@@ -34,7 +34,13 @@
                         <div class="row mb-3">
                             <div class="col-md-12">
                                 <fieldset class="border border-2 border-warning p-4 mb-1">
-                                    <legend class="text-warning">Книговыдача {% if mod_lib %}<span class="float-end text-danger"><div id="sum"></div></span>{% endif %}</legend>
+                                    <legend class="text-warning">Книговыдача
+                                        {% if mod_lib %}
+                                            <span class="float-end text-danger">
+                                                <div id="sum"></div>
+                                            </span>
+                                        {% endif %}
+                                    </legend>
                                     <div class="row mb-3 g-3">
                                         <div class="col-md-3">
                                             <label for="id_qty_books_14" class="form-label">Книговыдача (14+)</label>
