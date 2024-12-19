@@ -37,6 +37,8 @@
                                         <th>Книговыдача (До 14)</th>
                                         <th>Книговыдача (15-30)</th>
                                         <th>Книговыдача (Прочие)</th>
+                                        <th>Книговыдача (НЭБ)</th>
+                                        <th>Книговыдача (Президентская)</th>
 
                                         {% if mod_lib %}
                                             <th>Общ.-политтич.лит-ра</th>
@@ -67,6 +69,8 @@
                                         <td>{{ report.qty_books_14 }}</td>
                                         <td>{{ report.qty_books_30 }}</td>
                                         <td>{{ report.qty_books_other }}</td>
+                                        <td>{{ report.qty_books_neb }}</td>
+                                        <td>{{ report.qty_books_prilb }}</td>
 
                                         {% if mod_lib %}
                                             <td>{{ report.qty_books_part_opl }}</td>
