@@ -1,0 +1,76 @@
+{% extends "base.html" %} {% load static %}
+{% load sass_tags %}
+
+{% block content %}
+
+    <div class="page-body">
+        <div class="container-fluid">
+            {% include "layout/breadcrumb.html" %}
+            <div class="row">
+                <div class="col-3">
+                    <div class="card common-hover">
+                        <div class="card-header card-header b-l-primary border-3">
+                            <h3 class="card-title text-primary">{{ employee }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <img src="{{ user.avatar.url }}" class="img-responsive w-100"/>
+                                </div>
+                                <div class="col-md-8 pl-5">
+                                    <h5>{{ employee.branch }}</h5>
+                                    <span>{{ employee.position }}</span>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="text-center">
+                                <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#passwordModal" >
+                                    Сменить пароль
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="card">
+                        <div class="card-header pb-0 card-no-border">
+                            <h3>Персональные данные</h3>
+
+                        <div class="card-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{ user_form|crispy }}
+                                {{ employee_form|crispy }}
+                                <button class="btn btn-success-gradien" type="submit">Сохранить изменения</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+        <div class="modal-dialog mt-0 mb-0" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Смена пароля</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ password_form|crispy }}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal" data-bs-original-title="" title="">Отмена</button>
+                    <button class="btn btn-primary" type="submit">Сменить пароль</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
