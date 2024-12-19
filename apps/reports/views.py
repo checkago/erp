@@ -596,6 +596,15 @@ class ChildVisitReportCreateView(LoginRequiredMixin, CreateView):
     model = ChildVisitReport
     form_class = ChildVisitReportForm
     template_name = 'child/child_visit_form.html'
+    success_url = reverse_lazy('child_visits_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+        context['mod_lib'] = branch.mod_lib
+        return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -614,6 +623,15 @@ class ChildVisitReportUpdateView(LoginRequiredMixin, UpdateView):
     model = ChildVisitReport
     form_class = ChildVisitReportForm
     template_name = 'child/child_visit_form.html'
+    success_url = reverse_lazy('child_visits_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+        context['mod_lib'] = branch.mod_lib
+        return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
