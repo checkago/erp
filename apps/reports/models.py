@@ -1,4 +1,3 @@
-import datetime
 
 from django.db import models
 
@@ -110,6 +109,8 @@ class ChildBookReport(models.Model):
     qty_books_14 = models.IntegerField(default=0, verbose_name='Книговыдача (До 14)')
     qty_books_30 = models.IntegerField(default=0, verbose_name='Книговыдача (15-30)')
     qty_books_other = models.IntegerField(default=0, verbose_name='Книговыдача (Прочие)')
+    qty_books_neb = models.IntegerField(default=0, verbose_name='Книговыдача (НЭБ)')
+    qty_books_prlib = models.IntegerField(default=0, verbose_name='Книговыдача (Президентская)')
     qty_books_part_opl = models.IntegerField(default=0, verbose_name='Общ.-политтич.лит-ра')
     qty_books_part_enm = models.IntegerField(default=0, verbose_name='Естеств. Науки. Медицина')
     qty_books_part_tech = models.IntegerField(default=0, verbose_name='Техника')
