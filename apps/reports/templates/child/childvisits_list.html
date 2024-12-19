@@ -154,7 +154,7 @@
         ],
         xaxis: {
           categories: {{ dates|safe }},
-          tickFormatter: function(val, index) {
+          tickFormat: function(val, index) {
             var dateParts = val.split('.');
             var date = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
             var day = date.toLocaleString('ru', { weekday: 'short' });
