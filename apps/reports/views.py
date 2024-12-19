@@ -497,8 +497,8 @@ class ChildVisitReportListView(LoginRequiredMixin, ListView):
         qty_visited_35_data = []
         qty_visited_other_data = []
         qty_visited_invalids_data = []
-        qty_visited_prlib_data = []
         qty_visited_out_station_data = []
+        qty_visited_prlib_data = []
         qty_events_14_data = []
         qty_events_35_data = []
         qty_events_other_data = []
@@ -518,8 +518,8 @@ class ChildVisitReportListView(LoginRequiredMixin, ListView):
             'qty_visited_35': 0,
             'qty_visited_other': 0,
             'qty_visited_invalids': 0,
-            'qty_visited_prlib': 0,
             'qty_visited_out_station': 0,
+            'qty_visited_prlib': 0,
             'qty_events_14': 0,
             'qty_events_35': 0,
             'qty_events_other': 0,
@@ -533,12 +533,13 @@ class ChildVisitReportListView(LoginRequiredMixin, ListView):
             day_count[day_str]['qty_reg_14'] += visit.qty_reg_14
             day_count[day_str]['qty_reg_30'] += visit.qty_reg_30
             day_count[day_str]['qty_reg_other'] += visit.qty_reg_other
-            day_count[day_str]['qty_reg_prlib'] += visit.qty_reg_other
+            day_count[day_str]['qty_reg_prlib'] += visit.qty_reg_prlib
             day_count[day_str]['qty_visited_14'] += visit.qty_visited_14
             day_count[day_str]['qty_visited_35'] += visit.qty_visited_35
             day_count[day_str]['qty_visited_other'] += visit.qty_visited_other
             day_count[day_str]['qty_visited_invalids'] += visit.qty_visited_invalids
             day_count[day_str]['qty_visited_out_station'] += visit.qty_visited_out_station
+            day_count[day_str]['qty_visited_prlib'] += visit.qty_visited_prlib
             day_count[day_str]['qty_events_14'] += visit.qty_events_14
             day_count[day_str]['qty_events_35'] += visit.qty_events_35
             day_count[day_str]['qty_events_other'] += visit.qty_events_other
@@ -551,18 +552,20 @@ class ChildVisitReportListView(LoginRequiredMixin, ListView):
             qty_reg_14_data.append(counts['qty_reg_14'])
             qty_reg_30_data.append(counts['qty_reg_30'])
             qty_reg_other_data.append(counts['qty_reg_other'])
+            qty_reg_prlib_data.append(counts['qty_reg_prlib'])
             qty_visited_14_data.append(counts['qty_visited_14'])
             qty_visited_35_data.append(counts['qty_visited_35'])
             qty_visited_other_data.append(counts['qty_visited_other'])
             qty_visited_invalids_data.append(counts['qty_visited_invalids'])
             qty_visited_out_station_data.append(counts['qty_visited_out_station'])
+            qty_visited_prlib_data.append(counts['qty_visited_prlib'])
             qty_events_14_data.append(counts['qty_events_14'])
             qty_events_35_data.append(counts['qty_events_35'])
             qty_events_other_data.append(counts['qty_events_other'])
             qty_events_invalids_data.append(counts['qty_events_invalids'])
             qty_events_out_station_data.append(counts['qty_events_out_station'])
-            total_reg_data.append(counts['qty_reg_7'] + counts['qty_reg_14'] + counts['qty_reg_30'] + counts['qty_reg_other'])
-            total_visited_data.append(counts['qty_visited_14'] + counts['qty_visited_35'] + counts['qty_visited_other'] + counts['qty_visited_invalids'] + counts['qty_visited_out_station'])
+            total_reg_data.append(counts['qty_reg_7'] + counts['qty_reg_14'] + counts['qty_reg_30'] + counts['qty_reg_other'] + counts['qty_reg_prlib'])
+            total_visited_data.append(counts['qty_visited_14'] + counts['qty_visited_35'] + counts['qty_visited_other'] + counts['qty_visited_invalids'] + counts['qty_visited_out_station'] + counts['qty_visited_prlib'])
             total_events_data.append(counts['qty_events_14'] + counts['qty_events_35'] + counts['qty_events_other'] + counts['qty_events_invalids'] + counts['qty_events_out_station'])
 
         context['dates'] = dates
@@ -570,11 +573,13 @@ class ChildVisitReportListView(LoginRequiredMixin, ListView):
         context['qty_reg_14_data'] = qty_reg_14_data
         context['qty_reg_30_data'] = qty_reg_30_data
         context['qty_reg_other_data'] = qty_reg_other_data
+        context['qty_reg_prlib_data'] = qty_reg_prlib_data
         context['qty_visited_14_data'] = qty_visited_14_data
         context['qty_visited_35_data'] = qty_visited_35_data
         context['qty_visited_other_data'] = qty_visited_other_data
         context['qty_visited_invalids_data'] = qty_visited_invalids_data
         context['qty_visited_out_station_data'] = qty_visited_out_station_data
+        context['qty_visited_prlib_data'] = qty_visited_prlib_data
         context['qty_events_14_data'] = qty_events_14_data
         context['qty_events_35_data'] = qty_events_35_data
         context['qty_events_other_data'] = qty_events_other_data
@@ -743,7 +748,7 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
                 counts['qty_books_part_audio'] + counts['qty_books_part_krai']
             )
             total_references_data.append(
-                counts['qty_books_reference_14'] + counts['qty_books_reference_30'] +
+                counts['qty_books_reference_14'] + counts['qty_books_reference_30'] + counts['qty_books_neb'] + counts['qty_books_prlib'] +
                 counts['qty_books_reference_other'] + counts['qty_books_reference_online']
             )
 
