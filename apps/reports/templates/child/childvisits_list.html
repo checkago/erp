@@ -155,7 +155,8 @@
         xaxis: {
           categories: {{ dates|safe }},
           tickFormatter: function(val, index) {
-            var date = new Date(val);
+            var dateParts = val.split('-');
+            var date = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
             var day = date.toLocaleString('ru', { weekday: 'long' });
             var formattedDate = date.toLocaleString('ru', { day: '2-digit', month: 'short', year: 'numeric' });
             return formattedDate + ', ' + day;
