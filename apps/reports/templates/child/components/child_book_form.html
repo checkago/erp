@@ -34,6 +34,11 @@
                             <div class="col-md-12">
                                 <fieldset class="border border-2 border-warning p-4 mb-1">
                                     <legend class="text-warning">Книговыдача</legend>
+                                        {% if mod_lib %}
+                                            <span class="float-end text-danger">
+                                                <div id="sum"></div>
+                                            </span>
+                                        {% endif %}
                                     <div class="row mb-3 g-3">
                                         <div class="col-md-3">
                                             <label for="id_qty_books_14" class="form-label">Книговыдача (До 14)</label>
@@ -147,3 +152,55 @@
       </div>
     </div>
   </div>
+<script>
+    const qtyBooks14 = document.getElementById('id_qty_books_14');
+    const qtyBooks35 = document.getElementById('id_qty_books_35');
+    const qtyBooksInvalid = document.getElementById('id_qty_books_invalid');
+    const qtyBooksNeb = document.getElementById('id_qty_books_neb');
+    const qtyBooksPrlib = document.getElementById('id_qty_books_prlib');
+
+    const qtyBooksPartOpl = document.getElementById('id_qty_books_part_opl');
+    const qtyBooksPartEnm = document.getElementById('id_qty_books_part_enm');
+    const qtyBooksPartTech = document.getElementById('id_qty_books_part_tech');
+    const qtyBooksPartSh = document.getElementById('id_qty_books_part_sh');
+    const qtyBooksPartSi = document.getElementById('id_qty_books_part_si');
+    const qtyBooksPartYl = document.getElementById('id_qty_books_part_yl');
+    const qtyBooksPartHl = document.getElementById('id_qty_books_part_hl');
+    const qtyBooksPartDl = document.getElementById('id_qty_books_part_dl');
+    const qtyBooksPartOther = document.getElementById('id_qty_books_part_other');
+    const qtyBooksPartAudio = document.getElementById('id_qty_books_part_audio');
+    const qtyBooksPartKrai = document.getElementById('id_qty_books_part_krai');
+
+    // Получаем элемент для отображения суммы
+    const sumElement = document.getElementById('sum');
+
+    // Функция для расчета суммы
+    function calculateSum() {
+        const sum = parseInt(qtyBooks14.value) + parseInt(qtyBooks35.value) + parseInt(qtyBooksInvalid.value) + parseInt(qtyBooksNeb.value) + parseInt(qtyBooksPrlib.value);
+        const sumPart = parseInt(qtyBooksPartOpl.value) + parseInt(qtyBooksPartEnm.value) + parseInt(qtyBooksPartTech.value) + parseInt(qtyBooksPartSh.value) + parseInt(qtyBooksPartSi.value) + parseInt(qtyBooksPartYl.value) + parseInt(qtyBooksPartHl.value) + parseInt(qtyBooksPartDl.value) + parseInt(qtyBooksPartOther.value) + parseInt(qtyBooksPartAudio.value) + parseInt(qtyBooksPartKrai.value);
+        const result = sum - sumPart;
+        sumElement.innerText = `Контроль: ${result}`;
+    }
+
+    // Добавляем обработчики событий для полей
+    qtyBooks14.addEventListener('input', calculateSum);
+    qtyBooks35.addEventListener('input', calculateSum);
+    qtyBooksInvalid.addEventListener('input', calculateSum);
+    qtyBooksNeb.addEventListener('input', calculateSum);
+    qtyBooksPrlib.addEventListener('input', calculateSum);
+
+    qtyBooksPartOpl.addEventListener('input', calculateSum);
+    qtyBooksPartEnm.addEventListener('input', calculateSum);
+    qtyBooksPartTech.addEventListener('input', calculateSum);
+    qtyBooksPartSh.addEventListener('input', calculateSum);
+    qtyBooksPartSi.addEventListener('input', calculateSum);
+    qtyBooksPartYl.addEventListener('input', calculateSum);
+    qtyBooksPartHl.addEventListener('input', calculateSum);
+    qtyBooksPartDl.addEventListener('input', calculateSum);
+    qtyBooksPartOther.addEventListener('input', calculateSum);
+    qtyBooksPartAudio.addEventListener('input', calculateSum);
+    qtyBooksPartKrai.addEventListener('input', calculateSum);
+
+    // Вызываем функцию для расчета суммы при загрузке страницы
+    calculateSum();
+</script>
