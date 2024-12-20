@@ -27,12 +27,14 @@
                                 </div>
                             </div>
                         </div>
+                        {% if branch.cafedra_set.all %}
                         <h5>Кафедры:</h5>
                         <ul class="list-group d-flex">
                             {% for cafedra in branch.cafedra_set.all %}
                                 <li class="list-inline-item">{{ cafedra.name }} <a href="#"></a></li>
                             {% endfor %}
                         </ul>
+                        {% endif %}
                     </div>
                     {% if request.user.employee and request.user.employee.branch == branch %}
                     <div class="card-footer">
