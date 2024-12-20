@@ -34,11 +34,13 @@
                             {% endfor %}
                         </ul>
                     </div>
+                    {% if request.user.employee and request.user.employee.branch == branch %}
                     <div class="card-footer">
                         <button class="btn btn-info-gradien d-flex" type="button" data-bs-toggle="modal" data-bs-target="#addCafedraModal" >
                              <i class="me-2"  data-feather="plus-square"> </i>Добавить кафедру
                         </button>
                     </div>
+                    {% endif %}
                 </div>
                 <div class="col-9">
                     <div class="card">
