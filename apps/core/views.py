@@ -1,14 +1,13 @@
 from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.views.decorators.cache import cache_page
 from rest_framework import generics
 
-from apps.core.forms import ErpUserForm, EmployeeForm, CafedraForm
+from apps.core.forms import ErpUserForm, EmployeeForm, BranchForm
 from apps.core.models import Employee, Branch, Position
 from apps.core.serializers import EmployeeSerializer
 
@@ -90,17 +89,47 @@ def branch_list_view(request):
 
 
 @login_required
-def branch_detail(request, pk):
-    branch = Branch.objects.get(pk=pk)
-    user = request.user
-    employee = Employee.objects.filter(user=user, branch=branch).first()
-    if employee is None:
-        return HttpResponseForbidden()
-    cafedra_form = CafedraForm()
-    context = {
-        'cafedra_form': cafedra_form
-    }
-    return render(request, 'branch_detail.html', context)
+def branch_detail_view(request, pk):
+    branch = get_object_or_404(Branch, pk=pk)
+    context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch}
+    return render(request, 'branch_detail.html', context=context)
+
+@login_required
+@permission_required('branch.change_branch', raise_exception=True)
+def branch_edit_view(request, pk):
+    branch = get_object_or_404(Branch, pk=pk)
+    employee = request.user.employee
+    if employee and employee.branch == branch:
+        if request.method == 'POST':
+            form = BranchForm(request.POST, instance=branch)
+            if form.is_valid():
+                form.save()
+                return redirect('branch_detail', pk=pk)
+        else:
+            form = BranchForm(instance=branch)
+        context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch, 'form': form}
+        return render(request, 'branch_edit.html', context=context)
+    else:
+        return redirect('branch_detail', pk=pk)
+
+
+@login_required
+def branch_edit_view(request, pk):
+    branch = get_object_or_404(Branch, pk=pk)
+    employee = request.user.employee
+    if employee and employee.branch == branch:
+        if request.method == 'POST':
+            form = BranchForm(request.POST, instance=branch)
+            if form.is_valid():
+                form.save()
+                return redirect('branch_detail', pk=pk)
+        else:
+            form = BranchForm(instance=branch)
+        context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch, 'form': form}
+        return render(request, 'branch_edit.html', context=context)
+    else:
+        return redirect('branch_detail', pk=pk)
+
 
 
 def user_profile(request):

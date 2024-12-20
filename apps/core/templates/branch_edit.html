@@ -42,17 +42,39 @@
                     <div class="card">
                         <div class="card-header pb-0 card-no-border">
                             <h3>Данные</h3>
-                            <div>
-                                <p>{{ branch.full_name }}</p>
-                                <p>{{ branch.short_name }}</p>
-                                <p>{{ branch.adress }}</p>
-                                <p>{{ branch.email }}</p>
-                                <p>{{ branch.phone }}</p>
-                            </div>
 
-                            {% if request.user.employee and request.user.employee.branch == branch %}
-                                <a href="{% url 'branch_edit' branch.pk %}" class="btn btn-primary">Редактировать</a>
-                            {% endif %}
+                        <div class="card-body">
+                            <form method="post" class="theme-form">
+                                {% csrf_token %}
+                                    <div class="col-md-4 mb-2">
+                                        <label for="id_manager" class="form-label">Руководитель</label>
+                                        {{ form.manager }}
+                                    </div>
+                                <div class="row mb-3 g-3">
+                                    <div class="col-md-4">
+                                        <label for="id_full_name" class="form-label">Полное наименование</label>
+                                        {{ form.full_name }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="id_short_name" class="form-label">Краткое наименование</label>
+                                        {{ form.short_name }}
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label for="id_address" class="form-label">Адрес</label>
+                                        {{ form.address }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="id_email" class="form-label">Email</label>
+                                        {{ form.email }}
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="id_phone" class="form-label">Телефон</label>
+                                        {{ form.phone }}
+                                    </div>
+                                </div>
+                                <button class="btn btn-success-gradien" type="submit">Сохранить изменения</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
