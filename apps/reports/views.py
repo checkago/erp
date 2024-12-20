@@ -764,10 +764,12 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
             qty_books_reference_other_data.append(counts['qty_books_reference_other'])
             qty_books_reference_online_data.append(counts['qty_books_reference_online'])
             total_books_data.append(
-                counts['qty_books_14'] + counts['qty_books_30'] + counts['qty_books_other'] + counts['qty_books_neb'] + counts['qty_books_prlib']
+                counts['qty_books_14'] + counts['qty_books_30'] + counts['qty_books_other'] + counts['qty_books_neb']
+                + counts['qty_books_prlib']
             )
             total_references_data.append(
-                counts['qty_books_reference_14'] + counts['qty_books_reference_30'] + counts['qty_books_neb'] + counts['qty_books_prlib'] +
+                counts['qty_books_reference_14'] + counts['qty_books_reference_30'] + counts['qty_books_neb']
+                + counts['qty_books_prlib'] +
                 counts['qty_books_reference_other'] + counts['qty_books_reference_online']
             )
 
