@@ -7,8 +7,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from rest_framework import generics
 
-from apps.core.forms import ErpUserForm, EmployeeForm, BranchForm
-from apps.core.models import Employee, Branch, Position
+from apps.core.forms import ErpUserForm, EmployeeForm, BranchForm, CafedraForm
+from apps.core.models import Employee, Branch, Position, Cafedra
 from apps.core.serializers import EmployeeSerializer
 
 
@@ -92,8 +92,17 @@ def branch_list_view(request):
 def branch_detail_view(request, pk):
     branch = get_object_or_404(Branch, pk=pk)
     employees = Employee.objects.filter(branch=branch).exclude(pk=branch.manager_id)
+    if request.method == 'POST':
+        form = CafedraForm(request.POST)
+        if form.is_valid():
+            cafedra = form.save(commit=False)
+            cafedra.library = branch
+            cafedra.save()
+            return redirect('branch_detail', pk=pk)
+    else:
+        form = CafedraForm()
     context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch,
-               'employees': employees}
+               'employees': employees, 'add_cafedra_form': form}
     return render(request, 'branch_detail.html', context=context)
 
 @login_required
@@ -103,16 +112,27 @@ def branch_edit_view(request, pk):
     employee = request.user.employee
     if employee and employee.branch == branch:
         if request.method == 'POST':
-            form = BranchForm(request.POST, instance=branch)
-            if form.is_valid():
-                form.save()
-                return redirect('branch_detail', pk=pk)
+            if 'add_cafedra_form' in request.POST:
+                form = CafedraForm(request.POST)
+                if form.is_valid():
+                    cafedra = form.save(commit=False)
+                    cafedra.library = branch
+                    cafedra.save()
+                    return redirect('branch_edit', pk=pk)
+            else:
+                form = BranchForm(request.POST, instance=branch)
+                if form.is_valid():
+                    form.save()
+                    return redirect('branch_detail', pk=pk)
         else:
             form = BranchForm(instance=branch)
-        context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch, 'form': form}
+            add_cafedra_form = CafedraForm()
+        context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch, 'form': form,
+                   'cafedras': branch.cafedra_set.all(), 'add_cafedra_form': CafedraForm()}
         return render(request, 'branch_edit.html', context=context)
     else:
         return redirect('branch_detail', pk=pk)
+
 
 
 @login_required
@@ -127,10 +147,27 @@ def branch_edit_view(request, pk):
                 return redirect('branch_detail', pk=pk)
         else:
             form = BranchForm(instance=branch)
-        context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch, 'form': form}
+        context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch, 'form': form,
+                   'cafedras': branch.cafedra_set.all()}
         return render(request, 'branch_edit.html', context=context)
     else:
         return redirect('branch_detail', pk=pk)
+
+
+
+@login_required
+def cafedra_edit_view(request, pk):
+    cafedra = get_object_or_404(Cafedra, pk=pk)
+    if request.method == 'POST':
+        form = CafedraForm(request.POST, instance=cafedra)
+        if form.is_valid():
+            form.save()
+            return redirect('branch_detail', pk=cafedra.library.pk)
+    else:
+        form = CafedraForm(instance=cafedra)
+    context = {"breadcrumb": {"parent": "Филиалы", "child": cafedra.library.short_name}, 'cafedra': cafedra, 'form': form,
+               'cafedras': branch.cafedra_set.all()}
+    return render(request, 'cafedra_edit.html', context=context)
 
 
 

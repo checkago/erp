@@ -26,15 +26,6 @@
                                     <span>{{ branch.phone }}</span>
                                 </div>
                             </div>
-                            <hr>
-                            <div>
-                                {{ cafedras }}
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button type="button" class="btn btn-primary" name="show-button" data-toggle="modal" data-target="#cafedraModal">
-                                Добавить/редактировать кафедры
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -83,11 +74,11 @@
     </div>
 
 
-<div class="modal fade" id="cafedraModal" tabindex="-1" role="dialog" aria-labelledby="cafedraModalLabel" aria-hidden="true">
+<div class="modal fade" id="addCafedraModal" tabindex="-1" role="dialog" aria-labelledby="addCafedraModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="cafedraModalLabel">Добавить/редактировать кафедры</h5>
+                <h5 class="modal-title" id="addCafedraModalLabel">Добавить кафедру</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -95,8 +86,8 @@
             <div class="modal-body">
                 <form method="post">
                     {% csrf_token %}
-                    {{ cafedra_form.as_p }}
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                    {{ add_cafedra_form.as_p }}
+                    <button type="submit" class="btn btn-primary">Добавить</button>
                 </form>
             </div>
         </div>

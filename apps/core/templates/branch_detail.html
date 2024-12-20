@@ -26,16 +26,18 @@
                                     <h5>{{ branch.manager }}</h5>
                                 </div>
                             </div>
-                            <hr>
-                            <div>
-                                {{ cafedras }}
-                            </div>
                         </div>
-                        <div class="card-footer">
-                            <button type="button" class="btn btn-primary" name="show-button" data-toggle="modal" data-target="#cafedraModal">
-                                Добавить/редактировать кафедры
-                            </button>
-                        </div>
+                        <h5>Кафедры:</h5>
+                        <ul class="list-group d-flex">
+                            {% for cafedra in branch.cafedra_set.all %}
+                                <li class="list-inline-item">{{ cafedra.name }} <a href="#"></a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-info-gradien d-flex" type="button" data-bs-toggle="modal" data-bs-target="#addCafedraModal" >
+                             <i class="me-2"  data-feather="plus-square"> </i>Добавить кафедру
+                        </button>
                     </div>
                 </div>
                 <div class="col-9">
@@ -49,10 +51,12 @@
                                 <li class="list-item mb-2"><h6>Электронная почта: </h6><span>{{ branch.email }}</span></li>
                                 <li class="list-item mb-2"><h6>Телефон: </h6><span>{{ branch.phone }}</span></li>
                             </ul>
-                            <hr class="mb-2">
                             {% if request.user.employee and request.user.employee.branch == branch %}
                                 <a href="{% url 'branch_edit' branch.pk %}" class="btn btn-primary">Редактировать</a>
                             {% endif %}
+                        </div>
+                        <hr class="mb-2">
+                        {% if employees %}
                         <div class="card-body">
                             <h5 class="title">Сотрудники филиала/отдела</h5>
                             <div class="list-group mt-3">
@@ -63,6 +67,7 @@
                                 </a>
                             {% endfor %}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -71,31 +76,33 @@
     </div>
 
 
-<div class="modal fade" id="cafedraModal" tabindex="-1" role="dialog" aria-labelledby="cafedraModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+
+
+<div class="modal fade" id="addCafedraModal" tabindex="-1" role="dialog" aria-labelledby="СafedraModalLabel" aria-hidden="true">
+    <div class="modal-dialog mt-0 mb-0" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="cafedraModalLabel">Добавить/редактировать кафедры</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title">Добавление новой кафедры</h5>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
             </div>
+            <form method="post" name="add_cafedra_form">
             <div class="modal-body">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ cafedra_form.as_p }}
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
-                </form>
+                {% csrf_token %}
+                {{ add_cafedra_form|crispy }}
             </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal" data-bs-original-title="" title="">Отмена</button>
+                <button class="btn btn-primary" type="submit">Добавить кафедру</button>
+            </div>
+            </form>
         </div>
     </div>
 </div>
 
+
+
 {% endblock %}
 
 {% block scriptcontent %}
-    <!-- Plugins JS start-->
-    <script src="{% static 'assets/js/tooltip-init.js' %}"></script>
 
-    <!-- Plugins JS Ends-->
 {% endblock %}

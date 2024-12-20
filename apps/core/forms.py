@@ -42,3 +42,9 @@ class BranchForm(forms.ModelForm):
             self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
 
 
+class CafedraForm(forms.ModelForm):
+    class Meta:
+        model = Cafedra
+        fields = ('name',)
+
+
