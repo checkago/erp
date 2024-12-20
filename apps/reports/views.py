@@ -302,6 +302,8 @@ class AdultBookReportListView(LoginRequiredMixin, ListView):
         qty_books_14_data = []
         qty_books_35_data = []
         qty_books_invalid_data = []
+        qty_books_neb_data = []
+        qty_books_prlib_data = []
         qty_books_part_opl_data = []
         qty_books_part_enm_data = []
         qty_books_part_tech_data = []
@@ -324,6 +326,8 @@ class AdultBookReportListView(LoginRequiredMixin, ListView):
             'qty_books_14': 0,
             'qty_books_35': 0,
             'qty_books_invalid': 0,
+            'qty_books_neb': 0,
+            'qty_books_prlib': 0,
             'qty_books_part_opl': 0,
             'qty_books_part_enm': 0,
             'qty_books_part_tech': 0,
@@ -346,6 +350,8 @@ class AdultBookReportListView(LoginRequiredMixin, ListView):
             day_count[day_str]['qty_books_14'] += report.qty_books_14
             day_count[day_str]['qty_books_35'] += report.qty_books_35
             day_count[day_str]['qty_books_invalid'] += report.qty_books_invalid
+            day_count[day_str]['qty_books_neb'] += report.qty_books_neb
+            day_count[day_str]['qty_books_prlib'] += report.qty_books_prlib
             day_count[day_str]['qty_books_part_opl'] += report.qty_books_part_opl
             day_count[day_str]['qty_books_part_enm'] += report.qty_books_part_enm
             day_count[day_str]['qty_books_part_tech'] += report.qty_books_part_tech
@@ -367,6 +373,8 @@ class AdultBookReportListView(LoginRequiredMixin, ListView):
             qty_books_14_data.append(counts['qty_books_14'])
             qty_books_35_data.append(counts['qty_books_35'])
             qty_books_invalid_data.append(counts['qty_books_invalid'])
+            qty_books_neb_data.append(counts['qty_books_neb'])
+            qty_books_prlib_data.append(counts['qty_books_prlib'])
             qty_books_part_opl_data.append(counts['qty_books_part_opl'])
             qty_books_part_enm_data.append(counts['qty_books_part_enm'])
             qty_books_part_tech_data.append(counts['qty_books_part_tech'])
@@ -383,11 +391,8 @@ class AdultBookReportListView(LoginRequiredMixin, ListView):
             qty_books_reference_invalid_data.append(counts['qty_books_reference_invalid'])
             qty_books_reference_online_data.append(counts['qty_books_reference_online'])
             total_books_data.append(
-                counts['qty_books_14'] + counts['qty_books_35'] + counts['qty_books_invalid'] +
-                counts['qty_books_part_opl'] + counts['qty_books_part_enm'] + counts['qty_books_part_tech'] +
-                counts['qty_books_part_sh'] + counts['qty_books_part_si'] + counts['qty_books_part_yl'] +
-                counts['qty_books_part_hl'] + counts['qty_books_part_dl'] + counts['qty_books_part_other'] +
-                counts['qty_books_part_audio'] + counts['qty_books_part_krai']
+                counts['qty_books_14'] + counts['qty_books_35'] + counts['qty_books_invalid'] + counts['qty_books_neb']
+                + counts['qty_books_prlib']
             )
             total_references_data.append(
                 counts['qty_books_reference_14'] + counts['qty_books_reference_35'] +
@@ -759,11 +764,7 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
             qty_books_reference_other_data.append(counts['qty_books_reference_other'])
             qty_books_reference_online_data.append(counts['qty_books_reference_online'])
             total_books_data.append(
-                counts['qty_books_14'] + counts['qty_books_30'] + counts['qty_books_other'] + counts['qty_books_neb'] + counts['qty_books_prlib'] +
-                counts['qty_books_part_opl'] + counts['qty_books_part_enm'] + counts['qty_books_part_tech'] +
-                counts['qty_books_part_sh'] + counts['qty_books_part_si'] + counts['qty_books_part_yl'] +
-                counts['qty_books_part_hl'] + counts['qty_books_part_dl'] + counts['qty_books_part_other'] +
-                counts['qty_books_part_audio'] + counts['qty_books_part_krai']
+                counts['qty_books_14'] + counts['qty_books_30'] + counts['qty_books_other'] + counts['qty_books_neb'] + counts['qty_books_prlib']
             )
             total_references_data.append(
                 counts['qty_books_reference_14'] + counts['qty_books_reference_30'] + counts['qty_books_neb'] + counts['qty_books_prlib'] +
