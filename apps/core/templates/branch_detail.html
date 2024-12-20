@@ -41,18 +41,28 @@
                 <div class="col-9">
                     <div class="card">
                         <div class="card-header pb-0 card-no-border">
-                            <h3>Данные</h3>
-                            <div>
-                                <p>{{ branch.full_name }}</p>
-                                <p>{{ branch.short_name }}</p>
-                                <p>{{ branch.adress }}</p>
-                                <p>{{ branch.email }}</p>
-                                <p>{{ branch.phone }}</p>
-                            </div>
-
+                            <h3>Данные филиала/отдела</h3>
+                            <ul class="list-group">
+                                <li class="list-item mb-2"><h6>Полное наименование: </h6><span>{{ branch.full_name }}</span></li>
+                                <li class="list-item mb-2"><h6>Краткое наименование: </h6><span>{{ branch.short_name }}</span></li>
+                                <li class="list-item mb-2"><h6>Адрес: </h6><span>{{ branch.address }}</span></li>
+                                <li class="list-item mb-2"><h6>Электронная почта: </h6><span>{{ branch.email }}</span></li>
+                                <li class="list-item mb-2"><h6>Телефон: </h6><span>{{ branch.phone }}</span></li>
+                            </ul>
+                            <hr class="mb-2">
                             {% if request.user.employee and request.user.employee.branch == branch %}
                                 <a href="{% url 'branch_edit' branch.pk %}" class="btn btn-primary">Редактировать</a>
                             {% endif %}
+                        <div class="card-body">
+                            <h5 class="title">Сотрудники филиала/отдела</h5>
+                            <div class="list-group col-md-6 mt-3">
+                            {% for Employee in employees %}
+                                <a class="list-group-item list-group-item-action list-hover-primary" href="#!">
+                                    <img class="rounded-circle" src="{{ Employee.user.avatar.url }}" alt="user">
+                                    {{ Employee.user.last_name }} {{ Employee.user.first_name }} {{ Employee.user.middle_name }} - {{ Employee.position }}
+                                </a>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>

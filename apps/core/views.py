@@ -91,7 +91,9 @@ def branch_list_view(request):
 @login_required
 def branch_detail_view(request, pk):
     branch = get_object_or_404(Branch, pk=pk)
-    context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch}
+    employees = Employee.objects.filter(branch=branch).exclude(pk=branch.manager_id)
+    context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch,
+               'employees': employees}
     return render(request, 'branch_detail.html', context=context)
 
 @login_required

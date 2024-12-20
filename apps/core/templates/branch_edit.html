@@ -41,12 +41,12 @@
                 <div class="col-9">
                     <div class="card">
                         <div class="card-header pb-0 card-no-border">
-                            <h3>Данные</h3>
+                            <h3>Данные филиала/отдела</h3>
 
                         <div class="card-body">
                             <form method="post" class="theme-form">
                                 {% csrf_token %}
-                                    <div class="col-md-4 mb-2">
+                                    <div class="col-md-4 mb-2 text-black">
                                         <label for="id_manager" class="form-label">Руководитель</label>
                                         {{ form.manager }}
                                     </div>
