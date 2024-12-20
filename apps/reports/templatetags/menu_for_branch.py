@@ -12,7 +12,7 @@ def show_branch_menu(context):
         try:
             employee = Employee.objects.get(user=user)
             branch = employee.branch
-            if branch.adult and branch.child:
+            if branch.adult and branch.child and branch.mod_lib:
                 return "show_both_menu"
             elif branch.adult:
                 return "show_adult_menu"

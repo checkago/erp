@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_filters %}
 {% load static %}
 {% load crispy_forms_field %}
 {% load crispy_forms_tags %}
@@ -19,7 +20,7 @@
                         <div class="card-body">
                             <div class="row mb-3">
                                 <div class="col-md-4">
-                                    <img src="{{ user.avatar.url }}" class="img-responsive w-100"/>
+                                    <img src="{{ user.avatar.url }}" class="img-responsive w-100" alt=""/>
                                 </div>
                                 <div class="col-md-8 pl-5">
                                     <h6>Руководитель:</h6>
@@ -65,7 +66,7 @@
                             <h5 class="title">Сотрудники филиала/отдела</h5>
                             <div class="list-group mt-3">
                             {% for Employee in employees %}
-                                <a class="list-group-item list-group-item-action list-hover-primary" href="#!">
+                                <a class="list-group-item list-group-item-action list-hover-primary" href="#">
                                     <img class="rounded-circle" src="{{ Employee.user.avatar.url }}" alt="user">
                                     {{ Employee.user.last_name }} {{ Employee.user.first_name }} {{ Employee.user.middle_name }} - {{ Employee.position }}
                                 </a>
