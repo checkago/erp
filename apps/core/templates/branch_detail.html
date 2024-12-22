@@ -18,7 +18,7 @@
                             <h3 class="card-title text-primary">{{ branch }}</h3>
                         </div>
                         <div class="card-body">
-                            <div class="row mb-3">
+                            <div class="row">
                                 <div class="col-md-4">
                                     <img src="{{ user.avatar.url }}" class="img-responsive w-100" alt=""/>
                                 </div>
@@ -28,66 +28,72 @@
                                 </div>
                             </div>
                         </div>
-                        {% if branch.cafedra_set.all %}
-                        <h5>Кафедры:</h5>
-                        <ul class="list-group d-flex">
-                            {% for cafedra in branch.cafedra_set.all %}
-                                <li class="list-inline-item">{{ cafedra.name }} <a href="#"></a></li>
-                            {% endfor %}
-                        </ul>
+                    </div>
+                    <div class="card-footer">
+                            {% if branch.cafedra_set.all %}
+                            <h5>Кафедры:</h5>
+                            <ul class="list-group d-flex">
+                                {% for cafedra in branch.cafedra_set.all %}
+                                    <li class="list-inline-item">{{ cafedra.name }} <a href="#"></a></li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        {% if request.user.employee and request.user.employee.branch == branch %}
+                            <hr class="mb-2">
+                            <div class="d-grid gap-2 mx-auto buttons-box">
+                                <button class="btn btn-lg btn-info-gradien d-flex mt-2 text-center" type="button" data-bs-toggle="modal" data-bs-target="#addCafedraModal" >
+                                     <i class="me-2"  data-feather="plus-square"> </i>Добавить кафедру
+                                </button>
+                            </div>
                         {% endif %}
                     </div>
-                    {% if request.user.employee and request.user.employee.branch == branch %}
-                    <div class="card-footer">
-                        <button class="btn btn-info-gradien d-flex" type="button" data-bs-toggle="modal" data-bs-target="#addCafedraModal" >
-                             <i class="me-2"  data-feather="plus-square"> </i>Добавить кафедру
-                        </button>
-                    </div>
-                    {% endif %}
                 </div>
                 <div class="col-9">
                     <div class="card">
                         <div class="card-header pb-0 card-no-border">
-                            <h3>Данные филиала/отдела</h3>
-                            <ul class="list-group">
-                                <li class="list-item mb-2"><h6>Полное наименование: </h6><span>{{ branch.full_name }}</span></li>
-                                <li class="list-item mb-2"><h6>Краткое наименование: </h6><span>{{ branch.short_name }}</span></li>
-                                <li class="list-item mb-2"><h6>Адрес: </h6><span>{{ branch.address }}</span></li>
-                                <li class="list-item mb-2"><h6>Электронная почта: </h6><span>{{ branch.email }}</span></li>
-                                <li class="list-item mb-2"><h6>Телефон: </h6><span>{{ branch.phone }}</span></li>
-                                <div class="col-6">
-                                    <hr>
-                                </div>
-                                {% if branch.adult %}
-                                <li class="list-item mb-2"><h6 class="text-primary">Взрослая</h6></li>
+                        <div class="row">
+                            <div class="col-5">
+                                <h3>Данные филиала/отдела</h3>
+                                <ul class="list-group">
+                                    <li class="list-item mb-2"><h6>Полное наименование: </h6><span>{{ branch.full_name }}</span></li>
+                                    <li class="list-item mb-2"><h6>Краткое наименование: </h6><span>{{ branch.short_name }}</span></li>
+                                    <li class="list-item mb-2"><h6>Адрес: </h6><span>{{ branch.address }}</span></li>
+                                    <li class="list-item mb-2"><h6>Электронная почта: </h6><span>{{ branch.email }}</span></li>
+                                    <li class="list-item mb-2"><h6>Телефон: </h6><span>{{ branch.phone }}</span></li>
+                                    <div class="col-6">
+                                        <hr>
+                                    </div>
+                                    {% if branch.adult %}
+                                    <li class="list-item mb-2"><h6 class="text-primary">Взрослая</h6></li>
+                                    {% endif %}
+                                    {% if branch.child %}
+                                    <li class="list-item mb-2"><h6 class="text-success">Детская</h6></li>
+                                    {% endif %}
+                                    {% if branch.mod_lib %}
+                                    <li class="list-item mb-2"><h6 class="text-danger">Модельная</h6></li>
+                                    {% endif %}
+                                </ul>
+                                {% if request.user.employee and request.user.employee.branch == branch %}
+                                    <a href="{% url 'branch_edit' branch.pk %}" class="btn btn-primary">Редактировать</a>
                                 {% endif %}
-                                {% if branch.child %}
-                                <li class="list-item mb-2"><h6 class="text-success">Детская</h6></li>
-                                {% endif %}
-                                {% if branch.mod_lib %}
-                                <li class="list-item mb-2"><h6 class="text-danger">Модельная</h6></li>
-                                {% endif %}
-                            </ul>
-                            {% if request.user.employee and request.user.employee.branch == branch %}
-                                <a href="{% url 'branch_edit' branch.pk %}" class="btn btn-primary">Редактировать</a>
+                            </div>
+                            <div class="col-7">
+                            {% if employees %}
+                                <h5 class="title">Сотрудники филиала/отдела</h5>
+                                <div class="list-group mt-3">
+                                {% for Employee in employees %}
+                                    <a class="list-group-item list-group-item-action list-hover-primary" href="#">
+                                        <img class="rounded-circle" src="{{ Employee.user.avatar.url }}" alt="user">
+                                        {{ Employee.user.last_name }} {{ Employee.user.first_name }} {{ Employee.user.middle_name }} - {{ Employee.position }}
+                                    </a>
+                                {% endfor %}
                             {% endif %}
+                            </div>
                         </div>
-                        <hr class="mb-2">
-                        {% if employees %}
-                        <div class="card-body">
-                            <h5 class="title">Сотрудники филиала/отдела</h5>
-                            <div class="list-group mt-3">
-                            {% for Employee in employees %}
-                                <a class="list-group-item list-group-item-action list-hover-primary" href="#">
-                                    <img class="rounded-circle" src="{{ Employee.user.avatar.url }}" alt="user">
-                                    {{ Employee.user.last_name }} {{ Employee.user.first_name }} {{ Employee.user.middle_name }} - {{ Employee.position }}
-                                </a>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         </div>
     </div>
