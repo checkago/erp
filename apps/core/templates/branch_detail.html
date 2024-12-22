@@ -62,13 +62,13 @@
                                 <li class="list-item mb-2"><h6>Отдел</h6></li>
                                 {% endif %}
                                 {% if branch.adult %}
-                                <li class="list-item mb-2"><h6>Взрослая</h6></li>
+                                <li class="list-item mb-2"><h6 class="text-primary">Взрослая</h6></li>
                                 {% endif %}
                                 {% if branch.child %}
-                                <li class="list-item mb-2"><h6>Детская</h6></li>
+                                <li class="list-item mb-2"><h6 class="text-success">Детская</h6></li>
                                 {% endif %}
                                 {% if branch.mod_lib %}
-                                <li class="list-item mb-2"><h6>Модельная</h6></li>
+                                <li class="list-item mb-2"><h6 class="text-danger">Модельная</h6></li>
                                 {% endif %}
                             </ul>
                             {% if request.user.employee and request.user.employee.branch == branch %}
