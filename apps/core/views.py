@@ -154,23 +154,6 @@ def branch_edit_view(request, pk):
         return redirect('branch_detail', pk=pk)
 
 
-
-@login_required
-def cafedra_edit_view(request, pk):
-    cafedra = get_object_or_404(Cafedra, pk=pk)
-    if request.method == 'POST':
-        form = CafedraForm(request.POST, instance=cafedra)
-        if form.is_valid():
-            form.save()
-            return redirect('branch_detail', pk=cafedra.library.pk)
-    else:
-        form = CafedraForm(instance=cafedra)
-    context = {"breadcrumb": {"parent": "Филиалы", "child": cafedra.library.short_name}, 'cafedra': cafedra, 'form': form,
-               'cafedras': branch.cafedra_set.all()}
-    return render(request, 'cafedra_edit.html', context=context)
-
-
-
 def user_profile(request):
     user = request.user
     employee = Employee.objects.get(user=user)

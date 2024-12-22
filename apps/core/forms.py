@@ -32,6 +32,22 @@ class BranchForm(forms.ModelForm):
             'mail_address': forms.TextInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'email': forms.TextInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'phone': forms.TextInput(attrs={'class': 'form-control border border-1 border-dark'}),
+            'department': forms.CheckboxInput(attrs={
+                'class': 'btn-check',
+                'type': 'checkbox',
+                'id': 'department'}),
+            'adult': forms.CheckboxInput(attrs={
+                'class': 'btn-check',
+                'type': 'checkbox',
+                'id': 'adult'}),
+            'child': forms.CheckboxInput(attrs={
+                'class': 'btn-check',
+                'type': 'checkbox',
+                'id': 'child'}),
+            'mod_lib': forms.CheckboxInput(attrs={
+                'class': 'btn-check',
+                'type': 'checkbox',
+                'id': 'mod_lib'}),
         }
 
     def __init__(self, *args, **kwargs):

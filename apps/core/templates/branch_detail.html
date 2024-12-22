@@ -55,6 +55,18 @@
                                 <li class="list-item mb-2"><h6>Адрес: </h6><span>{{ branch.address }}</span></li>
                                 <li class="list-item mb-2"><h6>Электронная почта: </h6><span>{{ branch.email }}</span></li>
                                 <li class="list-item mb-2"><h6>Телефон: </h6><span>{{ branch.phone }}</span></li>
+                                {% if branch.department %}
+                                <li class="list-item mb-2"><h6>Отдел: </h6><span>{{ branch.department }}</span></li>
+                                {% endif %}
+                                {% if branch.adult %}
+                                <li class="list-item mb-2"><h6>Взрослая: </h6><span>{{ branch.adult }}</span></li>
+                                {% endif %}
+                                {% if branch.child %}
+                                <li class="list-item mb-2"><h6>Детская: </h6><span>{{ branch.child }}</span></li>
+                                {% endif %}
+                                {% if branch.mod_lib %}
+                                <li class="list-item mb-2"><h6>Модельная: </h6><span>{{ branch.mod_lib }}</span></li>
+                                {% endif %}
                             </ul>
                             {% if request.user.employee and request.user.employee.branch == branch %}
                                 <a href="{% url 'branch_edit' branch.pk %}" class="btn btn-primary">Редактировать</a>
