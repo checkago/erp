@@ -2,8 +2,8 @@ import os
 from collections import defaultdict
 
 from django.http import HttpResponse
-from openpyxl import load_workbook
-from openpyxl.styles import Font
+# from openpyxl import load_workbook
+# from openpyxl.styles import Font
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
