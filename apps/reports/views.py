@@ -1,5 +1,9 @@
+import os
 from collections import defaultdict
 
+from django.http import HttpResponse
+from openpyxl import load_workbook
+from openpyxl.styles import Font
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -29,6 +33,43 @@ class CachedViewMixin:
 
 class DiaryView(LoginRequiredMixin, TemplateView):
     template_name = 'diary.html'  # Укажите путь к вашему шаблону
+
+    def get(self, request, *args, **kwargs):
+        if 'export_to_excel' in request.GET:
+            return self.export_to_excel()
+        return super().get(request, *args, **kwargs)
+
+    def export_to_excel(self):
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        template_path = os.path.join(base_dir, 'reports/template.xlsx')
+
+        if not os.path.exists(template_path):
+            raise FileNotFoundError(f"File not found: {template_path}")
+
+        wb = load_workbook(filename=template_path)
+        ws = wb.active
+
+        # Данные мероприятий
+        row = 2  # Предполагается, что заголовки уже есть в шаблоне
+        for event in Event.objects.all():
+            ws.cell(row=row, column=1, value=event.date)
+            ws.cell(row=row, column=2, value=event.name)
+            ws.cell(row=row, column=3, value=event.get_direction_display())
+            ws.cell(row=row, column=4, value=event.quantity)
+            ws.cell(row=row, column=5, value=event.age_14)
+            ws.cell(row=row, column=6, value=event.age_35)
+            ws.cell(row=row, column=7, value=event.age_other)
+            ws.cell(row=row, column=8, value=event.invalids)
+            ws.cell(row=row, column=9, value=event.out_of_station)
+            ws.cell(row=row, column=10, value=event.get_as_part_display())
+            ws.cell(row=row, column=11, value='Да' if event.paid else 'Нет')
+            ws.cell(row=row, column=12, value=event.note)
+            row += 1
+
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=events.xlsx'
+        wb.save(response)
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -109,35 +150,39 @@ class EventListView(LoginRequiredMixin, TemplateView):
 class EventCreateView(LoginRequiredMixin, View):
     def get(self, request):
         form = EventForm(user=request.user)  # Создаем пустую форму
-        return render(request, 'events/event_form.html', {'form': form})
+        breadcrumb = {"parent": "Дневник", "child": "Мероприятия"}
+        return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
 
     def post(self, request):
         form = EventForm(request.POST, user=request.user)
+        breadcrumb = {"parent": "Дневник", "child": "Мероприятия"}
         if form.is_valid():
             event = form.save(commit=False)  # Не сохраняем объект сразу
             employee = Employee.objects.get(user=request.user)
             event.library = employee.branch  # Устанавливаем библиотеку
             event.save()  # Сохраняем объект
             return redirect(reverse_lazy('events_list'))
-        return render(request, 'events/event_form.html', {'form': form})
+        return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
 
 
 class EventUpdateView(LoginRequiredMixin, View):
     def get(self, request, id):
         event_instance = get_object_or_404(Event, id=id)  # Получаем объект события по id
         form = EventForm(instance=event_instance, user=request.user)  # Создаем форму с текущими данными события
-        return render(request, 'events/event_form.html', {'form': form})
+        breadcrumb = {"parent": "Дневник", "child": "Мероприятия"}
+        return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
 
     def post(self, request, id):
         event_instance = get_object_or_404(Event, id=id)
         form = EventForm(request.POST, instance=event_instance, user=request.user)
+        breadcrumb = {"parent": "Дневник", "child": "Мероприятия"}
         if form.is_valid():
             event = form.save(commit=False)  # Не сохраняем объект сразу
             employee = Employee.objects.get(user=request.user)
             event.library = employee.branch  # Устанавливаем библиотеку
             event.save()  # Сохраняем объект
             return redirect(reverse_lazy('events_list'))
-        return render(request, 'events/event_form.html', {'form': form})
+        return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
 
 
 class AdultVisitReportListView(LoginRequiredMixin, ListView):
@@ -246,6 +291,15 @@ class AdultVisitReportCreateView(LoginRequiredMixin, CreateView):
     form_class = AdultVisitReportForm
     template_name = 'adult/adult_visit_form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+        context['mod_lib'] = branch.mod_lib
+        context['breadcrumb'] = {"parent": "Посещения", "child": "Взрослая"}
+        return context
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
@@ -263,6 +317,15 @@ class AdultVisitReportUpdateView(LoginRequiredMixin, UpdateView):
     model = AdultVisitReport
     form_class = AdultVisitReportForm
     template_name = 'adult/adult_visit_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+        context['mod_lib'] = branch.mod_lib
+        context['breadcrumb'] = {"parent": "Посещения", "child": "Взрослая"}
+        return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -435,6 +498,7 @@ class AdultBookReportCreateView(LoginRequiredMixin, CreateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
+        context['breadcrumb'] = {"parent": "Книговыдача", "child": "Взрослая"}
         return context
 
     def get_form_kwargs(self):
@@ -461,6 +525,7 @@ class AdultBookReportUpdateView(LoginRequiredMixin, UpdateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
+        context['breadcrumb'] = {"parent": "Книговыдача", "child": "Взрослая"}
         return context
 
     def get_form_kwargs(self):
@@ -609,6 +674,7 @@ class ChildVisitReportCreateView(LoginRequiredMixin, CreateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
+        context['breadcrumb'] = {"parent": "Посещения", "child": "Детская"}
         return context
 
     def get_form_kwargs(self):
@@ -636,6 +702,7 @@ class ChildVisitReportUpdateView(LoginRequiredMixin, UpdateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
+        context['breadcrumb'] = {"parent": "Посещения", "child": "Детская"}
         return context
 
     def get_form_kwargs(self):
@@ -667,7 +734,7 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
-        context['breadcrumb'] = {"parent": "Книговыдача", "child": "Взрослая"}
+        context['breadcrumb'] = {"parent": "Книговыдача", "child": "Детская"}
         reports = self.get_queryset()
 
         # Подготавливаем данные для графика
@@ -812,6 +879,7 @@ class ChildBookReportCreateView(LoginRequiredMixin, CreateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
+        context['breadcrumb'] = {"parent": "Книговыдача", "child": "Детская"}
         return context
 
     def get_form_kwargs(self):
@@ -839,6 +907,7 @@ class ChildBookReportUpdateView(LoginRequiredMixin, UpdateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
+        context['breadcrumb'] = {"parent": "Книговыдача", "child": "Детская"}
         return context
 
     def get_form_kwargs(self):

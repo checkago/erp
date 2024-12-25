@@ -91,7 +91,6 @@ class AdultBookReportForm(forms.ModelForm):
             self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
 
 
-
 class AdultVisitReportForm(forms.ModelForm):
     class Meta:
         model = AdultVisitReport
