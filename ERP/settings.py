@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'import_export',
     'rest_framework',
     'crispy_forms',
     "crispy_bootstrap5",
@@ -50,6 +49,7 @@ INSTALLED_APPS = [
     'apps.reports',
     'widget_tweaks',
     'sass_processor',
+    'import_export',
 ]
 
 MIDDLEWARE = [
