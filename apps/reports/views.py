@@ -2,8 +2,8 @@ import os
 from collections import defaultdict
 
 from django.http import HttpResponse
-# from openpyxl import load_workbook
-# from openpyxl.styles import Font
+from openpyxl import load_workbook
+from openpyxl.styles import Font
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -39,37 +39,37 @@ class DiaryView(LoginRequiredMixin, TemplateView):
             return self.export_to_excel()
         return super().get(request, *args, **kwargs)
 
-    # def export_to_excel(self):
-    #     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    #     template_path = os.path.join(base_dir, 'reports/template.xlsx')
-    #
-    #     if not os.path.exists(template_path):
-    #         raise FileNotFoundError(f"File not found: {template_path}")
-    #
-    #     wb = load_workbook(filename=template_path)
-    #     ws = wb.active
-    #
-    #     # Данные мероприятий
-    #     row = 2  # Предполагается, что заголовки уже есть в шаблоне
-    #     for event in Event.objects.all():
-    #         ws.cell(row=row, column=1, value=event.date)
-    #         ws.cell(row=row, column=2, value=event.name)
-    #         ws.cell(row=row, column=3, value=event.get_direction_display())
-    #         ws.cell(row=row, column=4, value=event.quantity)
-    #         ws.cell(row=row, column=5, value=event.age_14)
-    #         ws.cell(row=row, column=6, value=event.age_35)
-    #         ws.cell(row=row, column=7, value=event.age_other)
-    #         ws.cell(row=row, column=8, value=event.invalids)
-    #         ws.cell(row=row, column=9, value=event.out_of_station)
-    #         ws.cell(row=row, column=10, value=event.get_as_part_display())
-    #         ws.cell(row=row, column=11, value='Да' if event.paid else 'Нет')
-    #         ws.cell(row=row, column=12, value=event.note)
-    #         row += 1
-    #
-    #     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    #     response['Content-Disposition'] = 'attachment; filename=events.xlsx'
-    #     wb.save(response)
-    #     return response
+    def export_to_excel(self):
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        template_path = os.path.join(base_dir, 'reports/template.xlsx')
+
+        if not os.path.exists(template_path):
+            raise FileNotFoundError(f"File not found: {template_path}")
+
+        wb = load_workbook(filename=template_path)
+        ws = wb.active
+
+        # Данные мероприятий
+        row = 2  # Предполагается, что заголовки уже есть в шаблоне
+        for event in Event.objects.all():
+            ws.cell(row=row, column=1, value=event.date)
+            ws.cell(row=row, column=2, value=event.name)
+            ws.cell(row=row, column=3, value=event.get_direction_display())
+            ws.cell(row=row, column=4, value=event.quantity)
+            ws.cell(row=row, column=5, value=event.age_14)
+            ws.cell(row=row, column=6, value=event.age_35)
+            ws.cell(row=row, column=7, value=event.age_other)
+            ws.cell(row=row, column=8, value=event.invalids)
+            ws.cell(row=row, column=9, value=event.out_of_station)
+            ws.cell(row=row, column=10, value=event.get_as_part_display())
+            ws.cell(row=row, column=11, value='Да' if event.paid else 'Нет')
+            ws.cell(row=row, column=12, value=event.note)
+            row += 1
+
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=events.xlsx'
+        wb.save(response)
+        return response
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
