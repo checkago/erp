@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils import timezone
 from datetime import datetime, date
-
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
