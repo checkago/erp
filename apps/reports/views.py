@@ -871,7 +871,6 @@ class ChildBookReportCreateView(LoginRequiredMixin, CreateView):
     model = ChildBookReport
     form_class = ChildBookReportForm
     template_name = 'child/child_book_form.html'
-    success_url = reverse_lazy('child_books_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -879,7 +878,7 @@ class ChildBookReportCreateView(LoginRequiredMixin, CreateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
-        context['breadcrumb'] = {"parent": "Книговыдача", "child": "Детская"}
+        context['breadcrumb'] = {"parent": "Книговыдача", "child": "детская"}
         return context
 
     def get_form_kwargs(self):
