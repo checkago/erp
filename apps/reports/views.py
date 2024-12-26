@@ -497,13 +497,14 @@ class AdultBookReportCreateView(LoginRequiredMixin, CreateView):
         user = self.request.user
         employee = Employee.objects.get(user=user)
         branch = employee.branch
-        context['mod_lib'] = branch.mod_lib
+        context['mod_lib'] = branch.mod_lib  # Передаем статус модельной библиотеки в контекст
         context['breadcrumb'] = {"parent": "Книговыдача", "child": "Взрослая"}
         return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
+        kwargs['mod_lib'] = Employee.objects.get(user=self.request.user).branch.mod_lib  # Передаем статус модельной библиотеки в форму
         return kwargs
 
     def form_valid(self, form):
@@ -877,21 +878,19 @@ class ChildBookReportCreateView(LoginRequiredMixin, CreateView):
         user = self.request.user
         employee = Employee.objects.get(user=user)
         branch = employee.branch
-        context['mod_lib'] = branch.mod_lib
-        context['breadcrumb'] = {"parent": "Книговыдача", "child": "детская"}
+        context['mod_lib'] = branch.mod_lib  # Передаем статус модельной библиотеки в контекст
+        context['breadcrumb'] = {"parent": "Книговыдача", "child": "Детская"}
         return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
+        kwargs['mod_lib'] = Employee.objects.get(user=self.request.user).branch.mod_lib  # Передаем статус модельной библиотеки в форму
         return kwargs
 
     def form_valid(self, form):
         form.instance.library = Employee.objects.get(user=self.request.user).branch
         return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse_lazy('child_books_list')
 
 
 class ChildBookReportUpdateView(LoginRequiredMixin, UpdateView):

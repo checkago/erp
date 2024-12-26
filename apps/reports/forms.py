@@ -85,10 +85,25 @@ class AdultBookReportForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
+        mod_lib = kwargs.pop('mod_lib', False)  # Получаем статус модельной библиотеки
         super().__init__(*args, **kwargs)
+
         if user:
             employee = Employee.objects.get(user=user)
             self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
+
+            # Скрываем поля, если библиотека не модельная
+            if not mod_lib:
+                fields_to_hide = [
+                    'qty_books_part_opl', 'qty_books_part_enm',
+                    'qty_books_part_tech', 'qty_books_part_sh',
+                    'qty_books_part_si', 'qty_books_part_yl',
+                    'qty_books_part_hl', 'qty_books_part_dl',
+                    'qty_books_part_other', 'qty_books_part_audio',
+                    'qty_books_part_krai'
+                ]
+                for field in fields_to_hide:
+                    self.fields[field].widget = forms.HiddenInput()  #
 
 
 class AdultVisitReportForm(forms.ModelForm):
@@ -213,6 +228,28 @@ class ChildBookReportForm(forms.ModelForm):
             'qty_books_reference_online': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'note': forms.Textarea(attrs={'class': 'form-control border border-1 border-dark', 'rows': '1'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        mod_lib = kwargs.pop('mod_lib', False)  # Получаем статус модельной библиотеки
+        super().__init__(*args, **kwargs)
+
+        if user:
+            employee = Employee.objects.get(user=user)
+            self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
+
+            # Удаляем поля из формы, если библиотека не модельная
+            if not mod_lib:
+                fields_to_remove = [
+                    'qty_books_part_opl', 'qty_books_part_enm',
+                    'qty_books_part_tech', 'qty_books_part_sh',
+                    'qty_books_part_si', 'qty_books_part_yl',
+                    'qty_books_part_hl', 'qty_books_part_dl',
+                    'qty_books_part_other', 'qty_books_part_audio',
+                    'qty_books_part_krai'
+                ]
+                for field in fields_to_remove:
+                    self.fields.pop(field, None)  # Удаляем поле из формы
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)

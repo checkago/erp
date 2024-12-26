@@ -63,7 +63,8 @@
                                             {{ form.qty_books_prlib }}
                                         </div>
                                     </div>
-                                    {% if mod_lib %}
+                                </fieldset>
+                                <fieldset  class="conditional-fields border border-2 border-warning p-4 mb-1">
                                     <h5 class="text-primary">В том числе по отраслям</h5>
                                         <hr>
                                     <div class="row mb-3 g-3">
@@ -116,7 +117,6 @@
                                             {{ form.qty_books_part_krai }}
                                         </div>
                                     </div>
-                                    {% endif %}
                                 </fieldset>
                             </div>
                         </div>
@@ -156,7 +156,6 @@
                         <button type="submit" form="AdultBookForm" class="btn btn-primary">Сохранить изменения</button>
                     </div>
                 </form>
-
             </div>
         </div>
       </div>
@@ -213,4 +212,18 @@
 
     // Вызываем функцию для расчета суммы при загрузке страницы
     calculateSum();
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modLib = {{ mod_lib|yesno:"true,false" }};
+    const fieldsToHide = document.querySelectorAll('.conditional-fields');
+
+    if (!modLib) {
+        fieldsToHide.forEach(field => {
+            field.style.display = 'none'; // Скрываем элементы
+        });
+    }
+});
 </script>

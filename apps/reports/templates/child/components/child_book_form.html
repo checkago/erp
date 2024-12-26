@@ -63,6 +63,8 @@
                                             {{ form.qty_books_prlib }}
                                         </div>
                                     </div>
+                                </fieldset>
+                                <fieldset class="conditional-fields border border-2 border-warning p-4 mb-1">
                                     {% if mod_lib %}
                                     <h5>В том числе по отраслям</h5>
                                         <hr>
@@ -213,4 +215,17 @@
 
     // Вызываем функцию для расчета суммы при загрузке страницы
     calculateSum();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modLib = {{ mod_lib|yesno:"true,false" }};
+    const fieldsToHide = document.querySelectorAll('.conditional-fields');
+
+    if (!modLib) {
+        fieldsToHide.forEach(field => {
+            field.style.display = 'none'; // Скрываем элементы
+        });
+    }
+});
 </script>
