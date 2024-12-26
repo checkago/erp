@@ -893,6 +893,10 @@ class ChildBookReportCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+    def get_success_url(self):
+        return reverse_lazy('child_books_list')
+
+
 class ChildBookReportUpdateView(LoginRequiredMixin, UpdateView):
     model = ChildBookReport
     form_class = ChildBookReportForm
