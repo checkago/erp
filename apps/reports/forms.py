@@ -250,10 +250,3 @@ class ChildBookReportForm(forms.ModelForm):
                 ]
                 for field in fields_to_remove:
                     self.fields.pop(field, None)  # Удаляем поле из формы
-
-    def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
-        if user:
-            employee = Employee.objects.get(user=user)
-            self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
