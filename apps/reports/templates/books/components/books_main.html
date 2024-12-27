@@ -70,8 +70,8 @@
                                 {% for report in reports %}
                                     <tr>
                                         <td>{{ report.date|date:"d.m.Y" }}</td>
-                                        {% if visit.cafedra %}
-                                        <td>{{ visit.cafedra }}</td>
+                                        {% if report.cafedra %}
+                                        <td>{{ report.cafedra }}</td>
                                         {% else %}
                                         <td> --- --- </td>
                                         {% endif %}
