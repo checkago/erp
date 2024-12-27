@@ -352,7 +352,7 @@ class BookReportListView(LoginRequiredMixin, ListView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
-        context['breadcrumb'] = {"parent": "Книговыдача", "child": "Взрослая"}
+        context['breadcrumb'] = {"parent": "Дневник", "child": "Книговыдача"}
         reports = self.get_queryset()
 
         # Подготавливаем данные для графика
