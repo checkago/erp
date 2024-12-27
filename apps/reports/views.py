@@ -535,6 +535,8 @@ class BookReportUpdateView(LoginRequiredMixin, UpdateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
+        kwargs['mod_lib'] = Employee.objects.get(
+            user=self.request.user).branch.mod_lib  # Передаем статус модельной библиотеки в форму
         return kwargs
 
     def form_valid(self, form):
