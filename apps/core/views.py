@@ -185,31 +185,32 @@ def user_profile(request):
     return render(request, 'user_profile.html', context)
 
 def change_password(request):
+    user = request.user
+    employee = Employee.objects.get(user=user)
+    positions = Position.objects.all()
+
     if request.method == 'POST':
         password_form = PasswordChangeForm(request.user, request.POST)
         if password_form.is_valid():
             user = password_form.save()
-            update_session_auth_hash(request, user)  # Обновляем сессию пользователя
-            return redirect('user_profile')  # Перенаправляем после успешного изменения пароля
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Пароль успешно изменён.')
+            return redirect('user_profile')
+        else:
+            for error in password_form.errors.values():
+                for msg in error:
+                    messages.error(request, msg)
     else:
         password_form = PasswordChangeForm(request.user)
 
-    return render(request, 'user_profile.html', {
+    context = {
+        'user': user,
+        'employee': employee,
+        'positions': positions,
         'password_form': password_form,
-    })
+    }
 
-
-def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
-            return redirect('user_profile')
-    else:
-        form = PasswordChangeForm(request.user)
-
-    return render(request, 'user_profile.html', {'form': form})
+    return render(request, 'user_password_change.html', context)
 
 
 
