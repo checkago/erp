@@ -6,6 +6,7 @@
 {% block css %}
 <!-- Plugins css start-->
 <link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/todo.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/datatables.scss' %}">
 <!-- Plugins css Ends-->
 {% endblock %}
 
@@ -15,7 +16,7 @@
       {% include "layout/breadcrumb.html" %}
 
      
-      {% include "child/components/childvisits_main.html" %}
+      {% include "visits/components/visits_main.html" %}
 
       
 </div>
@@ -24,6 +25,8 @@
 
 {% block scriptcontent %}
 <!-- Plugins JS start-->
+<script src="{% static 'assets/js/datatable/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/js/datatable/datatables/datatable.custom.js' %}"></script>
 <script src="{% static 'assets/js/todo/todo.js'%}"></script>
 <script src="{% static 'assets/js/chart/apex-chart/apex-chart.js' %}"></script>
 <script>
@@ -63,48 +66,31 @@
                     reset: true,
                 },
                 locale: 'ru'  // Устанавливаем язык панели инструментов на русский
-            },
-            csv: {
-                filename: 'data',
-                columnDelimiter: ',',
-                headerCategory: function() {
-                  return 'Дата';
-                }
             }
         },
         series: [
             {
-                name: 'Новые (Дошкольники)',
+                name: 'Новые (Молодежь 14-35)',
                 type: 'column',
-                data: {{ qty_reg_7_data|safe }} // Данные по количеству регистраций за дни (столбцы)
+                data: {{ qty_reg_35_data|safe }} // Данные по количеству регистраций за дни (столбцы)
             },
             {
-                name: 'Новые (Остальные - 14)',
-                type: 'column',
-                data: {{ qty_reg_14_data|safe }} // Данные по количеству регистраций за дни (столбцы)
-            },
-            {
-                name: 'Новые (Молодежь 15-30)',
-                type: 'column',
-                data: {{ qty_reg_30_data|safe }} // Данные по количеству регистраций за дни (столбцы)
-            },
-            {
-                name: 'Новые (Прочие 30+)',
+                name: 'Новые (Прочие 35+)',
                 type: 'column',
                 data: {{ qty_reg_other_data|safe }} // Данные по количеству регистраций за дни (столбцы)
             },
             {
-                name: 'Посещение (Остальные - 14)',
+                name: 'Новые (Инвалиды)',
                 type: 'column',
-                data: {{ qty_visited_14_data|safe }} // Данные по количеству посещений за дни (столбцы)
+                data: {{ qty_reg_invalid_data|safe }} // Данные по количеству регистраций за дни (столбцы)
             },
             {
-                name: 'Посещение (Молодежь 15-30)',
+                name: 'Посещение (Молодежь 15-35)',
                 type: 'column',
                 data: {{ qty_visited_35_data|safe }} // Данные по количеству посещений за дни (столбцы)
             },
             {
-                name: 'Посещение (Прочие 30+)',
+                name: 'Посещение (Прочие 35+)',
                 type: 'column',
                 data: {{ qty_visited_other_data|safe }} // Данные по количеству посещений за дни (столбцы)
             },
@@ -114,22 +100,12 @@
                 data: {{ qty_visited_invalids_data|safe }} // Данные по количеству посещений за дни (столбцы)
             },
             {
-                name: 'Посещение (Внестационар)',
-                type: 'column',
-                data: {{ qty_visited_out_station_data|safe }} // Данные по количеству посещений за дни (столбцы)
-            },
-            {
-                name: 'Мероприятия (Остальные - 14)',
-                type: 'column',
-                data: {{ qty_events_14_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
-            },
-            {
-                name: 'Мероприятия (Молодежь 15-30)',
+                name: 'Мероприятия (Молодежь 14-35)',
                 type: 'column',
                 data: {{ qty_events_35_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
             },
             {
-                name: 'Мероприятия (Прочие 30+)',
+                name: 'Мероприятия (Прочие 35+)',
                 type: 'column',
                 data: {{ qty_events_other_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
             },
@@ -137,11 +113,6 @@
                 name: 'Мероприятия (Инвалиды)',
                 type: 'column',
                 data: {{ qty_events_invalids_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
-            },
-            {
-                name: 'Мероприятия (Внестационар)',
-                type: 'column',
-                data: {{ qty_events_out_station_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
             },
             {
                 name: 'Общее количество регистраций',
@@ -159,7 +130,7 @@
                 data: {{ total_events_data|safe }} // Общее количество мероприятий за дни (линия)
             }
         ],
-        xaxis: {
+       xaxis: {
           categories: {{ dates|safe }},
           labels: {
             formatter: function(val, index) {

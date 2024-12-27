@@ -184,6 +184,20 @@ def user_profile(request):
 
     return render(request, 'user_profile.html', context)
 
+def change_password(request):
+    if request.method == 'POST':
+        password_form = PasswordChangeForm(request.user, request.POST)
+        if password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)  # Обновляем сессию пользователя
+            return redirect('user_profile')  # Перенаправляем после успешного изменения пароля
+    else:
+        password_form = PasswordChangeForm(request.user)
+
+    return render(request, 'user_profile.html', {
+        'password_form': password_form,
+    })
+
 
 def change_password(request):
     if request.method == 'POST':

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.reports.models import Event, AdultVisitReport, AdultBookReport, ChildBookReport, ChildVisitReport
+from apps.reports.models import Event, VisitReport, BookReport
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -8,24 +8,14 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ('date', 'library', 'cafedra', 'paid')
 
 
-class AdultVisitReportAdmin(admin.ModelAdmin):
+class VisitReportAdmin(admin.ModelAdmin):
     list_display = ('date', 'library')
 
 
-class AdultBookReportAdmin(admin.ModelAdmin):
-    list_display = ('date', 'library')
-
-
-class ChildVisitReportAdmin(admin.ModelAdmin):
-    list_display = ('date', 'library')
-
-
-class ChildBookReportAdmin(admin.ModelAdmin):
+class BookReportAdmin(admin.ModelAdmin):
     list_display = ('date', 'library')
 
 
 admin.site.register(Event, EventAdmin)
-admin.site.register(AdultVisitReport, AdultVisitReportAdmin)
-admin.site.register(AdultBookReport, AdultBookReportAdmin)
-admin.site.register(ChildVisitReport, ChildVisitReportAdmin)
-admin.site.register(ChildBookReport, ChildBookReportAdmin)
+admin.site.register(VisitReport, VisitReportAdmin)
+admin.site.register(BookReport, BookReportAdmin)

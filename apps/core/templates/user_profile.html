@@ -68,16 +68,16 @@
                     <h5 class="modal-title">Смена пароля</h5>
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
                 </div>
-                <div class="modal-body">
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ password_form|crispy }}
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal" data-bs-original-title="" title="">Отмена</button>
-                    <button class="btn btn-primary" type="submit">Сменить пароль</button>
-                </div>
+                <form method="post" action="{% url 'change_password' %}">
+                    <div class="modal-body">
+                            {% csrf_token %}
+                            {{ password_form|crispy }}
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal" data-bs-original-title="" title="">Отмена</button>
+                        <button class="btn btn-primary" type="submit">Сменить пароль</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

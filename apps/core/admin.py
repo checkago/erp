@@ -11,11 +11,10 @@ from .models import ErpUser, Position, Employee, Organization, Branch, Notificat
 class ErpUserResource(resources.ModelResource):
     class Meta:
         model = ErpUser
-        # Укажите дополнительные настройки, если необходимо
 
 
-class ErpUserAdmin(ImportExportModelAdmin, admin.ModelAdmin):
-    resource_class = ErpUserResource  # Укажите ресурс для экспорта/импорта
+class ErpUserAdmin(ImportExportModelAdmin, BaseUserAdmin):
+    resource_class = ErpUserResource
     list_display = ('username', 'email', 'last_name', 'first_name', 'middle_name',
                     'is_staff', 'is_active', 'task_notifications',
                     'messages_notifications', 'events_notifications')
@@ -46,6 +45,11 @@ class ErpUserAdmin(ImportExportModelAdmin, admin.ModelAdmin):
                                           'messages_notifications',
                                           'events_notifications')}),
     )
+
+    def save_model(self, request, obj, form, change):
+        if not change:  # Если это создание нового пользователя
+            obj.set_password(form.cleaned_data['password'])  # Устанавливаем зашифрованный пароль
+        super().save_model(request, obj, form, change)
 
 
 class PositionAdmin(admin.ModelAdmin):

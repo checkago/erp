@@ -3,6 +3,7 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path, include
 from . import views
+from .views import change_password
 
 urlpatterns = [
     path('', views.index, name='index'),
@@ -16,7 +17,7 @@ urlpatterns = [
     path('core/branches/<int:pk>/', views.branch_detail_view, name='branch_detail'),
     path('core/branches/<int:pk>/edit/', views.branch_edit_view, name='branch_edit'),
     path('core/profile/', views.user_profile, name='user_profile'),
-    path('core/change_password/', views.change_password, name='change_password'),
+    path('change-password/', change_password, name='change_password'),
 ]
 
 if settings.MEDIA_ROOT:

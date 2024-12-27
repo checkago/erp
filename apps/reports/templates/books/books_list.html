@@ -6,6 +6,7 @@
 {% block css %}
 <!-- Plugins css start-->
 <link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/todo.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/datatables.scss' %}">
 <!-- Plugins css Ends-->
 {% endblock %}
 
@@ -15,7 +16,7 @@
       {% include "layout/breadcrumb.html" %}
 
      
-      {% include "adult/components/adultvisits_main.html" %}
+      {% include "books/components/books_main.html" %}
 
       
 </div>
@@ -24,6 +25,8 @@
 
 {% block scriptcontent %}
 <!-- Plugins JS start-->
+<script src="{% static 'assets/js/datatable/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/js/datatable/datatables/datatable.custom.js' %}"></script>
 <script src="{% static 'assets/js/todo/todo.js'%}"></script>
 <script src="{% static 'assets/js/chart/apex-chart/apex-chart.js' %}"></script>
 <script>
@@ -67,67 +70,47 @@
         },
         series: [
             {
-                name: 'Новые (Молодежь 14-35)',
+                name: 'Книговыдача (14+)',
                 type: 'column',
-                data: {{ qty_reg_35_data|safe }} // Данные по количеству регистраций за дни (столбцы)
+                data: {{ qty_books_14_data|safe }} // Данные по книговыдаче за дни (столбцы)
             },
             {
-                name: 'Новые (Прочие 35+)',
+                name: 'Книговыдача (35+)',
                 type: 'column',
-                data: {{ qty_reg_other_data|safe }} // Данные по количеству регистраций за дни (столбцы)
+                data: {{ qty_books_35_data|safe }} // Данные по книговыдаче за дни (столбцы)
             },
             {
-                name: 'Новые (Инвалиды)',
+                name: 'Книговыдача (Инвалиды)',
                 type: 'column',
-                data: {{ qty_reg_invalid_data|safe }} // Данные по количеству регистраций за дни (столбцы)
+                data: {{ qty_books_invalid_data|safe }} // Данные по книговыдаче за дни (столбцы)
             },
             {
-                name: 'Посещение (Молодежь 15-35)',
-                type: 'column',
-                data: {{ qty_visited_35_data|safe }} // Данные по количеству посещений за дни (столбцы)
-            },
-            {
-                name: 'Посещение (Прочие 35+)',
-                type: 'column',
-                data: {{ qty_visited_other_data|safe }} // Данные по количеству посещений за дни (столбцы)
-            },
-            {
-                name: 'Посещение (Инвалиды)',
-                type: 'column',
-                data: {{ qty_visited_invalids_data|safe }} // Данные по количеству посещений за дни (столбцы)
-            },
-            {
-                name: 'Мероприятия (Молодежь 14-35)',
-                type: 'column',
-                data: {{ qty_events_35_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
-            },
-            {
-                name: 'Мероприятия (Прочие 35+)',
-                type: 'column',
-                data: {{ qty_events_other_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
-            },
-            {
-                name: 'Мероприятия (Инвалиды)',
-                type: 'column',
-                data: {{ qty_events_invalids_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
-            },
-            {
-                name: 'Общее количество регистраций',
+                name: 'Общее количество книговыдачи',
                 type: 'line',
-                data: {{ total_reg_data|safe }} // Общее количество регистраций за дни (линия)
+                data: {{ total_books_data|safe }} // Общее количество книговыдачи за дни (линия)
             },
             {
-                name: 'Общее количество посещений',
-                type: 'line',
-                data: {{ total_visited_data|safe }} // Общее количество посещений за дни (линия)
+                name: 'Справки (14+)',
+                type: 'column',
+                data: {{ qty_books_reference_14_data|safe }} // Данные по справкам за дни (столбцы)
             },
             {
-                name: 'Общее количество мероприятий',
+                name: 'Справки (35+)',
+                type: 'column',
+                data: {{ qty_books_reference_35_data|safe }} // Данные по справкам за дни (столбцы)
+            },
+            {
+                name: 'Справки (Инвалиды)',
+                type: 'column',
+                data: {{ qty_books_reference_invalid_data|safe }} // Данные по справкам за дни (столбцы)
+            },
+            {
+                name: 'Общее количество справок',
                 type: 'line',
-                data: {{ total_events_data|safe }} // Общее количество мероприятий за дни (линия)
+                data: {{ total_references_data|safe }} // Общее количество справок за дни (линия)
             }
         ],
-       xaxis: {
+        xaxis: {
           categories: {{ dates|safe }},
           labels: {
             formatter: function(val, index) {
@@ -149,5 +132,4 @@
     var chart = new ApexCharts(document.querySelector("#chart"), options);
     chart.render();
 </script>
-
 {% endblock %}

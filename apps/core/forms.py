@@ -5,7 +5,7 @@ from .models import ErpUser, Employee, Branch, Cafedra
 class ErpUserForm(forms.ModelForm):
     class Meta:
         model = ErpUser
-        fields = ('first_name', 'last_name', 'email', 'avatar', 'bio')
+        fields = ('last_name', 'first_name', 'middle_name', 'email', 'avatar', 'bio')
 
         widgets = {
             'bio': forms.Textarea(attrs={'class': 'form-control', 'rows': '2'}),

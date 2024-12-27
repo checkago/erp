@@ -1,4 +1,5 @@
 {% load static %}
+
 <div class="container-fluid email-wrap bookmark-wrap todo-wrap">
     <div class="row flex-row">
 
@@ -30,10 +31,11 @@
                 <div class="card basic_table">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="table-warning">
-                                    <tr>
+                            <table class="display border table-striped table-info dataTable" id="basic-1">
+                                <thead>
+                                    <tr class="bg-info text-dark text-center">
                                         <th>Дата</th>
+                                        <th>Кафедра</th>
                                         <th>Кол.</th>
                                         <th>Наименование</th>
                                         <th>Направление</th>
@@ -51,6 +53,11 @@
                                 {% for Event in events %}
                                     <tr>
                                         <th>{{ Event.date|date:"d.m.Y" }}</th>
+                                        {% if Event.cafedra %}
+                                        <th>{{ Event.cafedra }}</th>
+                                        {% else %}
+                                        <th> --- --- </th>
+                                        {% endif %}
                                         <th>{{ Event.quantity }}</th>
                                         <th>{{ Event.name }}</th>
                                         <th>{{ Event.direction }}</th>
@@ -69,6 +76,23 @@
                                     </tr>
                                 {% endfor %}
                                 </tbody>
+                                <tfoot>
+                                        <tr class="bg-info text-dark text-center">
+                                            <th>Дата</th>
+                                            <th>Кафедра</th>
+                                            <th>Кол.</th>
+                                            <th>Наименование</th>
+                                            <th>Направление</th>
+                                            <th>До 14</th>
+                                            <th>До 35</th>
+                                            <th>Прочие</th>
+                                            <th>Инвалиды</th>
+                                            <th>Внестационар</th>
+                                            <th>В рамках</th>
+                                            <th>Платно</th>
+                                            <th>Изменить</th>
+                                        </tr>
+                                    </tfoot>
                             </table>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 {% load static %}
-{% load menu_for_branch %}
+
 <div class="col-xl-3 xl-30 box-col-12">
         <div class="email-sidebar md-sidebar">
           <div class="email-left-aside md-sidebar-aside">
@@ -15,57 +15,20 @@
               </div>
                 <div class="card-body">
                     <div class="email-app-sidebar left-bookmark custom-scrollbar">
-                            {% show_branch_menu as menu %}
-                            {% if menu == "show_both_menu" %}
-                                <ul class="nav main-menu">
-                                    <div class="div"></div>
-                                    <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="#">
-                                        <span class="iconbg badge-light-success"><i data-feather="file-text"></i></span><span class="title ms-2">Регистрация/Посещения</span></a>
-                                        <ul class="sidebar-submenu ms-5">
-                                            <li class="mb-1"><a href="{% url 'adult_visits_list' %}" class="btn btn-lg btn-air-primary text-primary">Взрослая</a></li>
-                                            <li><a href="{% url 'child_visits_list' %}" class="btn btn-lg btn-air-success text-success">Детская</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="#">
-                                        <span class="iconbg badge-light-danger"><i data-feather="book-open"></i></span><span class="title ms-2">Книговыдача</span></a>
-                                        <ul class="sidebar-submenu ms-5">
-                                            <li class="mb-1"><a href="{% url 'adult_books_list' %}" class="btn btn-lg btn-air-primary text-primary">Взрослая</a></li>
-                                            <li><a href="{% url 'child_books_list' %}" class="btn btn-lg btn-air-success text-success">Детская</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="nav-item"><a href="{% url 'events_list' %}"><span class="iconbg badge-light-info"><i data-feather="users"></i></span><span class="title ms-2">Массовые мероприятия</span></a></li>
-                                    <li class="nav-item">
-                                      <button class="btn-info-gradien badge-light d-block btn-mail w-100"><i class="me-2" data-feather="check-circle"> </i>Сформировать сводный отчет</button>
-                                    </li>
-                                </ul>
-                            {% elif menu == "show_adult_menu" %}
-                                <ul class="nav main-menu">
-                                    <div class="div"></div>
-                                    <li class="nav-item"><a href="{% url 'adult_visits_list' %}"><span class="iconbg badge-light-success"><i data-feather="file-text"></i></span><span class="title ms-2">Регистрация/Посещения</span></a></li>
-                                    <li class="nav-item"><a href="{% url 'adult_books_list' %}"><span class="iconbg badge-light-danger"><i data-feather="book-open"></i></span><span class="title ms-2">Книговыдача</span></a></li>
-                                    <li class="nav-item"><a href="{% url 'events_list' %}"><span class="iconbg badge-light-info"><i data-feather="users"></i></span><span class="title ms-2">Массовые мероприятия</span></a></li>
-                                    <li class="nav-item">
-                                      <button class="btn-info-gradien badge-light d-block btn-mail w-100"><i class="me-2" data-feather="check-circle"> </i>Сформировать сводный отчет</button>
-                                    </li>
-                                </ul>
-                            {% elif menu == "show_child_menu" %}
-                                <ul class="nav main-menu">
-                                    <div class="div"></div>
-                                    <li class="nav-item"><a href="{% url 'child_visits_list' %}"><span class="iconbg badge-light-success"><i data-feather="file-text"></i></span><span class="title ms-2">Регистрация/Посещения</span></a></li>
-                                    <li class="nav-item"><a href="{% url 'child_books_list' %}"><span class="iconbg badge-light-danger"><i data-feather="book-open"></i></span><span class="title ms-2">Книговыдача</span></a></li>
-                                    <li class="nav-item"><a href="{% url 'events_list' %}"><span class="iconbg badge-light-info"><i data-feather="users"></i></span><span class="title ms-2">Массовые мероприятия</span></a></li>
-                                    <li class="nav-item">
-                                      <button class="btn-info-gradien badge-light d-block btn-mail w-100"><i class="me-2" data-feather="check-circle"> </i>Сформировать сводный отчет</button>
-                                    </li>
-                                </ul>
-                            {% else %}
-                                <!-- Код для скрытия меню -->
-                                <p>Меню не доступно</p>
-                            {% endif %}
-                            <div>
-                                <a href="?export_to_excel" class="btn btn-primary">Экспорт в Excel</a>
-                            </div>
+                        <ul class="main-menu">
+                            <div class="div"></div>
+                            <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="{% url 'visits_list' %}">
+                                <span class="iconbg badge-light-success"><i data-feather="file-text"></i></span><span class="title ms-2">Регистрация/Посещения</span></a>
+                            </li>
+                            <li class="sidebar-list"><a class="sidebar-link sidebar-title" href="{% url 'books_list' %}">
+                                <span class="iconbg badge-light-danger"><i data-feather="book-open"></i></span><span class="title ms-2">Книговыдача</span></a>
+                            </li>
+                            <li class="nav-item"><a href="{% url 'events_list' %}"><span class="iconbg badge-light-info"><i data-feather="users"></i></span><span class="title ms-2">Массовые мероприятия</span></a></li>
+                        </ul>
                     </div>
+                </div>
+                <div class="card-footer">
+                    <a href="?export_to_excel" class="btn-info-gradien badge-light d-flex btn-lg w-100"><i class="me-2" data-feather="check-circle"> </i>Экспорт в Excel</a>
                 </div>
             </div>
           </div>
