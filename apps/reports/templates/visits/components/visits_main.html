@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="container-fluid">
-        <div class="card">
+        <div class="card basic_table">
             <div class="card-header">
                 <div class="row">
                     <div class="col-4"><h4>Таблица регистраций/посещений</h4></div>
@@ -27,87 +27,82 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="card basic_table">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="display border dataTable table-success" id="basic-1">
-                                <thead>
-                                    <tr class="bg-success text-dark text-center">
-                                        <th>Дата отчета</th>
-                                        <th>Кафедра</th>
-                                        <th>Новые (Дошкольники)</th>
-                                        <th>Новые (До 14)</th>
-                                        <th>Новые (Молодежь 14-35)</th>
-                                        <th>Новые (Прочие 35+)</th>
-                                        <th>Новые (Инвалиды)</th>
-                                        <th>Новые (Президентская)</th>
-                                        <th>Новые (Литрес)</th>
-                                        <th>Посещение (До 14)</th>
-                                        <th>Посещение (Молодежь 14-35)</th>
-                                        <th>Посещение (Прочие 35+)</th>
-                                        <th>Посещение (Инвалиды)</th>
-                                        <th>Посещение (Внестационар)</th>
-                                        <th>Посещение (Президентская)</th>
-                                        <th>Посещение (Литрес)</th>
-                                        <th>Изменить</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for visit in visits %}
-                                    <tr>
-                                        <td>{{ visit.date|date:"d.m.Y" }}</td>
-                                        {% if visit.cafedra %}
-                                        <td>{{ visit.cafedra }}</td>
-                                        {% else %}
-                                        <td> --- --- </td>
-                                        {% endif %}
-                                        <td>{{ visit.qty_reg_7 }}</td>
-                                        <td>{{ visit.qty_reg_14 }}</td>
-                                        <td>{{ visit.qty_reg_15_35 }}</td>
-                                        <td>{{ visit.qty_reg_other }}</td>
-                                        <td>{{ visit.qty_reg_invalid }}</td>
-                                        <td>{{ visit.qty_reg_prlib }}</td>
-                                        <td>{{ visit.qty_reg_litres }}</td>
-                                        <td>{{ visit.qty_visited_14}}</td>
-                                        <td>{{ visit.qty_visited_15_35 }}</td>
-                                        <td>{{ visit.qty_visited_other }}</td>
-                                        <td>{{ visit.qty_visited_invalids }}</td>
-                                        <td>{{ visit.qty_out_of_station }}</td>
-                                        <td>{{ visit.qty_visited_prlib }}</td>
-                                        <td>{{ visit.qty_visited_lires }}</td>
-                                        <td>
-                                            <a class="float-end" href="{% url 'visits_update' visit.id %}">
-                                                <i data-feather="edit"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                                <tfoot>
-                                    <tr class="bg-success text-dark text-center">
-                                        <th>Дата отчета</th>
-                                        <th>Кафедра</th>
-                                        <th>Новые (Дошкольники)</th>
-                                        <th>Новые (До 14)</th>
-                                        <th>Новые (Молодежь 14-35)</th>
-                                        <th>Новые (Прочие 35+)</th>
-                                        <th>Новые (Инвалиды)</th>
-                                        <th>Новые (Президентская)</th>
-                                        <th>Новые (Литрес)</th>
-                                        <th>Посещение (До 14)</th>
-                                        <th>Посещение (Молодежь 14-35)</th>
-                                        <th>Посещение (Прочие 35+)</th>
-                                        <th>Посещение (Инвалиды)</th>
-                                        <th>Посещение (Внестационар)</th>
-                                        <th>Посещение (Президентская)</th>
-                                        <th>Посещение (Литрес)</th>
-                                        <th>Изменить</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-
-                        </div>
-                    </div>
+                <div class="table-responsive">
+                    <table class="display border dataTable table-success" id="basic-1">
+                        <thead>
+                            <tr class="bg-success text-dark text-center">
+                                <th>Дата отчета</th>
+                                <th>Кафедра</th>
+                                <th>Новые (Дошкольники)</th>
+                                <th>Новые (До 14)</th>
+                                <th>Новые (Молодежь 14-35)</th>
+                                <th>Новые (Прочие 35+)</th>
+                                <th>Новые (Инвалиды)</th>
+                                <th>Новые (Президентская)</th>
+                                <th>Новые (Литрес)</th>
+                                <th>Посещение (До 14)</th>
+                                <th>Посещение (Молодежь 14-35)</th>
+                                <th>Посещение (Прочие 35+)</th>
+                                <th>Посещение (Инвалиды)</th>
+                                <th>Посещение (Внестационар)</th>
+                                <th>Посещение (Президентская)</th>
+                                <th>Посещение (Литрес)</th>
+                                <th>Изменить</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for visit in visits %}
+                            <tr>
+                                <td>{{ visit.date|date:"d.m.Y" }}</td>
+                                {% if visit.cafedra %}
+                                <td>{{ visit.cafedra }}</td>
+                                {% else %}
+                                <td> --- --- </td>
+                                {% endif %}
+                                <td>{{ visit.qty_reg_7 }}</td>
+                                <td>{{ visit.qty_reg_14 }}</td>
+                                <td>{{ visit.qty_reg_15_35 }}</td>
+                                <td>{{ visit.qty_reg_other }}</td>
+                                <td>{{ visit.qty_reg_invalid }}</td>
+                                <td>{{ visit.qty_reg_prlib }}</td>
+                                <td>{{ visit.qty_reg_litres }}</td>
+                                <td>{{ visit.qty_visited_14}}</td>
+                                <td>{{ visit.qty_visited_15_35 }}</td>
+                                <td>{{ visit.qty_visited_other }}</td>
+                                <td>{{ visit.qty_visited_invalids }}</td>
+                                <td>{{ visit.qty_out_of_station }}</td>
+                                <td>{{ visit.qty_visited_prlib }}</td>
+                                <td>{{ visit.qty_visited_lires }}</td>
+                                <td>
+                                    <a class="float-end" href="{% url 'visits_update' visit.id %}">
+                                        <i data-feather="edit"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-success text-dark text-center">
+                                <th>Дата отчета</th>
+                                <th>Кафедра</th>
+                                <th>Новые (Дошкольники)</th>
+                                <th>Новые (До 14)</th>
+                                <th>Новые (Молодежь 14-35)</th>
+                                <th>Новые (Прочие 35+)</th>
+                                <th>Новые (Инвалиды)</th>
+                                <th>Новые (Президентская)</th>
+                                <th>Новые (Литрес)</th>
+                                <th>Посещение (До 14)</th>
+                                <th>Посещение (Молодежь 14-35)</th>
+                                <th>Посещение (Прочие 35+)</th>
+                                <th>Посещение (Инвалиды)</th>
+                                <th>Посещение (Внестационар)</th>
+                                <th>Посещение (Президентская)</th>
+                                <th>Посещение (Литрес)</th>
+                                <th>Изменить</th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
             </div>
         </div>
