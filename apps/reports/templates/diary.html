@@ -6,6 +6,7 @@
 {% block css %}
 <!-- Plugins css start-->
 <link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/todo.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/datatables.scss' %}">
 <!-- Plugins css Ends-->
 {% endblock %}
 
@@ -21,5 +22,7 @@
 {% block scriptcontent %}
 <!-- Plugins JS start-->
 <script src="{% static 'assets/js/todo/todo.js' %}"></script>
+<script src="{% static 'assets/js/datatable/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/js/datatable/datatables/datatable.custom.js' %}"></script>
 <!-- Plugins JS Ends-->
 {% endblock %}

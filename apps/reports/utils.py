@@ -170,3 +170,39 @@ def get_event_totals(user):
         'monthly': monthly_totals_events,
         'yearly': yearly_totals_events,
     }
+
+
+def get_notes_with_data():
+    notes_data = []
+
+    # Получаем записи из модели Event
+    events = Event.objects.filter(note__isnull=False).exclude(note='')
+    for event in events:
+        notes_data.append({
+            'date': event.date,
+            'note': event.note,
+            'model_name': 'Мероприятия',
+            'edit_url': f'/reports/event/update/{event.id}/'  # URL для редактирования события
+        })
+
+    # Получаем записи из модели VisitReport
+    visits = VisitReport.objects.filter(note__isnull=False).exclude(note='')
+    for visit in visits:
+        notes_data.append({
+            'date': visit.date,
+            'note': visit.note,
+            'model_name': 'Регистрация/Посещения',
+            'edit_url': f'/reports/visits/update/{visit.id}/'  # URL для редактирования отчета посещений
+        })
+
+    # Получаем записи из модели BookReport
+    books = BookReport.objects.filter(note__isnull=False).exclude(note='')
+    for book in books:
+        notes_data.append({
+            'date': book.date,
+            'note': book.note,
+            'model_name': 'Книговыдача',
+            'edit_url': f'/reports/books/update/{book.id}/'  # URL для редактирования отчета книговыдачи
+        })
+
+    return notes_data

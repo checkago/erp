@@ -90,11 +90,35 @@
             </div>
         </div>
       </div>
-      <div class="box-col-12">
-          <div class="card">
-              <div class="card-body">
-                  <div class="row">
-
+      <div class="col-xl-12">
+          <div class="row">
+              <div class="col-6">
+                  <div class="card">
+                      <div class="card-header">
+                          <h5>Обратить внимание:</h5>
+                      </div>
+                      <div class="card-body">
+                          <table class="display border table-striped dataTable" id="basic-1">
+                                <thead class="bg-info text-dark text-center">
+                                    <tr>
+                                        <th>Дата</th>
+                                        <th>Примечание</th>
+                                        <th>Категория</th>
+                                        <th>Редактировать</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for note in notes %}
+                                    <tr>
+                                        <td>{{ note.date|date:"d.m.Y" }}</td>
+                                        <td>{{ note.note }}</td>
+                                        <td>{{ note.model_name }}</td>
+                                        <td><a href="{{ note.edit_url }}">Редактировать</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                      </div>
                   </div>
               </div>
           </div>
