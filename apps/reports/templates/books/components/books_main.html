@@ -154,13 +154,19 @@
                                     <th>Прочие(в т.ч. журналы)</th>
                                     <th>Аудиокниги</th>
                                     <th>Краеведение(в том числе)</th>
-                                {% endif %}
 
-                                <th>До 14</th>
-                                <th>14+</th>
-                                <th>35+</th>
-                                <th>Инвалиды</th>
-                                <th>Удаленно</th>
+                                    <th>До 14</th>
+                                    <th>14+</th>
+                                    <th>35+</th>
+                                    <th>Инвалиды</th>
+                                    <th>Удаленно</th>
+                                {% else %}
+                                    <th class="bg-success text-dark">До 14</th>
+                                    <th class="bg-success text-dark">14+</th>
+                                    <th class="bg-success text-dark">35+</th>
+                                    <th class="bg-success text-dark">Инвалиды</th>
+                                    <th class="bg-success text-dark">Удаленно</th>
+                                {% endif %}
                             </tr>
                         </tfoot>
                     </table>
