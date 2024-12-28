@@ -195,7 +195,7 @@ class VisitReportListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['breadcrumb'] = {"parent": "Дневник", "child": "Регисрация/Посещения"}
+        context['breadcrumb'] = {"parent": "Дневник", "child": "Регистрация/Посещения"}
         visits = self.get_queryset()
 
         # Подготавливаем данные для графика
