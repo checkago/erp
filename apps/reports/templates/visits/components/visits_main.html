@@ -28,26 +28,31 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="display border dataTable table-success" id="basic-1">
+                    <table class="display border table-striped dataTable" id="basic-1">
                         <thead>
                             <tr class="bg-success text-dark text-center">
-                                <th>Дата отчета</th>
-                                <th>Кафедра</th>
-                                <th>Новые (Дошкольники)</th>
-                                <th>Новые (До 14)</th>
-                                <th>Новые (Молодежь 14-35)</th>
-                                <th>Новые (Прочие 35+)</th>
-                                <th>Новые (Инвалиды)</th>
-                                <th>Новые (Президентская)</th>
-                                <th>Новые (Литрес)</th>
-                                <th>Посещение (До 14)</th>
-                                <th>Посещение (Молодежь 14-35)</th>
-                                <th>Посещение (Прочие 35+)</th>
-                                <th>Посещение (Инвалиды)</th>
-                                <th>Посещение (Внестационар)</th>
-                                <th>Посещение (Президентская)</th>
-                                <th>Посещение (Литрес)</th>
-                                <th>Изменить</th>
+                                <th rowspan="2">Дата отчета</th>
+                                <th rowspan="2">Кафедра</th>
+                                <th colspan="7">Новые</th>
+                                <th colspan="7">Посещение</th>
+                                <th rowspan="2">Изменить</th>
+                            </tr>
+                            <tr class="bg-warning text-dark text-center">
+                                <th>Дошкольники</th>
+                                <th>До 14</th>
+                                <th>Молодежь 14-35</th>
+                                <th>Прочие 35+</th>
+                                <th>Инвалиды</th>
+                                <th>Президентская</th>
+                                <th>Литрес</th>
+
+                                <th class="bg-info text-dark">До 14</th>
+                                <th class="bg-info text-dark">Молодежь 14-35</th>
+                                <th class="bg-info text-dark">Прочие 35+</th>
+                                <th class="bg-info text-dark">Инвалиды</th>
+                                <th class="bg-info text-dark">Внестационар</th>
+                                <th class="bg-info text-dark">Президентская</th>
+                                <th class="bg-info text-dark">Литрес</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -70,9 +75,9 @@
                                 <td>{{ visit.qty_visited_15_35 }}</td>
                                 <td>{{ visit.qty_visited_other }}</td>
                                 <td>{{ visit.qty_visited_invalids }}</td>
-                                <td>{{ visit.qty_out_of_station }}</td>
+                                <td>{{ visit.qty_visited_out_station }}</td>
                                 <td>{{ visit.qty_visited_prlib }}</td>
-                                <td>{{ visit.qty_visited_lires }}</td>
+                                <td>{{ visit.qty_visited_litres }}</td>
                                 <td>
                                     <a class="float-end" href="{% url 'visits_update' visit.id %}">
                                         <i data-feather="edit"></i>
@@ -83,23 +88,28 @@
                         </tbody>
                         <tfoot>
                             <tr class="bg-success text-dark text-center">
-                                <th>Дата отчета</th>
-                                <th>Кафедра</th>
-                                <th>Новые (Дошкольники)</th>
-                                <th>Новые (До 14)</th>
-                                <th>Новые (Молодежь 14-35)</th>
-                                <th>Новые (Прочие 35+)</th>
-                                <th>Новые (Инвалиды)</th>
-                                <th>Новые (Президентская)</th>
-                                <th>Новые (Литрес)</th>
-                                <th>Посещение (До 14)</th>
-                                <th>Посещение (Молодежь 14-35)</th>
-                                <th>Посещение (Прочие 35+)</th>
-                                <th>Посещение (Инвалиды)</th>
-                                <th>Посещение (Внестационар)</th>
-                                <th>Посещение (Президентская)</th>
-                                <th>Посещение (Литрес)</th>
-                                <th>Изменить</th>
+                                <th rowspan="2">Дата отчета</th>
+                                <th rowspan="2">Кафедра</th>
+                                <th colspan="7">Новые</th>
+                                <th colspan="7">Посещение</th>
+                                <th rowspan="2">Изменить</th>
+                            </tr>
+                            <tr class="bg-warning text-dark text-center">
+                                <th>Дошкольники</th>
+                                <th>До 14</th>
+                                <th>Молодежь 14-35</th>
+                                <th>Прочие 35+</th>
+                                <th>Инвалиды</th>
+                                <th>Президентская</th>
+                                <th>Литрес</th>
+
+                                <th class="bg-info text-dark">До 14</th>
+                                <th class="bg-info text-dark">Молодежь 14-35</th>
+                                <th class="bg-info text-dark">Прочие 35+</th>
+                                <th class="bg-info text-dark">Инвалиды</th>
+                                <th class="bg-info text-dark">Внестационар</th>
+                                <th class="bg-info text-dark">Президентская</th>
+                                <th class="bg-info text-dark">Литрес</th>
                             </tr>
                         </tfoot>
                     </table>

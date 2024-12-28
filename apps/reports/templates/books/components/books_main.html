@@ -31,16 +31,24 @@
                     <table class="display border table-striped dataTable" id="basic-1">
                         <thead>
                             <tr class="bg-secondary text-bg-info text-center">
-                                <th>Дата отчета</th>
-                                <th>Кафедра</th>
-                                <th>Книговыдача (До 14)</th>
-                                <th>Книговыдача (14-35)</th>
-                                <th>Книговыдача (35+)</th>
-                                <th>Книговыдача (Инвалиды)</th>
-                                <th>Книговыдача (НЭБ)</th>
-                                <th>Книговыдача (Президентская)</th>
-                                <th>Книговыдача (Литрес)</th>
-                                <th>Книговыдача (Консультант+)</th>
+                                <th rowspan="2">Дата отчета</th>
+                                <th rowspan="2">Кафедра</th>
+                                <th colspan="8">Книговыдача</th> <!-- Объединяем столбцы книговыдачи -->
+                                {% if mod_lib %}
+                                    <th class="bg-warning text-bg-warning" colspan="11">По отраслям</th> <!-- Объединяем дополнительные книги, если необходимо -->
+                                {% endif %}
+                                <th colspan="4">Справки</th> <!-- Объединяем столбцы справок -->
+                                <th rowspan="2">Изменить</th>
+                            </tr>
+                            <tr class="bg-info text-dark text-center">
+                                <th>До 14</th>
+                                <th>14-35</th>
+                                <th>35+</th>
+                                <th>Инвалиды</th>
+                                <th>НЭБ</th>
+                                <th>Президентская</th>
+                                <th>Литрес</th>
+                                <th>Консультант+</th>
 
                                 {% if mod_lib %}
                                     <th>Общ.-политич.лит-ра</th>
@@ -54,14 +62,17 @@
                                     <th>Прочие(в т.ч. журналы)</th>
                                     <th>Аудиокниги</th>
                                     <th>Краеведение(в том числе)</th>
-                                {% endif %}
 
-                                <th>Справки (14+)</th>
-                                <th>Справки (35+)</th>
-                                <th>Справки (Инвалиды)</th>
-                                <th>Справки (Удаленно)</th>
-                                <th>Примечание</th>
-                                <th>Изменить</th>
+                                    <th>14+</th>
+                                    <th>35+</th>
+                                    <th>Инвалиды</th>
+                                    <th>Удаленно</th>
+                                {% else %}
+                                    <th class="bg-success text-dark">14+</th>
+                                    <th class="bg-success text-dark">35+</th>
+                                    <th class="bg-success text-dark">Инвалиды</th>
+                                    <th class="bg-success text-dark">Удаленно</th>
+                                {% endif %}
                             </tr>
                         </thead>
                         <tbody>
@@ -96,31 +107,37 @@
                                     <td>{{ report.qty_books_part_krai }}</td>
                                 {% endif %}
 
+                                <!-- Справки -->
                                 <td>{{ report.qty_books_reference_14 }}</td>
                                 <td>{{ report.qty_books_reference_35 }}</td>
                                 <td>{{ report.qty_books_reference_invalid }}</td>
                                 <td>{{ report.qty_books_reference_online }}</td>
-                                <td>{{ report.note }}</td>
-                                <td>
-                                    <a class="float-end" href="{% url 'books_update' report.id %}">
-                                        <i data-feather="edit"></i>
-                                    </a>
-                                </td>
+
+                                <!-- Примечание и изменение -->
+                                <td><a class="float-end" href="{% url 'books_update' report.id %}"><i data-feather="edit"></i></a></td>
                             </tr>
                         {% endfor %}
                         </tbody>
                         <tfoot>
-                            <tr class="bg-secondary text-bg-info">
-                                <th>Дата отчета</th>
-                                <th>Кафедра</th>
-                                <th>Книговыдача (До 14)</th>
-                                <th>Книговыдача (14-35)</th>
-                                <th>Книговыдача (35+)</th>
-                                <th>Книговыдача (Инвалиды)</th>
-                                <th>Книговыдача (НЭБ)</th>
-                                <th>Книговыдача (Президентская)</th>
-                                <th>Книговыдача (Литрес)</th>
-                                <th>Книговыдача (Консультант+)</th>
+                            <tr class="bg-secondary text-bg-info text-center">
+                                <th rowspan="2">Дата отчета</th>
+                                <th rowspan="2">Кафедра</th>
+                                <th colspan="8">Книговыдача</th> <!-- Объединяем столбцы книговыдачи -->
+                                {% if mod_lib %}
+                                    <th class="bg-warning text-bg-warning" colspan="11">По отраслям</th> <!-- Объединяем дополнительные книги, если необходимо -->
+                                {% endif %}
+                                <th colspan="4">Справки</th> <!-- Объединяем столбцы справок -->
+                                <th rowspan="2">Изменить</th>
+                            </tr>
+                            <tr class="bg-info text-dark text-center">
+                                <th>До 14</th>
+                                <th>14-35</th>
+                                <th>35+</th>
+                                <th>Инвалиды</th>
+                                <th>НЭБ</th>
+                                <th>Президентская</th>
+                                <th>Литрес</th>
+                                <th>Консультант+</th>
 
                                 {% if mod_lib %}
                                     <th>Общ.-политич.лит-ра</th>
@@ -136,12 +153,10 @@
                                     <th>Краеведение(в том числе)</th>
                                 {% endif %}
 
-                                <th>Справки (14+)</th>
-                                <th>Справки (35+)</th>
-                                <th>Справки (Инвалиды)</th>
-                                <th>Справки (Удаленно)</th>
-                                <th>Примечание</th>
-                                <th>Изменить</th>
+                                <th>14+</th>
+                                <th>35+</th>
+                                <th>Инвалиды</th>
+                                <th>Удаленно</th>
                             </tr>
                         </tfoot>
                     </table>
