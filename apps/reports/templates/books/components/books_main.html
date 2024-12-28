@@ -33,7 +33,7 @@
                             <tr class="bg-secondary text-bg-info text-center">
                                 <th rowspan="2">Дата отчета</th>
                                 <th rowspan="2">Кафедра</th>
-                                <th colspan="8">Книговыдача</th> <!-- Объединяем столбцы книговыдачи -->
+                                <th colspan="9">Книговыдача</th> <!-- Объединяем столбцы книговыдачи -->
                                 {% if mod_lib %}
                                     <th class="bg-warning text-bg-warning" colspan="11">По отраслям</th> <!-- Объединяем дополнительные книги, если необходимо -->
                                 {% endif %}
@@ -49,6 +49,7 @@
                                 <th>Президентская</th>
                                 <th>Литрес</th>
                                 <th>Консультант+</th>
+                                <th>Локальная биб.</th>
 
                                 {% if mod_lib %}
                                     <th>Общ.-политич.лит-ра</th>
@@ -94,6 +95,7 @@
                                 <td>{{ report.qty_books_prlib }}</td>
                                 <td>{{ report.qty_books_litres }}</td>
                                 <td>{{ report.qty_books_consultant }}</td>
+                                <td>{{ report.qty_books_local_library }}</td>
 
                                 {% if mod_lib %}
                                     <td>{{ report.qty_books_part_opl }}</td>
@@ -125,7 +127,7 @@
                             <tr class="bg-secondary text-bg-info text-center">
                                 <th rowspan="2">Дата отчета</th>
                                 <th rowspan="2">Кафедра</th>
-                                <th colspan="8">Книговыдача</th> <!-- Объединяем столбцы книговыдачи -->
+                                <th colspan="9">Книговыдача</th> <!-- Объединяем столбцы книговыдачи -->
                                 {% if mod_lib %}
                                     <th class="bg-warning text-bg-warning" colspan="11">По отраслям</th> <!-- Объединяем дополнительные книги, если необходимо -->
                                 {% endif %}
@@ -141,6 +143,7 @@
                                 <th>Президентская</th>
                                 <th>Литрес</th>
                                 <th>Консультант+</th>
+                                <th>Локальная биб.</th>
 
                                 {% if mod_lib %}
                                     <th>Общ.-политич.лит-ра</th>

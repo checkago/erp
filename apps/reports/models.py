@@ -8,7 +8,8 @@ from apps.core.models import Branch, Cafedra
 class Event(models.Model):
     
     DN = 'Досуговое направление'
-    DNN = 'Духовно-нравственное, эстетическое направление'
+    DNN = 'Духовно-нравственное'
+    EST = 'Эстетическое направление'
     IPN = 'Историко-патриотическое направление'
     KR = 'Краеведение'
     NPN = 'Научно-популярное направление'
@@ -24,6 +25,7 @@ class Event(models.Model):
     direction_CHOICES = (
         (DN, 'Досуговое направление'),
         (DNN, 'Духовно-нравственное, эстетическое направление'),
+        (EST, 'Эстетическое направление'),
         (IPN, 'Историко-патриотическое направление'),
         (KR, 'Краеведение'),
         (NPN, 'Научно-популярное направление'),
@@ -58,6 +60,7 @@ class Event(models.Model):
     age_other = models.IntegerField(default=0, verbose_name='После 35 и другие')
     invalids = models.IntegerField(default=0, verbose_name='Инвалиды')
     out_of_station = models.IntegerField(default=0, verbose_name='Внестационар')
+    online = models.IntegerField(default=0, verbose_name='Удаленно')
     as_part = models.CharField(max_length=150, choices=age_CHOICES, default=KRUJKI,
                                  verbose_name='В рамках')
     paid = models.BooleanField(default=False, blank=True, verbose_name='Платное')
@@ -87,6 +90,7 @@ class VisitReport(models.Model):
     qty_visited_other = models.IntegerField(default=0, verbose_name='Посещение (Прочие 35+)')
     qty_visited_invalids = models.IntegerField(default=0, verbose_name='Посещение (Инвалиды)')
     qty_visited_out_station = models.IntegerField(default=0, verbose_name='Посещение (Внестационар)')
+    qty_visited_online = models.IntegerField(default=0, verbose_name='Посещение (Удаленно)')
     qty_visited_prlib = models.IntegerField(default=0, verbose_name='Посещение (Президентская)')
     qty_visited_litres = models.IntegerField(default=0, verbose_name='Посещение (Литрес)')
     note = models.TextField(blank=True, verbose_name='Примечание')
@@ -111,6 +115,7 @@ class BookReport(models.Model):
     qty_books_prlib = models.IntegerField(default=0, verbose_name='Книговыдача (Президентская)')
     qty_books_litres = models.IntegerField(default=0, verbose_name='Книговыдача (Литрес)')
     qty_books_consultant = models.IntegerField(default=0, verbose_name='Книговыдача (Консультант+)')
+    qty_books_local_library = models.IntegerField(default=0, verbose_name='Книговыдача (Локальная биб.)')
     qty_books_part_opl = models.IntegerField(default=0, verbose_name='Общ.-политтич.лит-ра')
     qty_books_part_enm = models.IntegerField(default=0, verbose_name='Естеств. Науки. Медицина')
     qty_books_part_tech = models.IntegerField(default=0, verbose_name='Техника')

@@ -1,6 +1,6 @@
 import os
 from collections import defaultdict
-
+from .utils import get_totals, get_book_totals, get_event_totals
 from django.http import HttpResponse
 from openpyxl import load_workbook
 from openpyxl.styles import Font
@@ -78,6 +78,13 @@ class DiaryView(LoginRequiredMixin, TemplateView):
         context['bookreport'] = BookReport.objects.all()
         context['events'] = Event.objects.all()
         context['form'] = EventForm()
+        user = self.request.user
+        totals_visits_branch = get_totals(user)
+        totals_books_branch = get_book_totals(user)
+        totals_event_branch = get_event_totals(user)
+        context['totals_visits_branch'] = totals_visits_branch
+        context['totals_books_branch'] = totals_books_branch
+        context['totals_event_branch'] = totals_event_branch
         return context
 
 
