@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from datetime import timedelta, datetime
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.decorators.cache import cache_page
 from django.views.generic import CreateView, UpdateView, ListView, TemplateView
@@ -86,7 +86,7 @@ class EventListView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['breadcrumb'] = {"parent": "Дневник", "child": "Мероприятия"}
+        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Мероприятия"}
         user = self.request.user
         employee = Employee.objects.get(user=user)
 
@@ -148,12 +148,12 @@ class EventListView(LoginRequiredMixin, TemplateView):
 class EventCreateView(LoginRequiredMixin, View):
     def get(self, request):
         form = EventForm(user=request.user)  # Создаем пустую форму
-        breadcrumb = {"parent": "Дневник", "child": "Мероприятия"}
+        breadcrumb = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Мероприятия"}
         return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
 
     def post(self, request):
         form = EventForm(request.POST, user=request.user)
-        breadcrumb = {"parent": "Дневник", "child": "Мероприятия"}
+        breadcrumb = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Мероприятия"}
         if form.is_valid():
             event = form.save(commit=False)  # Не сохраняем объект сразу
             employee = Employee.objects.get(user=request.user)
@@ -167,13 +167,13 @@ class EventUpdateView(LoginRequiredMixin, View):
     def get(self, request, id):
         event_instance = get_object_or_404(Event, id=id)  # Получаем объект события по id
         form = EventForm(instance=event_instance, user=request.user)  # Создаем форму с текущими данными события
-        breadcrumb = {"parent": "Дневник", "child": "Мероприятия"}
+        breadcrumb = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Мероприятия"}
         return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
 
     def post(self, request, id):
         event_instance = get_object_or_404(Event, id=id)
         form = EventForm(request.POST, instance=event_instance, user=request.user)
-        breadcrumb = {"parent": "Дневник", "child": "Мероприятия"}
+        breadcrumb = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Мероприятия"}
         if form.is_valid():
             event = form.save(commit=False)  # Не сохраняем объект сразу
             employee = Employee.objects.get(user=request.user)
@@ -195,7 +195,10 @@ class VisitReportListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['breadcrumb'] = {"parent": "Дневник", "child": "Регистрация/Посещения"}
+        context['breadcrumb'] = {
+            "parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>',  # Добавляем ссылку на Дневник
+            "child": "Регистрация/Посещения"
+        }
         visits = self.get_queryset()
 
         # Подготавливаем данные для графика
@@ -292,7 +295,7 @@ class VisitReportCreateView(LoginRequiredMixin, CreateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
-        context['breadcrumb'] = {"parent": "Дневник", "child": "Добавить Посещение"}
+        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Добавить Посещение"}
         return context
 
     def get_form_kwargs(self):
@@ -319,7 +322,7 @@ class VisitReportUpdateView(LoginRequiredMixin, UpdateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
-        context['breadcrumb'] = {"parent": "Дневник", "child": "Редактировать Посещение"}
+        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Редактировать Посещение"}
         return context
 
     def get_form_kwargs(self):
@@ -352,7 +355,7 @@ class BookReportListView(LoginRequiredMixin, ListView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
-        context['breadcrumb'] = {"parent": "Дневник", "child": "Книговыдача"}
+        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Книговыдача"}
         reports = self.get_queryset()
 
         # Подготавливаем данные для графика
@@ -501,7 +504,7 @@ class BookReportCreateView(LoginRequiredMixin, CreateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib  # Передаем статус модельной библиотеки в контекст
-        context['breadcrumb'] = {"parent": "Дневник", "child": "Добавить книговыдачу"}
+        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Добавить книговыдачу"}
         return context
 
     def get_form_kwargs(self):
@@ -529,7 +532,7 @@ class BookReportUpdateView(LoginRequiredMixin, UpdateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
-        context['breadcrumb'] = {"parent": "Дневник", "child": "Редактировать книговыдачу"}
+        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Редактировать книговыдачу"}
         return context
 
     def get_form_kwargs(self):

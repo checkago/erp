@@ -11,7 +11,7 @@
                         <use href="{% static 'assets/svg/icon-sprite.svg' %}#stroke-home"></use>
                     </svg>
                 </a></li>
-                <li class="breadcrumb-item">{{ breadcrumb.parent }}</li>
+                <li class="breadcrumb-item">{{ breadcrumb.parent|safe }}</li>
                 <li class="breadcrumb-item active">{{ breadcrumb.child }}</li>
             </ol>
         </div>
