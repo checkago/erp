@@ -122,6 +122,7 @@ class BookReport(models.Model):
     qty_books_part_other = models.IntegerField(default=0, verbose_name='Прочие(в т.ч. журналы)')
     qty_books_part_audio = models.IntegerField(default=0, verbose_name='Аудиокниги')
     qty_books_part_krai = models.IntegerField(default=0, verbose_name='Краеведение(в том числе)')
+    qty_books_reference_do_14 = models.IntegerField(default=0, verbose_name='Справки (До 14)')
     qty_books_reference_14 = models.IntegerField(default=0, verbose_name='Справки (14)')
     qty_books_reference_35 = models.IntegerField(default=0, verbose_name='Справки (35)')
     qty_books_reference_other = models.IntegerField(default=0, verbose_name='Справки (Прочие)')

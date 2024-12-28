@@ -50,7 +50,7 @@ class BookReportForm(forms.ModelForm):
                   'qty_books_neb', 'qty_books_prlib', 'qty_books_litres', 'qty_books_consultant', 'qty_books_part_opl',
                   'qty_books_part_enm', 'qty_books_part_tech', 'qty_books_part_sh', 'qty_books_part_si',
                   'qty_books_part_yl', 'qty_books_part_hl', 'qty_books_part_dl', 'qty_books_part_other',
-                  'qty_books_part_audio', 'qty_books_part_krai', 'qty_books_reference_14',
+                  'qty_books_part_audio', 'qty_books_part_krai', 'qty_books_reference_do_14', 'qty_books_reference_14',
                   'qty_books_reference_35', 'qty_books_reference_invalid', 'qty_books_reference_online',
                   'note']
         widgets = {
@@ -79,6 +79,7 @@ class BookReportForm(forms.ModelForm):
             'qty_books_part_other': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_part_audio': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_part_krai': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
+            'qty_books_reference_do_14': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_reference_14': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_reference_35': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_reference_invalid': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
