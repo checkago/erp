@@ -206,3 +206,105 @@ def get_notes_with_data():
         })
 
     return notes_data
+
+
+def get_all_totals():
+    today = date.today()
+    # Итоги за текущий день
+    daily_totals = VisitReport.objects.filter(date=today).aggregate(
+        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum(
+            'qty_reg_invalid') + Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
+        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') + Sum(
+            'qty_visited_invalids') + Sum('qty_visited_out_station') + Sum('qty_visited_online') + Sum(
+            'qty_visited_prlib') + Sum('qty_visited_litres')
+    )
+    # Итоги за текущий месяц
+    monthly_totals = VisitReport.objects.filter(date__month=today.month, date__year=today.year).aggregate(
+        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum(
+            'qty_reg_invalid') + Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
+        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') + Sum(
+            'qty_visited_invalids') + Sum('qty_visited_out_station') + Sum('qty_visited_online') + Sum(
+            'qty_visited_prlib') + Sum('qty_visited_litres')
+    )
+    # Итоги за текущий год
+    yearly_totals = VisitReport.objects.filter(date__year=today.year).aggregate(
+        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum(
+            'qty_reg_invalid') + Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
+        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') + Sum(
+            'qty_visited_invalids') + Sum('qty_visited_out_station') + Sum('qty_visited_online') + Sum(
+            'qty_visited_prlib') + Sum('qty_visited_litres')
+    )
+    return {'daily': daily_totals, 'monthly': monthly_totals, 'yearly': yearly_totals}
+
+
+def get_all_book_totals():
+    today = date.today()
+    # Итоги по книговыдаче
+    daily_totals_loan = BookReport.objects.filter(date=today).aggregate(
+        total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') + Sum(
+            'qty_books_invalid') + Sum('qty_books_neb') + Sum('qty_books_prlib') + Sum('qty_books_litres') + Sum(
+            'qty_books_consultant') + Sum('qty_books_local_library')
+    )
+    monthly_totals_loan = BookReport.objects.filter(date__month=today.month, date__year=today.year).aggregate(
+        total_loan=Sum('qty_books_14') + Sum(' qty_books_15_35 ') + ...
+    )
+    yearly_totals_loan = BookReport.objects.filter(date__year=today.year).aggregate(
+        total_loan=Sum(...)
+    )
+    # Итоги по справкам
+    daily_totals_reference = BookReport.objects.filter(date=today).aggregate(
+        total_reference=Sum(...)
+    )
+    monthly_totals_reference = BookReport.objects.filter(date__month=today.month, date__year=today.year).aggregate(
+        total_reference=Sum(...)
+    )
+    yearly_totals_reference = BookReport.objects.filter(date__year=today.year).aggregate(
+        total_reference=Sum(...)
+    )
+    return {'daily': {'loan': daily_totals_loan, 'reference': daily_totals_reference},
+            'monthly': {'loan': monthly_totals_loan, 'reference': monthly_totals_reference},
+            'yearly': {'loan': yearly_totals_loan, 'reference': yearly_totals_reference}}
+
+
+def get_all_event_totals():
+    today = date.today()
+    # Итоги по количеству мероприятий и посетителей
+    daily_totals_events = Event.objects.filter(date=today).aggregate(
+        total_quantity=Sum(...),
+        total_visitors=Sum(...),
+        total_paid=Count(...)
+    )
+    monthly_totals_events = Event.objects.filter(date__month=today.month, date__year=today.year).aggregate(
+        total_quantity=Sum(...),
+        total_visitors=Sum(...),
+        total_paid=Count(...)
+    )
+    yearly_totals_events = Event.objects.filter(date__year=today.year).aggregate(
+        total_quantity=Sum(...),
+        total_visitors=Sum(...),
+        total_paid=Count(...)
+    )
+    return {'daily': daily_totals_events, 'monthly': monthly_totals_events, 'yearly': yearly_totals_events}
+
+
+def get_all_notes_with_data():
+    notes_data = []
+    # Получаем записи из модели Event
+    events = Event.objects.filter(note__isnull=False).exclude(note='').all()
+    for event in events:
+        notes_data.append({'date': event.date, 'note': event.note, 'model_name': 'Мероприятия',
+                           'edit_url': f'/reports/event/update/{event.id}/'})
+
+        # Получаем записи из модели VisitReport
+    visits = VisitReport.objects.filter(note__isnull=False).exclude(note='').all()
+    for visit in visits:
+        notes_data.append({'date': visit.date, 'note': visit.note, 'model_name': 'Регистрация/Посещения',
+                           'edit_url': f'/reports/visits/update/{visit.id}/'})
+
+        # Получаем записи из модели BookReport
+    books = BookReport.objects.filter(note__isnull=False).exclude(note='').all()
+    for book in books:
+        notes_data.append({'date': book.date, 'note': book.note, 'model_name': 'Книговыдача',
+                           'edit_url': f'/reports/books/update/{book.id}/'})
+
+    return notes_data
