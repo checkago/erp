@@ -70,16 +70,16 @@
                         <h6>Новые</h6>
                         <ul>
                             <li class="mb-3">За сегодня: {% if totals_visits_branch.daily.total_reg %}<strong>{{ totals_visits_branch.daily.total_reg }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                            <li class="mb-3">За месяц: <strong>{{ totals_visits_branch.monthly.total_reg }}</strong></li>
-                            <li class="mb-3">С начала года: <strong>{{ totals_visits_branch.yearly.total_reg }}</strong></li>
+                            <li class="mb-3">За месяц: {% if totals_visits_branch.monthly.total_reg %}<strong>{{ totals_visits_branch.monthly.total_reg }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
+                            <li class="mb-3">С начала года: {% if totals_visits_branch.yearly.total_reg %}<strong>{{ totals_visits_branch.yearly.total_reg }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
                         </ul>
                     </div>
                     <div class="col">
                         <h6>Посещения</h6>
-                            <ul>
+                        <ul>
                             <li class="mb-3">За сегодня: {% if totals_visits_branch.daily.total_visited %}<strong>{{ totals_visits_branch.daily.total_visited }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                            <li class="mb-3">За месяц: <strong>{{ totals_visits_branch.monthly.total_visited }}</strong></li>
-                            <li class="mb-3">С начала года: <strong>{{ totals_visits_branch.yearly.total_visited }}</strong></li>
+                            <li class="mb-3">За месяц: {% if totals_visits_branch.monthly.total_visited %}<strong>{{ totals_visits_branch.monthly.total_visited }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
+                            <li class="mb-3">С начала года: {% if totals_visits_branch.yearly.total_visited %}<strong>{{ totals_visits_branch.yearly.total_visited }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
                         </ul>
                     </div>
                 </div>
@@ -97,16 +97,16 @@
                         <h6>Книговыдача</h6>
                         <ul>
                             <li class="mb-3">За сегодня: {% if totals_books_branch.daily.loan.total_loan %}<strong>{{ totals_books_branch.daily.loan.total_loan }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                            <li class="mb-3">За месяц: <strong>{{ totals_books_branch.monthly.loan.total_loan }}</strong></li>
-                            <li class="mb-3">С начала года: <strong>{{ totals_books_branch.yearly.loan.total_loan }}</strong></li>
+                            <li class="mb-3">За месяц: {% if totals_books_branch.monthly.loan.total_loan %}<strong>{{ totals_books_branch.monthly.loan.total_loan }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
+                            <li class="mb-3">С начала года: {% if totals_books_branch.yearly.loan.total_loan %}<strong>{{ totals_books_branch.yearly.loan.total_loan }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
                         </ul>
                     </div>
                     <div class="col">
                         <h6>Справки</h6>
                         <ul>
                             <li class="mb-3">За сегодня: {% if totals_books_branch.daily.reference.total_reference %}<strong>{{ totals_books_branch.daily.reference.total_reference }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                            <li class="mb-3">За месяц: <strong>{{ totals_books_branch.monthly.reference.total_reference }}</strong></li>
-                            <li class="mb-3">С начала года: <strong>{{ totals_books_branch.yearly.reference.total_reference }}</strong></li>
+                            <li class="mb-3">За месяц: {% if totals_books_branch.monthly.reference.total_reference %}<strong>{{ totals_books_branch.monthly.reference.total_reference }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
+                            <li class="mb-3">С начала года: {% if totals_books_branch.yearly.reference.total_reference %}<strong>{{ totals_books_branch.yearly.reference.total_reference }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
                         </ul>
                     </div>
                 </div>
@@ -124,16 +124,16 @@
                         <h6>Количество</h6>
                         <ul>
                             <li class="mb-3">За сегодня: {% if totals_event_branch.daily.total_quantity %}<strong>{{ totals_event_branch.daily.total_quantity }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                            <li class="mb-3">За месяц: <strong>{{ totals_event_branch.monthly.total_quantity }}</strong></li>
-                            <li class="mb-3">С начала года: <strong>{{ totals_event_branch.yearly.total_quantity }}</strong></li>
+                            <li class="mb-3">За месяц: {% if totals_event_branch.monthly.total_quantity %}<strong>{{ totals_event_branch.monthly.total_quantity }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
+                            <li class="mb-3">С начала года: {% if totals_event_branch.yearly.total_quantity %}<strong>{{ totals_event_branch.yearly.total_quantity }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
                         </ul>
                     </div>
                     <div class="col">
                         <h6>Посетители</h6>
                         <ul>
                             <li class="mb-3">За сегодня: {% if totals_event_branch.daily.total_visitors %}<strong>{{ totals_event_branch.daily.total_visitors }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                            <li class="mb-3">За месяц: <strong>{{ totals_event_branch.monthly.total_visitors }}</strong></li>
-                            <li class="mb-3">С начала года: <strong>{{ totals_event_branch.yearly.total_visitors }}</strong></li>
+                            <li class="mb-3">За месяц: {% if totals_event_branch.monthly.total_visitors %}<strong>{{ totals_event_branch.monthly.total_visitors }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
+                            <li class="mb-3">С начала года: {% if totals_event_branch.yearly.total_visitors %}<strong>{{ totals_event_branch.yearly.total_visitors }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
                         </ul>
                     </div>
                 </div>
