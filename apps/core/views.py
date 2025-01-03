@@ -167,7 +167,7 @@ def user_profile(request):
     positions = Position.objects.all()
 
     if request.method == 'POST':
-        user_form = ErpUserForm(request.POST, instance=user)
+        user_form = ErpUserForm(request.POST, request.FILES, instance=user)
         employee_form = EmployeeForm(request.POST, instance=employee)
 
         if user_form.is_valid() and employee_form.is_valid():
