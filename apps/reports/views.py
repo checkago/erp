@@ -1,6 +1,6 @@
 import os
 from collections import defaultdict
-from .utils import get_totals, get_book_totals, get_event_totals, get_notes_with_data, get_all_notes_with_data
+from .utils import get_totals, get_book_totals, get_event_totals, get_all_notes_with_data
 from django.http import HttpResponse
 from openpyxl import load_workbook
 from openpyxl.styles import Font
@@ -18,10 +18,12 @@ from apps.core.models import Employee
 
 
 class LoginRequiredMixin:
+    login_url = "/login_home"
+
     @classmethod
     def as_view(cls, **initkwargs):
         view = super().as_view(**initkwargs)
-        return login_required(view)
+        return login_required(view, login_url=cls.login_url)
 
 
 class CachedViewMixin:
