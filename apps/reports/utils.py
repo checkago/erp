@@ -287,24 +287,45 @@ def get_all_event_totals():
     return {'daily': daily_totals_events, 'monthly': monthly_totals_events, 'yearly': yearly_totals_events}
 
 
-def get_all_notes_with_data():
+def get_all_notes_with_data(user):
     notes_data = []
+
+    # Получаем запись сотрудника для текущего пользователя
+    try:
+        employee = Employee.objects.get(user=user)
+        user_branch = employee.branch  # Получаем филиал
+    except Employee.DoesNotExist:
+        user_branch = None  # Если сотрудник не найден
+
     # Получаем записи из модели Event
-    events = Event.objects.filter(note__isnull=False).exclude(note='').all()
+    events = Event.objects.filter(note__isnull=False, library=user_branch).exclude(note='').all()
     for event in events:
-        notes_data.append({'date': event.date, 'note': event.note, 'model_name': 'Мероприятия',
-                           'edit_url': f'/reports/event/update/{event.id}/'})
+        notes_data.append({
+            'date': event.date,
+            'note': event.note,
+            'model_name': 'Мероприятия',
+            'edit_url': f'/reports/event/update/{event.id}/'
+        })
 
-        # Получаем записи из модели VisitReport
-    visits = VisitReport.objects.filter(note__isnull=False).exclude(note='').all()
+    # Получаем записи из модели VisitReport
+    visits = VisitReport.objects.filter(note__isnull=False, library=user_branch).exclude(note='').all()
     for visit in visits:
-        notes_data.append({'date': visit.date, 'note': visit.note, 'model_name': 'Регистрация/Посещения',
-                           'edit_url': f'/reports/visits/update/{visit.id}/'})
+        notes_data.append({
+            'date': visit.date,
+            'note': visit.note,
+            'model_name': 'Регистрация/Посещения',
+            'edit_url': f'/reports/visits/update/{visit.id}/'
+        })
 
-        # Получаем записи из модели BookReport
-    books = BookReport.objects.filter(note__isnull=False).exclude(note='').all()
+    # Получаем записи из модели BookReport
+    books = BookReport.objects.filter(note__isnull=False, library=user_branch).exclude(note='').all()
     for book in books:
-        notes_data.append({'date': book.date, 'note': book.note, 'model_name': 'Книговыдача',
-                           'edit_url': f'/reports/books/update/{book.id}/'})
+        notes_data.append({
+            'date': book.date,
+            'note': book.note,
+            'model_name': 'Книговыдача',
+            'edit_url': f'/reports/books/update/{book.id}/'
+        })
 
     return notes_data
+
