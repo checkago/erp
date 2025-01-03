@@ -161,6 +161,7 @@ def branch_edit_view(request, pk):
         return redirect('branch_detail', pk=pk)
 
 
+@login_required
 def user_profile(request):
     user = request.user
     employee = Employee.objects.get(user=user)
@@ -191,6 +192,8 @@ def user_profile(request):
 
     return render(request, 'user_profile.html', context)
 
+
+@login_required
 def change_password(request):
     user = request.user
     employee = Employee.objects.get(user=user)
