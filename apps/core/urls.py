@@ -16,6 +16,7 @@ urlpatterns = [
     path('core/branches', views.branch_list_view, name="branches"),
     path('core/branches/<int:pk>/', views.branch_detail_view, name='branch_detail'),
     path('core/branches/<int:pk>/edit/', views.branch_edit_view, name='branch_edit'),
+    path('core/profile/user/<int:pk>/', views.view_user_profile, name='view_user_profile'),
     path('core/profile/', views.user_profile, name='user_profile'),
     path('change-password/', change_password, name='change_password'),
 ]

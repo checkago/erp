@@ -8,7 +8,7 @@ from django.contrib import messages
 from rest_framework import generics
 
 from apps.core.forms import ErpUserForm, EmployeeForm, BranchForm, CafedraForm
-from apps.core.models import Employee, Branch, Position, Cafedra
+from apps.core.models import Employee, Branch, Position, Cafedra, ErpUser
 from apps.core.serializers import EmployeeSerializer
 from apps.reports.utils import get_totals, get_event_totals, get_book_totals
 
@@ -159,6 +159,25 @@ def branch_edit_view(request, pk):
         return render(request, 'branch_edit.html', context=context)
     else:
         return redirect('branch_detail', pk=pk)
+
+
+@login_required
+def view_user_profile(request, pk):
+    # Получаем пользователя по user_id
+    user = get_object_or_404(ErpUser, pk=pk)
+    employee = get_object_or_404(Employee, user=user)
+    positions = Position.objects.all()
+    previous_url = request.META.get('HTTP_REFERER', '/')
+
+    # Создаем контекст для передачи в шаблон
+    context = {
+        'user': user,
+        'employee': employee,
+        'positions': positions,
+        'previous_url': previous_url
+    }
+
+    return render(request, 'view_user_profile.html', context)
 
 
 @login_required

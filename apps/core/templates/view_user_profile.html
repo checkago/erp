@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load sass_tags %}
+
+{% block css %}
+    <!-- Plugins css start-->
+    <link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/datatables.scss' %}">
+    <!-- Plugins css Ends-->
+{% endblock %}
+
+{% block content %}
+    {% if messages %}
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <div class="page-body">
+        <div class="container-fluid">
+            {% include "layout/breadcrumb.html" %}
+            <div class="row">
+                <div class="col-3">
+                    <div class="card common-hover">
+                        <div class="card-header card-header b-l-primary border-3">
+                            <h3 class="card-title text-primary">{{ employee }}</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center">
+                                <img src="{{ user.avatar.url }}" class="img-responsive w-100"/>
+                                <h5 class="mt-2">{{ employee.branch }}</h5>
+                                <span>{{ employee.position }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-9">
+                    <div class="card">
+                        <div class="card-header pb-0 card-no-border">
+                            <h3>Персональные данные</h3>
+
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <h5>ФИО: </h5><span class="mb-3">{{ employee }} {{ employee.user.middle_name }}</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <h5>Место работы: </h5><span class="mb-3">{{ employee.branch }}</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <h5>должность: </h5><span class="mb-3">{{ employee.position }}</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <h5>Email: </h5><span class="mb-3">{{ employee.user.email }}</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <h5>Телефон: </h5><span class="mb-3">{% if employee.phone %}{{ employee.phone }}{% else %}Нет информации{% endif %}</span>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ previous_url }}" class="btn btn-danger-gradien" type="submit">Назад</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scriptcontent %}
+    <!-- Plugins JS start-->
+    <script src="{% static 'assets/js/tooltip-init.js' %}"></script>
+    <script src="{% static 'assets/js/alert.js' %}"></script>
+
+    <!-- Plugins JS Ends-->
+{% endblock %}
