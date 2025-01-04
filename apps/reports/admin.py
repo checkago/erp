@@ -4,16 +4,16 @@ from apps.reports.models import Event, VisitReport, BookReport
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('date', 'library', 'cafedra', 'name', 'direction', 'paid')
+    list_display = ('date', 'library', 'cafedra', 'name', 'direction', 'paid', 'note')
     list_filter = ('date', 'library', 'cafedra', 'paid')
 
 
 class VisitReportAdmin(admin.ModelAdmin):
-    list_display = ('date', 'library', 'cafedra')
+    list_display = ('date', 'library', 'cafedra', 'note')
 
 
 class BookReportAdmin(admin.ModelAdmin):
-    list_display = ('date', 'library', 'cafedra')
+    list_display = ('date', 'library', 'cafedra', 'note')
 
 
 admin.site.register(Event, EventAdmin)
