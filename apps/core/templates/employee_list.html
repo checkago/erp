@@ -43,7 +43,7 @@
                                             <th><a href="{% url 'view_user_profile' Employee.user.pk %}">{% if Employee.user.avatar %}<img src="{{ Employee.user.avatar.url }}"
                                                                                   style="height: 35px">{% else %}{% endif %}
                                             </a></th>
-                                            <th><a href="{% url 'view_user_profile' Employee.user.pk %}">{{ Employee }}</a></th>
+                                            <th><a href="{% url 'view_user_profile' Employee.user.pk %}">{{ Employee }} {{ Employee.user.middle_name }}</a></th>
                                             <th>{{ Employee.position }}</th>
                                             <th>{{ Employee.branch }}</th>
                                             <th>{% if Employee.dismissed %}
