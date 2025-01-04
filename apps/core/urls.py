@@ -11,6 +11,7 @@ urlpatterns = [
     path('signup_home', views.signup_home, name='signup_home'),
     path('login_home', views.login_home, name="login_home"),
     path('logout_view', views.logout_view, name="logout_view"),
+    path('core/organization', views.organization_view, name="organization_view"),
     path('core/employees', views.employee_list_view, name="employees"),
     path('api/v1/employees/', views.EmployeeListView.as_view(), name='employee_list'),
     path('core/branches', views.branch_list_view, name="branches"),

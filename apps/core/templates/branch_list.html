@@ -13,7 +13,7 @@
                             <div class="card-header b-l-primary border-3">
                                 <h5>{{ Branch.short_name }}</h5>
                                 <span class="text-primary">{{ Branch.full_name }}</span>
-                                <span class="text-secondary"><strong>Руководитель:</strong> {{ Branch.manager }}</span>
+                                <span class="text-secondary"><strong>Руководитель:</strong> {{ Branch.manager }} {{ Branch.manager.user.middle_name }}</span>
                                 <div class="card-header-right">
                                   <ul class="list-unstyled card-option">
                                     <li><i class="icofont icofont-plus minimize-card"></i></li>

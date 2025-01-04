@@ -8,7 +8,7 @@ from django.contrib import messages
 from rest_framework import generics
 
 from apps.core.forms import ErpUserForm, EmployeeForm, BranchForm, CafedraForm
-from apps.core.models import Employee, Branch, Position, Cafedra, ErpUser
+from apps.core.models import Employee, Branch, Position, Cafedra, ErpUser, Organization
 from apps.core.serializers import EmployeeSerializer
 from apps.reports.utils import get_totals, get_event_totals, get_book_totals
 
@@ -85,6 +85,13 @@ def employee_list_view(request):
 class EmployeeListView(generics.ListAPIView):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+
+
+@login_required
+def organization_view(request):
+    organization = get_object_or_404(Organization, id=1)
+    context = {"breadcrumb": {"parent": "Главная", "child": "Карточка организации"}, 'organization': organization}
+    return render(request, 'organization.html', context=context)
 
 
 @login_required(login_url="/login_home")

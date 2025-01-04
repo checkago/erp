@@ -67,7 +67,7 @@ class EmployeeAdmin(admin.ModelAdmin):
 
 
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'short_name', 'manager')
+    list_display = ('id', 'full_name', 'short_name', 'manager')
     list_filter = ('manager',)
 
 
