@@ -1,5 +1,7 @@
 import os
 from collections import defaultdict
+
+from .checks import check_data_fillings
 from .utils import get_totals, get_book_totals, get_event_totals, get_all_notes_with_data, get_all_visit_totals, \
     get_all_book_totals, get_all_event_totals
 from django.http import HttpResponse
@@ -98,12 +100,14 @@ def diary_svod(request):
     all_totals_visits = get_all_visit_totals()  # Общие итоги по всем библиотекам
     all_totals_books = get_all_book_totals()  # Общие итоги по всем библиотекам
     all_totals_events = get_all_event_totals()  # Общие итоги по всем библиотекам
+    reports_fill_check = check_data_fillings()
 
     context = {
         'totals': totals,
         'all_totals_visits': all_totals_visits,
         'all_totals_books': all_totals_books,
         'all_totals_events': all_totals_events,
+        'reports_fill_check': reports_fill_check,
         'breadcrumb': {"parent": "Отчеты", "child": "Сводный отчет"}
     }
 

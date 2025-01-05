@@ -1,4 +1,5 @@
 {% load static %}
+
 <div class="container-fluid email-wrap bookmark-wrap todo-wrap">
     <div class="row">
       <div class="col-xl-12 col-md-12">
@@ -103,27 +104,46 @@
               <div class="col-6">
                   <div class="card basic_table">
                       <div class="card-header">
-                          <h5>Обратить внимание:</h5><span>При внесениии изменений не забывайте удалять примечание, иначе оно останется в списке</span>
+                          <h5>Обратить внимание:</h5>
+                          <span>В списке отражаются библиотеки, которые не заполняли разделы дневника более <strong class="text-primary">3 дней</strong> и требуют внимания. <span class="text-danger text-uppercase"><strong>Красным отмечены</strong></span> злостные должники с превышением более чем на <strong class="text-primary">5 дней</strong></span>
 
                       </div>
                       <div class="card-body">
                           <table class="display border table-striped dataTable" id="basic-1">
                                 <thead class="bg-info text-dark text-center">
                                     <tr>
-                                        <th>Дата</th>
-                                        <th>Примечание</th>
+                                        <th>Дата крайней записи</th>
+                                        <th>Библиотека</th>
                                         <th>Категория</th>
-                                        <th>Редактировать</th>
+                                        <th>Пропущенные дни</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for note in notes %}
-                                    <tr>
-                                        <td>{{ note.date|date:"d.m.Y" }}</td>
-                                        <td>{{ note.note }}</td>
-                                        <td>{{ note.model_name }}</td>
-                                        <td><a href="{{ note.edit_url }}">Редактировать</a></td>
-                                    </tr>
+                                    {% for report in reports_fill_check %}
+                                        {% for category, days in report.missed_days.items %}
+                                            {% if days > 0 %}
+                                                <tr>
+                                                    <td>{{ report.date|date:"d.m.Y" }}</td>
+                                                    <td>{{ report.branch }}</td>
+                                                    <td>
+                                                        {% if category == 'books' %}
+                                                            Книговыдача
+                                                        {% elif category == 'visits' %}
+                                                            Посещения
+                                                        {% elif category == 'events' %}
+                                                            Мероприятия
+                                                        {% else %}
+                                                            Неизвестная категория
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="{% if report.is_bad_library %}bg-danger f-w-600 text-bg-danger text-end{% endif %}"><strong>{{ days }}</strong></td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% empty %}
+                                        <tr>
+                                            <td colspan="4">Нет данных о пропущенных записях.</td>
+                                        </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
