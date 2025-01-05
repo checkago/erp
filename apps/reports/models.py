@@ -52,7 +52,7 @@ class Event(models.Model):
         (AD, 'Активное долголетие'),
         (OTHER, 'Прочие'),
     )
-    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='eventreports', verbose_name='Библиотека')
     cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
     name = models.CharField(max_length=250, verbose_name='Название мероприятия')
     date = models.DateField(verbose_name='Дата проведения')
@@ -79,7 +79,7 @@ class Event(models.Model):
 
 
 class VisitReport(models.Model):
-    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='visitreports', verbose_name='Библиотека')
     cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
     date = models.DateField(null=True, verbose_name='Дата отчета')
     qty_reg_7 = models.IntegerField(default=0, verbose_name='Новые (Дошкольники)')
@@ -108,7 +108,7 @@ class VisitReport(models.Model):
 
 
 class BookReport(models.Model):
-    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='bookreports', verbose_name='Библиотека')
     cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
     date = models.DateField(null=True, verbose_name='Дата отчета')
     qty_books_14 = models.IntegerField(default=0, verbose_name='Книговыдача (До 14)')
