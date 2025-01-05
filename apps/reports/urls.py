@@ -2,12 +2,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
+from . import views
 from .views import EventListView, DiaryView, EventUpdateView, EventCreateView, BookReportListView, \
     BookReportCreateView, BookReportUpdateView, VisitReportListView, VisitReportCreateView, \
     VisitReportUpdateView
 
 urlpatterns = [
     path('diary/', DiaryView.as_view(), name='diary'),
+    path('diary_svod/', views.diary_svod, name='diary-svod'),
     path('visits/', VisitReportListView.as_view(), name='visits_list'),
     path('visits/create/', VisitReportCreateView.as_view(), name='visits_create'),
     path('visits/update/<int:pk>/', VisitReportUpdateView.as_view(), name='visits_update'),

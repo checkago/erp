@@ -1,127 +1,28 @@
+{% extends 'base.html' %}
+
 {% load static %}
-<div class="container-fluid email-wrap bookmark-wrap todo-wrap">
-    <div class="row">
+{% load sass_tags %}
 
-      {% include 'components/diary_sidebar.html' %}
+{% block css %}
+<!-- Plugins css start-->
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/todo.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/datatables.scss' %}">
+<!-- Plugins css Ends-->
+{% endblock %}
 
-      <div class="col-xl-9 col-md-9">
-        <div class="row">
-            <div class="col">
-                <div class="card">
-                    <div class="card-header bg-success text-bg-success">
-                        <h4>Регистрация/Посещения</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <h6>Новые</h6>
-                                <ul>
-                                    <li class="mb-3">За сегодня: {% if totals_visits_branch.daily.total_reg %}<strong>{{ totals_visits_branch.daily.total_reg }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                    <li class="mb-3">За месяц: {% if totals_visits_branch.monthly.total_reg %}<strong>{{ totals_visits_branch.monthly.total_reg }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                    <li class="mb-3">С начала года: {% if totals_visits_branch.yearly.total_reg %}<strong>{{ totals_visits_branch.yearly.total_reg }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                </ul>
-                            </div>
-                            <div class="col">
-                                <h6>Посещения</h6>
-                                <ul>
-                                    <li class="mb-3">За сегодня: {% if totals_visits_branch.daily.total_visited %}<strong>{{ totals_visits_branch.daily.total_visited }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                    <li class="mb-3">За месяц: {% if totals_visits_branch.monthly.total_visited %}<strong>{{ totals_visits_branch.monthly.total_visited }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                    <li class="mb-3">С начала года: {% if totals_visits_branch.yearly.total_visited %}<strong>{{ totals_visits_branch.yearly.total_visited }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-header bg-danger text-bg-danger">
-                        <h4>Книговыдача</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <h6>Книговыдача</h6>
-                                <ul>
-                                    <li class="mb-3">За сегодня: {% if totals_books_branch.daily.loan.total_loan %}<strong>{{ totals_books_branch.daily.loan.total_loan }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                    <li class="mb-3">За месяц: {% if totals_books_branch.monthly.loan.total_loan %}<strong>{{ totals_books_branch.monthly.loan.total_loan }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                    <li class="mb-3">С начала года: {% if totals_books_branch.yearly.loan.total_loan %}<strong>{{ totals_books_branch.yearly.loan.total_loan }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                </ul>
-                            </div>
-                            <div class="col">
-                                <h6>Справки</h6>
-                                <ul>
-                                    <li class="mb-3">За сегодня: {% if totals_books_branch.daily.reference.total_reference %}<strong>{{ totals_books_branch.daily.reference.total_reference }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                    <li class="mb-3">За месяц: {% if totals_books_branch.monthly.reference.total_reference %}<strong>{{ totals_books_branch.monthly.reference.total_reference }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                    <li class="mb-3">С начала года: {% if totals_books_branch.yearly.reference.total_reference %}<strong>{{ totals_books_branch.yearly.reference.total_reference }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card">
-                    <div class="card-header bg-info text-bg-info">
-                        <h4>Мероприятия</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <h6>Количество</h6>
-                                <ul>
-                                    <li class="mb-3">За сегодня: {% if totals_event_branch.daily.total_quantity %}<strong>{{ totals_event_branch.daily.total_quantity }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                    <li class="mb-3">За месяц: {% if totals_event_branch.monthly.total_quantity %}<strong>{{ totals_event_branch.monthly.total_quantity }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                    <li class="mb-3">С начала года: {% if totals_event_branch.yearly.total_quantity %}<strong>{{ totals_event_branch.yearly.total_quantity }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                </ul>
-                            </div>
-                            <div class="col">
-                                <h6>Посетители</h6>
-                                <ul>
-                                    <li class="mb-3">За сегодня: {% if totals_event_branch.daily.total_visitors %}<strong>{{ totals_event_branch.daily.total_visitors }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                    <li class="mb-3">За месяц: {% if totals_event_branch.monthly.total_visitors %}<strong>{{ totals_event_branch.monthly.total_visitors }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                    <li class="mb-3">С начала года: {% if totals_event_branch.yearly.total_visitors %}<strong>{{ totals_event_branch.yearly.total_visitors }}</strong>{% else %}<strong>Данных пока нет</strong>{% endif %}</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-      </div>
-      <div class="col-xl-12">
-          <div class="row">
-              <div class="col-6">
-                  <div class="card basic_table">
-                      <div class="card-header">
-                          <h5>Обратить внимание:</h5><span>При внесениии изменений не забывайте удалять примечание, иначе оно останется в списке</span>
+{% block content %}
 
-                      </div>
-                      <div class="card-body">
-                          <table class="display border table-striped dataTable" id="basic-1">
-                                <thead class="bg-info text-dark text-center">
-                                    <tr>
-                                        <th>Дата</th>
-                                        <th>Примечание</th>
-                                        <th>Категория</th>
-                                        <th>Редактировать</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for note in notes %}
-                                    <tr>
-                                        <td>{{ note.date|date:"d.m.Y" }}</td>
-                                        <td>{{ note.note }}</td>
-                                        <td>{{ note.model_name }}</td>
-                                        <td><a href="{{ note.edit_url }}">Редактировать</a></td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-    </div>
-  </div>
+<div class="page-body">
+      {% include "layout/breadcrumb.html" %}
+      {% include "components/diary_svod.html" %}
+</div>
+
+{% endblock %}
+
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/datatable/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/js/datatable/datatables/datatable.custom.js' %}"></script>
+<script src="{% static 'assets/js/todo/todo.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock %}
