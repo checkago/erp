@@ -18,22 +18,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                            {% if branch.cafedra_set.all %}
-                            <h5>Кафедры:</h5>
-                            <ul class="list-group d-flex">
-                                {% for cafedra in branch.cafedra_set.all %}
-                                    <li class="list-inline-item">{{ cafedra.name }} <a href="#"></a></li>
-                                {% endfor %}
-                            </ul>
-                            {% endif %}
-                        {% if request.user.employee and request.user.employee.branch == branch %}
-                            <hr class="mb-2">
-                            <div class="d-grid gap-2 mx-auto buttons-box">
-                                <button class="btn btn-lg btn-info-gradien d-flex mt-2 text-center" type="button" data-bs-toggle="modal" data-bs-target="#addCafedraModal" >
-                                     <i class="me-2"  data-feather="plus-square"> </i>Добавить кафедру
-                                </button>
-                            </div>
-                        {% endif %}
+
                     </div>
                 </div>
         </div>
