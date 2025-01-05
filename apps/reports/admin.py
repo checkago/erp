@@ -10,10 +10,12 @@ class EventAdmin(admin.ModelAdmin):
 
 class VisitReportAdmin(admin.ModelAdmin):
     list_display = ('date', 'library', 'cafedra', 'note')
+    list_filter = ('date', 'library', 'cafedra')
 
 
 class BookReportAdmin(admin.ModelAdmin):
     list_display = ('date', 'library', 'cafedra', 'note')
+    list_filter = ('date', 'library', 'cafedra')
 
 
 admin.site.register(Event, EventAdmin)
