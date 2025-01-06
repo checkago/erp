@@ -7,7 +7,7 @@ BAD_LIBRARY_THRESHOLD = 7
 
 def check_data_fillings():
     # Устанавливаем стартовую дату на 3 января текущего года
-    start_date = timezone.now().replace(month=1, day=1, year=timezone.now().year).date()
+    start_date = timezone.now().replace(month=1, day=3, year=timezone.now().year).date()
     current_date = timezone.now().date()
 
     results = []
