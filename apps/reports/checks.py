@@ -3,7 +3,7 @@ from django.utils import timezone
 from .models import VisitReport, BookReport, Event, Branch
 
 CHECK_DAYS = 3
-BAD_LIBRARY_THRESHOLD = 7
+BAD_LIBRARY_THRESHOLD = 5
 
 def check_data_fillings():
     # Устанавливаем стартовую дату на 3 января текущего года
@@ -14,7 +14,7 @@ def check_data_fillings():
     branches = Branch.objects.filter(Q(adult=True) | Q(child=True) | Q(mod_lib=True))
 
     for branch in branches:
-        # Получаем последние отчеты с учетом стартовой даты
+        # Получаем последние отчеты
         latest_visit_report = branch.visitreports.last()
         latest_book_report = branch.bookreports.last()
         latest_event = branch.events.last()
