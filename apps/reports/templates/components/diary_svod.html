@@ -109,16 +109,17 @@
 
                       </div>
                       <div class="card-body">
-                          <table class="display border table-striped dataTable" id="basic-1">
-                                <thead class="bg-info text-dark text-center">
+                        <table class="display border table-striped dataTable" id="basic-1">
+                            <thead class="bg-info text-dark text-center">
                                     <tr>
                                         <th>Дата крайней записи</th>
                                         <th>Библиотека</th>
                                         <th>Категория</th>
                                         <th>Пропущенные дни</th>
+                                        <th>Запись заранее</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                            <tbody>
                                     {% for report in reports_fill_check %}
                                         {% for category, days in report.missed_days.items %}
                                             {% if days > 0 %}
@@ -136,17 +137,50 @@
                                                             Неизвестная категория
                                                         {% endif %}
                                                     </td>
-                                                    <td class="{% if report.is_bad_library %}bg-danger f-w-600 text-bg-danger text-end{% endif %}"><strong>{{ days }}</strong></td>
+                                                    <td class="{% if report.is_bad_library %}bg-danger f-w-600 text-bg-danger text-end{% endif %}">
+                                                        <strong>{{ days }}</strong>
+                                                    </td>
                                                 </tr>
                                             {% endif %}
                                         {% endfor %}
+
+                                        {# Проверка на будущие записи #}
+                                        {% for future_visit in report.future_records.visits %}
+                                            <tr class="bg-warning">
+                                                <td>{{ future_visit.date|date:"d.m.Y" }}</td>
+                                                <td>{{ report.branch }}</td>
+                                                <td>Посещения</td>
+                                                <td>-</td> <!-- Здесь можно указать количество пропущенных дней или оставить пустым -->
+                                                <td>Будущая запись</td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        {% for future_book in report.future_records.books %}
+                                            <tr class="bg-warning">
+                                                <td>{{ future_book.date|date:"d.m.Y" }}</td>
+                                                <td>{{ report.branch }}</td>
+                                                <td>Книговыдача</td>
+                                                <td>-</td> <!-- Здесь можно указать количество пропущенных дней или оставить пустым -->
+                                                <td>Будущая запись</td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        {% for future_event in report.future_records.events %}
+                                            <tr class="bg-warning">
+                                                <td>{{ future_event.date|date:"d.m.Y" }}</td>
+                                                <td>{{ report.branch }}</td>
+                                                <td>Мероприятия</td>
+                                                <td>-</td> <!-- Здесь можно указать количество пропущенных дней или оставить пустым -->
+                                                <td>Будущая запись</td>
+                                            </tr>
+                                        {% endfor %}
                                     {% empty %}
                                         <tr>
-                                            <td colspan="4" class="bg-light text-bg-light">Нет данных о пропущенных записях.</td>
+                                            <td colspan="5" class="bg-light text-bg-light">Нет данных о пропущенных записях.</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
-                            </table>
+                        </table>
                       </div>
                   </div>
               </div>

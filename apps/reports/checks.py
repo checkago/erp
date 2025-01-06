@@ -34,10 +34,18 @@ def check_data_fillings():
         total_missed_days_books = (current_date - check_date_books).days
         total_missed_days_events = (current_date - check_date_events).days
 
-        # Проверяем, есть ли пропущенные дни больше CHECK_DAYS
-        if (total_missed_days_visits >= CHECK_DAYS) or \
-           (total_missed_days_books >= CHECK_DAYS) or \
-           (total_missed_days_events >= CHECK_DAYS):
+        # Проверка на будущие даты для всех типов отчетов
+        future_visits = VisitReport.objects.filter(library=branch, date__gt=current_date)
+        future_books = BookReport.objects.filter(library=branch, date__gt=current_date)
+        future_events = Event.objects.filter(library=branch, date__gt=current_date)
+
+        # Добавляем результаты в список только если есть пропущенные дни или будущие записи
+        if (total_missed_days_visits >= CHECK_DAYS or
+            total_missed_days_books >= CHECK_DAYS or
+            total_missed_days_events >= CHECK_DAYS or
+            future_visits.exists() or
+            future_books.exists() or
+            future_events.exists()):
             results.append({
                 'branch': branch.short_name,
                 'missed_days': {
@@ -49,11 +57,14 @@ def check_data_fillings():
                     (last_visit_date if total_missed_days_visits >= CHECK_DAYS else None,
                      last_book_date if total_missed_days_books >= CHECK_DAYS else None,
                      last_event_date if total_missed_days_events >= CHECK_DAYS else None),
-                    key=lambda d: d if d is not None else timezone.datetime.min.date()  # Используем минимальную дату для None
+                    key=lambda d: d if d is not None else timezone.datetime.min.date()
                 ),
-                'is_bad_library': (total_missed_days_visits > BAD_LIBRARY_THRESHOLD or
-                                   total_missed_days_books > BAD_LIBRARY_THRESHOLD or
-                                   total_missed_days_events > BAD_LIBRARY_THRESHOLD)
+                'has_future_records': future_visits.exists() or future_books.exists() or future_events.exists(),  # Флаг для будущих записей
+                'future_records': {
+                    'visits': future_visits,
+                    'books': future_books,
+                    'events': future_events,
+                }
             })
 
     return results
