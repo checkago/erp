@@ -34,7 +34,7 @@ def check_data_fillings():
         total_missed_days_books = (current_date - check_date_books).days
         total_missed_days_events = (current_date - check_date_events).days
 
-        # Проверка на будущие даты для всех типов отчетов за текущий год
+        # Проверка на будущие даты для всех типов отчетов за текущий год, исключая уже прошедшие даты
         future_visits = VisitReport.objects.filter(library=branch, date__gt=current_date)
         future_books = BookReport.objects.filter(library=branch, date__gt=current_date)
         future_events = Event.objects.filter(library=branch, date__gt=current_date)
