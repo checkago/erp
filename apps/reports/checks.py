@@ -3,7 +3,7 @@ from django.utils import timezone
 from .models import VisitReport, BookReport, Event, Branch
 
 CHECK_DAYS = 3
-BAD_LIBRARY_THRESHOLD = 5
+BAD_LIBRARY_THRESHOLD = 7
 
 def check_data_fillings():
     # Устанавливаем стартовую дату на 3 января текущего года
@@ -15,18 +15,9 @@ def check_data_fillings():
 
     for branch in branches:
         # Получаем последние отчеты с учетом стартовой даты
-        latest_visit_report = branch.visitreports.last()
-        latest_book_report = branch.bookreports.last()
-        latest_event = branch.events.last()
-
-        # Проверяем, есть ли записи после стартовой даты
-        has_recent_visit_report = latest_visit_report and latest_visit_report.date >= start_date
-        has_recent_book_report = latest_book_report and latest_book_report.date >= start_date
-        has_recent_event = latest_event and latest_event.date >= start_date
-
-        # Если есть записи после стартовой даты, пропускаем библиотеку
-        if has_recent_visit_report or has_recent_book_report or has_recent_event:
-            continue
+        latest_visit_report = branch.visitreports.filter(date__gte=start_date).last()
+        latest_book_report = branch.bookreports.filter(date__gte=start_date).last()
+        latest_event = branch.events.filter(date__gte=start_date).last()
 
         # Вычисляем общее количество пропущенных дней с последней записи или с начала года
         total_missed_days_visits = (current_date - latest_visit_report.date).days if latest_visit_report else (current_date - start_date).days
@@ -34,9 +25,9 @@ def check_data_fillings():
         total_missed_days_events = (current_date - latest_event.date).days if latest_event else (current_date - start_date).days
 
         # Проверяем, есть ли пропущенные дни больше CHECK_DAYS
-        if (total_missed_days_visits > CHECK_DAYS) or \
-           (total_missed_days_books > CHECK_DAYS) or \
-           (total_missed_days_events > CHECK_DAYS):
+        if (latest_visit_report is None or total_missed_days_visits >= CHECK_DAYS) or \
+           (latest_book_report is None or total_missed_days_books >= CHECK_DAYS) or \
+           (latest_event is None or total_missed_days_events >= CHECK_DAYS):
             results.append({
                 'branch': branch.short_name,
                 'missed_days': {
