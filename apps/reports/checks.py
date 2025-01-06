@@ -3,7 +3,7 @@ from django.utils import timezone
 from .models import VisitReport, BookReport, Event, Branch
 
 CHECK_DAYS = 3
-BAD_LIBRARY_THRESHOLD = 5
+BAD_LIBRARY_THRESHOLD = 7
 
 def check_data_fillings():
     # Устанавливаем стартовую дату на 3 января текущего года
@@ -24,10 +24,10 @@ def check_data_fillings():
         total_missed_days_books = (current_date - latest_book_report.date).days if latest_book_report else (current_date - start_date).days
         total_missed_days_events = (current_date - latest_event.date).days if latest_event else (current_date - start_date).days
 
-        # Проверяем, есть ли пропущенные дни больше CHECK_DAYS и нет записей после стартовой даты
-        if (latest_visit_report is None or total_missed_days_visits > CHECK_DAYS) or \
-           (latest_book_report is None or total_missed_days_books > CHECK_DAYS) or \
-           (latest_event is None or total_missed_days_events > CHECK_DAYS):
+        # Проверяем, есть ли пропущенные дни больше CHECK_DAYS
+        if (latest_visit_report is None or total_missed_days_visits >= CHECK_DAYS) or \
+           (latest_book_report is None or total_missed_days_books >= CHECK_DAYS) or \
+           (latest_event is None or total_missed_days_events >= CHECK_DAYS):
             results.append({
                 'branch': branch.short_name,
                 'missed_days': {
