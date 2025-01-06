@@ -3,7 +3,7 @@ from django.utils import timezone
 from .models import VisitReport, BookReport, Event, Branch
 
 CHECK_DAYS = 3
-BAD_LIBRARY_THRESHOLD = 7
+BAD_LIBRARY_THRESHOLD = 5
 
 def check_data_fillings():
     # Устанавливаем стартовую дату на 3 января текущего года
