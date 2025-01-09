@@ -4,7 +4,7 @@ from apps.reports.models import VisitReport, BookReport, Event
 from apps.core.models import Employee
 
 
-def get_totals(user):
+def get_visits_totals(user):
     today = date.today()
 
     # Получаем библиотеку, к которой принадлежит пользователь

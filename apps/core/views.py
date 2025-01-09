@@ -10,14 +10,14 @@ from rest_framework import generics
 from apps.core.forms import ErpUserForm, EmployeeForm, BranchForm, CafedraForm
 from apps.core.models import Employee, Branch, Position, Cafedra, ErpUser, Organization
 from apps.core.serializers import EmployeeSerializer
-from apps.reports.utils import get_totals, get_event_totals, get_book_totals
+from apps.reports.utils import get_event_totals, get_book_totals, get_visits_totals
 
 
 @login_required(login_url="/login_home")
 # @cache_page(60 * 5)
 def index(request):
     user = request.user
-    totals_visits_branch = get_totals(user)
+    totals_visits_branch = get_visits_totals(user)
     totals_books_branch = get_book_totals(user)
     totals_event_branch = get_event_totals(user)
     context = {"breadcrumb": {"parent": "Главная", "child": "Рабочий стол"}, "jsFunction": 'startTime()',

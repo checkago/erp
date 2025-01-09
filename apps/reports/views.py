@@ -2,8 +2,8 @@ import os
 from collections import defaultdict
 
 from .checks import check_data_fillings
-from .utils import get_totals, get_book_totals, get_event_totals, get_all_notes_with_data, get_all_visit_totals, \
-    get_all_book_totals, get_all_event_totals
+from .utils import get_book_totals, get_event_totals, get_all_notes_with_data, get_all_visit_totals, \
+    get_all_book_totals, get_all_event_totals, get_visits_totals
 from django.http import HttpResponse
 from openpyxl import load_workbook
 from openpyxl.styles import Font
@@ -84,7 +84,7 @@ class DiaryView(LoginRequiredMixin, TemplateView):
         context['events'] = Event.objects.all()
         context['form'] = EventForm()
         user = self.request.user
-        totals_visits_branch = get_totals(user)
+        totals_visits_branch = get_visits_totals(user)
         totals_books_branch = get_book_totals(user)
         totals_event_branch = get_event_totals(user)
         context['totals_visits_branch'] = totals_visits_branch
@@ -96,14 +96,12 @@ class DiaryView(LoginRequiredMixin, TemplateView):
 
 @login_required
 def diary_svod(request):
-    totals = get_totals(request.user)  # Итоги для конкретной библиотеки
     all_totals_visits = get_all_visit_totals()  # Общие итоги по всем библиотекам
     all_totals_books = get_all_book_totals()  # Общие итоги по всем библиотекам
     all_totals_events = get_all_event_totals()  # Общие итоги по всем библиотекам
     reports_fill_check = check_data_fillings()
 
     context = {
-        'totals': totals,
         'all_totals_visits': all_totals_visits,
         'all_totals_books': all_totals_books,
         'all_totals_events': all_totals_events,
