@@ -122,8 +122,8 @@ class EventListView(LoginRequiredMixin, TemplateView):
         employee = Employee.objects.get(user=user)
 
         # Получаем события за последние 15 дней
-        date_15_days_ago = timezone.now() - timedelta(days=15)
-        events = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('-date')[:15]
+        date_30_days_ago = timezone.now() - timedelta(days=30)
+        events = Event.objects.filter(date__gte=date_30_days_ago, library=employee.branch).order_by('-date')[:30]
 
         # Подготавливаем данные для графика
         dates = []
@@ -222,7 +222,7 @@ class VisitReportListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         employee = Employee.objects.get(user=user)
-        return VisitReport.objects.filter(library=employee.branch).order_by('-date')[:15]
+        return VisitReport.objects.filter(library=employee.branch).order_by('-date')[:30]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -378,7 +378,7 @@ class BookReportListView(LoginRequiredMixin, ListView):
         user = self.request.user
         employee = Employee.objects.get(user=user)
 
-        return BookReport.objects.filter(library=employee.branch).order_by('-date')[:15]
+        return BookReport.objects.filter(library=employee.branch).order_by('-date')[:30]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
