@@ -68,7 +68,7 @@ def signup_home(request):
         password = request.POST['password']
         user = User.objects.filter(email=email).exists()
         if user:
-            raise Exception('Something went wrong')
+            raise Exception('Что-то пошло не так')
         new_user = User.objects.create_user(username=username, email=email, password=password)
         new_user.save()
         return redirect('index')
