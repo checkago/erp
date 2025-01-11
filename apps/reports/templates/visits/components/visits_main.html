@@ -31,7 +31,7 @@
                     <table class="display border table-striped dataTable" id="basic-1">
                         <thead>
                             <tr class="bg-success text-dark text-center">
-                                <th rowspan="2">Дата отчета</th>
+                                <th class="fixed-column" rowspan="2">Дата отчета</th>
                                 <th rowspan="2">Кафедра</th>
                                 <th colspan="7">Новые</th>
                                 <th colspan="8">Посещение</th>
@@ -59,7 +59,7 @@
                         <tbody>
                         {% for visit in visits %}
                             <tr>
-                                <td>{{ visit.date|date:"d.m.Y" }}</td>
+                                <td class="fixed-column">{{ visit.date|date:"d.m.Y" }}</td>
                                 {% if visit.cafedra %}
                                 <td>{{ visit.cafedra }}</td>
                                 {% else %}
@@ -90,7 +90,7 @@
                         </tbody>
                         <tfoot>
                             <tr class="bg-success text-dark text-center">
-                                <th rowspan="2">Дата отчета</th>
+                                <th class="fixed-column" rowspan="2">Дата отчета</th>
                                 <th rowspan="2">Кафедра</th>
                                 <th colspan="7">Новые</th>
                                 <th colspan="8">Посещение</th>
