@@ -123,7 +123,7 @@ class EventListView(LoginRequiredMixin, TemplateView):
 
         # Получаем события за последние 15 дней
         date_30_days_ago = timezone.now() - timedelta(days=30)
-        events = Event.objects.filter(date__gte=date_30_days_ago, library=employee.branch).order_by('-date')[:30]
+        events = Event.objects.filter(date__gte=date_30_days_ago, library=employee.branch).order_by('-date')
 
         # Подготавливаем данные для графика
         dates = []
