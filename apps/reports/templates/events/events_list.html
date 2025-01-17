@@ -6,6 +6,7 @@
 {% block css %}
 <!-- Plugins css start-->
 <link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/todo.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/datatables.scss' %}">
 <!-- Plugins css Ends-->
 {% endblock %}
 
@@ -22,8 +23,10 @@
 
 {% block scriptcontent %}
 <!-- Plugins JS start-->
-    <script src="{% static 'assets/js/todo/todo.js'%}"></script>
-    <script src="{% static 'assets/js/chart/apex-chart/apex-chart.js' %}"></script>
+<script src="{% static 'assets/js/datatable/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'assets/js/datatable/datatables/datatable.custom.js' %}"></script>
+<script src="{% static 'assets/js/todo/todo.js'%}"></script>
+<script src="{% static 'assets/js/chart/apex-chart/apex-chart.js' %}"></script>
     <script>
 
         // Подготовка данных для графика из контекста Django
@@ -71,6 +74,11 @@
                     data: {{ quantity_data|safe }} // Данные по количеству мероприятий за дни (столбцы)
                 },
                 {
+                    name: 'Дошкольники',
+                    type: 'column',
+                    data: {{ age_7_data|safe }} // Данные по возрасту до 14 лет за дни (столбцы)
+                },
+                {
                     name: 'До 14 лет',
                     type: 'column',
                     data: {{ age_14_data|safe }} // Данные по возрасту до 14 лет за дни (столбцы)
@@ -92,8 +100,21 @@
                 }
             ],
             xaxis: {
-                categories: {{ dates|safe }}, // Даты на оси X (по дням)
-            },
+              categories: {{ dates|safe }},
+              labels: {
+                formatter: function(val, index) {
+                  if (typeof val === 'string') {
+                    var dateParts = val.split('.');
+                    var year = parseInt(dateParts[2]).toString().substr(2, 2);
+                    var date = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+                    var day = date.toLocaleString('ru', { weekday: 'short' });
+                    return dateParts[0] + '.' + dateParts[1] + '.' + year + ' | ' + day;
+                  } else {
+                    return val;
+                  }
+                }
+              }
+            }
         };
 
         // Инициализация и рендеринг графика

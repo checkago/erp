@@ -1,0 +1,180 @@
+{% load static %}
+<div class="container-fluid email-wrap bookmark-wrap todo-wrap">
+    <div class="row flex-row">
+
+      {% include 'components/diary_sidebar.html' %}
+
+      <div class="col-xl-9 xl-70 box-col-12">
+        <div class="card">
+          <div class="card-body">
+            <div id="chart"> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+        <div class="card basic_table">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-4"><h4>Таблица книговыдачи</h4></div>
+                    <div class="col-2"></div>
+                    <div class="col-2"></div>
+                    <div class="col-4">
+                        <a href="{% url 'books_create' %}" class="btn btn-lg btn-primary d-flex float-end">
+                            <i class="me-2"  data-feather="plus-square"> </i> Добавить книговыдачу в дневник
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="display border table-striped dataTable" id="basic-1">
+                        <thead>
+                            <tr class="bg-secondary text-bg-info text-center">
+                                <th class="fixed-column" rowspan="2">Дата отчета</th>
+                                <th rowspan="2">Кафедра</th>
+                                <th colspan="9">Книговыдача</th> <!-- Объединяем столбцы книговыдачи -->
+                                {% if mod_lib %}
+                                    <th class="bg-warning text-bg-warning" colspan="11">По отраслям</th> <!-- Объединяем дополнительные книги, если необходимо -->
+                                {% endif %}
+                                <th colspan="5">Справки</th> <!-- Объединяем столбцы справок -->
+                                <th rowspan="2">Изменить</th>
+                            </tr>
+                            <tr class="bg-info text-dark text-center">
+                                <th>До 14</th>
+                                <th>14-35</th>
+                                <th>35+</th>
+                                <th>Инвалиды</th>
+                                <th>НЭБ</th>
+                                <th>Президентская</th>
+                                <th>Литрес</th>
+                                <th>Консультант+</th>
+                                <th>Локальная биб.</th>
+
+                                {% if mod_lib %}
+                                    <th>Общ.-политич.лит-ра</th>
+                                    <th>Естеств. Науки. Медицина</th>
+                                    <th>Техника</th>
+                                    <th>Сельское хозяйство</th>
+                                    <th>Спорт. Искусство</th>
+                                    <th>Языкознание. Литературоведение</th>
+                                    <th>Художественная лит-ра</th>
+                                    <th>Детская литература</th>
+                                    <th>Прочие(в т.ч. журналы)</th>
+                                    <th>Аудиокниги</th>
+                                    <th>Краеведение(в том числе)</th>
+
+                                    <th>До 14</th>
+                                    <th>14+</th>
+                                    <th>35+</th>
+                                    <th>Инвалиды</th>
+                                    <th>Удаленно</th>
+                                {% else %}
+                                    <th class="bg-success text-dark">До 14</th>
+                                    <th class="bg-success text-dark">14+</th>
+                                    <th class="bg-success text-dark">35+</th>
+                                    <th class="bg-success text-dark">Инвалиды</th>
+                                    <th class="bg-success text-dark">Удаленно</th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for report in reports %}
+                            <tr>
+                                <td>{{ report.date|date:"d.m.Y" }}</td>
+                                {% if report.cafedra %}
+                                <td>{{ report.cafedra }}</td>
+                                {% else %}
+                                <td> --- --- </td>
+                                {% endif %}
+                                <td>{{ report.qty_books_14 }}</td>
+                                <td>{{ report.qty_books_15_35 }}</td>
+                                <td>{{ report.qty_books_other }}</td>
+                                <td>{{ report.qty_books_invalid }}</td>
+                                <td>{{ report.qty_books_neb }}</td>
+                                <td>{{ report.qty_books_prlib }}</td>
+                                <td>{{ report.qty_books_litres }}</td>
+                                <td>{{ report.qty_books_consultant }}</td>
+                                <td>{{ report.qty_books_local_library }}</td>
+
+                                {% if mod_lib %}
+                                    <td>{{ report.qty_books_part_opl }}</td>
+                                    <td>{{ report.qty_books_part_enm }}</td>
+                                    <td>{{ report.qty_books_part_tech }}</td>
+                                    <td>{{ report.qty_books_part_sh }}</td>
+                                    <td>{{ report.qty_books_part_si }}</td>
+                                    <td>{{ report.qty_books_part_yl }}</td>
+                                    <td>{{ report.qty_books_part_hl }}</td>
+                                    <td>{{ report.qty_books_part_dl }}</td>
+                                    <td>{{ report.qty_books_part_other }}</td>
+                                    <td>{{ report.qty_books_part_audio }}</td>
+                                    <td>{{ report.qty_books_part_krai }}</td>
+                                {% endif %}
+
+                                <!-- Справки -->
+                                <td>{{ report.qty_books_reference_do_14 }}</td>
+                                <td>{{ report.qty_books_reference_14 }}</td>
+                                <td>{{ report.qty_books_reference_35 }}</td>
+                                <td>{{ report.qty_books_reference_invalid }}</td>
+                                <td>{{ report.qty_books_reference_online }}</td>
+
+                                <!-- Примечание и изменение -->
+                                <td><a class="float-end" href="{% url 'books_update' report.id %}"><i data-feather="edit"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr class="bg-secondary text-bg-info text-center">
+                                <th class="fixed-column" rowspan="2">Дата отчета</th>
+                                <th rowspan="2">Кафедра</th>
+                                <th colspan="9">Книговыдача</th> <!-- Объединяем столбцы книговыдачи -->
+                                {% if mod_lib %}
+                                    <th class="bg-warning text-bg-warning" colspan="11">По отраслям</th> <!-- Объединяем дополнительные книги, если необходимо -->
+                                {% endif %}
+                                <th colspan="5">Справки</th> <!-- Объединяем столбцы справок -->
+                                <th rowspan="2">Изменить</th>
+                            </tr>
+                            <tr class="bg-info text-dark text-center">
+                                <th>До 14</th>
+                                <th>14-35</th>
+                                <th>35+</th>
+                                <th>Инвалиды</th>
+                                <th>НЭБ</th>
+                                <th>Президентская</th>
+                                <th>Литрес</th>
+                                <th>Консультант+</th>
+                                <th>Локальная биб.</th>
+
+                                {% if mod_lib %}
+                                    <th>Общ.-политич.лит-ра</th>
+                                    <th>Естеств. Науки. Медицина</th>
+                                    <th>Техника</th>
+                                    <th>Сельское хозяйство</th>
+                                    <th>Спорт. Искусство</th>
+                                    <th>Языкознание. Литературоведение</th>
+                                    <th>Художественная лит-ра</th>
+                                    <th>Детская литература</th>
+                                    <th>Прочие(в т.ч. журналы)</th>
+                                    <th>Аудиокниги</th>
+                                    <th>Краеведение(в том числе)</th>
+
+                                    <th>До 14</th>
+                                    <th>14+</th>
+                                    <th>35+</th>
+                                    <th>Инвалиды</th>
+                                    <th>Удаленно</th>
+                                {% else %}
+                                    <th class="bg-success text-dark">До 14</th>
+                                    <th class="bg-success text-dark">14+</th>
+                                    <th class="bg-success text-dark">35+</th>
+                                    <th class="bg-success text-dark">Инвалиды</th>
+                                    <th class="bg-success text-dark">Удаленно</th>
+                                {% endif %}
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>

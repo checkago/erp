@@ -6,6 +6,26 @@
 {% block css %}
 <!-- Plugins css start-->
 <link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/todo.scss' %}">
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/datatables.scss' %}">
+<style>
+        .table-container {
+            display: flex;
+        }
+        .fixed-column {
+            position: sticky;
+            left: 0;
+            background-color: #f73164;
+            z-index: 10;
+        }
+        .fixed-table {
+            width: auto; /* Ширина фиксированной таблицы */
+            margin-right: -1px; /* Убираем двойную границу */
+        }
+        .scrollable-table {
+            overflow-x: auto; /* Горизонтальная прокрутка */
+            width: 100%; /* Занимает всю ширину */
+        }
+    </style>
 <!-- Plugins css Ends-->
 {% endblock %}
 
@@ -15,7 +35,7 @@
       {% include "layout/breadcrumb.html" %}
 
      
-      {% include "adult/components/adultbooks_main.html" %}
+      {% include "books/components/books_main.html" %}
 
       
 </div>
@@ -24,6 +44,16 @@
 
 {% block scriptcontent %}
 <!-- Plugins JS start-->
+<script src="{% static 'assets/js/datatable/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/4.0.1/js/dataTables.fixedColumns.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#basic-1').DataTable( {
+            scrollX:        true,
+            fixedColumns:   true
+        } );
+    } );
+</script>
 <script src="{% static 'assets/js/todo/todo.js'%}"></script>
 <script src="{% static 'assets/js/chart/apex-chart/apex-chart.js' %}"></script>
 <script>
@@ -108,12 +138,20 @@
             }
         ],
         xaxis: {
-            type: 'datetime',
-            categories: {{ dates|safe }}, // Даты на оси X (по дням)
-            labels: {
-                rotation: -45,
-                align: 'right'
+          categories: {{ dates|safe }},
+          labels: {
+            formatter: function(val, index) {
+              if (typeof val === 'string') {
+                var dateParts = val.split('.');
+                var year = parseInt(dateParts[2]).toString().substr(2, 2);
+                var date = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
+                var day = date.toLocaleString('ru', { weekday: 'short' });
+                return dateParts[0] + '.' + dateParts[1] + '.' + year + ' | ' + day;
+              } else {
+                return val;
+              }
             }
+          }
         }
     };
 

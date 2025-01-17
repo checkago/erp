@@ -1,22 +1,28 @@
 from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.views.decorators.cache import cache_page
 from rest_framework import generics
 
-from apps.core.forms import ErpUserForm, EmployeeForm, CafedraForm
-from apps.core.models import Employee, Branch, Position
+from apps.core.forms import ErpUserForm, EmployeeForm, BranchForm, CafedraForm
+from apps.core.models import Employee, Branch, Position, Cafedra, ErpUser, Organization
 from apps.core.serializers import EmployeeSerializer
+from apps.reports.utils import get_event_totals, get_book_totals, get_visits_totals
 
 
 @login_required(login_url="/login_home")
 # @cache_page(60 * 5)
 def index(request):
-    context = {"breadcrumb": {"parent": "Главная", "child": "Рабочий стол"}, "jsFunction": 'startTime()'}
+    user = request.user
+    totals_visits_branch = get_visits_totals(user)
+    totals_books_branch = get_book_totals(user)
+    totals_event_branch = get_event_totals(user)
+    context = {"breadcrumb": {"parent": "Главная", "child": "Рабочий стол"}, "jsFunction": 'startTime()',
+               'totals_visits_branch': totals_visits_branch, 'totals_books_branch': totals_books_branch,
+               'totals_event_branch': totals_event_branch}
     return render(request, "general/dashboard/index.html", context)
 
 
@@ -62,7 +68,7 @@ def signup_home(request):
         password = request.POST['password']
         user = User.objects.filter(email=email).exists()
         if user:
-            raise Exception('Something went wrong')
+            raise Exception('Что-то пошло не так')
         new_user = User.objects.create_user(username=username, email=email, password=password)
         new_user.save()
         return redirect('index')
@@ -81,6 +87,13 @@ class EmployeeListView(generics.ListAPIView):
     serializer_class = EmployeeSerializer
 
 
+@login_required
+def organization_view(request):
+    organization = get_object_or_404(Organization, id=1)
+    context = {"breadcrumb": {"parent": "Главная", "child": "Карточка организации"}, 'organization': organization}
+    return render(request, 'organization.html', context=context)
+
+
 @login_required(login_url="/login_home")
 # @cache_page(60 * 5)
 def branch_list_view(request):
@@ -90,26 +103,98 @@ def branch_list_view(request):
 
 
 @login_required
-def branch_detail(request, pk):
-    branch = Branch.objects.get(pk=pk)
-    user = request.user
-    employee = Employee.objects.filter(user=user, branch=branch).first()
-    if employee is None:
-        return HttpResponseForbidden()
-    cafedra_form = CafedraForm()
+def branch_detail_view(request, pk):
+    branch = get_object_or_404(Branch, pk=pk)
+    employees = Employee.objects.filter(branch=branch).exclude(pk=branch.manager_id)
+    if request.method == 'POST':
+        form = CafedraForm(request.POST)
+        if form.is_valid():
+            cafedra = form.save(commit=False)
+            cafedra.library = branch
+            cafedra.save()
+            return redirect('branch_detail', pk=pk)
+    else:
+        form = CafedraForm()
+    context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch,
+               'employees': employees, 'add_cafedra_form': form}
+    return render(request, 'branch_detail.html', context=context)
+
+@login_required
+@permission_required('branch.change_branch', raise_exception=True)
+def branch_edit_view(request, pk):
+    branch = get_object_or_404(Branch, pk=pk)
+    employee = request.user.employee
+    if employee and employee.branch == branch:
+        if request.method == 'POST':
+            if 'add_cafedra_form' in request.POST:
+                form = CafedraForm(request.POST)
+                if form.is_valid():
+                    cafedra = form.save(commit=False)
+                    cafedra.library = branch
+                    cafedra.save()
+                    return redirect('branch_edit', pk=pk)
+            else:
+                form = BranchForm(request.POST, instance=branch)
+                if form.is_valid():
+                    form.save()
+                    return redirect('branch_detail', pk=pk)
+        else:
+            form = BranchForm(instance=branch)
+            add_cafedra_form = CafedraForm()
+        context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch, 'form': form,
+                   'cafedras': branch.cafedra_set.all(), 'add_cafedra_form': CafedraForm()}
+        return render(request, 'branch_edit.html', context=context)
+    else:
+        return redirect('branch_detail', pk=pk)
+
+
+
+@login_required
+def branch_edit_view(request, pk):
+    branch = get_object_or_404(Branch, pk=pk)
+    employee = request.user.employee
+    if employee and employee.branch == branch:
+        if request.method == 'POST':
+            form = BranchForm(request.POST, instance=branch)
+            if form.is_valid():
+                form.save()
+                return redirect('branch_detail', pk=pk)
+        else:
+            form = BranchForm(instance=branch)
+        context = {"breadcrumb": {"parent": "Филиалы", "child": branch.short_name}, 'branch': branch, 'form': form,
+                   'cafedras': branch.cafedra_set.all()}
+        return render(request, 'branch_edit.html', context=context)
+    else:
+        return redirect('branch_detail', pk=pk)
+
+
+@login_required
+def view_user_profile(request, pk):
+    # Получаем пользователя по user_id
+    user = get_object_or_404(ErpUser, pk=pk)
+    employee = get_object_or_404(Employee, user=user)
+    positions = Position.objects.all()
+    previous_url = request.META.get('HTTP_REFERER', '/')
+
+    # Создаем контекст для передачи в шаблон
     context = {
-        'cafedra_form': cafedra_form
+        'user': user,
+        'employee': employee,
+        'positions': positions,
+        'previous_url': previous_url
     }
-    return render(request, 'branch_detail.html', context)
+
+    return render(request, 'view_user_profile.html', context)
 
 
+@login_required
 def user_profile(request):
     user = request.user
     employee = Employee.objects.get(user=user)
     positions = Position.objects.all()
 
     if request.method == 'POST':
-        user_form = ErpUserForm(request.POST, instance=user)
+        user_form = ErpUserForm(request.POST, request.FILES, instance=user)
         employee_form = EmployeeForm(request.POST, instance=employee)
 
         if user_form.is_valid() and employee_form.is_valid():
@@ -134,17 +219,34 @@ def user_profile(request):
     return render(request, 'user_profile.html', context)
 
 
+@login_required
 def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            form.save()
-            update_session_auth_hash(request, form.user)
-            return redirect('user_profile')
-    else:
-        form = PasswordChangeForm(request.user)
+    user = request.user
+    employee = Employee.objects.get(user=user)
+    positions = Position.objects.all()
 
-    return render(request, 'user_profile.html', {'form': form})
+    if request.method == 'POST':
+        password_form = PasswordChangeForm(request.user, request.POST)
+        if password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Пароль успешно изменён.')
+            return redirect('user_profile')
+        else:
+            for error in password_form.errors.values():
+                for msg in error:
+                    messages.error(request, msg)
+    else:
+        password_form = PasswordChangeForm(request.user)
+
+    context = {
+        'user': user,
+        'employee': employee,
+        'positions': positions,
+        'password_form': password_form,
+    }
+
+    return render(request, 'user_password_change.html', context)
 
 
 

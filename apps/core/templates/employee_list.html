@@ -23,15 +23,14 @@
                             <h3>Список сотрудников</h3><span>Вы можете осуществлять поиск по сотрудников по любому из указанных в таблице параметров, сортировать список по колонкам, а также выбирать количество выводимых записей</span>
                         </div>
                         <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="display border table-striped dataTable" id="basic-1">
+                            <div class="table-responsive custom-scrollbar state-saving-table">
+                                <table class="display border table-striped dataTable" id="basic-9">
                                     <thead>
-                                    <tr class="text-primary">
+                                    <tr class="text-bg-light bg-primary" role="row">
                                         <th></th>
                                         <th>Сотрудник</th>
                                         <th>Должность</th>
                                         <th>Филиал</th>
-                                        <th>Статус</th>
                                         <th>Email</th>
                                         <th>Телефон</th>
                                         <th>Отпуск</th>
@@ -40,16 +39,21 @@
                                     <tbody>
                                     {% for Employee in employees %}
                                         <tr>
-                                            <th>{% if Employee.user.avatar %}<img src="{{ Employee.user.avatar.url }}"
-                                                                                  style="height: 35px">{% else %}{% endif %}
-                                            </th>
-                                            <th>{{ Employee }}</th>
+                                            <th><a href="{% url 'view_user_profile' Employee.user.pk %}">
+                                                {% if Employee.user.avatar %}
+                                                    <img src="{{ Employee.user.avatar.url }}" class="rounded-3" style="height: 35px">
+                                                {% else %}
+                                                {% endif %}
+                                            </a></th>
+                                            <th><a href="{% url 'view_user_profile' Employee.user.pk %}">{{ Employee }} {{ Employee.user.middle_name }}</a></th>
                                             <th>{{ Employee.position }}</th>
                                             <th>{{ Employee.branch }}</th>
+                                            <!--
                                             <th>{% if Employee.dismissed %}
                                                 <span class="badge rounded-pill badge-warning">Уволен</span>{% else %}
                                                 <span class="badge rounded-pill badge-success">Работает</span>{% endif %}
                                             </th>
+                                            -->
                                             <th>{{ Employee.user.email }}</th>
                                             <th>{% if Employee.phone %}{{ Employee.phone }}{% else %}
                                                 <span class="badge rounded-pill badge-warning">не указан</span>{% endif %}
@@ -62,12 +66,11 @@
                                     {% endfor %}
                                     </tbody>
                                     <tfoot>
-                                    <tr class="text-primary">
+                                    <tr class="text-bg-light bg-primary" role="row">
                                         <th></th>
                                         <th>Сотрудник</th>
                                         <th>Должность</th>
                                         <th>Филиал</th>
-                                        <th>Статус</th>
                                         <th>Email</th>
                                         <th>Телефон</th>
                                         <th>Отпуск</th>

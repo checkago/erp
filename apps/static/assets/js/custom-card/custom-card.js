@@ -36,7 +36,7 @@ var customcard = {
             var $this = $(this);
             var port = $($this.parents('.card'));
             var card = $(port).children('.card-body').slideToggle();
-            $(this).toggleClass("icofont-plus").fadeIn('slow');
+            $(this).toggleClass("icofont-minus").fadeIn('slow');
         }), $(".card-header-right .full-card").on('click', function() {
             var $this = $(this);
             var port = $($this.parents('.card'));

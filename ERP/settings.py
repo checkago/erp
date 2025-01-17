@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'apps.reports',
     'widget_tweaks',
     'sass_processor',
+    'import_export',
 ]
 
 MIDDLEWARE = [

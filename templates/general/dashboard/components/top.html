@@ -43,5 +43,101 @@
             </div>
         </div>
     </div>
+    <div class="col-xxl-4 col-sm-6 box-col-6">
+    </div>
+    <div class="col-xxl-4 col-sm-6 box-col-6">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-grid gap-2 buttons-box">
+                    <a href="{% url 'visits_create' %}" class="btn btn-success btn-lg mb-3 d-flex float-start"><i class="me-2"  data-feather="plus-square"> </i>Добавить Регистрацию/Посещение</a>
+                    <a href="{% url 'books_create' %}" class="btn btn-danger btn-lg mb-3 d-flex float-start"><i class="me-2"  data-feather="plus-square"> </i>Добавить Книговыдачу</a>
+                    <a href="{% url 'event_create' %}" class="btn btn-info btn-lg d-flex float-start"><i class="me-2"  data-feather="plus-square"> </i>Добавить Мероприятие</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="row">
+    <div class="col">
+        <div class="card border border-2">
+            <div class="card-header bg-success text-bg-success">
+                <h4>Регистрация/Посещения</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h6>Новые</h6>
+                        <ul>
+                            <li class="mb-3">За сегодня: {% if totals_visits_branch.daily.total_reg %}<strong>{{ totals_visits_branch.daily.total_reg }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                            <li class="mb-3">За месяц: {% if totals_visits_branch.monthly.total_reg %}<strong>{{ totals_visits_branch.monthly.total_reg }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                            <li class="mb-3">С начала года: {% if totals_visits_branch.yearly.total_reg %}<strong>{{ totals_visits_branch.yearly.total_reg }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h6>Посещения</h6>
+                        <ul>
+                            <li class="mb-3">За сегодня: {% if totals_visits_branch.daily.total_visited %}<strong>{{ totals_visits_branch.daily.total_visited }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                            <li class="mb-3">За месяц: {% if totals_visits_branch.monthly.total_visited %}<strong>{{ totals_visits_branch.monthly.total_visited }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                            <li class="mb-3">С начала года: {% if totals_visits_branch.yearly.total_visited %}<strong>{{ totals_visits_branch.yearly.total_visited }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card border border-2">
+            <div class="card-header bg-danger text-bg-danger">
+                <h4>Книговыдача</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h6>Книговыдача</h6>
+                        <ul>
+                            <li class="mb-3">За сегодня: {% if totals_books_branch.daily.loan.total_loan %}<strong>{{ totals_books_branch.daily.loan.total_loan }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                            <li class="mb-3">За месяц: {% if totals_books_branch.monthly.loan.total_loan %}<strong>{{ totals_books_branch.monthly.loan.total_loan }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                            <li class="mb-3">С начала года: {% if totals_books_branch.yearly.loan.total_loan %}<strong>{{ totals_books_branch.yearly.loan.total_loan }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h6>Справки</h6>
+                        <ul>
+                            <li class="mb-3">За сегодня: {% if totals_books_branch.daily.reference.total_reference %}<strong>{{ totals_books_branch.daily.reference.total_reference }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                            <li class="mb-3">За месяц: {% if totals_books_branch.monthly.reference.total_reference %}<strong>{{ totals_books_branch.monthly.reference.total_reference }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                            <li class="mb-3">С начала года: {% if totals_books_branch.yearly.reference.total_reference %}<strong>{{ totals_books_branch.yearly.reference.total_reference }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card border border-2">
+            <div class="card-header bg-info text-bg-info">
+                <h4>Мероприятия</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h6>Количество</h6>
+                        <ul>
+                            <li class="mb-3">За сегодня: {% if totals_event_branch.daily.total_quantity %}<strong>{{ totals_event_branch.daily.total_quantity }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                            <li class="mb-3">За месяц: {% if totals_event_branch.monthly.total_quantity %}<strong>{{ totals_event_branch.monthly.total_quantity }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                            <li class="mb-3">С начала года: {% if totals_event_branch.yearly.total_quantity %}<strong>{{ totals_event_branch.yearly.total_quantity }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                        </ul>
+                    </div>
+                    <div class="col">
+                        <h6>Посетители</h6>
+                        <ul>
+                            <li class="mb-3">За сегодня: {% if totals_event_branch.daily.total_visitors %}<strong>{{ totals_event_branch.daily.total_visitors }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                            <li class="mb-3">За месяц: {% if totals_event_branch.monthly.total_visitors %}<strong>{{ totals_event_branch.monthly.total_visitors }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                            <li class="mb-3">С начала года: {% if totals_event_branch.yearly.total_visitors %}<strong>{{ totals_event_branch.yearly.total_visitors }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

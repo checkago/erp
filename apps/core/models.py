@@ -73,6 +73,14 @@ class Organization(models.Model):
     mail_address = models.CharField(max_length=250, blank=True, verbose_name='Адрес почтовый')
     phone = models.CharField(max_length=20, blank=True, verbose_name='Телефон')
     site = models.URLField(blank=True, verbose_name='Сайт')
+    inn = models.CharField(max_length=10, blank=True, verbose_name='ИНН')
+    kpp = models.CharField(max_length=9, blank=True, verbose_name='КПП')
+    ogrn = models.CharField(max_length=13, blank=True, verbose_name='ОГРН')
+    reg_date = models.DateField(verbose_name='дата регистрации', blank=True, null=True)
+    logo_big = models.ImageField(upload_to='organization/logo', verbose_name='Большой логотип', blank=True, null=True)
+    logo_small = models.ImageField(upload_to='organization/logo', verbose_name='Маленький логотип', blank=True, null=True)
+    logo_vertical = models.ImageField(upload_to='organization/logo', verbose_name='Вертикальный логотип', blank=True,
+                                   null=True)
 
     class Meta:
         verbose_name = 'Данные организации'

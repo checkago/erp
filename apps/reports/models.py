@@ -1,4 +1,3 @@
-import datetime
 
 from django.db import models
 
@@ -9,7 +8,8 @@ from apps.core.models import Branch, Cafedra
 class Event(models.Model):
     
     DN = 'Досуговое направление'
-    DNN = 'Духовно-нравственное, эстетическое направление'
+    DNN = 'Духовно-нравственное'
+    EST = 'Эстетическое направление'
     IPN = 'Историко-патриотическое направление'
     KR = 'Краеведение'
     NPN = 'Научно-популярное направление'
@@ -17,14 +17,18 @@ class Event(models.Model):
     PSPN = 'Профилактика суицидального поведения несовершеннолетних'
     PTE = 'Профилактика терроризма и экстремизма'
     PO = 'Профориентация'
+    TECH = 'Техника'
     SKAM = 'Социальная и культурная адаптация мигрантов'
     UMMS = 'Укрепление межнационального и межрелигиозного согласия'
     UOZ = 'Укрепление общественного здоровья'
     EP = 'Экологическое просвещение'
+    FTS = 'Фотосессия'
+    SEM = 'Семинар'
 
     direction_CHOICES = (
         (DN, 'Досуговое направление'),
-        (DNN, 'Духовно-нравственное, эстетическое направление'),
+        (DNN, 'Духовно-нравственное'),
+        (EST, 'Эстетическое направление'),
         (IPN, 'Историко-патриотическое направление'),
         (KR, 'Краеведение'),
         (NPN, 'Научно-популярное направление'),
@@ -32,10 +36,13 @@ class Event(models.Model):
         (PSPN, 'Профилактика суицидального поведения несовершеннолетних'),
         (PTE, 'Профилактика терроризма и экстремизма'),
         (PO, 'Профориентация'),
+        (TECH, 'Техника'),
         (SKAM, 'Социальная и культурная адаптация мигрантов'),
         (UMMS, 'Укрепление межнационального и межрелигиозного согласия'),
         (UOZ, 'Укрепление общественного здоровья'),
-        (EP, 'Экологическое просвещение')
+        (EP, 'Экологическое просвещение'),
+        (FTS, 'Фотосессия'),
+        (SEM, 'Семинар')
     )
 
     KRUJKI = 'Кружки'
@@ -47,7 +54,7 @@ class Event(models.Model):
         (AD, 'Активное долголетие'),
         (OTHER, 'Прочие'),
     )
-    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='events', verbose_name='Библиотека')
     cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
     name = models.CharField(max_length=250, verbose_name='Название мероприятия')
     date = models.DateField(verbose_name='Дата проведения')
@@ -59,6 +66,7 @@ class Event(models.Model):
     age_other = models.IntegerField(default=0, verbose_name='После 35 и другие')
     invalids = models.IntegerField(default=0, verbose_name='Инвалиды')
     out_of_station = models.IntegerField(default=0, verbose_name='Внестационар')
+    online = models.IntegerField(default=0, verbose_name='Удаленно')
     as_part = models.CharField(max_length=150, choices=age_CHOICES, default=KRUJKI,
                                  verbose_name='В рамках')
     paid = models.BooleanField(default=False, blank=True, verbose_name='Платное')
@@ -72,44 +80,48 @@ class Event(models.Model):
         return f"{self.date} {self.name} {self.direction}"
 
 
-#Показатели детской библиотеки
-class ChildVisitReport(models.Model):
-    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
+class VisitReport(models.Model):
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='visitreports', verbose_name='Библиотека')
     cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
     date = models.DateField(null=True, verbose_name='Дата отчета')
     qty_reg_7 = models.IntegerField(default=0, verbose_name='Новые (Дошкольники)')
-    qty_reg_14 = models.IntegerField(default=0, verbose_name='Новые (Остальные - 14)')
-    qty_reg_30 = models.IntegerField(default=0, verbose_name='Новые (Молодежь 15-30)')
-    qty_reg_other = models.IntegerField(default=0, verbose_name='Новые (Прочие 30+)')
-    qty_visited_14 = models.IntegerField(default=0, verbose_name='Посещение (Остальные - 14)')
-    qty_visited_35 = models.IntegerField(default=0, verbose_name='Посещение (Молодежь 15-30)')
-    qty_visited_other = models.IntegerField(default=0, verbose_name='Посещение (Прочие 30+)')
+    qty_reg_14 = models.IntegerField(default=0, verbose_name='Новые (До 14)')
+    qty_reg_15_35 = models.IntegerField(default=0, verbose_name='Новые (Молодежь 15-35)')
+    qty_reg_other = models.IntegerField(default=0, verbose_name='Новые (Прочие 35+)')
+    qty_reg_invalid = models.IntegerField(default=0, verbose_name='Новые (Инвалиды)')
+    qty_reg_prlib = models.IntegerField(default=0, verbose_name='Новые (Президентская)')
+    qty_reg_litres = models.IntegerField(default=0, verbose_name='Новые (Литрес)')
+    qty_visited_14 = models.IntegerField(default=0, verbose_name='Посещение (До 14)')
+    qty_visited_15_35 = models.IntegerField(default=0, verbose_name='Посещение (Молодежь 15-35)')
+    qty_visited_other = models.IntegerField(default=0, verbose_name='Посещение (Прочие 35+)')
     qty_visited_invalids = models.IntegerField(default=0, verbose_name='Посещение (Инвалиды)')
     qty_visited_out_station = models.IntegerField(default=0, verbose_name='Посещение (Внестационар)')
-    qty_events_14 = models.IntegerField(default=0, verbose_name='Мероприятия (Остальные - 14)')
-    qty_events_35 = models.IntegerField(default=0, verbose_name='Мероприятия (Молодежь 15-30)')
-    qty_events_other = models.IntegerField(default=0, verbose_name='Мероприятия (Прочие 30+)')
-    qty_events_invalids = models.IntegerField(default=0, verbose_name='Мероприятия (Инвалиды)')
-    qty_events_out_station = models.IntegerField(default=0, verbose_name='Мероприятия (Внестационар)')
-    qty_online_requests = models.IntegerField(default=0, verbose_name='Удаленные обращения')
-    qty_paid = models.IntegerField(default=0, verbose_name='Платные посещения')
+    qty_visited_online = models.IntegerField(default=0, verbose_name='Посещение (Удаленно)')
+    qty_visited_prlib = models.IntegerField(default=0, verbose_name='Посещение (Президентская)')
+    qty_visited_litres = models.IntegerField(default=0, verbose_name='Посещение (Литрес)')
     note = models.TextField(blank=True, verbose_name='Примечание')
 
     class Meta:
-        verbose_name = 'Отчет посещений по детской библиотеке'
-        verbose_name_plural = 'Отчеты посещений по детским библиотекам'
+        verbose_name = 'Отчет посещений по библиотеке'
+        verbose_name_plural = 'Отчеты посещений по библиотекам'
 
     def __str__(self):
         return f"{self.library}"
 
 
-class ChildBookReport(models.Model):
-    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
+class BookReport(models.Model):
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='bookreports', verbose_name='Библиотека')
     cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
     date = models.DateField(null=True, verbose_name='Дата отчета')
     qty_books_14 = models.IntegerField(default=0, verbose_name='Книговыдача (До 14)')
-    qty_books_30 = models.IntegerField(default=0, verbose_name='Книговыдача (15-30)')
-    qty_books_other = models.IntegerField(default=0, verbose_name='Книговыдача (Прочие)')
+    qty_books_15_35 = models.IntegerField(default=0, verbose_name='Книговыдача (15-35)')
+    qty_books_other = models.IntegerField(default=0, verbose_name='Книговыдача (Прочие 35+)')
+    qty_books_invalid = models.IntegerField(default=0, verbose_name='Книговыдача (Инвалиды)')
+    qty_books_neb = models.IntegerField(default=0, verbose_name='Книговыдача (НЭБ)')
+    qty_books_prlib = models.IntegerField(default=0, verbose_name='Книговыдача (Президентская)')
+    qty_books_litres = models.IntegerField(default=0, verbose_name='Книговыдача (Литрес)')
+    qty_books_consultant = models.IntegerField(default=0, verbose_name='Книговыдача (Консультант+)')
+    qty_books_local_library = models.IntegerField(default=0, verbose_name='Книговыдача (Локальная биб.)')
     qty_books_part_opl = models.IntegerField(default=0, verbose_name='Общ.-политтич.лит-ра')
     qty_books_part_enm = models.IntegerField(default=0, verbose_name='Естеств. Науки. Медицина')
     qty_books_part_tech = models.IntegerField(default=0, verbose_name='Техника')
@@ -121,80 +133,20 @@ class ChildBookReport(models.Model):
     qty_books_part_other = models.IntegerField(default=0, verbose_name='Прочие(в т.ч. журналы)')
     qty_books_part_audio = models.IntegerField(default=0, verbose_name='Аудиокниги')
     qty_books_part_krai = models.IntegerField(default=0, verbose_name='Краеведение(в том числе)')
+    qty_books_reference_do_14 = models.IntegerField(default=0, verbose_name='Справки (До 14)')
     qty_books_reference_14 = models.IntegerField(default=0, verbose_name='Справки (14)')
-    qty_books_reference_30 = models.IntegerField(default=0, verbose_name='Справки (30)')
+    qty_books_reference_35 = models.IntegerField(default=0, verbose_name='Справки (35)')
     qty_books_reference_other = models.IntegerField(default=0, verbose_name='Справки (Прочие)')
-    qty_books_reference_online = models.IntegerField(default=0, verbose_name='Справки (Удаленно')
-    note = models.TextField(blank=True, verbose_name='Примечание')
-
-
-    class Meta:
-        verbose_name = 'Отчет книговыдачи по детской библиотеке'
-        verbose_name_plural = 'Отчеты книговыдачи детским библиотекам'
-
-    def __str__(self):
-        return f"{self.library}"
-
-
-class AdultVisitReport(models.Model):
-    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
-    cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
-    date = models.DateField(null=True, verbose_name='Дата отчета')
-    qty_reg_35 = models.IntegerField(default=0, verbose_name='Новые (Молодежь 14+)')
-    qty_reg_other = models.IntegerField(default=0, verbose_name='Новые (Прочие 35+)')
-    qty_reg_invalid = models.IntegerField(default=0, verbose_name='Новые (Инвалиды)')
-    qty_reg_prlib = models.IntegerField(default=0, verbose_name='Новые (Президентская)')
-    qty_visited_35 = models.IntegerField(default=0, verbose_name='Посещение (Молодежь 14+)')
-    qty_visited_other = models.IntegerField(default=0, verbose_name='Посещение (Прочие 35+)')
-    qty_visited_invalids = models.IntegerField(default=0, verbose_name='Посещение (Инвалиды)')
-    qty_visited_prlib = models.IntegerField(default=0, verbose_name='Посещение (Президентская)')
-    qty_events_35 = models.IntegerField(default=0, verbose_name='Мероприятия (Молодежь 14+)')
-    qty_events_other = models.IntegerField(default=0, verbose_name='Мероприятия (Прочие 35+)')
-    qty_events_invalids = models.IntegerField(default=0, verbose_name='Мероприятия (Инвалиды)')
-    qty_events_out_station = models.IntegerField(default=0, verbose_name='Мероприятия (Внестационар)')
-    qty_online_requests = models.IntegerField(default=0, verbose_name='Удаленные обращения')
-    qty_paid = models.IntegerField(default=0, verbose_name='Платные посещения')
-    note = models.TextField(blank=True, verbose_name='Примечание')
-
-    class Meta:
-        verbose_name = 'Отчет посещений по взрослой библиотеке'
-        verbose_name_plural = 'Отчеты посещений взрослых библиотек'
-
-    def __str__(self):
-        return f"{self.date} {self.library}"
-
-
-class AdultBookReport(models.Model):
-    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Библиотека')
-    cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
-    date = models.DateField(null=True, verbose_name='Дата отчета')
-    qty_books_14 = models.IntegerField(default=0, verbose_name='Книговыдача (14+)')
-    qty_books_35 = models.IntegerField(default=0, verbose_name='Книговыдача (35+)')
-    qty_books_invalid = models.IntegerField(default=0, verbose_name='Книговыдача (Инвалиды)')
-    qty_books_neb = models.IntegerField(default=0, verbose_name='НЭБ')
-    qty_books_prlib = models.IntegerField(default=0, verbose_name='Президентская биб.')
-    qty_books_part_opl = models.IntegerField(default=0, verbose_name='Общ.-политтич.лит-ра')
-    qty_books_part_enm = models.IntegerField(default=0, verbose_name='Естеств. Науки. Медицина')
-    qty_books_part_tech = models.IntegerField(default=0, verbose_name='Техника')
-    qty_books_part_sh = models.IntegerField(default=0, verbose_name='Сельское хозяйство')
-    qty_books_part_si = models.IntegerField(default=0, verbose_name='Спорт. Искусство')
-    qty_books_part_yl = models.IntegerField(default=0, verbose_name='Языкознание. Литературоведение')
-    qty_books_part_hl = models.IntegerField(default=0, verbose_name='Художественная лит-ра')
-    qty_books_part_dl = models.IntegerField(default=0, verbose_name='Детская литература')
-    qty_books_part_other = models.IntegerField(default=0, verbose_name='Прочие(в т.ч. журналы)')
-    qty_books_part_audio = models.IntegerField(default=0, verbose_name='Аудиокниги')
-    qty_books_part_krai = models.IntegerField(default=0, verbose_name='Краеведение(в том числе)')
-    qty_books_reference_14 = models.IntegerField(default=0, verbose_name='Справки (14+)')
-    qty_books_reference_35 = models.IntegerField(default=0, verbose_name='Справки (35+)')
     qty_books_reference_invalid = models.IntegerField(default=0, verbose_name='Справки (Инвалиды)')
     qty_books_reference_online = models.IntegerField(default=0, verbose_name='Справки (Удаленно')
     note = models.TextField(blank=True, verbose_name='Примечание')
 
+
     class Meta:
-        verbose_name = 'Отчет книговыдачи по взрослой библиотеке'
-        verbose_name_plural = 'Отчеты книговыдачи по взрослым библиотекам'
+        verbose_name = 'Отчет книговыдачи по библиотеке'
+        verbose_name_plural = 'Отчеты книговыдачи библиотекам'
 
     def __str__(self):
-        return f"{self.date} {self.library}"
+        return f"{self.library}"
 
 

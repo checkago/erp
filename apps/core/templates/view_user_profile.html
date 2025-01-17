@@ -28,16 +28,10 @@
                             <h3 class="card-title text-primary">{{ employee }}</h3>
                         </div>
                         <div class="card-body">
-                            <div class="text-center media profile-media">
+                            <div class="text-center">
                                 <img src="{{ user.avatar.url }}" class="img-responsive rounded-3 w-100"/>
                                 <h5 class="mt-2">{{ employee.branch }}</h5>
                                 <span>{{ employee.position }}</span>
-                            </div>
-                            <hr class="mb-2">
-                            <div class="text-center">
-                                <a href="{% url 'change_password' %}" class="btn btn-primary btn-lg" type="button">
-                                    Сменить пароль
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -48,12 +42,27 @@
                             <h3>Персональные данные</h3>
 
                         <div class="card-body">
-                            <form method="post" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                {{ user_form|crispy }}
-                                {{ employee_form|crispy }}
-                                <button class="btn btn-success-gradien" type="submit">Сохранить изменения</button>
-                            </form>
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <h5>ФИО: </h5><span class="mb-3">{{ employee }} {{ employee.user.middle_name }}</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <h5>Место работы: </h5><span class="mb-3">{{ employee.branch }}</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <h5>должность: </h5><span class="mb-3">{{ employee.position }}</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <h5>Email: </h5><span class="mb-3">{{ employee.user.email }}</span>
+                                </li>
+                                <li class="list-group-item">
+                                    <h5>Телефон: </h5><span class="mb-3">{% if employee.phone %}{{ employee.phone }}{% else %}Нет информации{% endif %}</span>
+                                </li>
+                            </ul>
+
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ previous_url }}" class="btn btn-danger-gradien" type="submit">Назад</a>
                         </div>
                     </div>
                 </div>
