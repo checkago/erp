@@ -52,8 +52,8 @@ class EventListView(LoginRequiredMixin, TemplateView):
         employee = Employee.objects.get(user=user)
 
         # Получаем события за последние 15 дней
-        date_15_days_ago = timezone.now() - timedelta(days=15)
-        events = Event.objects.filter(date__gte=date_15_days_ago, library=employee.branch).order_by('-date')[:15]
+        date_30_days_ago = timezone.now() - timedelta(days=30)
+        events = Event.objects.filter(date__gte=date_30_days_ago, library=employee.branch).order_by('-date')[:30]
 
         # Подготавливаем данные для графика
         dates = []
@@ -148,7 +148,7 @@ class AdultVisitReportListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         employee = Employee.objects.get(user=user)
-        return AdultVisitReport.objects.filter(library=employee.branch).order_by('-date')[:15]
+        return AdultVisitReport.objects.filter(library=employee.branch).order_by('-date')[:30]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -286,7 +286,7 @@ class AdultBookReportListView(LoginRequiredMixin, ListView):
         user = self.request.user
         employee = Employee.objects.get(user=user)
 
-        return AdultBookReport.objects.filter(library=employee.branch).order_by('-date')[:15]
+        return AdultBookReport.objects.filter(library=employee.branch).order_by('-date')[:30]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -479,7 +479,7 @@ class ChildVisitReportListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         employee = Employee.objects.get(user=user)
-        return ChildVisitReport.objects.filter(library=employee.branch).order_by('-date')[:15]
+        return ChildVisitReport.objects.filter(library=employee.branch).order_by('-date')[:30]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -631,7 +631,7 @@ class ChildBookReportListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         employee = Employee.objects.get(user=user)
-        return ChildBookReport.objects.filter(library=employee.branch).order_by('-date')[:15]
+        return ChildBookReport.objects.filter(library=employee.branch).order_by('-date')[:30]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
