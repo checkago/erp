@@ -261,7 +261,6 @@ class VisitReportListView(LoginRequiredMixin, ListView):
 
         for visit in visits:
             day_str = visit.date.strftime('%d.%m.%Y')
-            day_count[day_str]['qty_reg_7'] += visit.qty_reg_7
             day_count[day_str]['qty_reg_14'] += visit.qty_reg_14
             day_count[day_str]['qty_reg_15_35'] += visit.qty_reg_15_35
             day_count[day_str]['qty_reg_other'] += visit.qty_reg_other
@@ -274,7 +273,6 @@ class VisitReportListView(LoginRequiredMixin, ListView):
 
         for date, counts in sorted(day_count.items()):
             dates.append(date)
-            qty_reg_7_data.append(counts['qty_reg_7'])
             qty_reg_14_data.append(counts['qty_reg_14'])
             qty_reg_15_35_data.append(counts['qty_reg_15_35'])
             qty_reg_other_data.append(counts['qty_reg_other'])
@@ -290,7 +288,6 @@ class VisitReportListView(LoginRequiredMixin, ListView):
 
         # Логируем данные для отладки
         print("Dates:", dates)
-        print("Qty Reg 7 Data:", qty_reg_7_data)
         print("Qty Reg 14 Data:", qty_reg_14_data)
         print("Qty Reg 15_35 Data:", qty_reg_15_35_data)
         print("Qty Reg Other Data:", qty_reg_other_data)
@@ -302,7 +299,6 @@ class VisitReportListView(LoginRequiredMixin, ListView):
         print("Total Visited Data:", total_visited_data)
 
         context['dates'] = dates
-        context['qty_reg_7_data'] = qty_reg_7_data
         context['qty_reg_14_data'] = qty_reg_14_data
         context['qty_reg_15_35_data'] = qty_reg_15_35_data
         context['qty_reg_other_data'] = qty_reg_other_data
