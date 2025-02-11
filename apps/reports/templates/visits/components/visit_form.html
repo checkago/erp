@@ -72,7 +72,7 @@
                                             <h6>Пенс./Инв. из общего числа:</h6>
                                             <h5 class="text-danger"><span>0</span></h5>
                                         </div>
-                                        <div id="total-reg-sum" class="col-4 text-center">
+                                        <div id="electronic_reg_sum" class="col-4 text-center">
                                             <h6>Электронные ресурсы:</h6>
                                             <h5 class="text-danger"><span>0</span></h5>
                                         </div>
@@ -139,6 +139,7 @@
       </div>
     </div>
   </div>
+
 <script>
     // Функция для вычисления суммы
     function calculateSum() {
@@ -158,6 +159,7 @@
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
   </script>
+
 <script>
     // Функция для вычисления суммы
     function calculateSum() {
@@ -171,6 +173,24 @@
     // Назначение обработчиков событий на поля ввода
     document.getElementById('id_qty_reg_invalid').addEventListener('input', calculateSum);
     document.getElementById('id_qty_reg_pensioners').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
+
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyRegPrlib = parseFloat(document.getElementById('id_qty_reg_prlib').value) || 0;
+        const qtyRegLitres = parseFloat(document.getElementById('id_qty_reg_litres').value) || 0;
+
+        const totalSum = qtyRegPrlib + qtyRegLitres;
+        document.getElementById('electronic_reg_sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_qty_reg_prlib').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_reg_litres').addEventListener('input', calculateSum);
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
