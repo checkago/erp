@@ -9,7 +9,7 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ['cafedra', 'name', 'date', 'direction',
                   'quantity', 'as_part', 'age_14',
-                  'age_35', 'age_other', 'invalids', 'out_of_station', 'as_part', 'paid', 'note']
+                  'age_35', 'age_other', 'invalids', 'pensioners', 'out_of_station', 'as_part', 'paid', 'note']
         widgets = {
             'cafedra': forms.Select(attrs={'class': 'form-select border border-1 border-dark'}),
             'name': forms.TextInput(attrs={'class': 'form-control border border-1 border-dark'}),
@@ -24,6 +24,7 @@ class EventForm(forms.ModelForm):
             'age_35': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'age_other': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'invalids': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
+            'pensioners': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'out_of_station': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'as_part': forms.Select(attrs={'class': 'form-select border border-1 border-dark'}),
             'paid': forms.CheckboxInput(attrs={
@@ -114,9 +115,9 @@ class BookReportForm(forms.ModelForm):
 class VisitReportForm(forms.ModelForm):
     class Meta:
         model = VisitReport
-        fields = ['cafedra', 'date', 'qty_reg_14', 'qty_reg_15_35', 'qty_reg_other', 'qty_reg_invalid',
+        fields = ['cafedra', 'date', 'qty_reg_14', 'qty_reg_15_35', 'qty_reg_other', 'qty_reg_invalid', 'qty_reg_pensioners',
                   'qty_reg_prlib', 'qty_reg_litres', 'qty_visited_14', 'qty_visited_15_35', 'qty_visited_other',
-                  'qty_visited_invalids', 'qty_visited_prlib', 'qty_visited_litres', 'qty_visited_out_station',
+                  'qty_visited_invalids', 'qty_visited_pensioners', 'qty_visited_prlib', 'qty_visited_litres', 'qty_visited_out_station',
                   'qty_visited_online', 'note']
         widgets = {
             'cafedra': forms.Select(attrs={'class': 'form-select border border-1 border-dark border border-1 border-dark'}),
@@ -129,12 +130,16 @@ class VisitReportForm(forms.ModelForm):
             'qty_reg_15_35': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_reg_other': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_reg_invalid': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
+            'qty_reg_pensioners': forms.NumberInput(
+                attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_reg_prlib': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_reg_litres': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_visited_14': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_visited_15_35': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_visited_other': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_visited_invalids': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
+            'qty_visited_pensioners': forms.NumberInput(
+                attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_visited_prlib': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_visited_litres': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_visited_out_station': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
