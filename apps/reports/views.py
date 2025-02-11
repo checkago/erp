@@ -235,7 +235,6 @@ class VisitReportListView(LoginRequiredMixin, ListView):
 
         # Подготавливаем данные для графика
         dates = []
-        qty_reg_7_data = []
         qty_reg_14_data = []
         qty_reg_15_35_data = []
         qty_reg_other_data = []
@@ -248,7 +247,6 @@ class VisitReportListView(LoginRequiredMixin, ListView):
         total_visited_data = []
 
         day_count = defaultdict(lambda: {
-            'qty_reg_7': 0,
             'qty_reg_14': 0,
             'qty_reg_15_35': 0,
             'qty_reg_other': 0,
