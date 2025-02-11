@@ -14,38 +14,26 @@ def get_visits_totals(user):
     # Итоги за текущий день
     daily_totals = VisitReport.objects.filter(date=today, library=library).aggregate(
         total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') +
-                  Sum('qty_reg_other') + Sum('qty_reg_invalid') +
-                  Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
-        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
-                      Sum('qty_visited_other') + Sum('qty_visited_invalids') +
-                      Sum('qty_visited_out_station') +
-                      Sum('qty_visited_online') +
-                      Sum('qty_visited_prlib') + Sum('qty_visited_litres')
+                  Sum('qty_reg_other') + Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
+        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') +
+                      Sum('qty_visited_prlib') + Sum('qty_visited_litres') + Sum('qty_visited_online')
     )
 
     # Итоги за текущий месяц
     monthly_totals = VisitReport.objects.filter(date__month=today.month, date__year=today.year,
                                                 library=library).aggregate(
         total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') +
-                  Sum('qty_reg_other') + Sum('qty_reg_invalid') +
-                  Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
-        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
-                      Sum('qty_visited_other') + Sum('qty_visited_invalids') +
-                      Sum('qty_visited_out_station') +
-                      Sum('qty_visited_online') +
-                      Sum('qty_visited_prlib') + Sum('qty_visited_litres')
+                  Sum('qty_reg_other') + Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
+        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') +
+                      Sum('qty_visited_prlib') + Sum('qty_visited_litres') + Sum('qty_visited_online')
     )
 
     # Итоги за текущий год
     yearly_totals = VisitReport.objects.filter(date__year=today.year, library=library).aggregate(
         total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') +
-                  Sum('qty_reg_other') + Sum('qty_reg_invalid') +
-                  Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
-        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
-                      Sum('qty_visited_other') + Sum('qty_visited_invalids') +
-                      Sum('qty_visited_out_station') +
-                      Sum('qty_visited_online') +
-                      Sum('qty_visited_prlib') + Sum('qty_visited_litres')
+                  Sum('qty_reg_other') + Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
+        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') +
+                      Sum('qty_visited_prlib') + Sum('qty_visited_litres') + Sum('qty_visited_online')
     )
 
     return {
@@ -64,48 +52,42 @@ def get_book_totals(user):
 
     # Итоги по книговыдаче
     daily_totals_loan = BookReport.objects.filter(date=today, library=library).aggregate(
-        total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') +
-                   Sum('qty_books_invalid') + Sum('qty_books_neb') +
+        total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') + Sum('qty_books_neb') +
                    Sum('qty_books_prlib') + Sum('qty_books_litres') +
                    Sum('qty_books_consultant') + Sum('qty_books_local_library')
     )
 
     monthly_totals_loan = BookReport.objects.filter(date__month=today.month, date__year=today.year,
                                                     library=library).aggregate(
-        total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') +
-                   Sum('qty_books_invalid') + Sum('qty_books_neb') +
+        total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') + Sum('qty_books_neb') +
                    Sum('qty_books_prlib') + Sum('qty_books_litres') +
                    Sum('qty_books_consultant') + Sum('qty_books_local_library')
     )
 
     yearly_totals_loan = BookReport.objects.filter(date__year=today.year, library=library).aggregate(
-        total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') +
-                   Sum('qty_books_invalid') + Sum('qty_books_neb') +
+        total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') + Sum('qty_books_neb') +
                    Sum('qty_books_prlib') + Sum('qty_books_litres') +
                    Sum('qty_books_consultant') + Sum('qty_books_local_library')
     )
 
     # Итоги по справкам
     daily_totals_reference = BookReport.objects.filter(date=today, library=library).aggregate(
-        total_reference=Sum('qty_books_reference_do_14') + Sum('qty_books_reference_14') +
-                        Sum('qty_books_reference_35') + Sum('qty_books_reference_other') +
-                        Sum('qty_books_reference_invalid') +
-                        Sum('qty_books_reference_online')
+        total_reference=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') + Sum('qty_books_neb') +
+                   Sum('qty_books_prlib') + Sum('qty_books_litres') +
+                   Sum('qty_books_consultant') + Sum('qty_books_local_library')
     )
 
     monthly_totals_reference = BookReport.objects.filter(date__month=today.month, date__year=today.year,
                                                          library=library).aggregate(
-        total_reference=Sum('qty_books_reference_do_14') + Sum('qty_books_reference_14') +
-                        Sum('qty_books_reference_35') + Sum('qty_books_reference_other') +
-                        Sum('qty_books_reference_invalid') +
-                        Sum('qty_books_reference_online')
+        total_reference=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') + Sum('qty_books_neb') +
+                   Sum('qty_books_prlib') + Sum('qty_books_litres') +
+                   Sum('qty_books_consultant') + Sum('qty_books_local_library')
     )
 
     yearly_totals_reference = BookReport.objects.filter(date__year=today.year, library=library).aggregate(
-        total_reference=Sum('qty_books_reference_do_14') + Sum('qty_books_reference_14') +
-                        Sum('qty_books_reference_35') + Sum('qty_books_reference_other') +
-                        Sum('qty_books_reference_invalid') +
-                        Sum('qty_books_reference_online')
+        total_reference=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') + Sum('qty_books_neb') +
+                   Sum('qty_books_prlib') + Sum('qty_books_litres') +
+                   Sum('qty_books_consultant') + Sum('qty_books_local_library')
     )
 
     return {
@@ -135,9 +117,7 @@ def get_event_totals(user):
     daily_totals_events = Event.objects.filter(date=today, library=library).aggregate(
         total_quantity=Sum('quantity'),  # Общее количество мероприятий
         total_visitors=Sum(
-            F('age_14') + F('age_35') + F('age_other') +
-            F('invalids') + F('out_of_station') +
-            F('online')
+            F('age_14') + F('age_35') + F('age_other')
         ),
         total_paid=Count('id', filter=Q(paid=True))  # Количество платных мероприятий
     )
@@ -147,9 +127,7 @@ def get_event_totals(user):
                                                  library=library).aggregate(
         total_quantity=Sum('quantity'),  # Общее количество мероприятий
         total_visitors=Sum(
-            F('age_14') + F('age_35') + F('age_other') +
-            F('invalids') + F('out_of_station') +
-            F('online')
+            F('age_14') + F('age_35') + F('age_other')
         ),
         total_paid=Count('id', filter=Q(paid=True))  # Количество платных мероприятий
     )
@@ -158,9 +136,7 @@ def get_event_totals(user):
     yearly_totals_events = Event.objects.filter(date__year=today.year, library=library).aggregate(
         total_quantity=Sum('quantity'),  # Общее количество мероприятий
         total_visitors=Sum(
-            F('age_14') + F('age_35') + F('age_other') +
-            F('invalids') + F('out_of_station') +
-            F('online')
+            F('age_14') + F('age_35') + F('age_other')
         ),
         total_paid=Count('id', filter=Q(paid=True))  # Количество платных мероприятий
     )
@@ -212,27 +188,24 @@ def get_all_totals():
     today = date.today()
     # Итоги за текущий день
     daily_totals = VisitReport.objects.filter(date=today).aggregate(
-        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum(
-            'qty_reg_invalid') + Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
-        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') + Sum(
-            'qty_visited_invalids') + Sum('qty_visited_out_station') + Sum('qty_visited_online') + Sum(
-            'qty_visited_prlib') + Sum('qty_visited_litres')
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum('qty_reg_prlib') +
+                  Sum('qty_reg_litres'),
+        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') +
+                      Sum('qty_visited_prlib') + Sum('qty_visited_litres')
     )
     # Итоги за текущий месяц
     monthly_totals = VisitReport.objects.filter(date__month=today.month, date__year=today.year).aggregate(
-        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum(
-            'qty_reg_invalid') + Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
-        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') + Sum(
-            'qty_visited_invalids') + Sum('qty_visited_out_station') + Sum('qty_visited_online') + Sum(
-            'qty_visited_prlib') + Sum('qty_visited_litres')
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum('qty_reg_prlib') +
+                  Sum('qty_reg_litres'),
+        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') +
+                      Sum('qty_visited_prlib') + Sum('qty_visited_litres')
     )
     # Итоги за текущий год
     yearly_totals = VisitReport.objects.filter(date__year=today.year).aggregate(
-        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum(
-            'qty_reg_invalid') + Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
-        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') + Sum(
-            'qty_visited_invalids') + Sum('qty_visited_out_station') + Sum('qty_visited_online') + Sum(
-            'qty_visited_prlib') + Sum('qty_visited_litres')
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum('qty_reg_prlib') +
+                  Sum('qty_reg_litres'),
+        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') +
+                      Sum('qty_visited_prlib') + Sum('qty_visited_litres')
     )
     return {'daily': daily_totals, 'monthly': monthly_totals, 'yearly': yearly_totals}
 
@@ -241,25 +214,29 @@ def get_all_book_totals():
     today = date.today()
     # Итоги по книговыдаче
     daily_totals_loan = BookReport.objects.filter(date=today).aggregate(
-        total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') + Sum(
-            'qty_books_invalid') + Sum('qty_books_neb') + Sum('qty_books_prlib') + Sum('qty_books_litres') + Sum(
-            'qty_books_consultant') + Sum('qty_books_local_library')
+        total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') + Sum('qty_books_neb') +
+                   Sum('qty_books_prlib') + Sum('qty_books_litres') + Sum('qty_books_consultant') +
+                   Sum('qty_books_local_library')
     )
     monthly_totals_loan = BookReport.objects.filter(date__month=today.month, date__year=today.year).aggregate(
-        total_loan=Sum('qty_books_14') + Sum(' qty_books_15_35 ') + ...
+        total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') + Sum('qty_books_neb') +
+                   Sum('qty_books_prlib') + Sum('qty_books_litres') + Sum('qty_books_consultant') +
+                   Sum('qty_books_local_library')
     )
     yearly_totals_loan = BookReport.objects.filter(date__year=today.year).aggregate(
-        total_loan=Sum(...)
+        total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') + Sum('qty_books_neb') +
+                   Sum('qty_books_prlib') + Sum('qty_books_litres') + Sum('qty_books_consultant') +
+                   Sum('qty_books_local_library')
     )
     # Итоги по справкам
     daily_totals_reference = BookReport.objects.filter(date=today).aggregate(
-        total_reference=Sum(...)
+        total_reference=Sum('qty_books_reference_do_14') + Sum('qty_books_reference_14') + Sum('qty_books_reference_35')
     )
     monthly_totals_reference = BookReport.objects.filter(date__month=today.month, date__year=today.year).aggregate(
-        total_reference=Sum(...)
+        otal_reference=Sum('qty_books_reference_do_14') + Sum('qty_books_reference_14') + Sum('qty_books_reference_35')
     )
     yearly_totals_reference = BookReport.objects.filter(date__year=today.year).aggregate(
-        total_reference=Sum(...)
+        otal_reference=Sum('qty_books_reference_do_14') + Sum('qty_books_reference_14') + Sum('qty_books_reference_35')
     )
     return {'daily': {'loan': daily_totals_loan, 'reference': daily_totals_reference},
             'monthly': {'loan': monthly_totals_loan, 'reference': monthly_totals_reference},
