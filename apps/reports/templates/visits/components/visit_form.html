@@ -100,11 +100,11 @@
                                     {{ form.qty_visited_invalids }}
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="id_qty_visited_invalids" class="form-label">Пенсионеры (Из общего числа)</label>
+                                    <label for="id_qty_visited_pensioners" class="form-label">Пенсионеры (Из общего числа)</label>
                                     {{ form.qty_visited_pensioners }}
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="id_qty_visited_out_station" class="form-label">Внестационар</label>
+                                    <label for="id_qty_visited_out_station" class="form-label">Внестационар (Из общего числа)</label>
                                     {{ form.qty_visited_out_station }}
                                 </div>
                                 <div class="col-md-4">
@@ -118,6 +118,21 @@
                                 <div class="col-md-4">
                                     <label for="id_qty_visited_litres" class="form-label">Литрес</label>
                                     {{ form.qty_visited_litres }}
+                                </div>
+                            </div>
+                            <hr class="text-primary">
+                            <div class="row">
+                                <div id="total-visited-sum" class="col-4 text-center">
+                                    <h6>Общее число:</h6>
+                                    <h5 class="text-danger"><span>0</span></h5>
+                                </div>
+                                <div id="inv_pens_visited_sum" class="col-4 text-center">
+                                    <h6>Пенс./Инв. из общего числа:</h6>
+                                    <h5 class="text-danger"><span>0</span></h5>
+                                </div>
+                                <div id="electronic_visited_sum" class="col-4 text-center">
+                                    <h6>Электронные ресурсы:</h6>
+                                    <h5 class="text-danger"><span>0</span></h5>
                                 </div>
                             </div>
                         </fieldset>
@@ -191,6 +206,67 @@
     // Назначение обработчиков событий на поля ввода
     document.getElementById('id_qty_reg_prlib').addEventListener('input', calculateSum);
     document.getElementById('id_qty_reg_litres').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
+
+
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyVisited14 = parseFloat(document.getElementById('id_qty_visited_14').value) || 0;
+        const qtyVisited15_35 = parseFloat(document.getElementById('id_qty_visited_15_35').value) || 0;
+        const qtyVisitedOther = parseFloat(document.getElementById('id_qty_visited_other').value) || 0;
+        const qtyVisitedOnline = parseFloat(document.getElementById('id_qty_visited_online').value) || 0;
+
+        const totalSum = qtyVisited14 + qtyVisited15_35 + qtyVisitedOther + qtyVisitedOnline;
+        document.getElementById('total-visited-sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_qty_visited_14').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_visited_15_35').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_visited_other').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_visited_online').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
+
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyVisitedInvalid = parseFloat(document.getElementById('id_qty_visited_invalids').value) || 0;
+        const qtyVisitedPensioners = parseFloat(document.getElementById('id_qty_visited_pensioners').value) || 0;
+        const qtyVisitedOutOfStation = parseFloat(document.getElementById('id_qty_visited_out_station').value) || 0;
+
+        const totalSum = qtyVisitedInvalid + qtyVisitedPensioners + qtyVisitedOutOfStation;
+        document.getElementById('inv_pens_visited_sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_qty_visited_invalids').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_visited_pensioners').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_visited_out_station').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
+
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyVisitedPrlib = parseFloat(document.getElementById('id_qty_visited_prlib').value) || 0;
+        const qtyVisitedLitres = parseFloat(document.getElementById('id_qty_visited_litres').value) || 0;
+
+        const totalSum = qtyVisitedPrlib + qtyVisitedLitres;
+        document.getElementById('electronic_visited_sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_qty_visited_prlib').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_visited_litres').addEventListener('input', calculateSum);
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();

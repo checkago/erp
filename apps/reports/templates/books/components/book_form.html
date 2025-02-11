@@ -55,7 +55,7 @@
                                             {{ form.qty_books_other }}
                                         </div>
                                         <div class="col-md-3">
-                                            <label for="id_qty_books_invalid" class="form-label">Книговыдача (Инвалиды (в том числе))</label>
+                                            <label for="id_qty_books_invalid" class="form-label">Инвалиды (Из общего числа)</label>
                                             {{ form.qty_books_invalid }}
                                         </div>
                                         <div class="col-md-3">
@@ -77,6 +77,21 @@
                                         <div class="col-md-3">
                                             <label for="id_qty_books_local_library" class="form-label">Книговыдача (Локальная биб.)</label>
                                             {{ form.qty_books_local_library }}
+                                        </div>
+                                    </div>
+                                    <hr class="text-primary">
+                                    <div class="row">
+                                        <div id="total-books-sum" class="col-4 text-center">
+                                            <h6>Общее число:</h6>
+                                            <h5 class="text-danger"><span>0</span></h5>
+                                        </div>
+                                        <div id="inv_pens_books_sum" class="col-4 text-center">
+                                            <h6>Пенс./Инв. из общего числа:</h6>
+                                            <h5 class="text-danger"><span>0</span></h5>
+                                        </div>
+                                        <div id="electronic_books_sum" class="col-4 text-center">
+                                            <h6>Электронные ресурсы:</h6>
+                                            <h5 class="text-danger"><span>0</span></h5>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -154,12 +169,27 @@
                                     {{ form.qty_books_reference_35 }}
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="id_qty_books_reference_invalid" class="form-label">Справки (Инвалиды (в том числе))</label>
+                                    <label for="id_qty_books_reference_invalid" class="form-label">Инвалиды (Из общ. числа)</label>
                                     {{ form.qty_books_reference_invalid }}
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="id_qty_books_reference_online" class="form-label">Справки (Удаленно)</label>
+                                    <label for="id_qty_books_reference_online" class="form-label">Удаленно (Из общ. числа)</label>
                                     {{ form.qty_books_reference_online }}
+                                </div>
+                            </div>
+                            <hr class="text-primary">
+                            <div class="row">
+                                <div id="total-references-sum" class="col-4 text-center">
+                                    <h6>Общее число:</h6>
+                                    <h5 class="text-danger"><span>0</span></h5>
+                                </div>
+                                <div id="inv_references_sum" class="col-4 text-center">
+                                    <h6>Инв. из общего числа:</h6>
+                                    <h5 class="text-danger"><span>0</span></h5>
+                                </div>
+                                <div id="inv_online_references_sum" class="col-4 text-center">
+                                    <h6>Удаленно из общего числа:</h6>
+                                    <h5 class="text-danger"><span>0</span></h5>
                                 </div>
                             </div>
                         </fieldset>
@@ -242,7 +272,6 @@
     calculateSum();
 </script>
 
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const modLib = {{ mod_lib|yesno:"true,false" }};
@@ -255,3 +284,117 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyBooks14 = parseFloat(document.getElementById('id_qty_books_14').value) || 0;
+        const qtyBooks15_35 = parseFloat(document.getElementById('id_qty_books_15_35').value) || 0;
+        const qtyBooksOther = parseFloat(document.getElementById('id_qty_books_other').value) || 0;
+
+        const totalSum = qtyBooks14 + qtyBooks15_35 + qtyBooksOther;
+        document.getElementById('total-books-sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_qty_books_14').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_books_15_35').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_books_other').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+</script>
+
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyBooksInvalid = parseFloat(document.getElementById('id_qty_books_invalid').value) || 0;
+
+        const totalSum = qtyBooksInvalid;
+        document.getElementById('inv_pens_books_sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_qty_books_invalid').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
+
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyBooksNeb = parseFloat(document.getElementById('id_qty_books_neb').value) || 0;
+        const qtyBooksPrlib = parseFloat(document.getElementById('id_qty_books_prlib').value) || 0;
+        const qtyBooksLitres = parseFloat(document.getElementById('id_qty_books_litres').value) || 0;
+        const qtyBooksConsultant = parseFloat(document.getElementById('id_qty_books_consultant').value) || 0;
+        const qtyBooksLocalLibrary = parseFloat(document.getElementById('id_qty_books_local_library').value) || 0;
+
+        const totalSum = qtyBooksNeb + qtyBooksPrlib + qtyBooksLitres + qtyBooksConsultant + qtyBooksLocalLibrary;
+        document.getElementById('electronic_books_sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_qty_books_neb').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_books_prlib').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_books_litres').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_books_consultant').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_books_local_library').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
+
+
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyReferences14 = parseFloat(document.getElementById('id_qty_books_reference_do_14').value) || 0;
+        const qtyReferences15_35 = parseFloat(document.getElementById('id_qty_books_reference_14').value) || 0;
+        const qtyReferencesOther = parseFloat(document.getElementById('id_qty_books_reference_35').value) || 0;
+
+        const totalSum = qtyReferences14 + qtyReferences15_35 + qtyReferencesOther;
+        document.getElementById('total-references-sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_qty_books_reference_do_14').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_books_reference_14').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_books_reference_35').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+</script>
+
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyReferencesInvalid = parseFloat(document.getElementById('id_qty_books_reference_invalid').value) || 0;
+
+        const totalSum = qtyReferencesInvalid;
+        document.getElementById('inv_references_sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_qty_books_reference_invalid').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
+
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyReferencesOnline = parseFloat(document.getElementById('id_qty_books_reference_online').value) || 0;
+
+        const totalSum = qtyReferencesOnline;
+        document.getElementById('inv_online_references_sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_qty_books_reference_online').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
