@@ -50,7 +50,7 @@
                                             {{ form.qty_reg_invalid }}
                                         </div>
                                         <div class="col-md-4">
-                                            <label for="id_qty_reg_invalid" class="form-label">Пенсионеры (Из общего числа)</label>
+                                            <label for="id_qty_reg_pensioners" class="form-label">Пенсионеры (Из общего числа)</label>
                                             {{ form.qty_reg_pensioners }}
                                         </div>
                                         <div class="col-md-4">
@@ -60,6 +60,21 @@
                                         <div class="col-md-4">
                                             <label for="id_qty_reg_litres" class="form-label">Литрес</label>
                                             {{ form.qty_reg_litres }}
+                                        </div>
+                                    </div>
+                                    <hr class="text-primary">
+                                    <div class="row">
+                                        <div id="total-reg-sum" class="col-4 text-center">
+                                            <h6>Общее число:</h6>
+                                            <h5 class="text-danger"><span>0</span></h5>
+                                        </div>
+                                        <div id="inv_pens_reg_sum" class="col-4 text-center">
+                                            <h6>Пенс./Инв. из общего числа:</h6>
+                                            <h5 class="text-danger"><span>0</span></h5>
+                                        </div>
+                                        <div id="total-reg-sum" class="col-4 text-center">
+                                            <h6>Электронные ресурсы:</h6>
+                                            <h5 class="text-danger"><span>0</span></h5>
                                         </div>
                                     </div>
                                 </fieldset>
@@ -124,3 +139,39 @@
       </div>
     </div>
   </div>
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyReg14 = parseFloat(document.getElementById('id_qty_reg_14').value) || 0;
+        const qtyReg15_35 = parseFloat(document.getElementById('id_qty_reg_15_35').value) || 0;
+        const qtyRegOther = parseFloat(document.getElementById('id_qty_reg_other').value) || 0;
+
+        const totalSum = qtyReg14 + qtyReg15_35 + qtyRegOther;
+        document.getElementById('total-reg-sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_qty_reg_14').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_reg_15_35').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_reg_other').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyRegInvalid = parseFloat(document.getElementById('id_qty_reg_invalid').value) || 0;
+        const qtyRegPensioners = parseFloat(document.getElementById('id_qty_reg_pensioners').value) || 0;
+
+        const totalSum = qtyRegInvalid + qtyRegPensioners;
+        document.getElementById('inv_pens_reg_sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_qty_reg_invalid').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_reg_pensioners').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
