@@ -33,7 +33,7 @@
                             <tr class="bg-success text-dark text-center">
                                 <th class="fixed-column" rowspan="2">Дата отчета</th>
                                 <th rowspan="2">Кафедра</th>
-                                <th colspan="7">Новые</th>
+                                <th colspan="6">Новые</th>
                                 <th colspan="8">Посещение</th>
                                 <th rowspan="2">Изменить</th>
                             </tr>
@@ -41,14 +41,14 @@
                                 <th>До 14</th>
                                 <th>Молодежь 14-30</th>
                                 <th>Прочие 30+</th>
-                                <th>Инвалиды (в том числе)</th>
+                                <th>Инвалиды (в Общем числе)</th>
                                 <th>Президентская</th>
                                 <th>Литрес</th>
 
                                 <th class="bg-info text-dark">До 14</th>
                                 <th class="bg-info text-dark">Молодежь 14-30</th>
                                 <th class="bg-info text-dark">Прочие 30+</th>
-                                <th class="bg-info text-dark">Инвалиды (в том числе)</th>
+                                <th class="bg-info text-dark">Инвалиды (в Общем числе)</th>
                                 <th class="bg-info text-dark">Внестационар</th>
                                 <th class="bg-info text-dark">Удаленно</th>
                                 <th class="bg-info text-dark">Президентская</th>
@@ -58,7 +58,7 @@
                         <tbody>
                         {% for visit in visits %}
                             <tr>
-                                <td>{{ visit.date|date:"d.m.Y" }}</td>
+                                <td class="fixed-column">{{ visit.date|date:"d.m.Y" }}</td>
                                 {% if visit.cafedra %}
                                 <td>{{ visit.cafedra }}</td>
                                 {% else %}
@@ -90,7 +90,7 @@
                             <tr class="bg-success text-dark text-center">
                                 <th class="fixed-column" rowspan="2">Дата отчета</th>
                                 <th rowspan="2">Кафедра</th>
-                                <th colspan="7">Новые</th>
+                                <th colspan="6">Новые</th>
                                 <th colspan="8">Посещение</th>
                                 <th rowspan="2">Изменить</th>
                             </tr>
@@ -98,14 +98,14 @@
                                 <th>До 14</th>
                                 <th>Молодежь 14-30</th>
                                 <th>Прочие 30+</th>
-                                <th>Инвалиды (в том числе)</th>
+                                <th>Инвалиды (в Общем числе)</th>
                                 <th>Президентская</th>
                                 <th>Литрес</th>
 
                                 <th class="bg-info text-dark">До 14</th>
                                 <th class="bg-info text-dark">Молодежь 14-30</th>
                                 <th class="bg-info text-dark">Прочие 30+</th>
-                                <th class="bg-info text-dark">Инвалиды (в том числе)</th>
+                                <th class="bg-info text-dark">Инвалиды (в Общем числе)</th>
                                 <th class="bg-info text-dark">Внестационар</th>
                                 <th class="bg-info text-dark">Удаленно</th>
                                 <th class="bg-info text-dark">Президентская</th>
