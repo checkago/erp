@@ -41,33 +41,33 @@
                                         {{ form.quantity }}
                                     </div>
                                     <legend class="mt-2">Количество участников</legend>
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <label for="id_age_14" class="form-label">До 14 лет</label>
                                         {{ form.age_14 }}
                                     </div>
 
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <label for="id_age_35" class="form-label">До 30 лет</label>
                                         {{ form.age_35 }}
                                     </div>
 
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <label for="id_age_other" class="form-label">Прочие</label>
                                         {{ form.age_other }}
                                     </div>
 
-                                    <div class="col-md-2">
+                                    <div class="col-md-4">
                                         <label for="id_invalids" class="form-label">Инвалиды (Из общего числа)</label>
                                         {{ form.invalids }}
                                     </div>
 
-                                    <div class="col-md-2">
-                                        <label for="id_invalids" class="form-label">Пенсионеры (Из общего числа)</label>
+                                    <div class="col-md-4">
+                                        <label for="id_pensioners" class="form-label">Пенсионеры (Из общего числа)</label>
                                         {{ form.pensioners }}
                                     </div>
 
-                                    <div class="col-md-2">
-                                        <label for="id_out_of_station" class="form-label">Внестационар</label>
+                                    <div class="col-md-4">
+                                        <label for="id_out_of_station" class="form-label">Внестационар (Из общего числа)</label>
                                         {{ form.out_of_station }}
                                     </div>
 
@@ -85,9 +85,20 @@
                                     </div>
 
                                     <div class='col-md-7'>
-                                <label for='id_note' class='form-label'>Примечание</label>
-                                {{ form.note }}
-                            </div>
+                                        <label for='id_note' class='form-label'>Примечание</label>
+                                        {{ form.note }}
+                                    </div>
+                                </div>
+                                <hr class="text-primary">
+                                <div class="row">
+                                    <div id="total-event-sum" class="col-4 text-center">
+                                        <h6>Общее число:</h6>
+                                        <h5 class="text-danger"><span>0</span></h5>
+                                    </div>
+                                    <div id="inv_pens_out_event_sum" class="col-5 text-center">
+                                        <h6>Пенс./Инв./Внестац. из общего числа:</h6>
+                                        <h5 class="text-danger"><span>0</span></h5>
+                                    </div>
                                 </div>
                             </fieldset>
                         </div>
@@ -102,3 +113,42 @@
       </div>
     </div>
   </div>
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyEvent14 = parseFloat(document.getElementById('id_age_14').value) || 0;
+        const qtyEvent35 = parseFloat(document.getElementById('id_age_35').value) || 0;
+        const qtyEventOther = parseFloat(document.getElementById('id_age_other').value) || 0;
+
+        const totalSum = qtyEvent14 + qtyEvent35 + qtyEventOther;
+        document.getElementById('total-event-sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_age_14').addEventListener('input', calculateSum);
+    document.getElementById('id_age_35').addEventListener('input', calculateSum);
+    document.getElementById('id_age_other').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
+
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyEventInvalids = parseFloat(document.getElementById('id_invalids').value) || 0;
+        const qtyEventPensioners = parseFloat(document.getElementById('id_pensioners').value) || 0;
+        const qtyEventOutStation = parseFloat(document.getElementById('id_out_of_station').value) || 0;
+
+        const totalSum = qtyEventInvalids + qtyEventPensioners + qtyEventOutStation;
+        document.getElementById('inv_pens_out_event_sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_invalids').addEventListener('input', calculateSum);
+    document.getElementById('id_pensioners').addEventListener('input', calculateSum);
+    document.getElementById('id_out_of_station').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
