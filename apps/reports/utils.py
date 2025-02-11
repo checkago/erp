@@ -247,19 +247,16 @@ def get_all_event_totals():
     today = date.today()
     # Итоги по количеству мероприятий и посетителей
     daily_totals_events = Event.objects.filter(date=today).aggregate(
-        total_quantity=Sum(...),
-        total_visitors=Sum(...),
-        total_paid=Count(...)
+        total_quantity=Sum('quantity'),
+        total_visitors=Sum('age_14') + Sum('age_35') + Sum('age_other')
     )
     monthly_totals_events = Event.objects.filter(date__month=today.month, date__year=today.year).aggregate(
-        total_quantity=Sum(...),
-        total_visitors=Sum(...),
-        total_paid=Count(...)
+        total_quantity=Sum('quantity'),
+        total_visitors=Sum('age_14') + Sum('age_35') + Sum('age_other')
     )
     yearly_totals_events = Event.objects.filter(date__year=today.year).aggregate(
-        total_quantity=Sum(...),
-        total_visitors=Sum(...),
-        total_paid=Count(...)
+        total_quantity=Sum('quantity'),
+        total_visitors=Sum('age_14') + Sum('age_35') + Sum('age_other')
     )
     return {'daily': daily_totals_events, 'monthly': monthly_totals_events, 'yearly': yearly_totals_events}
 
