@@ -114,7 +114,7 @@ class BookReportForm(forms.ModelForm):
 class VisitReportForm(forms.ModelForm):
     class Meta:
         model = VisitReport
-        fields = ['cafedra', 'date', 'qty_reg_7', 'qty_reg_14', 'qty_reg_15_35', 'qty_reg_other', 'qty_reg_invalid',
+        fields = ['cafedra', 'date', 'qty_reg_14', 'qty_reg_15_35', 'qty_reg_other', 'qty_reg_invalid',
                   'qty_reg_prlib', 'qty_reg_litres', 'qty_visited_14', 'qty_visited_15_35', 'qty_visited_other',
                   'qty_visited_invalids', 'qty_visited_prlib', 'qty_visited_litres', 'qty_visited_out_station',
                   'qty_visited_online', 'note']
@@ -125,7 +125,6 @@ class VisitReportForm(forms.ModelForm):
                 'type': 'date',
                 'data-date-format': 'mm.dd.yyyy'
             }),
-            'qty_reg_7': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_reg_14': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_reg_15_35': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_reg_other': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
