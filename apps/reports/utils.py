@@ -13,7 +13,7 @@ def get_visits_totals(user):
 
     # Итоги за текущий день
     daily_totals = VisitReport.objects.filter(date=today, library=library).aggregate(
-        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') +
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') +
                   Sum('qty_reg_other') + Sum('qty_reg_invalid') +
                   Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
         total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
@@ -26,7 +26,7 @@ def get_visits_totals(user):
     # Итоги за текущий месяц
     monthly_totals = VisitReport.objects.filter(date__month=today.month, date__year=today.year,
                                                 library=library).aggregate(
-        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') +
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') +
                   Sum('qty_reg_other') + Sum('qty_reg_invalid') +
                   Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
         total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
@@ -38,7 +38,7 @@ def get_visits_totals(user):
 
     # Итоги за текущий год
     yearly_totals = VisitReport.objects.filter(date__year=today.year, library=library).aggregate(
-        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') +
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') +
                   Sum('qty_reg_other') + Sum('qty_reg_invalid') +
                   Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
         total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
@@ -212,7 +212,7 @@ def get_all_totals():
     today = date.today()
     # Итоги за текущий день
     daily_totals = VisitReport.objects.filter(date=today).aggregate(
-        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum(
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum(
             'qty_reg_invalid') + Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
         total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') + Sum(
             'qty_visited_invalids') + Sum('qty_visited_out_station') + Sum('qty_visited_online') + Sum(
@@ -220,7 +220,7 @@ def get_all_totals():
     )
     # Итоги за текущий месяц
     monthly_totals = VisitReport.objects.filter(date__month=today.month, date__year=today.year).aggregate(
-        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum(
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum(
             'qty_reg_invalid') + Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
         total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') + Sum(
             'qty_visited_invalids') + Sum('qty_visited_out_station') + Sum('qty_visited_online') + Sum(
@@ -228,7 +228,7 @@ def get_all_totals():
     )
     # Итоги за текущий год
     yearly_totals = VisitReport.objects.filter(date__year=today.year).aggregate(
-        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum(
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') + Sum(
             'qty_reg_invalid') + Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
         total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_other') + Sum(
             'qty_visited_invalids') + Sum('qty_visited_out_station') + Sum('qty_visited_online') + Sum(
@@ -339,7 +339,7 @@ def get_totals(user):
 
     # Итоги за текущий день
     daily_totals = VisitReport.objects.filter(date=today, library=library).aggregate(
-        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') +
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') +
                   Sum('qty_reg_other') + Sum('qty_reg_invalid') +
                   Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
         total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
@@ -359,7 +359,7 @@ def get_all_visit_totals():
 
     # Итоги за текущий день
     daily_totals = VisitReport.objects.filter(date=today).aggregate(
-        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') +
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') +
                   Sum('qty_reg_other') + Sum('qty_reg_invalid') +
                   Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
         total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
@@ -371,7 +371,7 @@ def get_all_visit_totals():
 
     # Итоги за текущий месяц
     monthly_totals = VisitReport.objects.filter(date__month=today.month, date__year=today.year).aggregate(
-        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') +
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') +
                   Sum('qty_reg_other') + Sum('qty_reg_invalid') +
                   Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
         total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
@@ -383,7 +383,7 @@ def get_all_visit_totals():
 
     # Итоги за текущий год
     yearly_totals = VisitReport.objects.filter(date__year=today.year).aggregate(
-        total_reg=Sum('qty_reg_7') + Sum('qty_reg_14') + Sum('qty_reg_15_35') +
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') +
                   Sum('qty_reg_other') + Sum('qty_reg_invalid') +
                   Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
         total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
