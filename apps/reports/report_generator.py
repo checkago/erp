@@ -228,6 +228,7 @@ def generate_visit_report_excel(user, year, month):
     return response
 
 
+
 def generate_book_report_excel(user, year, month):
     # Получаем сотрудника и филиал
     try:
@@ -456,7 +457,7 @@ def generate_book_report_excel(user, year, month):
         if key != 'note':  # Примечания не суммируются
             year_start_data[key] -= current_month_data[key]
 
-    # Записываем данные с начала года (без текущего месяца) в строку 6
+    # Записываем данные с начала года (без текущего месяца) в строку 5
     ws['B5'] = year_start_data['qty_books_14'] + year_start_data['qty_books_15_35'] + year_start_data['qty_books_other']
     ws['C5'] = year_start_data['qty_books_14']
     ws['D5'] = year_start_data['qty_books_15_35']
@@ -467,12 +468,12 @@ def generate_book_report_excel(user, year, month):
     ws['I5'] = year_start_data['qty_books_consultant']
     ws['K5'] = year_start_data['qty_books_local_library']
     ws['L5'] = (
-            year_start_data['qty_books_part_opl'] + year_start_data['qty_books_part_enm'] +
-            year_start_data['qty_books_part_tech'] + year_start_data['qty_books_part_sh'] +
-            year_start_data['qty_books_part_si'] + year_start_data['qty_books_part_yl'] +
-            year_start_data['qty_books_part_hl'] + year_start_data['qty_books_part_dl'] +
-            year_start_data['qty_books_part_other'] + year_start_data['qty_books_part_audio'] +
-            year_start_data['qty_books_part_krai']
+        year_start_data['qty_books_part_opl'] + year_start_data['qty_books_part_enm'] +
+        year_start_data['qty_books_part_tech'] + year_start_data['qty_books_part_sh'] +
+        year_start_data['qty_books_part_si'] + year_start_data['qty_books_part_yl'] +
+        year_start_data['qty_books_part_hl'] + year_start_data['qty_books_part_dl'] +
+        year_start_data['qty_books_part_other'] + year_start_data['qty_books_part_audio'] +
+        year_start_data['qty_books_part_krai']
     )
     ws['M5'] = year_start_data['qty_books_part_opl']
     ws['N5'] = year_start_data['qty_books_part_enm']
@@ -486,8 +487,8 @@ def generate_book_report_excel(user, year, month):
     ws['V5'] = year_start_data['qty_books_part_audio']
     ws['W5'] = year_start_data['qty_books_part_krai']
     ws['X5'] = (
-            year_start_data['qty_books_reference_do_14'] + year_start_data['qty_books_reference_35'] +
-            year_start_data['qty_books_reference_other']
+        year_start_data['qty_books_reference_do_14'] + year_start_data['qty_books_reference_35'] +
+        year_start_data['qty_books_reference_other']
     )
     ws['Y5'] = year_start_data['qty_books_reference_do_14']
     ws['Z5'] = year_start_data['qty_books_reference_14']
@@ -496,49 +497,50 @@ def generate_book_report_excel(user, year, month):
     ws['AC5'] = year_start_data['qty_books_reference_online']
     ws['AD5'] = year_start_data['note']
 
-    # Записываем данные в строку 7 (текущий месяц)
+    # Записываем данные в строку 6 (текущий месяц)
     row_num = 6
-    first_day, first_data = next(iter(sorted(daily_data.items())))
-    ws[f'A{row_num}'] = first_day
-    ws[f'B{row_num}'] = first_data['qty_books_14'] + first_data['qty_books_15_35'] + first_data['qty_books_other']
-    ws[f'C{row_num}'] = first_data['qty_books_14']
-    ws[f'D{row_num}'] = first_data['qty_books_15_35']
-    ws[f'E{row_num}'] = first_data['qty_books_other']
-    ws[f'F{row_num}'] = first_data['qty_books_invalid']
-    ws[f'G{row_num}'] = first_data['qty_books_neb']
-    ws[f'H{row_num}'] = first_data['qty_books_prlib']
-    ws[f'I{row_num}'] = first_data['qty_books_litres']
-    ws[f'J{row_num}'] = first_data['qty_books_consultant']
-    ws[f'K{row_num}'] = first_data['qty_books_local_library']
-    ws[f'L{row_num}'] = (
+    if daily_data:
+        first_day, first_data = next(iter(sorted(daily_data.items())))
+        ws[f'A{row_num}'] = first_day
+        ws[f'B{row_num}'] = first_data['qty_books_14'] + first_data['qty_books_15_35'] + first_data['qty_books_other']
+        ws[f'C{row_num}'] = first_data['qty_books_14']
+        ws[f'D{row_num}'] = first_data['qty_books_15_35']
+        ws[f'E{row_num}'] = first_data['qty_books_other']
+        ws[f'F{row_num}'] = first_data['qty_books_invalid']
+        ws[f'G{row_num}'] = first_data['qty_books_neb']
+        ws[f'H{row_num}'] = first_data['qty_books_prlib']
+        ws[f'I{row_num}'] = first_data['qty_books_litres']
+        ws[f'J{row_num}'] = first_data['qty_books_consultant']
+        ws[f'K{row_num}'] = first_data['qty_books_local_library']
+        ws[f'L{row_num}'] = (
             first_data['qty_books_part_opl'] + first_data['qty_books_part_enm'] +
             first_data['qty_books_part_tech'] + first_data['qty_books_part_sh'] +
             first_data['qty_books_part_si'] + first_data['qty_books_part_yl'] +
             first_data['qty_books_part_hl'] + first_data['qty_books_part_dl'] +
             first_data['qty_books_part_other'] + first_data['qty_books_part_audio'] +
             first_data['qty_books_part_krai']
-    )
-    ws[f'M{row_num}'] = first_data['qty_books_part_opl']
-    ws[f'N{row_num}'] = first_data['qty_books_part_enm']
-    ws[f'O{row_num}'] = first_data['qty_books_part_tech']
-    ws[f'P{row_num}'] = first_data['qty_books_part_sh']
-    ws[f'Q{row_num}'] = first_data['qty_books_part_si']
-    ws[f'R{row_num}'] = first_data['qty_books_part_yl']
-    ws[f'S{row_num}'] = first_data['qty_books_part_hl']
-    ws[f'T{row_num}'] = first_data['qty_books_part_dl']
-    ws[f'U{row_num}'] = first_data['qty_books_part_other']
-    ws[f'V{row_num}'] = first_data['qty_books_part_audio']
-    ws[f'W{row_num}'] = first_data['qty_books_part_krai']
-    ws[f'X{row_num}'] = (
+        )
+        ws[f'M{row_num}'] = first_data['qty_books_part_opl']
+        ws[f'N{row_num}'] = first_data['qty_books_part_enm']
+        ws[f'O{row_num}'] = first_data['qty_books_part_tech']
+        ws[f'P{row_num}'] = first_data['qty_books_part_sh']
+        ws[f'Q{row_num}'] = first_data['qty_books_part_si']
+        ws[f'R{row_num}'] = first_data['qty_books_part_yl']
+        ws[f'S{row_num}'] = first_data['qty_books_part_hl']
+        ws[f'T{row_num}'] = first_data['qty_books_part_dl']
+        ws[f'U{row_num}'] = first_data['qty_books_part_other']
+        ws[f'V{row_num}'] = first_data['qty_books_part_audio']
+        ws[f'W{row_num}'] = first_data['qty_books_part_krai']
+        ws[f'X{row_num}'] = (
             first_data['qty_books_reference_do_14'] + first_data['qty_books_reference_14'] +
             first_data['qty_books_reference_35']
-    )
-    ws[f'Y{row_num}'] = first_data['qty_books_reference_do_14']
-    ws[f'Z{row_num}'] = first_data['qty_books_reference_14']
-    ws[f'AA{row_num}'] = first_data['qty_books_reference_35']
-    ws[f'AB{row_num}'] = first_data['qty_books_reference_invalid']
-    ws[f'AC{row_num}'] = first_data['qty_books_reference_online']
-    ws[f'AD{row_num}'] = first_data['note']
+        )
+        ws[f'Y{row_num}'] = first_data['qty_books_reference_do_14']
+        ws[f'Z{row_num}'] = first_data['qty_books_reference_14']
+        ws[f'AA{row_num}'] = first_data['qty_books_reference_35']
+        ws[f'AB{row_num}'] = first_data['qty_books_reference_invalid']
+        ws[f'AC{row_num}'] = first_data['qty_books_reference_online']
+        ws[f'AD{row_num}'] = first_data['note']
 
     # Если данных больше, добавляем новые строки ниже строки 6
     if len(daily_data) > 1:
@@ -560,10 +562,10 @@ def generate_book_report_excel(user, year, month):
             ws[f'J{row_num}'] = data['qty_books_consultant']
             ws[f'K{row_num}'] = data['qty_books_local_library']
             ws[f'L{row_num}'] = (
-                    data['qty_books_part_opl'] + data['qty_books_part_enm'] + data['qty_books_part_tech'] +
-                    data['qty_books_part_sh'] + data['qty_books_part_si'] + data['qty_books_part_yl'] +
-                    data['qty_books_part_hl'] + data['qty_books_part_dl'] + data['qty_books_part_other'] +
-                    data['qty_books_part_audio'] + data['qty_books_part_krai']
+                data['qty_books_part_opl'] + data['qty_books_part_enm'] + data['qty_books_part_tech'] +
+                data['qty_books_part_sh'] + data['qty_books_part_si'] + data['qty_books_part_yl'] +
+                data['qty_books_part_hl'] + data['qty_books_part_dl'] + data['qty_books_part_other'] +
+                data['qty_books_part_audio'] + data['qty_books_part_krai']
             )
             ws[f'M{row_num}'] = data['qty_books_part_opl']
             ws[f'N{row_num}'] = data['qty_books_part_enm']
@@ -577,8 +579,8 @@ def generate_book_report_excel(user, year, month):
             ws[f'V{row_num}'] = data['qty_books_part_audio']
             ws[f'W{row_num}'] = data['qty_books_part_krai']
             ws[f'X{row_num}'] = (
-                    data['qty_books_reference_do_14'] + data['qty_books_reference_14'] +
-                    data['qty_books_reference_35']
+                data['qty_books_reference_do_14'] + data['qty_books_reference_14'] +
+                data['qty_books_reference_35']
             )
             ws[f'Y{row_num}'] = data['qty_books_reference_do_14']
             ws[f'Z{row_num}'] = data['qty_books_reference_14']
