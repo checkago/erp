@@ -2,6 +2,7 @@ import os
 from collections import defaultdict
 
 from .checks import check_data_fillings
+from .report_generator import generate_visit_report_excel
 from .utils import get_book_totals, get_event_totals, get_all_notes_with_data, get_all_visit_totals, \
     get_all_book_totals, get_all_event_totals, get_visits_totals
 from django.http import HttpResponse
@@ -34,6 +35,18 @@ class CachedViewMixin:
     def as_view(cls, **initkwargs):
         view = super().as_view(**initkwargs)
         return cache_page(60 * 5)(view)
+
+
+@login_required
+def export_visit_reports(request):
+    user = request.user
+    year = 2025
+    month = 2
+    response = generate_visit_report_excel(user, year, month)
+    if response:
+        return response
+    else:
+        return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
 
 
 class DiaryView(LoginRequiredMixin, TemplateView):
