@@ -479,7 +479,7 @@ def generate_book_report_excel(user, year, month):
     ws['R5'] = year_start_data['qty_books_part_yl']
     ws['S5'] = year_start_data['qty_books_part_hl']
     ws['T5'] = year_start_data['qty_books_part_dl']
-    ws['U'] = year_start_data['qty_books_part_other']
+    ws['U5'] = year_start_data['qty_books_part_other']
     ws['V5'] = year_start_data['qty_books_part_audio']
     ws['W5'] = year_start_data['qty_books_part_krai']
     ws['X5'] = year_start_data['qty_books_reference_do_14'] + year_start_data['qty_books_reference_35'] + year_start_data['qty_books_reference_other']
