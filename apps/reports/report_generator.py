@@ -457,37 +457,37 @@ def generate_book_report_excel(user, year, month):
             year_start_data[key] -= current_month_data[key]
 
     # Записываем данные с начала года (без текущего месяца) в строку 6
-    ws['B6'] = year_start_data['qty_books_14'] + year_start_data['qty_books_15_35'] + year_start_data['qty_books_other']
-    ws['C6'] = year_start_data['qty_books_14']
-    ws['D6'] = year_start_data['qty_books_15_35']
-    ws['E6'] = year_start_data['qty_books_other']
-    ws['F6'] = year_start_data['qty_books_invalid']
-    ws['G6'] = year_start_data['qty_books_neb']
-    ws['H6'] = year_start_data['qty_books_prlib']
-    ws['I6'] = year_start_data['qty_books_litres']
-    ws['J6'] = year_start_data['qty_books_consultant']
-    ws['K6'] = year_start_data['qty_books_local_library']
-    ws['L6'] = year_start_data['qty_books_part_opl']
-    ws['M6'] = year_start_data['qty_books_part_enm']
-    ws['N6'] = year_start_data['qty_books_part_tech']
-    ws['O6'] = year_start_data['qty_books_part_sh']
-    ws['P6'] = year_start_data['qty_books_part_si']
-    ws['Q6'] = year_start_data['qty_books_part_yl']
-    ws['R6'] = year_start_data['qty_books_part_hl']
-    ws['S6'] = year_start_data['qty_books_part_dl']
-    ws['T6'] = year_start_data['qty_books_part_other']
-    ws['U6'] = year_start_data['qty_books_part_audio']
-    ws['V6'] = year_start_data['qty_books_part_krai']
-    ws['W6'] = year_start_data['qty_books_reference_do_14']
-    ws['X6'] = year_start_data['qty_books_reference_14']
-    ws['Y6'] = year_start_data['qty_books_reference_35']
-    ws['Z6'] = year_start_data['qty_books_reference_other']
-    ws['AA6'] = year_start_data['qty_books_reference_invalid']
-    ws['AB6'] = year_start_data['qty_books_reference_online']
-    ws['AC6'] = year_start_data['note']
+    ws['B5'] = year_start_data['qty_books_14'] + year_start_data['qty_books_15_35'] + year_start_data['qty_books_other']
+    ws['C5'] = year_start_data['qty_books_14']
+    ws['D5'] = year_start_data['qty_books_15_35']
+    ws['E5'] = year_start_data['qty_books_other']
+    ws['F5'] = year_start_data['qty_books_invalid']
+    ws['G5'] = year_start_data['qty_books_neb']
+    ws['H5'] = year_start_data['qty_books_prlib']
+    ws['I5'] = year_start_data['qty_books_litres']
+    ws['J5'] = year_start_data['qty_books_consultant']
+    ws['K5'] = year_start_data['qty_books_local_library']
+    ws['L5'] = year_start_data['qty_books_part_opl']
+    ws['M5'] = year_start_data['qty_books_part_enm']
+    ws['N5'] = year_start_data['qty_books_part_tech']
+    ws['O5'] = year_start_data['qty_books_part_sh']
+    ws['P5'] = year_start_data['qty_books_part_si']
+    ws['Q5'] = year_start_data['qty_books_part_yl']
+    ws['R5'] = year_start_data['qty_books_part_hl']
+    ws['S5'] = year_start_data['qty_books_part_dl']
+    ws['T5'] = year_start_data['qty_books_part_other']
+    ws['U5'] = year_start_data['qty_books_part_audio']
+    ws['V5'] = year_start_data['qty_books_part_krai']
+    ws['W5'] = year_start_data['qty_books_reference_do_14']
+    ws['X5'] = year_start_data['qty_books_reference_14']
+    ws['Y5'] = year_start_data['qty_books_reference_35']
+    ws['Z5'] = year_start_data['qty_books_reference_other']
+    ws['AA5'] = year_start_data['qty_books_reference_invalid']
+    ws['AB5'] = year_start_data['qty_books_reference_online']
+    ws['AC5'] = year_start_data['note']
 
     # Записываем данные в строку 7 (текущий месяц)
-    row_num = 7
+    row_num = 6
     first_day, first_data = next(iter(sorted(daily_data.items())))
     ws[f'A{row_num}'] = first_day
     ws[f'B{row_num}'] = first_data['qty_books_14'] + first_data['qty_books_15_35'] + first_data['qty_books_other']
@@ -519,13 +519,13 @@ def generate_book_report_excel(user, year, month):
     ws[f'AB{row_num}'] = first_data['qty_books_reference_online']
     ws[f'AC{row_num}'] = first_data['note']
 
-    # Если данных больше, добавляем новые строки ниже строки 7
+    # Если данных больше, добавляем новые строки ниже строки 6
     if len(daily_data) > 1:
         for day, data in sorted(daily_data.items())[1:]:
             row_num += 1
             ws.insert_rows(row_num)  # Вставляем новую строку
             for col in range(1, ws.max_column + 1):
-                ws.cell(row=row_num, column=col)._style = ws.cell(row=7, column=col)._style  # Копируем стили
+                ws.cell(row=row_num, column=col)._style = ws.cell(row=6, column=col)._style  # Копируем стили
 
             ws[f'A{row_num}'] = day
             ws[f'B{row_num}'] = data['qty_books_14'] + data['qty_books_15_35'] + data['qty_books_other']
