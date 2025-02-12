@@ -186,7 +186,7 @@ def generate_visit_report_excel(user, year, month):
     ws[f'E{row_num}'] = first_data['qty_reg_other']
     ws[f'F{row_num}'] = first_data['qty_reg_pensioners']
     ws[f'G{row_num}'] = first_data['qty_reg_invalid']
-    ws[f'I{row_num}'] = first_data['qty_visited_14'] + first_data['qty_visited_15_35'] + first_data['qty_visited_other'] + first_data['qty_visited_online']
+    ws[f'H{row_num}'] = first_data['qty_visited_14'] + first_data['qty_visited_15_35'] + first_data['qty_visited_other'] + first_data['qty_visited_online']
     ws[f'I{row_num}'] = first_data['qty_visited_14']
     ws[f'J{row_num}'] = first_data['qty_visited_15_35']
     ws[f'K{row_num}'] = first_data['qty_visited_other']
