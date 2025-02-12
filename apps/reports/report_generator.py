@@ -129,6 +129,7 @@ def generate_visit_report_excel(user, year, month):
     ws['O6'] = year_start_data['qty_visited_online']
     ws['P6'] = year_start_data['note']
 
+
     # Записываем данные в строку 7 (текущий месяц)
     row_num = 7
     first_day, first_data = next(iter(sorted(daily_data.items())))
