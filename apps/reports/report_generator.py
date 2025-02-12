@@ -119,6 +119,7 @@ def generate_visit_report_excel(user, year, month):
     ws['E6'] = year_start_data['qty_reg_other']
     ws['F6'] = year_start_data['qty_reg_pensioners']
     ws['G6'] = year_start_data['qty_reg_invalid']
+    ws['H6'] = year_start_data['qty_visited_14'] + year_start_data['qty_visited_15_35'] + year_start_data['qty_visited_other'] + year_start_data['qty_visited_online']
     ws['I6'] = year_start_data['qty_visited_14']
     ws['J6'] = year_start_data['qty_visited_15_35']
     ws['K6'] = year_start_data['qty_visited_other']
