@@ -40,7 +40,7 @@ class CachedViewMixin:
 def export_visit_reports(request):
     user = request.user
     year = 2025
-    month = 1
+    month = 2
     response = generate_visit_report_excel(user, year, month)
     if response:
         return response
@@ -51,7 +51,7 @@ def export_visit_reports(request):
 def export_book_reports(request):
     user = request.user
     year = 2025
-    month = 1
+    month = 2
     response = generate_book_report_excel(user, year, month)
     if response:
         return response
