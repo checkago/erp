@@ -5,7 +5,7 @@ from django.urls import path
 from . import views
 from .views import EventListView, DiaryView, EventUpdateView, EventCreateView, BookReportListView, \
     BookReportCreateView, BookReportUpdateView, VisitReportListView, VisitReportCreateView, \
-    VisitReportUpdateView, export_visit_reports, generate_book_report_excel
+    VisitReportUpdateView, generate_book_report_excel
 
 urlpatterns = [
     path('diary/', DiaryView.as_view(), name='diary'),
