@@ -42,7 +42,7 @@ def generate_book_report_excel(request):
     user = request.user
     year = 2025
     month = 2
-    response = generate_visit_report_excel(user, year, month)
+    response = generate_book_report_excel(user, year, month)
     if response:
         return response
     else:
