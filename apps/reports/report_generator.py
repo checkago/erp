@@ -466,10 +466,14 @@ def generate_book_report_excel(user, year, month):
     ws['H5'] = year_start_data['qty_books_litres']
     ws['I5'] = year_start_data['qty_books_consultant']
     ws['K5'] = year_start_data['qty_books_local_library']
-    ws['L5'] = year_start_data['qty_books_part_opl'] + year_start_data['qty_books_part_enm'] + year_start_data['qty_books_part_tech']
-    + year_start_data['qty_books_part_sh'] + year_start_data['qty_books_part_si'] + year_start_data['qty_books_part_yl']
-    (+ year_start_data['qty_books_part_hl'] + year_start_data['qty_books_part_dl'] + year_start_data['qty_books_part_other']
-     + year_start_data['qty_books_part_audio'] + year_start_data['qty_books_part_krai'])
+    ws['L5'] = (
+            year_start_data['qty_books_part_opl'] + year_start_data['qty_books_part_enm'] +
+            year_start_data['qty_books_part_tech'] + year_start_data['qty_books_part_sh'] +
+            year_start_data['qty_books_part_si'] + year_start_data['qty_books_part_yl'] +
+            year_start_data['qty_books_part_hl'] + year_start_data['qty_books_part_dl'] +
+            year_start_data['qty_books_part_other'] + year_start_data['qty_books_part_audio'] +
+            year_start_data['qty_books_part_krai']
+    )
     ws['M5'] = year_start_data['qty_books_part_opl']
     ws['N5'] = year_start_data['qty_books_part_enm']
     ws['O5'] = year_start_data['qty_books_part_tech']
@@ -481,7 +485,10 @@ def generate_book_report_excel(user, year, month):
     ws['U5'] = year_start_data['qty_books_part_other']
     ws['V5'] = year_start_data['qty_books_part_audio']
     ws['W5'] = year_start_data['qty_books_part_krai']
-    ws['X5'] = year_start_data['qty_books_reference_do_14'] + year_start_data['qty_books_reference_35'] + year_start_data['qty_books_reference_other']
+    ws['X5'] = (
+            year_start_data['qty_books_reference_do_14'] + year_start_data['qty_books_reference_35'] +
+            year_start_data['qty_books_reference_other']
+    )
     ws['Y5'] = year_start_data['qty_books_reference_do_14']
     ws['Z5'] = year_start_data['qty_books_reference_14']
     ws['AA5'] = year_start_data['qty_books_reference_35']
@@ -503,9 +510,14 @@ def generate_book_report_excel(user, year, month):
     ws[f'I{row_num}'] = first_data['qty_books_litres']
     ws[f'J{row_num}'] = first_data['qty_books_consultant']
     ws[f'K{row_num}'] = first_data['qty_books_local_library']
-    ws[f'L{row_num}'] = first_data['qty_books_part_opl'] + first_data['qty_books_part_enm'] + first_data['qty_books_part_tech']
-    + first_data['qty_books_part_sh'] + first_data['qty_books_part_si'] + first_data['qty_books_part_yl'] + first_data['qty_books_part_hl']
-    + first_data['qty_books_part_dl'] + first_data['qty_books_part_other'] + first_data['qty_books_part_audio'] + first_data['qty_books_part_krai']
+    ws[f'L{row_num}'] = (
+            first_data['qty_books_part_opl'] + first_data['qty_books_part_enm'] +
+            first_data['qty_books_part_tech'] + first_data['qty_books_part_sh'] +
+            first_data['qty_books_part_si'] + first_data['qty_books_part_yl'] +
+            first_data['qty_books_part_hl'] + first_data['qty_books_part_dl'] +
+            first_data['qty_books_part_other'] + first_data['qty_books_part_audio'] +
+            first_data['qty_books_part_krai']
+    )
     ws[f'M{row_num}'] = first_data['qty_books_part_opl']
     ws[f'N{row_num}'] = first_data['qty_books_part_enm']
     ws[f'O{row_num}'] = first_data['qty_books_part_tech']
@@ -517,7 +529,10 @@ def generate_book_report_excel(user, year, month):
     ws[f'U{row_num}'] = first_data['qty_books_part_other']
     ws[f'V{row_num}'] = first_data['qty_books_part_audio']
     ws[f'W{row_num}'] = first_data['qty_books_part_krai']
-    ws[f'X{row_num}'] = first_data['qty_books_reference_do_14'] + first_data['qty_books_reference_14'] + first_data['qty_books_reference_35']
+    ws[f'X{row_num}'] = (
+            first_data['qty_books_reference_do_14'] + first_data['qty_books_reference_14'] +
+            first_data['qty_books_reference_35']
+    )
     ws[f'Y{row_num}'] = first_data['qty_books_reference_do_14']
     ws[f'Z{row_num}'] = first_data['qty_books_reference_14']
     ws[f'AA{row_num}'] = first_data['qty_books_reference_35']
@@ -544,9 +559,12 @@ def generate_book_report_excel(user, year, month):
             ws[f'I{row_num}'] = data['qty_books_litres']
             ws[f'J{row_num}'] = data['qty_books_consultant']
             ws[f'K{row_num}'] = data['qty_books_local_library']
-            ws[f'L{row_num}'] = data['qty_books_part_opl'] + data['qty_books_part_enm'] + data['qty_books_part_tech']
-            + data['qty_books_part_sh'] + data['qty_books_part_si'] + data['qty_books_part_yl'] + data['qty_books_part_hl']
-            + data['qty_books_part_dl'] + data['qty_books_part_other'] + data['qty_books_part_audio'] + data['qty_books_part_krai']
+            ws[f'L{row_num}'] = (
+                    data['qty_books_part_opl'] + data['qty_books_part_enm'] + data['qty_books_part_tech'] +
+                    data['qty_books_part_sh'] + data['qty_books_part_si'] + data['qty_books_part_yl'] +
+                    data['qty_books_part_hl'] + data['qty_books_part_dl'] + data['qty_books_part_other'] +
+                    data['qty_books_part_audio'] + data['qty_books_part_krai']
+            )
             ws[f'M{row_num}'] = data['qty_books_part_opl']
             ws[f'N{row_num}'] = data['qty_books_part_enm']
             ws[f'O{row_num}'] = data['qty_books_part_tech']
@@ -558,8 +576,10 @@ def generate_book_report_excel(user, year, month):
             ws[f'U{row_num}'] = data['qty_books_part_other']
             ws[f'V{row_num}'] = data['qty_books_part_audio']
             ws[f'W{row_num}'] = data['qty_books_part_krai']
-            ws[f'X{row_num}'] = data['qty_books_reference_do_14'] + data['qty_books_reference_14'] + \
-                                data['qty_books_reference_35']
+            ws[f'X{row_num}'] = (
+                    data['qty_books_reference_do_14'] + data['qty_books_reference_14'] +
+                    data['qty_books_reference_35']
+            )
             ws[f'Y{row_num}'] = data['qty_books_reference_do_14']
             ws[f'Z{row_num}'] = data['qty_books_reference_14']
             ws[f'AA{row_num}'] = data['qty_books_reference_35']
