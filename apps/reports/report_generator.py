@@ -468,8 +468,8 @@ def generate_book_report_excel(user, year, month):
     ws['K5'] = year_start_data['qty_books_local_library']
     ws['L5'] = year_start_data['qty_books_part_opl'] + year_start_data['qty_books_part_enm'] + year_start_data['qty_books_part_tech']
     + year_start_data['qty_books_part_sh'] + year_start_data['qty_books_part_si'] + year_start_data['qty_books_part_yl']
-    + year_start_data['qty_books_part_hl'] + year_start_data['qty_books_part_hl'] + year_start_data['qty_books_part_dl']
-    + year_start_data['qty_books_part_other'] + year_start_data['qty_books_part_audio'] + year_start_data['qty_books_part_krai']
+    (+ year_start_data['qty_books_part_hl'] + year_start_data['qty_books_part_dl'] + year_start_data['qty_books_part_other']
+     + year_start_data['qty_books_part_audio'] + year_start_data['qty_books_part_krai'])
     ws['M5'] = year_start_data['qty_books_part_opl']
     ws['N5'] = year_start_data['qty_books_part_enm']
     ws['O5'] = year_start_data['qty_books_part_tech']
