@@ -16,14 +16,14 @@ def generate_visit_report_excel(user, year, month):
     if not branch:
         return None
 
-    # Фильтруем отчеты по филиалу, году и месяцу
-    visit_reports = VisitReport.objects.filter(
+    # Фильтруем отчеты по филиалу, году и месяцу (текущий месяц)
+    visit_reports_current_month = VisitReport.objects.filter(
         library=branch,
         date__year=year,
         date__month=month
     ).order_by('date')
 
-    # Фильтруем отчеты с начала года до текущего месяца
+    # Фильтруем отчеты с начала года до текущего месяца (включая текущий месяц)
     visit_reports_since_year_start = VisitReport.objects.filter(
         library=branch,
         date__year=year,
@@ -46,7 +46,7 @@ def generate_visit_report_excel(user, year, month):
     # Словарь для агрегации данных по дням (текущий месяц)
     daily_data = {}
 
-    # Словарь для агрегации данных с начала года
+    # Словарь для агрегации данных с начала года (включая текущий месяц)
     year_start_data = {
         'qty_reg_14': 0,
         'qty_reg_15_35': 0,
@@ -63,8 +63,25 @@ def generate_visit_report_excel(user, year, month):
         'note': ''
     }
 
+    # Словарь для агрегации данных за текущий месяц
+    current_month_data = {
+        'qty_reg_14': 0,
+        'qty_reg_15_35': 0,
+        'qty_reg_other': 0,
+        'qty_reg_pensioners': 0,
+        'qty_reg_invalid': 0,
+        'qty_visited_14': 0,
+        'qty_visited_15_35': 0,
+        'qty_visited_other': 0,
+        'qty_visited_pensioners': 0,
+        'qty_visited_invalids': 0,
+        'qty_visited_out_station': 0,
+        'qty_visited_online': 0,
+        'note': ''
+    }
+
     # Агрегируем данные по дням (текущий месяц)
-    for report in visit_reports:
+    for report in visit_reports_current_month:
         date_key = report.date.day
         if date_key not in daily_data:
             daily_data[date_key] = {
@@ -96,7 +113,22 @@ def generate_visit_report_excel(user, year, month):
         daily_data[date_key]['qty_visited_online'] += report.qty_visited_online
         daily_data[date_key]['note'] += report.note + " " if report.note else ""
 
-    # Агрегируем данные с начала года
+        # Собираем данные за текущий месяц
+        current_month_data['qty_reg_14'] += report.qty_reg_14
+        current_month_data['qty_reg_15_35'] += report.qty_reg_15_35
+        current_month_data['qty_reg_other'] += report.qty_reg_other
+        current_month_data['qty_reg_pensioners'] += report.qty_reg_pensioners
+        current_month_data['qty_reg_invalid'] += report.qty_reg_invalid
+        current_month_data['qty_visited_14'] += report.qty_visited_14
+        current_month_data['qty_visited_15_35'] += report.qty_visited_15_35
+        current_month_data['qty_visited_other'] += report.qty_visited_other
+        current_month_data['qty_visited_pensioners'] += report.qty_visited_pensioners
+        current_month_data['qty_visited_invalids'] += report.qty_visited_invalids
+        current_month_data['qty_visited_out_station'] += report.qty_visited_out_station
+        current_month_data['qty_visited_online'] += report.qty_visited_online
+        current_month_data['note'] += report.note + " " if report.note else ""
+
+    # Агрегируем данные с начала года (включая текущий месяц)
     for report in visit_reports_since_year_start:
         year_start_data['qty_reg_14'] += report.qty_reg_14
         year_start_data['qty_reg_15_35'] += report.qty_reg_15_35
@@ -112,7 +144,22 @@ def generate_visit_report_excel(user, year, month):
         year_start_data['qty_visited_online'] += report.qty_visited_online
         year_start_data['note'] += report.note + " " if report.note else ""
 
-    # Записываем данные с начала года в строку 6
+    # Вычитаем данные за текущий месяц из итогов с начала года
+    year_start_data['qty_reg_14'] -= current_month_data['qty_reg_14']
+    year_start_data['qty_reg_15_35'] -= current_month_data['qty_reg_15_35']
+    year_start_data['qty_reg_other'] -= current_month_data['qty_reg_other']
+    year_start_data['qty_reg_pensioners'] -= current_month_data['qty_reg_pensioners']
+    year_start_data['qty_reg_invalid'] -= current_month_data['qty_reg_invalid']
+    year_start_data['qty_visited_14'] -= current_month_data['qty_visited_14']
+    year_start_data['qty_visited_15_35'] -= current_month_data['qty_visited_15_35']
+    year_start_data['qty_visited_other'] -= current_month_data['qty_visited_other']
+    year_start_data['qty_visited_pensioners'] -= current_month_data['qty_visited_pensioners']
+    year_start_data['qty_visited_invalids'] -= current_month_data['qty_visited_invalids']
+    year_start_data['qty_visited_out_station'] -= current_month_data['qty_visited_out_station']
+    year_start_data['qty_visited_online'] -= current_month_data['qty_visited_online']
+    year_start_data['note'] = ""  # Примечания не суммируются
+
+    # Записываем данные с начала года (без текущего месяца) в строку 6
     ws['B6'] = year_start_data['qty_reg_14'] + year_start_data['qty_reg_15_35'] + year_start_data['qty_reg_other']
     ws['C6'] = year_start_data['qty_reg_14']
     ws['D6'] = year_start_data['qty_reg_15_35']
@@ -129,7 +176,6 @@ def generate_visit_report_excel(user, year, month):
     ws['O6'] = year_start_data['qty_visited_online']
     ws['P6'] = year_start_data['note']
 
-
     # Записываем данные в строку 7 (текущий месяц)
     row_num = 7
     first_day, first_data = next(iter(sorted(daily_data.items())))
@@ -140,7 +186,7 @@ def generate_visit_report_excel(user, year, month):
     ws[f'E{row_num}'] = first_data['qty_reg_other']
     ws[f'F{row_num}'] = first_data['qty_reg_pensioners']
     ws[f'G{row_num}'] = first_data['qty_reg_invalid']
-    ws[f'H{row_num}'] = first_data['qty_visited_14'] + first_data['qty_visited_15_35'] + first_data['qty_visited_other'] + first_data['qty_visited_online']
+    ws[f'I{row_num}'] = first_data['qty_visited_14'] + first_data['qty_visited_15_35'] + first_data['qty_visited_other'] + first_data['qty_visited_online']
     ws[f'I{row_num}'] = first_data['qty_visited_14']
     ws[f'J{row_num}'] = first_data['qty_visited_15_35']
     ws[f'K{row_num}'] = first_data['qty_visited_other']
