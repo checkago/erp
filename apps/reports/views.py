@@ -38,7 +38,7 @@ class CachedViewMixin:
 
 
 @login_required
-def export_visit_reports(request):
+def generate_book_report_excel(request):
     user = request.user
     year = 2025
     month = 2
