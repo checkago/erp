@@ -54,17 +54,45 @@ def get_visits_totals(user):
 def get_book_totals(user):
     """Возвращает итоги по книговыдаче для текущего пользователя."""
     today = date.today()
-    employee = Employee.objects.get(user=user)
-    library = employee.branch
+    try:
+        employee = Employee.objects.get(user=user)
+        library = employee.branch
+    except Employee.DoesNotExist:
+        return {
+            'daily': {'loan': {'total_loan': 0}, 'reference': {'total_reference': 0}},
+            'monthly': {'loan': {'total_loan': 0}, 'reference': {'total_reference': 0}},
+            'yearly': {'loan': {'total_loan': 0}, 'reference': {'total_reference': 0}},
+        }
 
-    daily_totals = _aggregate_books(BookReport.objects.filter(date=today, library=library))
-    monthly_totals = _aggregate_books(BookReport.objects.filter(date__month=today.month, date__year=today.year, library=library))
-    yearly_totals = _aggregate_books(BookReport.objects.filter(date__year=today.year, library=library))
+    # Агрегация данных
+    daily_totals = BookReport.objects.filter(date=today, library=library).aggregate(
+        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0) + Sum('qty_books_other', default=0),
+        total_reference=Sum('qty_books_reference_do_14', default=0) + Sum('qty_books_reference_14', default=0) + Sum('qty_books_reference_35', default=0)
+    )
+
+    monthly_totals = BookReport.objects.filter(date__month=today.month, date__year=today.year, library=library).aggregate(
+        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0) + Sum('qty_books_other', default=0),
+        total_reference=Sum('qty_books_reference_do_14', default=0) + Sum('qty_books_reference_14', default=0) + Sum('qty_books_reference_35', default=0)
+    )
+
+    yearly_totals = BookReport.objects.filter(date__year=today.year, library=library).aggregate(
+        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0) + Sum('qty_books_other', default=0),
+        total_reference=Sum('qty_books_reference_do_14', default=0) + Sum('qty_books_reference_14', default=0) + Sum('qty_books_reference_35', default=0)
+    )
 
     return {
-        'daily': daily_totals,
-        'monthly': monthly_totals,
-        'yearly': yearly_totals,
+        'daily': {
+            'loan': {'total_loan': daily_totals['total_loan']},
+            'reference': {'total_reference': daily_totals['total_reference']},
+        },
+        'monthly': {
+            'loan': {'total_loan': monthly_totals['total_loan']},
+            'reference': {'total_reference': monthly_totals['total_reference']},
+        },
+        'yearly': {
+            'loan': {'total_loan': yearly_totals['total_loan']},
+            'reference': {'total_reference': yearly_totals['total_reference']},
+        },
     }
 
 
