@@ -5,7 +5,7 @@ from django.urls import path
 from . import views
 from .views import EventListView, DiaryView, EventUpdateView, EventCreateView, BookReportListView, \
     BookReportCreateView, BookReportUpdateView, VisitReportListView, VisitReportCreateView, \
-    VisitReportUpdateView, export_visit_reports, export_book_reports
+    VisitReportUpdateView, export_visit_reports, export_book_reports, export_events_reports
 
 urlpatterns = [
     path('diary/', DiaryView.as_view(), name='diary'),
@@ -21,6 +21,7 @@ urlpatterns = [
     path('event/update/<int:id>/', EventUpdateView.as_view(), name='event_update'),  # Путь для обновления события
     path('export-visit-reports/', export_visit_reports, name='export_visit_reports'),
     path('export-book-reports/', export_book_reports, name='export_book_reports'),
+    path('export-events-reports/', export_events_reports, name='export_events_reports'),
 
 ]
 

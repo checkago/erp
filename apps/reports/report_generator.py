@@ -1,7 +1,7 @@
 import os
 import openpyxl
 from django.http import HttpResponse
-from .models import VisitReport, BookReport
+from .models import VisitReport, BookReport, Event
 from apps.core.models import Employee, Branch
 from datetime import datetime
 
@@ -596,5 +596,100 @@ def generate_book_report_excel(user, year, month):
     # Сохраняем файл в HttpResponse
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename=book_reports.xlsx'
+    wb.save(response)
+    return response
+
+
+def generate_events_report_excel(user, year, month):
+    # Получаем сотрудника и филиал
+    try:
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+    except Employee.DoesNotExist:
+        return None
+
+    if not branch:
+        return None
+
+    # Фильтруем мероприятия по филиалу, году и месяцу
+    events = Event.objects.filter(
+        library=branch,
+        date__year=year,
+        date__month=month
+    ).order_by('date')
+
+    # Загружаем шаблон
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    template_path = os.path.join(base_dir, 'reports/excell/events_template.xlsx')
+
+    if not os.path.exists(template_path):
+        raise FileNotFoundError(f"File not found: {template_path}")
+
+    wb = openpyxl.load_workbook(filename=template_path)
+    ws = wb.active
+
+    # Устанавливаем год в заголовке (если есть такая ячейка)
+    ws['A1'] = f"Отчет по мероприятиям за {year} год"
+    ws['G1'] = f"{branch}"
+
+    # Рассчитываем данные с начала года (кроме выбранного месяца)
+    events_year = Event.objects.filter(
+        library=branch,
+        date__year=year
+    ).exclude(date__month=month)
+
+    total_quantity_year = sum(event.quantity for event in events_year)
+    total_participants_year = sum(event.age_14 + event.age_35 + event.age_other for event in events_year)
+    total_age_14_year = sum(event.age_14 for event in events_year)
+    total_age_35_year = sum(event.age_35 for event in events_year)
+    total_age_other_year = sum(event.age_other for event in events_year)
+    total_invalids_year = sum(event.invalids for event in events_year)
+    total_pensioners_year = sum(event.pensioners for event in events_year)
+    total_out_of_station_year = sum(event.out_of_station for event in events_year)
+
+    # Записываем данные с начала года в 5-ю строку
+    ws['D5'] = total_quantity_year
+    ws['E5'] = total_participants_year
+    ws['F5'] = total_age_14_year
+    ws['G5'] = total_age_35_year
+    ws['H5'] = total_age_other_year
+    ws['I5'] = total_invalids_year
+    ws['J5'] = total_pensioners_year
+    ws['K5'] = total_out_of_station_year
+
+    # Записываем данные, начиная с 6 строки
+    row_num = 6
+    for event in events:
+        # Вставляем строку *перед* записью данных (кроме первой строки)
+        if row_num > 6:
+            ws.insert_rows(row_num, amount=1)  # Вставляем одну строку
+            for col in range(1, ws.max_column + 1):
+                ws.cell(row=row_num, column=col)._style = ws.cell(row=6, column=col)._style
+
+        # Записываем данные в текущую строку
+        ws[f'A{row_num}'] = event.date.strftime('%d.%m.%Y')  # Дата проведения
+        ws[f'B{row_num}'] = event.name  # Название мероприятия
+        ws[f'C{row_num}'] = event.direction  # Направление
+        ws[f'D{row_num}'] = event.quantity  # Количество мероприятий
+        ws[f'E{row_num}'] = event.age_14 + event.age_35 + event.age_other  # Всего участников
+        ws[f'F{row_num}'] = event.age_14  # Дети (до 14 л.)
+        ws[f'G{row_num}'] = event.age_35  # Молодежь (до 30 л.)
+        ws[f'H{row_num}'] = event.age_other  # Прочие
+        ws[f'I{row_num}'] = event.invalids  # Инвалиды
+        ws[f'J{row_num}'] = event.pensioners  # Пенсионеры
+        ws[f'K{row_num}'] = event.out_of_station  # Внестационар
+        ws[f'L{row_num}'] = event.as_part  # Мероприятие в рамках
+        ws[f'M{row_num}'] = 'X' if event.paid else ''  # Платное
+        ws[f'N{row_num}'] = event.note  # Примечание
+
+        row_num += 1
+
+    # Удаляем последнюю строку, если она пустая
+    if all(ws.cell(row=ws.max_row, column=col).value is None for col in range(1, ws.max_column + 1)):
+        ws.delete_rows(ws.max_row)
+
+    # Сохраняем файл в HttpResponse
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=events_report_.xlsx'
     wb.save(response)
     return response
