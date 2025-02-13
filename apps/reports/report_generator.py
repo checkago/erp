@@ -1,5 +1,5 @@
 import os
-from calendar import calendar
+import calendar
 from urllib.parse import quote
 
 import openpyxl
