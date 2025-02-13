@@ -4,9 +4,12 @@ from urllib.parse import quote
 
 import openpyxl
 from django.http import HttpResponse
+from django.utils.formats import date_format
+
 from .models import VisitReport, BookReport, Event
 from apps.core.models import Employee, Branch
-from datetime import datetime
+from datetime import datetime, date
+
 
 def generate_visit_report_excel(user, year, month):
     # Получаем сотрудника и филиал
@@ -818,7 +821,9 @@ def generate_visit_report(wb, branch, year, month):
     ws['O6'] = year_start_data['qty_visited_online']
 
     # Заполняем данные за текущий месяц
-    ws['A1'] = f"Отчет по посещениям за {month} {year} года"
+    current_date = date(year, month, 1)
+    month_name_ru = date_format(current_date, "F")
+    ws['A1'] = f"Отчет по посещениям за {month_name_ru} {year} года"
     ws['L1'] = f"{branch}"
 
     row_num = 7  # Начинаем с 7 строки (после заголовков)
@@ -929,7 +934,9 @@ def generate_book_report(wb, branch, year, month):
     ws['AC5'] = year_start_data['qty_books_reference_online']
 
     # Заполняем данные за текущий месяц
-    ws['A1'] = f"Отчет по книговыдаче за {month} {year} года"
+    current_date = date(year, month, 1)
+    month_name_ru = date_format(current_date, "F")
+    ws['A1'] = f"Отчет по книговыдаче за {month_name_ru} {year} года"
     ws['U1'] = f"{branch}"
 
     row_num = 6  # Начинаем с 6 строки (после заголовков)
@@ -1014,8 +1021,10 @@ def generate_events_report(wb, branch, year, month):
     ws['J5'] = year_start_data['pensioners']
     ws['K5'] = year_start_data['out_of_station']
 
+    current_date = date(year, month, 1)
+    month_name_ru = date_format(current_date, "F")
     # Заполняем данные за текущий месяц
-    ws['A1'] = f"Отчет по мероприятиям за {month} {year} года"
+    ws['A1'] = f"Отчет по мероприятиям за {month_name_ru} {year} года"
     ws['G1'] = f"{branch}"
 
     row_num = 6  # Начинаем с 7 строки (после заголовков)
