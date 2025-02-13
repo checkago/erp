@@ -44,7 +44,7 @@ def export_visit_reports(request):
 
     # Пытаемся получить месяц из параметра запроса, если его нет - используем текущий месяц
     month = int(request.GET.get('month', current_month))
-    response = generate_visit_report_excel(user, year, current_month)
+    response = generate_visit_report_excel(user, year, month)
     if response:
         return response
     else:
@@ -57,7 +57,7 @@ def export_book_reports(request):
 
     # Пытаемся получить месяц из параметра запроса, если его нет - используем текущий месяц
     month = int(request.GET.get('month', current_month))
-    response = generate_book_report_excel(user, year, current_month)
+    response = generate_book_report_excel(user, year, month)
     if response:
         return response
     else:
@@ -71,7 +71,7 @@ def export_events_reports(request):
     # Пытаемся получить месяц из параметра запроса, если его нет - используем текущий месяц
     month = int(request.GET.get('month', current_month))
 
-    response = generate_events_report_excel(user, year, current_month)
+    response = generate_events_report_excel(user, year, month)
     if response:
         return response
     else:
