@@ -478,7 +478,9 @@ def generate_book_report_excel(user, year, month):
             year_start_data[key] -= current_month_data[key]
 
     # Записываем данные с начала года (без текущего месяца) в строку 5
-    ws['B5'] = year_start_data['qty_books_14'] + year_start_data['qty_books_15_35'] + year_start_data['qty_books_other']
+    ws['B5'] = (year_start_data['qty_books_14'] + year_start_data['qty_books_15_35'] + year_start_data['qty_books_neb']
+                + year_start_data['qty_books_prlib'] + year_start_data['qty_books_litres'] + year_start_data['qty_books_consultant']
+                + year_start_data['qty_books_local_library'])
     ws['C5'] = year_start_data['qty_books_14']
     ws['D5'] = year_start_data['qty_books_15_35']
     ws['E5'] = year_start_data['qty_books_invalid']
