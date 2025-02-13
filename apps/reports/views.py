@@ -49,44 +49,6 @@ def export_all_reports(request):
         return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
 
 
-def export_visit_reports(request):
-    user = request.user
-    year = datetime.now().year  # Получаем текущий год
-
-    # Пытаемся получить месяц из параметра запроса, если его нет - используем текущий месяц
-    month = int(request.GET.get('month'))
-    response = generate_visit_report_excel(user, year, month)
-    if response:
-        return response
-    else:
-        return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
-
-def export_book_reports(request):
-    user = request.user
-    year = datetime.now().year  # Получаем текущий год
-
-    # Пытаемся получить месяц из параметра запроса, если его нет - используем текущий месяц
-    month = int(request.GET.get('month'))
-    response = generate_book_report_excel(user, year, month)
-    if response:
-        return response
-    else:
-        return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
-
-def export_events_reports(request):
-    user = request.user
-    year = datetime.now().year  # Получаем текущий год
-
-    # Пытаемся получить месяц из параметра запроса, если его нет - используем текущий месяц
-    month = int(request.GET.get('month'))
-
-    response = generate_events_report_excel(user, year, month)
-    if response:
-        return response
-    else:
-        return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
-
-
 class DiaryView(LoginRequiredMixin, TemplateView):
     template_name = 'diary.html'  # Укажите путь к вашему шаблону
 

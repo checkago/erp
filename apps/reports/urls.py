@@ -19,9 +19,6 @@ urlpatterns = [
     path('events/', EventListView.as_view(), name='events_list'),
     path('event/create/', EventCreateView.as_view(), name='event_create'),  # Путь для создания события
     path('event/update/<int:id>/', EventUpdateView.as_view(), name='event_update'),  # Путь для обновления события
-    path('export-visit-reports/', export_visit_reports, name='export_visit_reports'),
-    path('export-book-reports/', export_book_reports, name='export_book_reports'),
-    path('export-events-reports/', export_events_reports, name='export_events_reports'),
     path('export-all-reports/', export_all_reports, name='export_all_reports'),
 
 ]
