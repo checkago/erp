@@ -1,4 +1,5 @@
 import os
+from calendar import calendar
 from urllib.parse import quote
 
 import openpyxl
@@ -228,7 +229,8 @@ def generate_visit_report_excel(user, year, month):
 
     # Сохраняем файл в HttpResponse
     # Формируем имя файла
-    filename = f"visit_report_{branch.short_name}_{year}_{month}.xlsx"
+    month_name = calendar.month_name[month]
+    filename = f"visit_report_{branch.short_name}_{year}_{month_name}.xlsx"
 
     # Экранируем имя файла
     safe_filename = quote(filename)
@@ -606,7 +608,8 @@ def generate_book_report_excel(user, year, month):
 
     # Сохраняем файл в HttpResponse
     # Формируем имя файла
-    filename = f"books_report_{branch.short_name}_{year}_{month}.xlsx"
+    month_name = calendar.month_name[month]
+    filename = f"books_report_{branch.short_name}_{year}_{month_name}.xlsx"
 
     # Экранируем имя файла
     safe_filename = quote(filename)
@@ -709,8 +712,9 @@ def generate_events_report_excel(user, year, month):
         ws.delete_rows(ws.max_row)
 
     # Сохраняем файл в HttpResponse
+    month_name = calendar.month_name[month]
     # Формируем имя файла
-    filename = f"event_report_{branch.short_name}_{year}_{month}.xlsx"
+    filename = f"event_report_{branch.short_name}_{year}_{month_name}.xlsx"
 
     # Экранируем имя файла
     safe_filename = quote(filename)
