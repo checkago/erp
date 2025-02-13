@@ -2,8 +2,7 @@ import os
 from collections import defaultdict
 
 from .checks import check_data_fillings
-from .report_generator import generate_visit_report_excel, generate_book_report_excel, generate_events_report_excel, \
-    generate_all_reports_excel
+from .report_generator import generate_all_reports_excel
 from .utils import get_book_totals, get_event_totals, get_all_notes_with_data, get_all_visit_totals, \
     get_all_book_totals, get_all_event_totals, get_visits_totals
 from django.http import HttpResponse
