@@ -1,4 +1,6 @@
 import os
+from urllib.parse import quote
+
 import openpyxl
 from django.http import HttpResponse
 from .models import VisitReport, BookReport, Event
@@ -42,7 +44,7 @@ def generate_visit_report_excel(user, year, month):
 
     # Устанавливаем год в заголовке
     ws[
-        'A1'] = f"УЧЁТ СОСТАВА ПОЛЬЗОВАТЕЛЕЙ И ПОСЕЩАЕМОСТИ БИБЛИОТЕКИ за {year} г."
+        'A1'] = f"УЧЁТ СОСТАВА ПОЛЬЗОВАТЕЛЕЙ И ПОСЕЩАЕМОСТИ БИБЛИОТЕКИ за {month} {year} года"
     ws[
         'L1'] = f"{branch}"
 
@@ -225,8 +227,17 @@ def generate_visit_report_excel(user, year, month):
             ws[f'P{row_num}'] = data['note']
 
     # Сохраняем файл в HttpResponse
+    # Формируем имя файла
+    filename = f"visit_report_{branch.short_name}_{year}_{month}.xlsx"
+
+    # Экранируем имя файла
+    safe_filename = quote(filename)
+
+    # Устанавливаем заголовок Content-Disposition
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=visit_reports.xlsx'
+    response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
+
+    # Сохраняем файл в HttpResponse
     wb.save(response)
     return response
 
@@ -268,7 +279,7 @@ def generate_book_report_excel(user, year, month):
     ws = wb.active
 
     # Устанавливаем год в заголовке
-    ws['A1'] = f"УЧЁТ ВЫДАЧИ ПЕЧАТНЫХ ИЗДАНИЙ, ИЗДАНИЙ НА ДРУГИХ НОСИТЕЛЯХ И СПРАВОЧНО-БИБЛИОГРАФИЧЕСКОЙ РАБОТЫ за {year} г."
+    ws['A1'] = f"УЧЁТ ВЫДАЧИ ПЕЧАТНЫХ ИЗДАНИЙ, ИЗДАНИЙ НА ДРУГИХ НОСИТЕЛЯХ И СПРАВОЧНО-БИБЛИОГРАФИЧЕСКОЙ РАБОТЫ за {month} {year} года"
     ws[
         'U1'] = f"{branch}"
     # Словарь для агрегации данных по дням (текущий месяц)
@@ -594,8 +605,17 @@ def generate_book_report_excel(user, year, month):
             ws[f'AD{row_num}'] = data['note']
 
     # Сохраняем файл в HttpResponse
+    # Формируем имя файла
+    filename = f"books_report_{branch.short_name}_{year}_{month}.xlsx"
+
+    # Экранируем имя файла
+    safe_filename = quote(filename)
+
+    # Устанавливаем заголовок Content-Disposition
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=book_reports.xlsx'
+    response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
+
+    # Сохраняем файл в HttpResponse
     wb.save(response)
     return response
 
@@ -629,7 +649,7 @@ def generate_events_report_excel(user, year, month):
     ws = wb.active
 
     # Устанавливаем год в заголовке (если есть такая ячейка)
-    ws['A1'] = f"Отчет по мероприятиям за {year} год"
+    ws['A1'] = f"Отчет по мероприятиям за {month} {year} года"
     ws['G1'] = f"{branch}"
 
     # Рассчитываем данные с начала года (кроме выбранного месяца)
@@ -689,7 +709,16 @@ def generate_events_report_excel(user, year, month):
         ws.delete_rows(ws.max_row)
 
     # Сохраняем файл в HttpResponse
+    # Формируем имя файла
+    filename = f"event_report_{branch.short_name}_{year}_{month}.xlsx"
+
+    # Экранируем имя файла
+    safe_filename = quote(filename)
+
+    # Устанавливаем заголовок Content-Disposition
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=events_report_.xlsx'
+    response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
+
+    # Сохраняем файл в HttpResponse
     wb.save(response)
     return response

@@ -39,31 +39,39 @@ class CachedViewMixin:
 
 def export_visit_reports(request):
     user = request.user
-    year = 2025
-    month = 2
-    response = generate_visit_report_excel(user, year, month)
+    year = datetime.now().year  # Получаем текущий год
+    current_month = datetime.now().month  # Получаем текущий месяц
+
+    # Пытаемся получить месяц из параметра запроса, если его нет - используем текущий месяц
+    month = int(request.GET.get('month', current_month))
+    response = generate_visit_report_excel(user, year, current_month)
     if response:
         return response
     else:
         return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
-
 
 def export_book_reports(request):
     user = request.user
-    year = 2025
-    month = 2
-    response = generate_book_report_excel(user, year, month)
+    year = datetime.now().year  # Получаем текущий год
+    current_month = datetime.now().month  # Получаем текущий месяц
+
+    # Пытаемся получить месяц из параметра запроса, если его нет - используем текущий месяц
+    month = int(request.GET.get('month', current_month))
+    response = generate_book_report_excel(user, year, current_month)
     if response:
         return response
     else:
         return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
 
-
 def export_events_reports(request):
     user = request.user
-    year = 2025
-    month = 2
-    response = generate_events_report_excel(user, year, month)
+    year = datetime.now().year  # Получаем текущий год
+    current_month = datetime.now().month  # Получаем текущий месяц
+
+    # Пытаемся получить месяц из параметра запроса, если его нет - используем текущий месяц
+    month = int(request.GET.get('month', current_month))
+
+    response = generate_events_report_excel(user, year, current_month)
     if response:
         return response
     else:
@@ -156,7 +164,7 @@ class EventListView(LoginRequiredMixin, TemplateView):
         employee = Employee.objects.get(user=user)
 
         # Получаем события за последние 15 дней
-        date_30_days_ago = timezone.now() - timedelta(days=30)
+        date_30_days_ago = timezone.now() - timedelta(days=60)
         events = Event.objects.filter(date__gte=date_30_days_ago, library=employee.branch).order_by('-date')
 
         # Подготавливаем данные для графика
@@ -256,7 +264,7 @@ class VisitReportListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         employee = Employee.objects.get(user=user)
-        date_30_days_ago = timezone.now() - timedelta(days=30)
+        date_30_days_ago = timezone.now() - timedelta(days=60)
         return VisitReport.objects.filter(date__gte=date_30_days_ago, library=employee.branch).order_by('-date')
 
     def get_context_data(self, **kwargs):
@@ -406,7 +414,7 @@ class BookReportListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         employee = Employee.objects.get(user=user)
-        date_30_days_ago = timezone.now() - timedelta(days=30)
+        date_30_days_ago = timezone.now() - timedelta(days=60)
         return BookReport.objects.filter(date__gte=date_30_days_ago, library=employee.branch).order_by('-date')
 
     def get_context_data(self, **kwargs):
