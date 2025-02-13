@@ -182,8 +182,9 @@ def generate_book_report(wb, branch, year, month):
     # Записываем данные с начала года в строку 5
     ws['B5'] = (
             year_start_data['qty_books_14'] + year_start_data['qty_books_15_35'] + year_start_data['qty_books_other'] +
-            year_start_data['qty_books_neb'] + year_start_data['qty_books_prlib'] + year_start_data['qty_books_prlib'] +
-            year_start_data['qty_books_litres'] + year_start_data['qty_books_consultant'] + year_start_data['qty_books_local_library']
+            year_start_data['qty_books_neb'] + year_start_data['qty_books_prlib'] +
+            year_start_data['qty_books_litres'] + year_start_data['qty_books_consultant'] +
+            year_start_data['qty_books_local_library']
     )
     ws['C5'] = year_start_data['qty_books_14']
     ws['D5'] = year_start_data['qty_books_15_35']
@@ -198,9 +199,9 @@ def generate_book_report(wb, branch, year, month):
             year_start_data['qty_books_part_opl'] + year_start_data['qty_books_part_enm'] +
             year_start_data['qty_books_part_tech'] + year_start_data['qty_books_part_sh'] +
             year_start_data['qty_books_part_si'] + year_start_data['qty_books_part_yl'] +
-            year_start_data['qty_books_part_yl'] + year_start_data['qty_books_part_hl'] +
-            year_start_data['qty_books_part_dl'] + year_start_data['qty_books_part_other'] +
-            year_start_data['qty_books_part_audio'] + year_start_data['qty_books_part_krai']
+            year_start_data['qty_books_part_hl'] + year_start_data['qty_books_part_dl'] +
+            year_start_data['qty_books_part_other'] + year_start_data['qty_books_part_audio'] +
+            year_start_data['qty_books_part_krai']
     )
     ws['M5'] = year_start_data['qty_books_part_opl']
     ws['N5'] = year_start_data['qty_books_part_enm']
@@ -236,7 +237,10 @@ def generate_book_report(wb, branch, year, month):
 
         # Записываем данные в текущую строку
         ws[f'A{row_num}'] = report.date.strftime('%d.%m.%Y')
-        ws[f'B{row_num}'] = report.qty_books_14 + report.qty_books_15_35 + report.qty_books_other
+        ws[f'B{row_num}'] = (
+                report.qty_books_14 + report.qty_books_15_35 + report.qty_books_other + report.qty_books_neb +
+                report.qty_books_prlib + report.qty_books_litres + report.qty_books_consultant + report.qty_books_local_library
+        )
         ws[f'C{row_num}'] = report.qty_books_14
         ws[f'D{row_num}'] = report.qty_books_15_35
         ws[f'E{row_num}'] = report.qty_books_other
@@ -246,9 +250,12 @@ def generate_book_report(wb, branch, year, month):
         ws[f'I{row_num}'] = report.qty_books_litres
         ws[f'J{row_num}'] = report.qty_books_consultant
         ws[f'K{row_num}'] = report.qty_books_local_library
-        ws[f'L{row_num}'] = (report.qty_books_part_opl + report.qty_books_part_enm + report.qty_books_part_tech + report.qty_books_part_sh
-                             + report.qty_books_part_si + report.qty_books_part_yl + report.qty_books_part_hl + report.qty_books_part_dl
-                             + report.qty_books_part_other + report.qty_books_part_audio + report.qty_books_part_krai)
+        ws[f'L{row_num}'] = (
+                report.qty_books_part_opl + report.qty_books_part_enm + report.qty_books_part_tech +
+                report.qty_books_part_sh + report.qty_books_part_si + report.qty_books_part_yl +
+                report.qty_books_part_hl + report.qty_books_part_dl + report.qty_books_part_other +
+                report.qty_books_part_audio + report.qty_books_part_krai
+        )
         ws[f'M{row_num}'] = report.qty_books_part_opl
         ws[f'N{row_num}'] = report.qty_books_part_enm
         ws[f'O{row_num}'] = report.qty_books_part_tech
