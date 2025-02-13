@@ -478,9 +478,12 @@ def generate_book_report_excel(user, year, month):
             year_start_data[key] -= current_month_data[key]
 
     # Записываем данные с начала года (без текущего месяца) в строку 5
-    ws['B5'] = (year_start_data['qty_books_14'] + year_start_data['qty_books_15_35'] + year_start_data['qty_books_neb']
-                + year_start_data['qty_books_prlib'] + year_start_data['qty_books_litres'] + year_start_data['qty_books_consultant']
-                + year_start_data['qty_books_local_library'])
+    ws['B5'] = (
+            year_start_data['qty_books_14'] + year_start_data['qty_books_15_35'] +
+            year_start_data['qty_books_neb'] + year_start_data['qty_books_prlib'] +
+            year_start_data['qty_books_litres'] + year_start_data['qty_books_consultant'] +
+            year_start_data['qty_books_local_library']
+    )
     ws['C5'] = year_start_data['qty_books_14']
     ws['D5'] = year_start_data['qty_books_15_35']
     ws['E5'] = year_start_data['qty_books_invalid']
@@ -903,7 +906,11 @@ def generate_book_report(wb, branch, year, month):
     }
 
     # Записываем данные с начала года в строку 5
-    ws['B5'] = year_start_data['qty_books_14'] + year_start_data['qty_books_15_35'] + year_start_data['qty_books_other']
+    ws['B5'] = (
+            year_start_data['qty_books_14'] + year_start_data['qty_books_15_35'] + year_start_data['qty_books_other'] +
+            year_start_data['qty_books_neb'] + year_start_data['qty_books_prlib'] + year_start_data['qty_books_prlib'] +
+            year_start_data['qty_books_litres'] + year_start_data['qty_books_consultant'] + year_start_data['qty_books_local_library']
+    )
     ws['C5'] = year_start_data['qty_books_14']
     ws['D5'] = year_start_data['qty_books_15_35']
     ws['E5'] = year_start_data['qty_books_other']
@@ -913,10 +920,14 @@ def generate_book_report(wb, branch, year, month):
     ws['I5'] = year_start_data['qty_books_litres']
     ws['J5'] = year_start_data['qty_books_consultant']
     ws['K5'] = year_start_data['qty_books_local_library']
-    ws['L5'] = year_start_data['qty_books_part_opl'] + year_start_data['qty_books_part_enm'] + year_start_data['qty_books_part_tech']
-    + year_start_data['qty_books_part_sh'] + year_start_data['qty_books_part_si'] + year_start_data['qty_books_part_yl']
-    + year_start_data['qty_books_part_yl'] + year_start_data['qty_books_part_hl'] + year_start_data['qty_books_part_dl']
-    + year_start_data['qty_books_part_other'] + year_start_data['qty_books_part_audio'] + year_start_data['qty_books_part_krai']
+    ws['L5'] = (
+            year_start_data['qty_books_part_opl'] + year_start_data['qty_books_part_enm'] +
+            year_start_data['qty_books_part_tech'] + year_start_data['qty_books_part_sh'] +
+            year_start_data['qty_books_part_si'] + year_start_data['qty_books_part_yl'] +
+            year_start_data['qty_books_part_yl'] + year_start_data['qty_books_part_hl'] +
+            year_start_data['qty_books_part_dl'] + year_start_data['qty_books_part_other'] +
+            year_start_data['qty_books_part_audio'] + year_start_data['qty_books_part_krai']
+    )
     ws['M5'] = year_start_data['qty_books_part_opl']
     ws['N5'] = year_start_data['qty_books_part_enm']
     ws['O5'] = year_start_data['qty_books_part_tech']
