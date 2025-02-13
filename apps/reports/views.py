@@ -1,13 +1,10 @@
-import os
 from collections import defaultdict
 
 from .checks import check_data_fillings
 from .report_generator import generate_all_reports_excel
-from .utils import get_book_totals, get_event_totals, get_all_notes_with_data, get_all_visit_totals, \
+from .utils import get_book_totals, get_event_totals, get_all_visit_totals, \
     get_all_book_totals, get_all_event_totals, get_visits_totals
 from django.http import HttpResponse
-from openpyxl import load_workbook
-from openpyxl.styles import Font
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -49,44 +46,7 @@ def export_all_reports(request):
 
 
 class DiaryView(LoginRequiredMixin, TemplateView):
-    template_name = 'diary.html'  # Укажите путь к вашему шаблону
-
-    def get(self, request, *args, **kwargs):
-        if 'export_to_excel' in request.GET:
-            return self.export_to_excel()
-        return super().get(request, *args, **kwargs)
-
-    def export_to_excel(self):
-        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        template_path = os.path.join(base_dir, 'reports/template.xlsx')
-
-        if not os.path.exists(template_path):
-            raise FileNotFoundError(f"File not found: {template_path}")
-
-        wb = load_workbook(filename=template_path)
-        ws = wb.active
-
-        # Данные мероприятий
-        row = 2  # Предполагается, что заголовки уже есть в шаблоне
-        for event in Event.objects.all():
-            ws.cell(row=row, column=1, value=event.date)
-            ws.cell(row=row, column=2, value=event.name)
-            ws.cell(row=row, column=3, value=event.get_direction_display())
-            ws.cell(row=row, column=4, value=event.quantity)
-            ws.cell(row=row, column=5, value=event.age_14)
-            ws.cell(row=row, column=6, value=event.age_35)
-            ws.cell(row=row, column=7, value=event.age_other)
-            ws.cell(row=row, column=8, value=event.invalids)
-            ws.cell(row=row, column=9, value=event.out_of_station)
-            ws.cell(row=row, column=10, value=event.get_as_part_display())
-            ws.cell(row=row, column=11, value='Да' if event.paid else 'Нет')
-            ws.cell(row=row, column=12, value=event.note)
-            row += 1
-
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=events.xlsx'
-        wb.save(response)
-        return response
+    template_name = 'diary.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -96,13 +56,9 @@ class DiaryView(LoginRequiredMixin, TemplateView):
         context['events'] = Event.objects.all()
         context['form'] = EventForm()
         user = self.request.user
-        totals_visits_branch = get_visits_totals(user)
-        totals_books_branch = get_book_totals(user)
-        totals_event_branch = get_event_totals(user)
-        context['totals_visits_branch'] = totals_visits_branch
-        context['totals_books_branch'] = totals_books_branch
-        context['totals_event_branch'] = totals_event_branch
-        context['notes'] = get_all_notes_with_data(user)
+        context['totals_visits_branch'] = get_visits_totals(user)
+        context['totals_books_branch'] = get_book_totals(user)
+        context['totals_event_branch'] = get_event_totals(user)
         return context
 
 

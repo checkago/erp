@@ -43,9 +43,19 @@
                             <div class="col">
                                 <h6>Книговыдача</h6>
                                 <ul>
-                                    <li class="mb-3">За сегодня: {% if totals_books_branch.daily.loan.total_loan %}<strong>{{ totals_books_branch.daily.loan.total_loan }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
-                                    <li class="mb-3">За месяц: <strong>{{ totals_books_branch.monthly.loan.total_loan }}</strong></li>
-                                    <li class="mb-3">С начала года: <strong>{{ totals_books_branch.yearly.loan.total_loan }}</strong></li>
+                                    <li class="mb-3">За сегодня:
+                                        {% if totals_books_branch.daily.loan.total_loan %}
+                                            <strong>{{ totals_books_branch.daily.loan.total_loan }}</strong>
+                                        {% else %}
+                                            <strong>Данных нет</strong>
+                                        {% endif %}
+                                    </li>
+                                    <li class="mb-3">За месяц:
+                                        <strong>{{ totals_books_branch.monthly.loan.total_loan }}</strong>
+                                    </li>
+                                    <li class="mb-3">С начала года:
+                                        <strong>{{ totals_books_branch.yearly.loan.total_loan }}</strong>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="col">
