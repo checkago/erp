@@ -40,10 +40,9 @@ class CachedViewMixin:
 def export_visit_reports(request):
     user = request.user
     year = datetime.now().year  # Получаем текущий год
-    current_month = datetime.now().month  # Получаем текущий месяц
 
     # Пытаемся получить месяц из параметра запроса, если его нет - используем текущий месяц
-    month = int(request.GET.get('month', current_month))
+    month = int(request.GET.get('month'))
     response = generate_visit_report_excel(user, year, month)
     if response:
         return response
@@ -53,10 +52,9 @@ def export_visit_reports(request):
 def export_book_reports(request):
     user = request.user
     year = datetime.now().year  # Получаем текущий год
-    current_month = datetime.now().month  # Получаем текущий месяц
 
     # Пытаемся получить месяц из параметра запроса, если его нет - используем текущий месяц
-    month = int(request.GET.get('month', current_month))
+    month = int(request.GET.get('month'))
     response = generate_book_report_excel(user, year, month)
     if response:
         return response
@@ -66,10 +64,9 @@ def export_book_reports(request):
 def export_events_reports(request):
     user = request.user
     year = datetime.now().year  # Получаем текущий год
-    current_month = datetime.now().month  # Получаем текущий месяц
 
     # Пытаемся получить месяц из параметра запроса, если его нет - используем текущий месяц
-    month = int(request.GET.get('month', current_month))
+    month = int(request.GET.get('month'))
 
     response = generate_events_report_excel(user, year, month)
     if response:
