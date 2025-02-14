@@ -119,12 +119,23 @@
                                 <td>{{ report.qty_books_reference_online }}</td>
 
                                 <!-- Примечание и изменение -->
-                                <td><a class="float-end ml-3" href="{% url 'books_delete' report.id %}" onclick="return confirm('Вы уверены, что хотите удалить эту запись книговыдачи?')">
+                                <td>
+                                {% if is_editable %}
+                                    <a class="float-end ml-3" href="{% url 'books_delete' report.id %}" onclick="return confirm('Вы уверены, что хотите удалить эту запись книговыдачи?')">
                                         <i class="text-danger" data-feather="trash-2"></i>
                                     </a>
                                     <a class="" href="{% url 'books_update' report.id %}">
                                         <i data-feather="edit"></i>
-                                    </a></td>
+                                    </a>
+                                {% else %}
+                                    <span class="float-end ml-3" style="cursor: not-allowed; color: gray;">
+                                        <i class="text-danger" data-feather="trash-2"></i>
+                                    </span>
+                                    <span style="color: text;">
+                                        <i data-feather="edit"></i>
+                                    </span>
+                                {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
