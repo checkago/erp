@@ -1,7 +1,5 @@
 from collections import defaultdict
 
-from django.core.exceptions import PermissionDenied
-
 from .checks import check_data_fillings
 from .report_generator import generate_all_reports_excel
 from .utils import get_book_totals, get_event_totals, get_all_visit_totals, \
@@ -559,10 +557,6 @@ class BookReportUpdateView(LoginRequiredMixin, UpdateView):
         return kwargs
 
     def form_valid(self, form):
-        # Проверка, что запись создана в текущем месяце
-        if form.instance.date.month != timezone.now().month or form.instance.date.year != timezone.now().year:
-            raise PermissionDenied("Вы не можете редактировать записи, созданные не в этом месяце.")
-
         form.instance.library = Employee.objects.get(user=self.request.user).branch
         return super().form_valid(form)
 
@@ -573,10 +567,8 @@ class BookReportUpdateView(LoginRequiredMixin, UpdateView):
 class BookReportDeleteView(LoginRequiredMixin, View):
     def get(self, request, id):
         book = get_object_or_404(BookReport, id=id)
-
-        # Проверка, что запись создана в текущем месяце
-        if book.date.month != timezone.now().month or book.date.year != timezone.now().year:
-            raise PermissionDenied("Вы не можете удалять записи, созданные не в этом месяце.")
-
+        # Добавьте проверку прав, если нужно (например, что только автор может удалять)
+        # if event.author != request.user:
+        #     return HttpResponseForbidden("У вас нет прав на удаление этого мероприятия.")
         book.delete()
         return redirect(reverse_lazy('books_list')) # Перенаправляем на список мероприятий
