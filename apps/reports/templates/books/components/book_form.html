@@ -173,22 +173,18 @@
                                     {{ form.qty_books_reference_invalid }}
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="id_qty_books_reference_online" class="form-label">Удаленно (Из общ. числа)</label>
+                                    <label for="id_qty_books_reference_online" class="form-label">Удаленно</label>
                                     {{ form.qty_books_reference_online }}
                                 </div>
                             </div>
                             <hr class="text-primary">
                             <div class="row">
-                                <div id="total-references-sum" class="col-4 text-center">
+                                <div id="total-references-sum" class="col-6 text-center">
                                     <h6>Общее число:</h6>
                                     <h5 class="text-danger"><span>0</span></h5>
                                 </div>
-                                <div id="inv_references_sum" class="col-4 text-center">
+                                <div id="inv_references_sum" class="col-6 text-center">
                                     <h6>Инв. из общего числа:</h6>
-                                    <h5 class="text-danger"><span>0</span></h5>
-                                </div>
-                                <div id="inv_online_references_sum" class="col-4 text-center">
-                                    <h6>Удаленно из общего числа:</h6>
                                     <h5 class="text-danger"><span>0</span></h5>
                                 </div>
                             </div>
@@ -353,8 +349,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const qtyReferences14 = parseFloat(document.getElementById('id_qty_books_reference_do_14').value) || 0;
         const qtyReferences15_35 = parseFloat(document.getElementById('id_qty_books_reference_14').value) || 0;
         const qtyReferencesOther = parseFloat(document.getElementById('id_qty_books_reference_35').value) || 0;
+        const qtyReferencesOnline = parseFloat(document.getElementById('id_qty_books_reference_online').value) || 0;
 
-        const totalSum = qtyReferences14 + qtyReferences15_35 + qtyReferencesOther;
+        const totalSum = qtyReferences14 + qtyReferences15_35 + qtyReferencesOther + qtyReferencesOnline;
         document.getElementById('total-references-sum').querySelector('span').textContent = totalSum;
     }
 
@@ -362,6 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('id_qty_books_reference_do_14').addEventListener('input', calculateSum);
     document.getElementById('id_qty_books_reference_14').addEventListener('input', calculateSum);
     document.getElementById('id_qty_books_reference_35').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_books_reference_online').addEventListener('input', calculateSum);
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
@@ -378,22 +376,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Назначение обработчиков событий на поля ввода
     document.getElementById('id_qty_books_reference_invalid').addEventListener('input', calculateSum);
-
-    // Вызов функции при загрузке страницы для отображения начальной суммы
-    calculateSum();
-  </script>
-
-<script>
-    // Функция для вычисления суммы
-    function calculateSum() {
-        const qtyReferencesOnline = parseFloat(document.getElementById('id_qty_books_reference_online').value) || 0;
-
-        const totalSum = qtyReferencesOnline;
-        document.getElementById('inv_online_references_sum').querySelector('span').textContent = totalSum;
-    }
-
-    // Назначение обработчиков событий на поля ввода
-    document.getElementById('id_qty_books_reference_online').addEventListener('input', calculateSum);
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
