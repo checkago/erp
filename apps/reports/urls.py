@@ -5,7 +5,7 @@ from django.urls import path
 from . import views
 from .views import EventListView, DiaryView, EventUpdateView, EventCreateView, BookReportListView, \
     BookReportCreateView, BookReportUpdateView, VisitReportListView, VisitReportCreateView, \
-    VisitReportUpdateView, export_all_reports
+    VisitReportUpdateView, export_all_reports, EventDeleteView, VisitDeleteView, BookReportDeleteView
 
 urlpatterns = [
     path('diary/', DiaryView.as_view(), name='diary'),
@@ -13,12 +13,15 @@ urlpatterns = [
     path('visits/', VisitReportListView.as_view(), name='visits_list'),
     path('visits/create/', VisitReportCreateView.as_view(), name='visits_create'),
     path('visits/update/<int:pk>/', VisitReportUpdateView.as_view(), name='visits_update'),
+    path('visits/delete/<int:id>/', VisitDeleteView.as_view(), name='visits_delete'),
     path('books/', BookReportListView.as_view(), name='books_list'),
     path('books/create/', BookReportCreateView.as_view(), name='books_create'),
     path('books/update/<int:pk>/', BookReportUpdateView.as_view(), name='books_update'),
+    path('books/delete/<int:id>/', BookReportDeleteView.as_view(), name='books_delete'),
     path('events/', EventListView.as_view(), name='events_list'),
     path('event/create/', EventCreateView.as_view(), name='event_create'),  # Путь для создания события
     path('event/update/<int:id>/', EventUpdateView.as_view(), name='event_update'),  # Путь для обновления события
+    path('event/delete/<int:id>/', EventDeleteView.as_view(), name='event_delete'),
     path('export-all-reports/', export_all_reports, name='export_all_reports'),
 
 ]

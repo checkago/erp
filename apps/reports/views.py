@@ -182,6 +182,16 @@ class EventUpdateView(LoginRequiredMixin, View):
         return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
 
 
+class EventDeleteView(LoginRequiredMixin, View):
+    def get(self, request, id):
+        event = get_object_or_404(Event, id=id)
+        # Добавьте проверку прав, если нужно (например, что только автор может удалять)
+        # if event.author != request.user:
+        #     return HttpResponseForbidden("У вас нет прав на удаление этого мероприятия.")
+        event.delete()
+        return redirect(reverse_lazy('events_list')) # Перенаправляем на список мероприятий
+
+
 class VisitReportListView(LoginRequiredMixin, ListView):
     model = VisitReport
     template_name = 'visits/visits_list.html'
@@ -330,6 +340,16 @@ class VisitReportUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('visits_list')
+
+
+class VisitDeleteView(LoginRequiredMixin, View):
+    def get(self, request, id):
+        visit = get_object_or_404(VisitReport, id=id)
+        # Добавьте проверку прав, если нужно (например, что только автор может удалять)
+        # if event.author != request.user:
+        #     return HttpResponseForbidden("У вас нет прав на удаление этого мероприятия.")
+        visit.delete()
+        return redirect(reverse_lazy('visits_list')) # Перенаправляем на список мероприятий
 
 
 class BookReportListView(LoginRequiredMixin, ListView):
@@ -542,3 +562,13 @@ class BookReportUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('books_list')
+
+
+class BookReportDeleteView(LoginRequiredMixin, View):
+    def get(self, request, id):
+        book = get_object_or_404(BookReport, id=id)
+        # Добавьте проверку прав, если нужно (например, что только автор может удалять)
+        # if event.author != request.user:
+        #     return HttpResponseForbidden("У вас нет прав на удаление этого мероприятия.")
+        book.delete()
+        return redirect(reverse_lazy('books_list')) # Перенаправляем на список мероприятий

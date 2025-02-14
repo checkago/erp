@@ -67,7 +67,10 @@
                                 <th>{{ Event.as_part}}</th>
                                 <th>{% if Event.paid == True %}<i class="fa fa-ruble fa-2x"></i>{% else %}{% endif %}</th>
                                 <th>
-                                    <a class="float-end" href="{% url 'event_update' Event.id %}">
+                                    <a class="float-end ml-3" href="{% url 'event_delete' Event.id %}" onclick="return confirm('Вы уверены, что хотите удалить это мероприятие?')">
+                                        <i class="text-danger" data-feather="trash-2"></i>
+                                    </a>
+                                    <a class="" href="{% url 'event_update' Event.id %}">
                                         <i data-feather="edit"></i>
                                     </a>
                                 </th>

@@ -79,7 +79,10 @@
                                 <td>{{ visit.qty_visited_prlib }}</td>
                                 <td>{{ visit.qty_visited_litres }}</td>
                                 <td>
-                                    <a class="float-end" href="{% url 'visits_update' visit.id %}">
+                                    <a class="float-end ml-3" href="{% url 'visits_delete' visit.id %}" onclick="return confirm('Вы уверены, что хотите удалить это мероприятие?')">
+                                        <i class="text-danger" data-feather="trash-2"></i>
+                                    </a>
+                                    <a class="" href="{% url 'visits_update' visit.id %}">
                                         <i data-feather="edit"></i>
                                     </a>
                                 </td>
