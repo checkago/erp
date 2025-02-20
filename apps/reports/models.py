@@ -1,4 +1,4 @@
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 from apps.core.models import Branch, Cafedra
@@ -152,3 +152,137 @@ class BookReport(models.Model):
         return f"{self.library}"
 
 
+class VisitPlan(models.Model):
+    year = models.PositiveIntegerField(
+        validators=[MinValueValidator(2000), MaxValueValidator(2100)],
+        verbose_name='Год'
+    )
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Филиал')
+    total_visits = models.IntegerField(verbose_name='Количество')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['year', 'library', 'total_visits'],
+                name='unique_year_library_total_visits'
+            )
+        ]
+        verbose_name = 'План посещаемости год'
+        verbose_name_plural = 'Планы посещаемости на год'
+
+    def __str__(self):
+        return f"{self.library} ({self.year})"
+
+
+class BookPlan(models.Model):
+    year = models.PositiveIntegerField(
+        validators=[MinValueValidator(2000), MaxValueValidator(2100)],
+        verbose_name='Год'
+    )
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Филиал')
+    total_books = models.IntegerField(verbose_name='Количество')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['year', 'library', 'total_books'],
+                name='unique_year_library_total_books'
+            )
+        ]
+        verbose_name = 'План книговыдачи на год'
+        verbose_name_plural = 'Планы книговыдачи на год'
+
+    def __str__(self):
+        return f"{self.library} ({self.year})"
+
+
+class EventsPlan(models.Model):
+    year = models.PositiveIntegerField(
+        validators=[MinValueValidator(2000), MaxValueValidator(2100)],
+        verbose_name='Год'
+    )
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Филиал')
+    total_events = models.IntegerField(verbose_name='Количество')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['year', 'library', 'total_events'],
+                name='unique_year_library_total_events'
+            )
+        ]
+        verbose_name = 'План мероприятий на год'
+        verbose_name_plural = 'Планы мероприятий на год'
+
+    def __str__(self):
+        return f"{self.library} ({self.year})"
+
+
+class RegsPlan(models.Model):
+    year = models.PositiveIntegerField(
+        validators=[MinValueValidator(2000), MaxValueValidator(2100)],
+        verbose_name='Год'
+    )
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Филиал')
+    total_regs = models.IntegerField(verbose_name='Количество')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['year', 'library', 'total_regs'],
+                name='unique_year_library_total_regs'
+            )
+        ]
+        verbose_name = 'План регистраций на год'
+        verbose_name_plural = 'Планы регистраций на год'
+
+    def __str__(self):
+        return f"{self.library} ({self.year})"
+
+
+class RegsFirstData(models.Model):
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Филиал')
+    data = models.IntegerField(verbose_name='Количество')
+
+    class Meta:
+        verbose_name = 'Начальные данные по регистрациям'
+        verbose_name_plural = 'Начальные данные по регистрациям'
+
+    def __str__(self):
+        return f"{self.library}"
+
+
+class VisitsFirstData(models.Model):
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Филиал')
+    data = models.IntegerField(verbose_name='Количество')
+
+    class Meta:
+        verbose_name = 'Начальные данные по посещениям'
+        verbose_name_plural = 'Начальные данные по посещениям'
+
+    def __str__(self):
+        return f"{self.library}"
+
+
+class EventsFirstData(models.Model):
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Филиал')
+    data = models.IntegerField(verbose_name='Количество')
+
+    class Meta:
+        verbose_name = 'Начальные данные по мероприятиям'
+        verbose_name_plural = 'Начальные данные по мероприятиям'
+
+    def __str__(self):
+        return f"{self.library}"
+
+
+class BooksFirstData(models.Model):
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, verbose_name='Филиал')
+    data = models.IntegerField(verbose_name='Количество')
+
+    class Meta:
+        verbose_name = 'Начальные данные по книговыдаче'
+        verbose_name_plural = 'Начальные данные по книговыдаче'
+
+    def __str__(self):
+        return f"{self.library}"
