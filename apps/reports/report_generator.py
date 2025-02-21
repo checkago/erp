@@ -3,9 +3,9 @@ import calendar
 from urllib.parse import quote
 
 import openpyxl
-from django.db import models
 from django.http import HttpResponse
 from django.utils.formats import date_format
+from openpyxl import load_workbook
 
 from .models import VisitReport, BookReport, Event, VisitsFirstData, EventsFirstData, VisitPlan, EventsPlan
 from apps.core.models import Employee, Branch
@@ -350,142 +350,189 @@ def generate_events_report(wb, branch, year, month):
 
 def generate_quarter_excel(user, year, quarter):
     try:
-        # Получаем филиал текущего пользователя
-        branch = Branch.objects.get(id=user.employee.branch.id)
-    except AttributeError:
-        return None  # Если пользователь не связан с сотрудником
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+    except Employee.DoesNotExist:
+        return None
 
+    if not branch:
+        return None
+
+    # Загрузка шаблона
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     template_path = os.path.join(base_dir, 'reports/excell/report_quarter_template.xlsx')
 
     if not os.path.exists(template_path):
         raise FileNotFoundError(f"File not found: {template_path}")
 
-    wb = openpyxl.load_workbook(filename=template_path)
+    wb = load_workbook(filename=template_path)
     ws = wb.active
 
-    # Заполняем шапку отчета
-    ws['E3'] = f'Значение показателя в {quarter} квартале {year} года'
-    ws['C3'] = f'Данные статистики по посещаемости по итогам {year - 1} года'
-    ws['D3'] = f'Значение целевого показателя за {year} год план'
+    # Динамическое заполнение заголовков
+    ws['E3'] = f"Значение показателя в {quarter} квартале {year} года"
+    ws['C3'] = f"Данные статистики по посещаемости по итогам {year - 1} года"
+    ws['D3'] = f"Значение целевого показателя за {year} год план"
+    ws['W3'] = f"итого за {quarter}-й квартал {year}"
+
+    # Полное наименование филиала
     ws['B7'] = branch.full_name
 
-    # Заполняем данные за предыдущий год
-    previous_year_data = (
-        VisitReport.objects.filter(library=branch, date__year=year - 1).aggregate(
-            total_visited_14=models.Sum('qty_visited_14'),
-            total_visited_15_35=models.Sum('qty_visited_15_35'),
-            total_visited_other=models.Sum('qty_visited_other'),
-            total_visited_online=models.Sum('qty_visited_online'),
-            total_visited_prlib=models.Sum('qty_visited_prlib'),
-            total_visited_litres=models.Sum('qty_visited_litres'),
-            total_visited_out_station=models.Sum('qty_visited_out_station'),
-        )
+    # Данные за предыдущий год
+    previous_year = year - 1
+    total_prev_year = get_total_previous_year(branch, previous_year)
+    ws['C7'] = total_prev_year
+
+    # Плановые показатели за текущий год
+    total_plan = get_total_plan(branch, year)
+    ws['D7'] = total_plan
+
+    # Данные за выбранный квартал
+    months = {
+        1: (1, 2, 3),
+        2: (4, 5, 6),
+        3: (7, 8, 9),
+        4: (10, 11, 12)
+    }[quarter]
+
+    # Заполнение данных по месяцам
+    for i, month in enumerate(months):
+        col_offset = i * 6
+        fill_month_data(ws, branch, year, month, col_offset)
+
+    # Итог за квартал
+    ws['W7'] = (ws['V7'].value or 0) + (ws['P7'].value or 0) + (ws['J7'].value or 0)
+
+    # Итог за год
+    total_year = get_total_year(branch, year)
+    ws['X7'] = total_year
+
+    # Процент выполнения плана
+    ws['Y7'] = (ws['X7'].value / (ws['D7'].value or 1)) * 100 if ws['X7'].value is not None else 0 #Добавлена проверка на None ws['X7'].value
+
+    # Динамическое заполнение названий месяцев
+    month_names = [calendar.month_name[month] for month in months]
+    ws['E4'] = f"{month_names[0]} посещаемость (всего)"
+    if len(months) > 1:
+        ws['K4'] = f"{month_names[1]} посещаемость (всего)"
+    if len(months) > 2:
+        ws['Q4'] = f"{month_names[2]} посещаемость (всего)"
+
+    # Сохранение файла
+    filename = f"quarter_report_{branch.short_name}_{year}_Q{quarter}.xlsx"
+    safe_filename = quote(filename)
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
+    wb.save(response)
+    return response
+
+def get_total_previous_year(branch, previous_year):
+    visit_reports_prev_year = VisitReport.objects.filter(library=branch, date__year=previous_year)
+    events_prev_year = Event.objects.filter(library=branch, date__year=previous_year)
+
+    total_visits_prev_year = sum(
+        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0)
+        for report in visit_reports_prev_year
     )
 
-    event_data = (
-        Event.objects.filter(library=branch, date__year=year - 1).aggregate(
-            total_age_14=models.Sum('age_14'),
-            total_age_35=models.Sum('age_35'),
-            total_age_other=models.Sum('age_other'),
-            total_online=models.Sum('online'),
-            total_out_of_station=models.Sum('out_of_station'),
-        )
+    total_events_prev_year = sum(
+        (event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0)
+        for event in events_prev_year
     )
 
-    for key, value in previous_year_data.items():
-        if value is None:
-            previous_year_data[key] = 0
+    total_online_prev_year = sum(
+        (event.online or 0) for event in events_prev_year
+    ) + sum(
+        (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0)
+        for report in visit_reports_prev_year
+    )
 
-    for key, value in event_data.items():
-        if value is None:
-            event_data[key] = 0
+    total_out_station_prev_year = sum(
+        (event.out_of_station or 0) for event in events_prev_year
+    ) + sum(
+        (report.qty_visited_out_station or 0)
+        for report in visit_reports_prev_year
+    )
 
-    if previous_year_data['total_visited_14'] is not None:
-        ws['C7'] = (
-                previous_year_data['total_visited_14'] +
-                previous_year_data['total_visited_15_35'] +
-                previous_year_data['total_visited_other'] +
-                event_data['total_age_14'] +
-                event_data['total_age_35'] +
-                event_data['total_age_other'] +
-                event_data['total_online'] +
-                previous_year_data['total_visited_online'] +
-                previous_year_data['total_visited_prlib'] +
-                previous_year_data['total_visited_litres'] +
-                event_data['total_out_of_station'] +
-                previous_year_data['total_visited_out_station']
-        )
-    else:
+    total_prev_year = (
+            total_visits_prev_year +
+            total_events_prev_year +
+            total_online_prev_year +
+            total_out_station_prev_year
+    )
+
+    if not visit_reports_prev_year.exists() and not events_prev_year.exists():
         visits_first_data = VisitsFirstData.objects.filter(library=branch).first()
         events_first_data = EventsFirstData.objects.filter(library=branch).first()
-        ws['C7'] = (visits_first_data.data if visits_first_data else 0) + (events_first_data.data if events_first_data else 0)
+        total_prev_year = ((visits_first_data.data or 0) if visits_first_data else 0) + (
+            (events_first_data.data or 0) if events_first_data else 0)
 
-    # Заполняем плановые показатели за текущий год
+    return total_prev_year
+
+def get_total_plan(branch, year):
     visit_plan = VisitPlan.objects.filter(library=branch, year=year).first()
     events_plan = EventsPlan.objects.filter(library=branch, year=year).first()
-    ws['D7'] = (visit_plan.total_visits if visit_plan else 0) + (events_plan.total_events if events_plan else 0)
+    total_plan = ((visit_plan.total_visits or 0) if visit_plan else 0) + ((events_plan.total_events or 0) if events_plan else 0)
+    return total_plan
 
-    # Заполняем данные за выбранный квартал
-    months = {
-        1: ['январь', 'февраль', 'март'],
-        2: ['апрель', 'май', 'июнь'],
-        3: ['июль', 'август', 'сентябрь'],
-        4: ['октябрь', 'ноябрь', 'декабрь'],
-    }
+def fill_month_data(ws, branch, year, month, col_offset):
+    visit_reports = VisitReport.objects.filter(library=branch, date__year=year, date__month=month)
+    events = Event.objects.filter(library=branch, date__year=year, date__month=month)
 
-    for i, month in enumerate(months[quarter]):
-        month_index = i * 6 + 5  # Смещение для каждого месяца
-        ws[f'E{4 + i * 6}'] = f'{month} посещаемость (всего)'
+    total_visits = sum(
+        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0)
+        for report in visit_reports
+    )
+    total_events = sum(
+        (event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0)
+        for event in events
+    )
+    total_online = sum(
+        (event.online or 0) for event in events
+    ) + sum(
+        (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0)
+        for report in visit_reports
+    )
+    total_out_station = sum(
+        (event.out_of_station or 0) for event in events
+    ) + sum(
+        (report.qty_visited_out_station or 0)
+        for report in visit_reports
+    )
+    total_events_out_station = sum(
+        (event.out_of_station or 0) for event in events
+    )
 
-        # Заполняем данные за месяц
-        visit_report = VisitReport.objects.filter(library=branch, date__year=year, date__month=quarter * 3 - 2 + i).first()
-        event_data_month = Event.objects.filter(library=branch, date__year=year, date__month=quarter * 3 - 2 + i).first()
+    # Записываем данные в ячейки
+    ws[f'{chr(69 + col_offset)}7'] = total_visits + total_events
+    ws[f'{chr(70 + col_offset)}7'] = total_events
+    ws[f'{chr(71 + col_offset)}7'] = total_online
+    ws[f'{chr(72 + col_offset)}7'] = total_out_station
+    ws[f'{chr(73 + col_offset)}7'] = total_events_out_station
+    ws[f'{chr(74 + col_offset)}7'] = (ws[f'{chr(69 + col_offset)}7'].value or 0) + (ws[f'{chr(71 + col_offset)}7'].value or 0) + (ws[f'{chr(72+ col_offset)}7'].value or 0)
 
-        if visit_report and event_data_month:
-            ws[f'E{7 + i * 6}'] = (
-                    (visit_report.qty_visited_14 or 0) +
-                    (visit_report.qty_visited_15_35 or 0) +
-                    (visit_report.qty_visited_other or 0) +
-                    (event_data_month.age_14 or 0) +
-                    (event_data_month.age_35 or 0) +
-                    (event_data_month.age_other or 0)
-            )
-            ws[f'F{7 + i * 6}'] = (
-                    (event_data_month.age_14 or 0) +
-                    (event_data_month.age_35 or 0) +
-                    (event_data_month.age_other or 0)
-            )
-            ws[f'G{7 + i * 6}'] = (
-                    (event_data_month.online or 0) +
-                    (visit_report.qty_visited_online or 0) +
-                    (visit_report.qty_visited_prlib or 0) +
-                    (visit_report.qty_visited_litres or 0)
-            )
-            ws[f'H{7 + i * 6}'] = (
-                    (event_data_month.out_of_station or 0) +
-                    (visit_report.qty_visited_out_station or 0)
-            )
-            ws[f'I{7 + i * 6}'] = event_data_month.out_of_station or 0
-            ws[f'J{7 + i * 6}'] = ws[f'E{7 + i * 6}'].value + ws[f'G{7 + i * 6}'].value + ws[f'H{7 + i * 6}'].value
-        else:
-            # Если данные отсутствуют, заполняем нулями
-            ws[f'E{7 + i * 6}'] = 0
-            ws[f'F{7 + i * 6}'] = 0
-            ws[f'G{7 + i * 6}'] = 0
-            ws[f'H{7 + i * 6}'] = 0
-            ws[f'I{7 + i * 6}'] = 0
-            ws[f'J{7 + i * 6}'] = 0
+def get_total_year(branch, year):
+    visit_reports_year = VisitReport.objects.filter(library=branch, date__year=year)
+    events_year = Event.objects.filter(library=branch, date__year=year)
+    total_year = (
+        sum((report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) for report in visit_reports_year) +
+        sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events_year) +
+        sum((event.online or 0) + (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for event, report in zip(events_year, visit_reports_year)) +
+        sum((event.out_of_station or 0) + (report.qty_visited_out_station or 0) for event, report in zip(events_year, visit_reports_year))
+    )
+    return total_year
 
-    # Заполняем итоговые данные
-    ws['W7'] = ws['V7'].value + ws['P7'].value + ws['J7'].value
+    # Процент выполнения плана
+    ws['Y7'] = ws['X7'].value / (ws['D7'].value / 100) if ws['D7'].value else 0
 
-    # Заполняем процент выполнения плана
-    if ws['D7'].value != 0:
-        ws['Y7'] = (ws['X7'].value / ws['D7'].value) * 100
+    # Динамическое заполнение названий месяцев
+    month_names = [calendar.month_name[month] for month in months]
+    ws['E4'] = f"{month_names[0]} посещаемость (всего)"
+    ws['K4'] = f"{month_names[1]} посещаемость (всего)"
+    ws['Q4'] = f"{month_names[2]} посещаемость (всего)"
 
-    # Сохраняем файл
-    filename = f"quarter_report_{quarter}_quarter_{year}.xlsx"
+    # Сохранение файла
+    filename = f"quarter_report_{branch.short_name}_{year}_Q{quarter}.xlsx"
     safe_filename = quote(filename)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')

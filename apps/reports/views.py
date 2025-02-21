@@ -46,15 +46,15 @@ def export_all_reports(request):
 
 
 def export_quarter_report(request):
-    user = request.user
-    year = 2025  # Можно сделать динамическим, если нужно
-    quarter = int(request.GET.get('quarter', 1))  # Получаем квартал из запроса
-
-    response = generate_quarter_excel(user, year, quarter)
+    year = 2025  # Текущий год
+    quarter = int(request.GET.get('quarter'))  # Получаем квартал из запроса
+    response = generate_quarter_excel(request.user, year, quarter)
     if response:
         return response
     else:
         return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
+
+
 
 
 class DiaryView(LoginRequiredMixin, TemplateView):
