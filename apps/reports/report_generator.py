@@ -1,7 +1,7 @@
 import os
 import calendar
 from urllib.parse import quote
-
+import locale
 import openpyxl
 from django.http import HttpResponse
 from django.utils.formats import date_format
@@ -525,11 +525,18 @@ def get_total_year(branch, year):
     # Процент выполнения плана
     ws['Y7'] = ws['X7'].value / (ws['D7'].value / 100) if ws['D7'].value else 0
 
+    # Установка русской локали
+    locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+
+    # Получение названий месяцев на русском
+    month_names_ru = [calendar.month_name[month].decode('utf-8') if isinstance(calendar.month_name[month], bytes) else
+                      calendar.month_name[month] for month in months]
+
     # Динамическое заполнение названий месяцев
     month_names = [calendar.month_name[month] for month in months]
-    ws['E4'] = f"{month_names[0]} посещаемость (всего)"
-    ws['K4'] = f"{month_names[1]} посещаемость (всего)"
-    ws['Q4'] = f"{month_names[2]} посещаемость (всего)"
+    ws['E4'] = f"{month_names_ru[0]} посещаемость (всего)"
+    ws['K4'] = f"{month_names_ru[1]} посещаемость (всего)"
+    ws['Q4'] = f"{month_names_ru[2]} посещаемость (всего)"
 
     # Сохранение файла
     filename = f"quarter_report_{branch.short_name}_{year}_Q{quarter}.xlsx"
