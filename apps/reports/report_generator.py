@@ -1,12 +1,13 @@
 import os
+import locale
+from django.utils import translation
 import calendar
 from urllib.parse import quote
-import locale
 import openpyxl
 from django.http import HttpResponse
 from django.utils.formats import date_format
 from openpyxl import load_workbook
-
+from django.utils import translation
 from .models import VisitReport, BookReport, Event, VisitsFirstData, EventsFirstData, VisitPlan, EventsPlan
 from apps.core.models import Employee, Branch
 from datetime import datetime, date
@@ -358,6 +359,14 @@ def generate_quarter_excel(user, year, quarter):
     if not branch:
         return None
 
+    # Устанавливаем русскую локаль только для этого потока
+    old_locale = locale.getlocale()
+    try:
+        locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+    except locale.Error:
+        # Если не удалось установить локаль, используем fallback
+        pass
+
     # Загрузка шаблона
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     template_path = os.path.join(base_dir, 'reports/excell/report_quarter_template.xlsx')
@@ -416,6 +425,9 @@ def generate_quarter_excel(user, year, quarter):
         ws['K4'] = f"{month_names[1]} посещаемость (всего)"
     if len(months) > 2:
         ws['Q4'] = f"{month_names[2]} посещаемость (всего)"
+
+    # Возвращаем язык по умолчанию
+    translation.deactivate()
 
     # Сохранение файла
     filename = f"quarter_report_{branch.short_name}_{year}_Q{quarter}.xlsx"
@@ -525,15 +537,15 @@ def get_total_year(branch, year):
     # Процент выполнения плана
     ws['Y7'] = ws['X7'].value / (ws['D7'].value / 100) if ws['D7'].value else 0
 
-    # Установка русской локали
-    locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+    # Динамическое заполнение названий месяцев
+    month_names = [calendar.month_name[month] for month in months]
+    ws['E4'] = f"{month_names[0]} посещаемость (всего)"
+    ws['K4'] = f"{month_names[1]} посещаемость (всего)"
+    ws['Q4'] = f"{month_names[2]} посещаемость (всего)"
 
-    # Получение названий месяцев на русском
-    month_names_ru = [calendar.month_name[month].decode('utf-8') if isinstance(calendar.month_name[month], bytes) else
-                      calendar.month_name[month] for month in months]
-    ws['E4'] = f"{month_names_ru[0]} посещаемость (всего)"
-    ws['K4'] = f"{month_names_ru[1]} посещаемость (всего)"
-    ws['Q4'] = f"{month_names_ru[2]} посещаемость (всего)"
+    # Возвращаем старую локаль
+    if old_locale:
+        locale.setlocale(locale.LC_ALL, old_locale)
 
     # Сохранение файла
     filename = f"quarter_report_{branch.short_name}_{year}_Q{quarter}.xlsx"
