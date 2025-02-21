@@ -531,9 +531,6 @@ def get_total_year(branch, year):
     # Получение названий месяцев на русском
     month_names_ru = [calendar.month_name[month].decode('utf-8') if isinstance(calendar.month_name[month], bytes) else
                       calendar.month_name[month] for month in months]
-
-    # Динамическое заполнение названий месяцев
-    month_names = [calendar.month_name[month] for month in months]
     ws['E4'] = f"{month_names_ru[0]} посещаемость (всего)"
     ws['K4'] = f"{month_names_ru[1]} посещаемость (всего)"
     ws['Q4'] = f"{month_names_ru[2]} посещаемость (всего)"
