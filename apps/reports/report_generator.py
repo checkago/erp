@@ -419,7 +419,12 @@ def generate_quarter_excel(user, year, quarter):
     ws['Y7'] = (ws['X7'].value / (ws['D7'].value or 1)) * 100 if ws['X7'].value is not None else 0 #Добавлена проверка на None ws['X7'].value
 
     # Динамическое заполнение названий месяцев
-    month_names = [calendar.month_name[month] for month in months]
+    month_names = []
+    for month in months:
+        current_date = datetime(year, month, 1)
+        month_name_ru = date_format(current_date, "F")
+        month_names.append(month_name_ru)
+
     ws['E4'] = f"{month_names[0]} посещаемость (всего)"
     if len(months) > 1:
         ws['K4'] = f"{month_names[1]} посещаемость (всего)"
