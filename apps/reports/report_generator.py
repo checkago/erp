@@ -537,15 +537,20 @@ def get_total_year(branch, year):
     # Процент выполнения плана
     ws['Y7'] = ws['X7'].value / (ws['D7'].value / 100) if ws['D7'].value else 0
 
-    # Динамическое заполнение названий месяцев
-    month_names = [calendar.month_name[month] for month in months]
-    ws['E4'] = f"{month_names[0]} посещаемость (всего)"
-    ws['K4'] = f"{month_names[1]} посещаемость (всего)"
-    ws['Q4'] = f"{month_names[2]} посещаемость (всего)"
+    try:
+        # Активируем русскую локаль
+        translation.activate('ru')
+        # Получаем названия месяцев
+        month_names = [calendar.month_name[month] for month in months]
 
-    # Возвращаем старую локаль
-    if old_locale:
-        locale.setlocale(locale.LC_ALL, old_locale)
+        # Записываем названия месяцев в ячейки Excel
+        ws['E4'] = f"{month_names[1]} посещаемость (всего)" if len(month_names) >= 1 else ""
+        ws['K4'] = f"{month_names[2]} посещаемость (всего)" if len(month_names) >= 2 else ""
+        ws['Q4'] = f"{month_names[3]} посещаемость (всего)" if len(month_names) >= 3 else ""
+
+    finally:
+        # Возвращаем локаль по умолчанию
+        translation.deactivate()
 
     # Сохранение файла
     filename = f"quarter_report_{branch.short_name}_{year}_Q{quarter}.xlsx"
