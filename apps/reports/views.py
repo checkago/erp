@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from .checks import check_data_fillings
-from .report_generator import generate_all_reports_excel, generate_quarter_excel
+from .report_generator import generate_all_reports_excel, generate_quarter_excel, generate_digital_month_report
 from .utils import get_book_totals, get_event_totals, get_all_visit_totals, \
     get_all_book_totals, get_all_event_totals, get_visits_totals
 from django.http import HttpResponse
@@ -55,6 +55,13 @@ def export_quarter_report(request):
         return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
 
 
+def export_digital_month_report(request):
+    month = int(request.GET.get('month'))
+    response = generate_digital_month_report(request.user, month)
+    if response:
+        return response
+    else:
+        return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
 
 
 class DiaryView(LoginRequiredMixin, TemplateView):

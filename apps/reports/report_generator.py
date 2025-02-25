@@ -4,11 +4,15 @@ from babel.dates import format_datetime
 import calendar
 from urllib.parse import quote
 import openpyxl
+from django.conf.locale import ru
+from django.db.models import Sum
+from django.db.models.functions import Coalesce
 from django.http import HttpResponse
 from django.utils.formats import date_format
 from openpyxl import load_workbook
-from django.utils import translation
-from .models import VisitReport, BookReport, Event, VisitsFirstData, EventsFirstData, VisitPlan, EventsPlan
+from django.utils import translation, timezone
+from .models import VisitReport, BookReport, Event, VisitsFirstData, EventsFirstData, VisitPlan, EventsPlan, RegsPlan, \
+    BookPlan
 from apps.core.models import Employee, Branch
 from datetime import datetime, date
 
@@ -553,6 +557,125 @@ def get_total_year(branch, year):
 
     # Сохранение файла
     filename = f"quarter_report_{branch.short_name}_{year}_Q{quarter}.xlsx"
+    safe_filename = quote(filename)
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
+    wb.save(response)
+    return response
+
+
+def generate_digital_month_report(user, month):
+    try:
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+    except Employee.DoesNotExist:
+        return None
+
+    if not branch:
+        return None
+
+    # Автоматическое определение текущего года
+    current_year = datetime.now().year
+
+    # Загрузка шаблона
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    template_path = os.path.join(base_dir, 'reports/excell/digital_month_template.xlsx')
+
+    if not os.path.exists(template_path):
+        raise FileNotFoundError(f"File not found: {template_path}")
+
+    wb = load_workbook(filename=template_path)
+    ws = wb.active
+
+    # Заполнение заголовка
+    current_date = date(current_year, month, 1)
+    month_name = date_format(current_date, "F")
+    ws['A1'] = f"Цифровой отчёт о работе {branch.full_name} (МБУК «ЦБС им. А. Белого» Балашиха) за {month_name} {current_year} года (с нарастающим итогом)"
+
+    # Получаем данные за текущий год до конца выбранного месяца
+    visit_reports = VisitReport.objects.filter(library=branch, date__year=current_year, date__month__lte=month)
+    book_reports = BookReport.objects.filter(library=branch, date__year=current_year, date__month__lte=month)
+    events = Event.objects.filter(library=branch, date__year=current_year, date__month__lte=month)
+
+    # Плановые показатели
+    regs_plan = RegsPlan.objects.filter(library=branch, year=current_year).first()
+    book_plan = BookPlan.objects.filter(library=branch, year=current_year).first()
+    visit_plan = VisitPlan.objects.filter(library=branch, year=current_year).first()
+
+    # Заполнение данных
+    ws['B4'] = regs_plan.total_regs if regs_plan else 0
+    ws['C4'] = sum(
+        (report.qty_reg_14 or 0) + (report.qty_reg_15_35 or 0) + (report.qty_reg_other or 0) +
+        (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0)
+        for report in visit_reports
+    )
+    ws['D4'] = (ws['C4'].value / ws['B4'].value) * 100 if ws['B4'].value else 0
+
+    ws['C5'] = sum(report.qty_reg_14 or 0 for report in visit_reports)
+    ws['C6'] = sum(report.qty_reg_15_35 or 0 for report in visit_reports)
+    ws['C7'] = sum((report.qty_reg_14 or 0) + (report.qty_reg_15_35 or 0) + (report.qty_reg_other or 0) for report in visit_reports)
+    ws['C8'] = sum(report.qty_visited_out_station or 0 for report in visit_reports)
+    ws['C9'] = sum((report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) + (report.qty_visited_online or 0) for report in visit_reports)
+
+    ws['B10'] = book_plan.total_books if book_plan else 0
+    ws['C10'] = sum(
+        (report.qty_books_14 or 0) + (report.qty_books_15_35 or 0) + (report.qty_books_other or 0) +
+        (report.qty_books_neb or 0) + (report.qty_books_prlib or 0) + (report.qty_books_litres or 0) +
+        (report.qty_books_consultant or 0) + (report.qty_books_local_library or 0)
+        for report in book_reports
+    )
+    ws['D10'] = (ws['C10'].value / ws['B10'].value) * 100 if ws['B10'].value else 0
+
+    ws['C11'] = sum(report.qty_books_14 or 0 for report in book_reports)
+    ws['C12'] = sum(report.qty_books_15_35 or 0 for report in book_reports)
+    ws['C13'] = sum((report.qty_books_14 or 0) + (report.qty_books_15_35 or 0) + (report.qty_books_other or 0) for report in book_reports)
+    ws['C14'] = 0  # По условию задачи
+    ws['C15'] = sum(
+        (report.qty_books_neb or 0) + (report.qty_books_prlib or 0) + (report.qty_books_litres or 0) +
+        (report.qty_books_consultant or 0) + (report.qty_books_local_library or 0)
+        for report in book_reports
+    )
+
+    ws['B16'] = visit_plan.total_visits if visit_plan else 0
+    ws['C16'] = sum(
+        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) +
+        (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) +
+        (event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0)
+        for report, event in zip(visit_reports, events)
+    )
+    ws['D16'] = (ws['C16'].value / ws['B16'].value) * 100 if ws['B16'].value else 0
+
+    ws['C17'] = sum(report.qty_visited_14 or 0 for report in visit_reports)
+    ws['C18'] = sum(report.qty_visited_15_35 or 0 for report in visit_reports)
+    ws['C19'] = sum((report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) for report in visit_reports)
+    ws['C20'] = sum(report.qty_visited_other or 0 for report in visit_reports)
+    ws['C21'] = sum((report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report in visit_reports)
+    ws['C22'] = sum((report.qty_visited_invalids or 0) + (event.invalids or 0) for report, event in zip(visit_reports, events))
+    ws['C23'] = Event.objects.filter(paid=True).count()
+
+    ws['C26'] = sum(report.qty_books_reference_do_14 or 0 for report in book_reports)
+    ws['C27'] = sum(report.qty_books_reference_14 or 0 for report in book_reports)
+    ws['C28'] = sum(report.qty_books_reference_online or 0 for report in book_reports)
+
+    ws['C29'] = sum(event.quantity or 0 for event in events)
+    ws['C30'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events)
+
+    ws['C31'] = sum(event.quantity or 0 for event in events if event.age_14 != 0)
+    ws['C32'] = sum(event.age_14 or 0 for event in events if event.age_14 != 0)
+    ws['C33'] = sum(event.quantity or 0 for event in events if event.age_35 != 0)
+    ws['C34'] = sum(event.age_35 or 0 for event in events if event.age_35 != 0)
+    ws['C35'] = sum(event.quantity or 0 for event in events if event.out_of_station == 0)
+    ws['C36'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if event.out_of_station != 0)
+    ws['C37'] = sum(event.quantity or 0 for event in events if event.age_14 != 0 and event.out_of_station != 0)
+    ws['C38'] = sum(event.age_14 or 0 for event in events if event.age_14 != 0 and event.out_of_station != 0)
+    ws['C39'] = sum(event.quantity or 0 for event in events if event.age_35 != 0 and event.out_of_station != 0)
+    ws['C40'] = sum(event.age_35 or 0 for event in events if event.age_35 != 0 and event.out_of_station != 0)
+    ws['C41'] = sum(event.quantity or 0 for event in events if event.out_of_station != 0)
+    ws['C42'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if event.out_of_station != 0)
+
+    # Сохранение файла
+    filename = f"digital_month_report_{branch.short_name}_{current_year}_{month}.xlsx"
     safe_filename = quote(filename)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
