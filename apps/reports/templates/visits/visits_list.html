@@ -51,7 +51,14 @@
         $('#basic-1').DataTable( {
             scrollX:        true,
             fixedColumns:   true,
-            stateSave: true
+            stateSave: true,
+            columnDefs: [
+            {
+                "type": "date",  // Указываем, что это дата
+                "targets": 0     // Указываем индекс столбца с датой (первый столбец имеет индекс 0)
+            }
+        ],
+
         } );
     } );
 </script>

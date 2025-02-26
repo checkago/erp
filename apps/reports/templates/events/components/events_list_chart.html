@@ -50,7 +50,7 @@
                         <tbody>
                         {% for Event in events %}
                             <tr>
-                                <th>{{ Event.date|date:"d.m.Y" }}</th>
+                                <th data-order="{{ report.date|date:'Y-m-d' }}">{{ Event.date|date:"d.m.Y" }}</th>
                                 {% if Event.cafedra %}
                                 <th>{{ Event.cafedra }}</th>
                                 {% else %}

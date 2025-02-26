@@ -59,7 +59,7 @@
                         <tbody>
                         {% for visit in visits %}
                             <tr>
-                                <td class="fixed-column">{{ visit.date|date:"d.m.Y" }}</td>
+                                <td data-order="{{ report.date|date:'Y-m-d' }}" class="fixed-column">{{ visit.date|date:"d.m.Y" }}</td>
                                 {% if visit.cafedra %}
                                 <td>{{ visit.cafedra }}</td>
                                 {% else %}

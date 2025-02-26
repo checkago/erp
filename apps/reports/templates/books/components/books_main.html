@@ -82,7 +82,7 @@
                         <tbody>
                         {% for report in reports %}
                             <tr>
-                                <td>{{ report.date|date:"d.m.Y" }}</td>
+                                <td data-order="{{ report.date|date:'Y-m-d' }}">{{ report.date|date:"d.m.Y" }}</td>
                                 {% if report.cafedra %}
                                 <td>{{ report.cafedra }}</td>
                                 {% else %}
