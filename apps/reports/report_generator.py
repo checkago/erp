@@ -113,7 +113,7 @@ def generate_visit_report(wb, branch, year, month):
     current_date = date(year, month, 1)
     month_name_ru = date_format(current_date, "F")
     ws['A1'] = f"Отчет по посещениям за {month_name_ru} {year} года"
-    ws['L1'] = f"{branch}"
+    ws['N1'] = f"{branch}"
 
     row_num = 7  # Начинаем с 7 строки (после заголовков)
     for report in visit_reports:
