@@ -47,7 +47,7 @@ class EventForm(forms.ModelForm):
 class BookReportForm(forms.ModelForm):
     class Meta:
         model = BookReport
-        fields = ['cafedra', 'date', 'qty_books_14', 'qty_books_15_35', 'qty_books_other', 'qty_books_invalid',
+        fields = ['cafedra', 'date', 'qty_books_14', 'qty_books_15_35', 'qty_books_other', 'qty_books_invalid', 'qty_books_out_of_station',
                   'qty_books_neb', 'qty_books_prlib', 'qty_books_litres', 'qty_books_consultant',
                   'qty_books_local_library', 'qty_books_part_opl', 'qty_books_part_enm', 'qty_books_part_tech',
                   'qty_books_part_sh', 'qty_books_part_si', 'qty_books_part_yl', 'qty_books_part_hl', 'qty_books_part_dl',
@@ -65,6 +65,7 @@ class BookReportForm(forms.ModelForm):
             'qty_books_15_35': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_other': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_invalid': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
+            'qty_books_out_of_station': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_neb': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_prlib': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'qty_books_litres': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
@@ -115,7 +116,7 @@ class BookReportForm(forms.ModelForm):
 class VisitReportForm(forms.ModelForm):
     class Meta:
         model = VisitReport
-        fields = ['cafedra', 'date', 'qty_reg_14', 'qty_reg_15_35', 'qty_reg_other', 'qty_reg_invalid', 'qty_reg_pensioners',
+        fields = ['cafedra', 'date', 'qty_reg_14', 'qty_reg_15_35', 'qty_reg_other', 'qty_reg_invalid', 'qty_reg_out_of_station', 'qty_reg_pensioners',
                   'qty_reg_prlib', 'qty_reg_litres', 'qty_visited_14', 'qty_visited_15_35', 'qty_visited_other',
                   'qty_visited_invalids', 'qty_visited_pensioners', 'qty_visited_prlib', 'qty_visited_litres', 'qty_visited_out_station',
                   'qty_visited_online', 'note']
@@ -130,6 +131,8 @@ class VisitReportForm(forms.ModelForm):
             'qty_reg_15_35': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_reg_other': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_reg_invalid': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
+            'qty_reg_out_of_station': forms.NumberInput(
+                attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_reg_pensioners': forms.NumberInput(
                 attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),
             'qty_reg_prlib': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark border border-1 border-dark'}),

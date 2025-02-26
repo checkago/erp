@@ -33,7 +33,7 @@
                             <tr class="bg-secondary text-bg-info text-center">
                                 <th class="fixed-column" rowspan="2">Дата отчета</th>
                                 <th rowspan="2">Кафедра</th>
-                                <th colspan="9">Книговыдача</th> <!-- Объединяем столбцы книговыдачи -->
+                                <th colspan="10">Книговыдача</th> <!-- Объединяем столбцы книговыдачи -->
                                 {% if mod_lib %}
                                     <th class="bg-warning text-bg-warning" colspan="11">По отраслям</th> <!-- Объединяем дополнительные книги, если необходимо -->
                                 {% endif %}
@@ -45,6 +45,7 @@
                                 <th>14-30</th>
                                 <th>30+</th>
                                 <th>Инвалиды (в том числе)</th>
+                                <th>Внестационар</th>
                                 <th>НЭБ</th>
                                 <th>Президентская</th>
                                 <th>Литрес</th>
@@ -67,7 +68,7 @@
                                     <th>До 14</th>
                                     <th>14+</th>
                                     <th>30+</th>
-                                    <th>Инвалиды</th>
+                                    <th>Инвалиды (в том числе)</th>
                                     <th>Удаленно</th>
                                 {% else %}
                                     <th class="bg-success text-dark">До 14</th>
@@ -91,6 +92,7 @@
                                 <td>{{ report.qty_books_15_35 }}</td>
                                 <td>{{ report.qty_books_other }}</td>
                                 <td>{{ report.qty_books_invalid }}</td>
+                                <td>{{ report.qty_books_out_of_station }}</td>
                                 <td>{{ report.qty_books_neb }}</td>
                                 <td>{{ report.qty_books_prlib }}</td>
                                 <td>{{ report.qty_books_litres }}</td>
@@ -134,7 +136,7 @@
                             <tr class="bg-secondary text-bg-info text-center">
                                 <th class="fixed-column" rowspan="2">Дата отчета</th>
                                 <th rowspan="2">Кафедра</th>
-                                <th colspan="9">Книговыдача</th> <!-- Объединяем столбцы книговыдачи -->
+                                <th colspan="10">Книговыдача</th> <!-- Объединяем столбцы книговыдачи -->
                                 {% if mod_lib %}
                                     <th class="bg-warning text-bg-warning" colspan="11">По отраслям</th> <!-- Объединяем дополнительные книги, если необходимо -->
                                 {% endif %}
@@ -146,6 +148,7 @@
                                 <th>14-30</th>
                                 <th>30+</th>
                                 <th>Инвалиды (в том числе)</th>
+                                <th>Внестационар</th>
                                 <th>НЭБ</th>
                                 <th>Президентская</th>
                                 <th>Литрес</th>

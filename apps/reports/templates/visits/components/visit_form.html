@@ -50,6 +50,10 @@
                                             {{ form.qty_reg_invalid }}
                                         </div>
                                         <div class="col-md-4">
+                                            <label for="id_qty_reg_out_of_stationd" class="form-label">Внестационар</label>
+                                            {{ form.qty_reg_out_of_station }}
+                                        </div>
+                                        <div class="col-md-4">
                                             <label for="id_qty_reg_pensioners" class="form-label">Пенсионеры (Из общего числа)</label>
                                             {{ form.qty_reg_pensioners }}
                                         </div>
@@ -161,8 +165,9 @@
         const qtyReg14 = parseFloat(document.getElementById('id_qty_reg_14').value) || 0;
         const qtyReg15_35 = parseFloat(document.getElementById('id_qty_reg_15_35').value) || 0;
         const qtyRegOther = parseFloat(document.getElementById('id_qty_reg_other').value) || 0;
+        const qtyRegOutOfStation = parseFloat(document.getElementById('id_qty_reg_out_of_station').value) || 0;
 
-        const totalSum = qtyReg14 + qtyReg15_35 + qtyRegOther;
+        const totalSum = qtyReg14 + qtyReg15_35 + qtyRegOther + qtyRegOutOfStation;
         document.getElementById('total-reg-sum').querySelector('span').textContent = totalSum;
     }
 
@@ -170,6 +175,7 @@
     document.getElementById('id_qty_reg_14').addEventListener('input', calculateSum);
     document.getElementById('id_qty_reg_15_35').addEventListener('input', calculateSum);
     document.getElementById('id_qty_reg_other').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_reg_out_of_station').addEventListener('input', calculateSum);
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();

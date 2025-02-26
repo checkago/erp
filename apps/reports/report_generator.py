@@ -88,6 +88,8 @@ def generate_visit_report(wb, branch, year, month):
         'qty_visited_pensioners': sum(report.qty_visited_pensioners for report in visit_reports_year),
         'qty_visited_invalids': sum(report.qty_visited_invalids for report in visit_reports_year),
         'qty_visited_out_station': sum(report.qty_visited_out_station for report in visit_reports_year),
+        'qty_visited_prlib': sum(report.qty_visited_prlib for report in visit_reports_year),
+        'qty_visited_litres': sum(report.qty_visited_litres for report in visit_reports_year),
         'qty_visited_online': sum(report.qty_visited_online for report in visit_reports_year),
     }
 
@@ -107,7 +109,9 @@ def generate_visit_report(wb, branch, year, month):
     ws['N6'] = year_start_data['qty_visited_pensioners']
     ws['O6'] = year_start_data['qty_visited_invalids']
     ws['P6'] = year_start_data['qty_visited_out_station']
-    ws['Q6'] = year_start_data['qty_visited_online']
+    ws['Q6'] = year_start_data['qty_visited_prlib']
+    ws['R6'] = year_start_data['qty_visited_litres']
+    ws['S6'] = year_start_data['qty_visited_online']
 
     # Заполняем данные за текущий месяц
     current_date = date(year, month, 1)
@@ -140,8 +144,10 @@ def generate_visit_report(wb, branch, year, month):
         ws[f'N{row_num}'] = report.qty_visited_pensioners
         ws[f'O{row_num}'] = report.qty_visited_invalids
         ws[f'P{row_num}'] = report.qty_visited_out_station
-        ws[f'Q{row_num}'] = report.qty_visited_online
-        ws[f'R{row_num}'] = report.note
+        ws[f'Q{row_num}'] = report.qty_visited_prlib
+        ws[f'R{row_num}'] = report.qty_visited_litres
+        ws[f'S{row_num}'] = report.qty_visited_online
+        ws[f'T{row_num}'] = report.note
         row_num += 1
 
 

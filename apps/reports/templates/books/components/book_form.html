@@ -59,6 +59,10 @@
                                             {{ form.qty_books_invalid }}
                                         </div>
                                         <div class="col-md-3">
+                                            <label for="id_qty_books_out_of_station" class="form-label">Внестационар</label>
+                                            {{ form.qty_books_out_of_station }}
+                                        </div>
+                                        <div class="col-md-3">
                                             <label for="id_qty_books_neb" class="form-label">Книговыдача (НЭБ)</label>
                                             {{ form.qty_books_neb }}
                                         </div>
@@ -212,6 +216,7 @@
     const qtyBooks15_35 = document.getElementById('id_qty_books_15_35');
     const qtyBooksOther = document.getElementById('id_qty_books_other');
     const qtyBooksInvalid = document.getElementById('id_qty_books_invalid');
+    const qtyBooksOutOfStation = document.getElementById('id_qty_books_out_of_station');
     const qtyBooksNeb = document.getElementById('id_qty_books_neb');
     const qtyBooksPrlib = document.getElementById('id_qty_books_prlib');
     const qtyBooksLitres = document.getElementById('id_qty_books_litres');
@@ -235,7 +240,7 @@
 
     // Функция для расчета суммы
     function calculateSum() {
-        const sum = parseInt(qtyBooks14.value) + parseInt(qtyBooks15_35.value) + parseInt(qtyBooksOther.value) + parseInt(qtyBooksInvalid.value) + parseInt(qtyBooksNeb.value) + parseInt(qtyBooksPrlib.value) + parseInt(qtyBooksLitres.value) + parseInt(qtyBooksConsultant.value) + parseInt(qtyBooksLocallibrary.value);
+        const sum = parseInt(qtyBooks14.value) + parseInt(qtyBooks15_35.value) + parseInt(qtyBooksOther.value) + parseInt(qtyBooksInvalid.value) + parseInt(qtyBooksOutOfStation.value) + parseInt(qtyBooksNeb.value) + parseInt(qtyBooksPrlib.value) + parseInt(qtyBooksLitres.value) + parseInt(qtyBooksConsultant.value) + parseInt(qtyBooksLocallibrary.value);
         const sumPart = parseInt(qtyBooksPartOpl.value) + parseInt(qtyBooksPartEnm.value) + parseInt(qtyBooksPartTech.value) + parseInt(qtyBooksPartSh.value) + parseInt(qtyBooksPartSi.value) + parseInt(qtyBooksPartYl.value) + parseInt(qtyBooksPartHl.value) + parseInt(qtyBooksPartDl.value) + parseInt(qtyBooksPartOther.value) + parseInt(qtyBooksPartAudio.value) + parseInt(qtyBooksPartKrai.value);
         const result = sum - sumPart;
         sumElement.innerText = `Контроль: ${result}`;
@@ -246,6 +251,7 @@
     qtyBooks15_35.addEventListener('input', calculateSum);
     qtyBooksOther.addEventListener('input', calculateSum);
     qtyBooksInvalid.addEventListener('input', calculateSum);
+    qtyBooksOutOfStation.addEventListener('input', calculateSum);
     qtyBooksNeb.addEventListener('input', calculateSum);
     qtyBooksPrlib.addEventListener('input', calculateSum);
     qtyBooksLitres.addEventListener('input', calculateSum);
@@ -288,8 +294,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const qtyBooks14 = parseFloat(document.getElementById('id_qty_books_14').value) || 0;
         const qtyBooks15_35 = parseFloat(document.getElementById('id_qty_books_15_35').value) || 0;
         const qtyBooksOther = parseFloat(document.getElementById('id_qty_books_other').value) || 0;
+        const qtyBooksOutofStation = parseFloat(document.getElementById('id_qty_books_out_of_station').value) || 0;
 
-        const totalSum = qtyBooks14 + qtyBooks15_35 + qtyBooksOther;
+        const totalSum = qtyBooks14 + qtyBooks15_35 + qtyBooksOther + qtyBooksOutofStation;
         document.getElementById('total-books-sum').querySelector('span').textContent = totalSum;
     }
 
@@ -297,6 +304,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('id_qty_books_14').addEventListener('input', calculateSum);
     document.getElementById('id_qty_books_15_35').addEventListener('input', calculateSum);
     document.getElementById('id_qty_books_other').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_books_out_of_station').addEventListener('input', calculateSum);
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
