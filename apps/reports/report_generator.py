@@ -666,11 +666,12 @@ def generate_digital_month_report(user, month):
     ws['C22'] = sum((report.qty_visited_invalids or 0) + (event.invalids or 0) for report, event in zip(visit_reports, events))
     ws['C23'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if event.paid)
     ws['C24'] = sum(event.invalids or 0 for event in events if event.paid)
-
+    ws['C25'] = sum((report.qty_books_reference_online or 0) + (report.qty_books_reference_do_14 or 0) + (
+                report.qty_books_reference_14 or 0) +
+                    + (report.qty_books_reference_35 or 0) for report in book_reports)
     ws['C26'] = sum(report.qty_books_reference_do_14 or 0 for report in book_reports)
     ws['C27'] = sum(report.qty_books_reference_14 or 0 for report in book_reports)
-    ws['C28'] = sum((report.qty_books_reference_online or 0) + (report.qty_books_reference_do_14 or 0) + (report.qty_books_reference_14 or 0) +
-                    + (report.qty_books_reference_35 or 0) for report in book_reports)
+    ws['C28'] = sum((report.qty_books_reference_online or 0) for report in book_reports)
 
     ws['C29'] = sum(event.quantity or 0 for event in events)
     ws['C30'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events)
