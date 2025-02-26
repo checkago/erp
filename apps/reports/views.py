@@ -108,23 +108,25 @@ class EventListView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         employee = Employee.objects.get(user=user)
 
-        # Получаем события за последние 15 дней
+        # Получаем события за последние 60 дней
         date_60_days_ago = timezone.now() - timedelta(days=60)
         events = Event.objects.filter(date__gte=date_60_days_ago, library=employee.branch).order_by('-date')
 
         # Подготавливаем данные для графика
         dates = []
-        quantity_data = []
-        age_14_data = []
-        age_35_data = []
-        age_other_data = []
-        total_age_data = []
+        quantity_data = []  # Общее количество мероприятий за день
+        age_14_data = []    # Участники до 14 лет
+        age_35_data = []    # Участники до 35 лет
+        age_other_data = [] # Участники старше 35 лет
+        total_age_data = [] # Общее количество участников (линия)
 
         day_count = defaultdict(lambda: {
-            'quantity': 0,
-            'age_14': 0,
-            'age_35': 0,
-            'age_other': 0
+            'quantity': 0,  # Количество мероприятий
+            'age_14': 0,    # Участники до 14 лет
+            'age_35': 0,    # Участники до 35 лет
+            'age_other': 0, # Участники старше 35 лет
+            'online': 0,    # Онлайн-участники
+            'out_of_station': 0  # Участники вне стационара
         })
 
         for event in events:
@@ -133,6 +135,8 @@ class EventListView(LoginRequiredMixin, TemplateView):
             day_count[day_str]['age_14'] += event.age_14
             day_count[day_str]['age_35'] += event.age_35
             day_count[day_str]['age_other'] += event.age_other
+            day_count[day_str]['online'] += event.online
+            day_count[day_str]['out_of_station'] += event.out_of_station
 
         for date, counts in sorted(day_count.items()):
             dates.append(date)
@@ -140,7 +144,8 @@ class EventListView(LoginRequiredMixin, TemplateView):
             age_14_data.append(counts['age_14'])
             age_35_data.append(counts['age_35'])
             age_other_data.append(counts['age_other'])
-            total_age_data.append(counts['age_14'] + counts['age_35'] + counts['age_other'])
+            # Общее количество участников: age_14 + age_35 + age_other + online + out_of_station
+            total_age_data.append(counts['age_14'] + counts['age_35'] + counts['age_other'] + counts['online'] + counts['out_of_station'])
 
         # Логируем данные для отладки
         print("Dates:", dates)
