@@ -80,6 +80,8 @@ def generate_visit_report(wb, branch, year, month):
         'qty_reg_other': sum(report.qty_reg_other for report in visit_reports_year),
         'qty_reg_pensioners': sum(report.qty_reg_pensioners for report in visit_reports_year),
         'qty_reg_invalid': sum(report.qty_reg_invalid for report in visit_reports_year),
+        'qty_reg_prlib': sum(report.qty_reg_prlib for report in visit_reports_year),
+        'qty_reg_litres': sum(report.qty_reg_litres for report in visit_reports_year),
         'qty_visited_14': sum(report.qty_visited_14 for report in visit_reports_year),
         'qty_visited_15_35': sum(report.qty_visited_15_35 for report in visit_reports_year),
         'qty_visited_other': sum(report.qty_visited_other for report in visit_reports_year),
@@ -96,14 +98,16 @@ def generate_visit_report(wb, branch, year, month):
     ws['E6'] = year_start_data['qty_reg_other']
     ws['F6'] = year_start_data['qty_reg_pensioners']
     ws['G6'] = year_start_data['qty_reg_invalid']
-    ws['H6'] = year_start_data['qty_visited_14'] + year_start_data['qty_visited_15_35'] + year_start_data['qty_visited_other']
-    ws['I6'] = year_start_data['qty_visited_14']
-    ws['J6'] = year_start_data['qty_visited_15_35']
-    ws['K6'] = year_start_data['qty_visited_other']
-    ws['L6'] = year_start_data['qty_visited_pensioners']
-    ws['M6'] = year_start_data['qty_visited_invalids']
-    ws['N6'] = year_start_data['qty_visited_out_station']
-    ws['O6'] = year_start_data['qty_visited_online']
+    ws['H6'] = year_start_data['qty_reg_prlib']
+    ws['I6'] = year_start_data['qty_reg_litres']
+    ws['J6'] = year_start_data['qty_visited_14'] + year_start_data['qty_visited_15_35'] + year_start_data['qty_visited_other']
+    ws['K6'] = year_start_data['qty_visited_14']
+    ws['L6'] = year_start_data['qty_visited_15_35']
+    ws['M6'] = year_start_data['qty_visited_other']
+    ws['N6'] = year_start_data['qty_visited_pensioners']
+    ws['O6'] = year_start_data['qty_visited_invalids']
+    ws['P6'] = year_start_data['qty_visited_out_station']
+    ws['Q6'] = year_start_data['qty_visited_online']
 
     # Заполняем данные за текущий месяц
     current_date = date(year, month, 1)
@@ -127,15 +131,17 @@ def generate_visit_report(wb, branch, year, month):
         ws[f'E{row_num}'] = report.qty_reg_other
         ws[f'F{row_num}'] = report.qty_reg_pensioners
         ws[f'G{row_num}'] = report.qty_reg_invalid
-        ws[f'H{row_num}'] = report.qty_visited_14 + report.qty_visited_15_35 + report.qty_visited_other
-        ws[f'I{row_num}'] = report.qty_visited_14
-        ws[f'J{row_num}'] = report.qty_visited_15_35
-        ws[f'K{row_num}'] = report.qty_visited_other
-        ws[f'L{row_num}'] = report.qty_visited_pensioners
-        ws[f'M{row_num}'] = report.qty_visited_invalids
-        ws[f'N{row_num}'] = report.qty_visited_out_station
-        ws[f'O{row_num}'] = report.qty_visited_online
-        ws[f'P{row_num}'] = report.note
+        ws[f'H{row_num}'] = report.qty_reg_prlib
+        ws[f'I{row_num}'] = report.qty_reg_litres
+        ws[f'J{row_num}'] = report.qty_visited_14 + report.qty_visited_15_35 + report.qty_visited_other
+        ws[f'K{row_num}'] = report.qty_visited_14
+        ws[f'L{row_num}'] = report.qty_visited_15_35
+        ws[f'M{row_num}'] = report.qty_visited_other
+        ws[f'N{row_num}'] = report.qty_visited_pensioners
+        ws[f'O{row_num}'] = report.qty_visited_invalids
+        ws[f'P{row_num}'] = report.qty_visited_out_station
+        ws[f'Q{row_num}'] = report.qty_visited_online
+        ws[f'R{row_num}'] = report.note
         row_num += 1
 
 
