@@ -120,6 +120,7 @@ class EventListView(LoginRequiredMixin, TemplateView):
         age_other_data = [] # Участники старше 35 лет
         total_age_data = [] # Общее количество участников (линия)
 
+        # Используем defaultdict для агрегации данных по дням
         day_count = defaultdict(lambda: {
             'quantity': 0,  # Количество мероприятий
             'age_14': 0,    # Участники до 14 лет
@@ -130,16 +131,21 @@ class EventListView(LoginRequiredMixin, TemplateView):
         })
 
         for event in events:
-            day_str = event.date.strftime('%d.%m.%Y')
-            day_count[day_str]['quantity'] += event.quantity
-            day_count[day_str]['age_14'] += event.age_14
-            day_count[day_str]['age_35'] += event.age_35
-            day_count[day_str]['age_other'] += event.age_other
-            day_count[day_str]['online'] += event.online
-            day_count[day_str]['out_of_station'] += event.out_of_station
+            # Используем объект datetime.date для группировки и сортировки
+            day_key = event.date  # event.date уже является объектом datetime.date
+            day_count[day_key]['quantity'] += event.quantity
+            day_count[day_key]['age_14'] += event.age_14
+            day_count[day_key]['age_35'] += event.age_35
+            day_count[day_key]['age_other'] += event.age_other
+            day_count[day_key]['online'] += event.online
+            day_count[day_key]['out_of_station'] += event.out_of_station
 
-        for date, counts in sorted(day_count.items()):
-            dates.append(date)
+        # Сортируем данные по дате (по возрастанию)
+        sorted_days = sorted(day_count.keys())
+
+        for day in sorted_days:
+            counts = day_count[day]
+            dates.append(day.strftime('%d.%m.%Y'))  # Преобразуем дату в строку для графика
             quantity_data.append(counts['quantity'])
             age_14_data.append(counts['age_14'])
             age_35_data.append(counts['age_35'])
