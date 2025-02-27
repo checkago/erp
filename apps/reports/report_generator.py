@@ -48,7 +48,7 @@ def generate_all_reports_excel(user, year, month):
 
     # Сохраняем файл в HttpResponse
     month_name = calendar.month_name[month]
-    filename = f"all_reports_{branch.short_name}_{year}_{month_name}.xlsx"
+    filename = f"эл.дневник_{branch.short_name}_{year}_{month_name}.xlsx"
     safe_filename = quote(filename)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
@@ -451,7 +451,7 @@ def generate_quarter_excel(user, year, quarter):
     translation.deactivate()
 
     # Сохранение файла
-    filename = f"quarter_report_{branch.short_name}_{year}_Q{quarter}.xlsx"
+    filename = f"квартальный_нац_цели_{branch.short_name}_{year}_Q{quarter}.xlsx"
     safe_filename = quote(filename)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
@@ -568,7 +568,7 @@ def get_total_year(branch, year):
 
 
     # Сохранение файла
-    filename = f"quarter_report_{branch.short_name}_{year}_Q{quarter}.xlsx"
+    filename = f"квартальный_нац_цели_{branch.short_name}_{year}_Q{quarter}.xlsx"
     safe_filename = quote(filename)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
@@ -690,7 +690,7 @@ def generate_digital_month_report(user, month):
     ws['C42'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if event.out_of_station != 0)
 
     # Сохранение файла
-    filename = f"digital_month_report_{branch.short_name}_{current_year}_{month}.xlsx"
+    filename = f"цифровой_ежемесячный_{branch.short_name}_{current_year}_{month}.xlsx"
     safe_filename = quote(filename)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
