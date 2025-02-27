@@ -103,6 +103,7 @@ class Branch(models.Model):
     department = models.BooleanField(default=False, blank=True, verbose_name='Это отдел')
     adult = models.BooleanField(default=False, blank=True, verbose_name='Взрослая библиотека')
     child = models.BooleanField(default=False, blank=True, verbose_name='Детская')
+    village = models.BooleanField(default=False, blank=True, verbose_name='Сельская')
     mod_lib = models.BooleanField(default=False, blank=True, verbose_name='Модельная')
 
     class Meta:
