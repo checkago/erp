@@ -72,7 +72,7 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 
 class BranchAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'short_name', 'manager', 'adult', 'child')
+    list_display = ('full_name', 'short_name', 'manager', 'adult', 'child', 'village')
     list_filter = ('organization', 'manager', 'adult', 'child')
 
 
