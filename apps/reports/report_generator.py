@@ -548,12 +548,12 @@ def fill_month_data(ws, branch, year, month, col_offset):
     )
 
     # Записываем данные в ячейки
-    ws[f'{chr(69 + col_offset)}7'] = total_visits + total_events
-    ws[f'{chr(70 + col_offset)}7'] = total_events
-    ws[f'{chr(71 + col_offset)}7'] = total_online
-    ws[f'{chr(72 + col_offset)}7'] = total_out_station
-    ws[f'{chr(73 + col_offset)}7'] = total_events_out_station
-    ws[f'{chr(74 + col_offset)}7'] = (ws[f'{chr(69 + col_offset)}7'].value or 0) + (ws[f'{chr(71 + col_offset)}7'].value or 0) + (ws[f'{chr(72 + col_offset)}7'].value or 0)
+    ws[f'{chr(69 + col_offset)}6'] = total_visits + total_events
+    ws[f'{chr(70 + col_offset)}6'] = total_events
+    ws[f'{chr(71 + col_offset)}6'] = total_online
+    ws[f'{chr(72 + col_offset)}6'] = total_out_station
+    ws[f'{chr(73 + col_offset)}6'] = total_events_out_station
+    ws[f'{chr(74 + col_offset)}6'] = (ws[f'{chr(69 + col_offset)}7'].value or 0) + (ws[f'{chr(71 + col_offset)}7'].value or 0) + (ws[f'{chr(72 + col_offset)}7'].value or 0)
 
 def get_total_year(branch, year):
     visit_reports_year = VisitReport.objects.filter(library=branch, date__year=year)
