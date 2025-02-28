@@ -431,14 +431,19 @@ def generate_quarter_excel(user, year, quarter):
         fill_month_data(ws, branch, year, month, col_offset)
 
     # Итог за квартал
-    ws['W7'] = (ws['V7'].value or 0) + (ws['P7'].value or 0) + (ws['J7'].value or 0)
+    total_quarter = 0
+    for i, month in enumerate(months):
+        col_offset = i * 6
+        total_quarter += (ws[f'{chr(74 + col_offset)}7'].value or 0)
+
+    ws['W7'] = total_quarter
 
     # Итог за год
     total_year = get_total_year(branch, year)
     ws['X7'] = total_year
 
     # Процент выполнения плана
-    ws['Y7'] = (ws['X7'].value / (ws['D7'].value or 1)) * 100 if ws['X7'].value is not None else 0 #Добавлена проверка на None ws['X7'].value
+    ws['Y7'] = (ws['X7'].value / (ws['D7'].value or 1)) * 100 if ws['X7'].value is not None else 0
 
     # Динамическое заполнение названий месяцев
     month_names = []
@@ -548,7 +553,7 @@ def fill_month_data(ws, branch, year, month, col_offset):
     ws[f'{chr(71 + col_offset)}7'] = total_online
     ws[f'{chr(72 + col_offset)}7'] = total_out_station
     ws[f'{chr(73 + col_offset)}7'] = total_events_out_station
-    ws[f'{chr(74 + col_offset)}7'] = (ws[f'{chr(69 + col_offset)}7'].value or 0) + (ws[f'{chr(71 + col_offset)}7'].value or 0) + (ws[f'{chr(72+ col_offset)}7'].value or 0)
+    ws[f'{chr(74 + col_offset)}7'] = (ws[f'{chr(69 + col_offset)}7'].value or 0) + (ws[f'{chr(71 + col_offset)}7'].value or 0) + (ws[f'{chr(72 + col_offset)}7'].value or 0)
 
 def get_total_year(branch, year):
     visit_reports_year = VisitReport.objects.filter(library=branch, date__year=year)
@@ -657,8 +662,7 @@ def generate_digital_month_report(user, month):
 
     ws['B16'] = visit_plan.total_visits if visit_plan else 0
     ws['C16'] = sum(
-        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) +
-        (report.qty_visited_out_station or 0) +
+        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) + (report.qty_visited_out_station or 0) +
         (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) +
         (event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) + (event.online or 0)
         for report, event in zip(visit_reports, events)
