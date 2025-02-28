@@ -619,7 +619,7 @@ def generate_digital_month_report(user, month):
     ws['B4'] = regs_plan.total_regs if regs_plan else 0
     ws['C4'] = sum(
         (report.qty_reg_14 or 0) + (report.qty_reg_15_35 or 0) + (report.qty_reg_other or 0) +
-        (report.qty_reg_prlib or 0) + (report.qty_reg_litres or 0)
+        (report.qty_reg_prlib or 0) + (report.qty_reg_litres or 0) + (report.qty_reg_out_of_station or 0)
         for report in visit_reports
     )
     ws['D4'] = (ws['C4'].value / ws['B4'].value) * 100 if ws['B4'].value else 0
