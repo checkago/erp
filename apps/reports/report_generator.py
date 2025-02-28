@@ -640,7 +640,7 @@ def generate_digital_month_report(user, month):
     ws['C10'] = sum(
         (report.qty_books_14 or 0) + (report.qty_books_15_35 or 0) + (report.qty_books_other or 0) +
         (report.qty_books_neb or 0) + (report.qty_books_prlib or 0) + (report.qty_books_litres or 0) +
-        (report.qty_books_consultant or 0) + (report.qty_books_local_library or 0)
+        (report.qty_books_consultant or 0) + (report.qty_books_local_library or 0) + (report.qty_books_out_of_station or 0)
         for report in book_reports
     )
     ws['D10'] = (ws['C10'].value / ws['B10'].value) * 100 if ws['B10'].value else 0
@@ -658,6 +658,7 @@ def generate_digital_month_report(user, month):
     ws['B16'] = visit_plan.total_visits if visit_plan else 0
     ws['C16'] = sum(
         (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) +
+        (report.qty_visited_out_station or 0) +
         (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) +
         (event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) + (event.online or 0)
         for report, event in zip(visit_reports, events)
