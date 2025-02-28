@@ -225,7 +225,7 @@
         const qtyVisited15_35 = parseFloat(document.getElementById('id_qty_visited_15_35').value) || 0;
         const qtyVisitedOther = parseFloat(document.getElementById('id_qty_visited_other').value) || 0;
         const qtyVisitedOnline = parseFloat(document.getElementById('id_qty_visited_online').value) || 0;
-        const qtyVisitedOutOfStation = parseFloat(document.getElementById('id_qty_visited_out_of_station').value) || 0;
+        const qtyVisitedOutOfStation = parseFloat(document.getElementById('id_qty_visited_out_station').value) || 0;
 
         const totalSum = qtyVisited14 + qtyVisited15_35 + qtyVisitedOther + qtyVisitedOnline + qtyVisitedOutOfStation;
         document.getElementById('total-visited-sum').querySelector('span').textContent = totalSum;
@@ -236,7 +236,7 @@
     document.getElementById('id_qty_visited_15_35').addEventListener('input', calculateSum);
     document.getElementById('id_qty_visited_other').addEventListener('input', calculateSum);
     document.getElementById('id_qty_visited_online').addEventListener('input', calculateSum);
-    document.getElementById('id_qty_visited_out_of_station').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_visited_out_station').addEventListener('input', calculateSum);
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
