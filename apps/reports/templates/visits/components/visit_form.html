@@ -108,7 +108,7 @@
                                     {{ form.qty_visited_pensioners }}
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="id_qty_visited_out_station" class="form-label">Внестационар</label>
+                                    <label for="id_qty_visited_out_station" class="form-label">Внестационар (Книгоношество)</label>
                                     {{ form.qty_visited_out_station }}
                                 </div>
                                 <div class="col-md-4">
@@ -227,7 +227,7 @@
         const qtyVisitedOnline = parseFloat(document.getElementById('id_qty_visited_online').value) || 0;
         const qtyVisitedOutOfStation = parseFloat(document.getElementById('id_qty_visited_out_of_station').value) || 0;
 
-        const totalSum = qtyVisited14 + qtyVisited15_35 + qtyVisitedOther + qtyVisitedOnline + + qtyVisitedOutOfStation;
+        const totalSum = qtyVisited14 + qtyVisited15_35 + qtyVisitedOther + qtyVisitedOnline + qtyVisitedOutOfStation;
         document.getElementById('total-visited-sum').querySelector('span').textContent = totalSum;
     }
 
