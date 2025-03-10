@@ -95,8 +95,12 @@
                                         <h6>Общее число:</h6>
                                         <h5 class="text-danger"><span>0</span></h5>
                                     </div>
-                                    <div id="inv_pens_out_event_sum" class="col-5 text-center">
-                                        <h6>Пенс./Инв./Внестац. из общего числа:</h6>
+                                    <div id="inv_pens_out_event_sum" class="col-4 text-center">
+                                        <h6>Пенс./Инв.:</h6>
+                                        <h5 class="text-danger"><span>0</span></h5>
+                                    </div>
+                                    <div id="out_event_sum" class="col-4 text-center">
+                                        <h6>Внестац. из общего числа:</h6>
                                         <h5 class="text-danger"><span>0</span></h5>
                                     </div>
                                 </div>
@@ -146,6 +150,22 @@
     // Назначение обработчиков событий на поля ввода
     document.getElementById('id_invalids').addEventListener('input', calculateSum);
     document.getElementById('id_pensioners').addEventListener('input', calculateSum);
+
+    // Вызов функции при загрузке страницы для отображения начальной суммы
+    calculateSum();
+  </script>
+
+<script>
+    // Функция для вычисления суммы
+    function calculateSum() {
+        const qtyEventOutStation = parseFloat(document.getElementById('id_out_of_station').value) || 0;
+
+        const totalSum = qtyEventOutStation;
+        document.getElementById('out_event_sum').querySelector('span').textContent = totalSum;
+    }
+
+    // Назначение обработчиков событий на поля ввода
+    document.getElementById('id_out_of_station').addEventListener('input', calculateSum);
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
