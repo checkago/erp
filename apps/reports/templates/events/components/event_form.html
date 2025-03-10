@@ -140,7 +140,7 @@
         const qtyEventPensioners = parseFloat(document.getElementById('id_pensioners').value) || 0;
         const qtyEventOutStation = parseFloat(document.getElementById('id_out_of_station').value) || 0;
 
-        const totalSum = qtyEventInvalids + qtyEventPensioners + qtyEventOutStation;
+        const totalSum = qtyEventInvalids + qtyEventPensioners;
         document.getElementById('inv_pens_out_event_sum').querySelector('span').textContent = totalSum;
     }
 
