@@ -562,9 +562,7 @@ def get_total_year(branch, year):
         sum((report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) for report in visit_reports_year) +
         sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events_year) +
         sum((event.online or 0) for event in events_year) +
-        sum((report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report in visit_reports_year) +
-        sum((event.out_of_station or 0) for event in events_year) +
-        sum((report.qty_visited_out_station or 0) for report in visit_reports_year)
+        sum((report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report in visit_reports_year)
     )
     return total_year
 
