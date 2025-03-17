@@ -524,7 +524,7 @@ def fill_month_data(ws, branch, year, month, col_offset):
     events = Event.objects.filter(library=branch, date__year=year, date__month=month)
 
     total_visits = sum(
-        ((report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0)) - (report.qty_visited_out_station or 0)
+        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0)
         for report in visit_reports
     )
     total_events = sum(
