@@ -8,7 +8,7 @@ def _aggregate_visits(queryset):
     """Вспомогательная функция для агрегации данных по посещениям."""
     return queryset.aggregate(
         total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') +
-                  Sum('qty_reg_prlib') + Sum('qty_reg_litres'),
+                  Sum('qty_reg_prlib') + Sum('qty_reg_litres') + Sum('qty_reg_out_of_station'),
         total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
                       Sum('qty_visited_other') + Sum('qty_visited_online') + Sum('qty_visited_prlib') +
                       Sum('qty_visited_litres')
