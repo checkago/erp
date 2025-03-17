@@ -29,7 +29,7 @@ def _aggregate_events(queryset):
     """Вспомогательная функция для агрегации данных по мероприятиям."""
     return queryset.aggregate(
         total_quantity=Sum('quantity'),
-        total_visitors=Sum(F('age_14') + F('age_35') + F('age_other')),
+        total_visitors=Sum(F('age_14') + F('age_35') + F('age_other') + F('out_of_station')),
         total_paid=Count('id', filter=Q(paid=True))
     )
 
