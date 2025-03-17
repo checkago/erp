@@ -19,7 +19,7 @@ def _aggregate_books(queryset):
     return queryset.aggregate(
         total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') +
                    Sum('qty_books_neb') + Sum('qty_books_prlib') + Sum('qty_books_litres') +
-                   Sum('qty_books_consultant') + Sum('qty_books_local_library'),
+                   Sum('qty_books_consultant') + Sum('qty_books_local_library') +Sum('qty_books_out_of_station'),
         total_reference=Sum('qty_books_reference_do_14') + Sum('qty_books_reference_14') +
                         Sum('qty_books_reference_35')
     )
