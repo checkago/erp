@@ -637,8 +637,7 @@ def generate_digital_month_report(user, month):
 
     ws['C5'] = sum(report.qty_reg_14 or 0 for report in visit_reports)
     ws['C6'] = sum(report.qty_reg_15_35 or 0 for report in visit_reports)
-    ws['C7'] = sum((report.qty_reg_14 or 0) + (report.qty_reg_15_35 or 0) + (report.qty_reg_other or 0) -
-                   (report.qty_reg_out_of_station or 0) for report in visit_reports)
+    ws['C7'] = sum((report.qty_reg_14 or 0) + (report.qty_reg_15_35 or 0) + (report.qty_reg_other or 0) for report in visit_reports)
     ws['C8'] = sum(report.qty_reg_out_of_station or 0 for report in visit_reports)
     ws['C9'] = sum((report.qty_reg_prlib or 0) + (report.qty_reg_litres or 0) for report in visit_reports)
 
@@ -653,8 +652,7 @@ def generate_digital_month_report(user, month):
 
     ws['C11'] = sum(report.qty_books_14 or 0 for report in book_reports)
     ws['C12'] = sum(report.qty_books_15_35 or 0 for report in book_reports)
-    ws['C13'] = sum((report.qty_books_14 or 0) + (report.qty_books_15_35 or 0) + (report.qty_books_other or 0) -
-                    (report.qty_books_out_of_station or 0) for report in book_reports)
+    ws['C13'] = sum((report.qty_books_14 or 0) + (report.qty_books_15_35 or 0) + (report.qty_books_other or 0) for report in book_reports)
     ws['C14'] = sum(report.qty_books_out_of_station or 0 for report in book_reports)
     ws['C15'] = sum(
         (report.qty_books_neb or 0) + (report.qty_books_prlib or 0) + (report.qty_books_litres or 0) +
