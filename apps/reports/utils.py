@@ -11,7 +11,7 @@ def _aggregate_visits(queryset):
                   Sum('qty_reg_prlib') + Sum('qty_reg_litres') + Sum('qty_reg_out_of_station'),
         total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
                       Sum('qty_visited_other') + Sum('qty_visited_online') + Sum('qty_visited_prlib') +
-                      Sum('qty_visited_litres')
+                      Sum('qty_visited_litres') + Sum('qty_visited_out_station')
     )
 
 
@@ -19,7 +19,7 @@ def _aggregate_books(queryset):
     return queryset.aggregate(
         total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') +
                    Sum('qty_books_neb') + Sum('qty_books_prlib') + Sum('qty_books_litres') +
-                   Sum('qty_books_consultant') + Sum('qty_books_local_library') + Sum('qty_visited_out_station'),
+                   Sum('qty_books_consultant') + Sum('qty_books_local_library'),
         total_reference=Sum('qty_books_reference_do_14') + Sum('qty_books_reference_14') +
                         Sum('qty_books_reference_35')
     )
