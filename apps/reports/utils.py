@@ -78,7 +78,9 @@ def get_book_totals(user):
 )
 
     yearly_totals = BookReport.objects.filter(date__year=today.year, library=library).aggregate(
-        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0) + Sum('qty_books_other', default=0),
+        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0) + Sum('qty_books_other', default=0) +
+        Sum('qty_books_neb', default=0) + Sum('qty_books_prlib', default=0) + Sum('qty_books_litres', default=0) +
+        Sum('qty_books_consultant', default=0) + Sum('qty_books_local_library', default=0) + Sum('qty_books_out_of_station', default=0),
         total_reference=Sum('qty_books_reference_do_14', default=0) + Sum('qty_books_reference_14', default=0) + Sum('qty_books_reference_35', default=0)
                         + Sum('qty_books_reference_online', default=0)
     )
