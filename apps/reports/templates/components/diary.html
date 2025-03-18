@@ -23,7 +23,7 @@
                             </div>
                             <div class="col">
                                 <h6>Посещения</h6>
-                                    <ul>
+                                <ul>
                                     <li class="mb-3">За сегодня: {% if totals_visits_branch.daily.total_visited %}<strong>{{ totals_visits_branch.daily.total_visited }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
                                     <li class="mb-3">За месяц: <strong>{{ totals_visits_branch.monthly.total_visited }}</strong></li>
                                     <li class="mb-3">С начала года: <strong>{{ totals_visits_branch.yearly.total_visited }}</strong></li>
