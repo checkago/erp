@@ -66,13 +66,15 @@ def get_book_totals(user):
 
     # Агрегация данных
     daily_totals = BookReport.objects.filter(date=today, library=library).aggregate(
-        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0) + Sum('qty_books_other', default=0),
+        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0) + Sum('qty_books_other', default=0)
+        + Sum('qty_books_out_of_station') + Sum('qty_books_neb') + Sum('qty_books_litres') + Sum('qty_books_prlib') + Sum('qty_books_consultant') + Sum('qty_books_local_library'),
         total_reference=Sum('qty_books_reference_do_14', default=0) + Sum('qty_books_reference_14', default=0) + Sum('qty_books_reference_35', default=0)
                         + Sum('qty_books_reference_online', default=0)
     )
 
     monthly_totals = BookReport.objects.filter(date__month=today.month, date__year=today.year, library=library).aggregate(
-        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0) + Sum('qty_books_other', default=0),
+        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0) + Sum('qty_books_other', default=0)
+        + Sum('qty_books_out_of_station') + Sum('qty_books_neb') + Sum('qty_books_litres') + Sum('qty_books_prlib') + Sum('qty_books_consultant') + Sum('qty_books_local_library'),
         total_reference=Sum('qty_books_reference_do_14', default=0) + Sum('qty_books_reference_14', default=0) + Sum('qty_books_reference_35', default=0)
                         + Sum('qty_books_reference_online', default=0)
 )
