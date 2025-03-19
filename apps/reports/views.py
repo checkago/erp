@@ -47,7 +47,7 @@ def export_all_reports(request):
 
 
 def export_quarter_report(request):
-    year = 2025  # Текущий год
+    year = datetime.now().year   # Текущий год
     quarter = int(request.GET.get('quarter'))  # Получаем квартал из запроса
     response = generate_quarter_excel(request.user, year, quarter)
     if response:
@@ -66,7 +66,7 @@ def export_digital_month_report(request):
 
 
 def export_nats_project_report(request):
-    year = 2025  # Текущий год
+    year = datetime.now().year   # Текущий год
     month = int(request.GET.get('month_nats'))  # Получаем месяц из запроса
     response = generate_nats_project_report(request.user, year, month)
     if response:
