@@ -711,3 +711,56 @@ def generate_digital_month_report(user, month):
     response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
     wb.save(response)
     return response
+
+
+def generate_nats_project_report(user, year, month):
+    try:
+        employee = Employee.objects.get(user=user)
+        branch = employee.branch
+    except Employee.DoesNotExist:
+        return None
+
+    if not branch:
+        return None
+
+    # Загрузка шаблона
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    template_path = os.path.join(base_dir, 'reports/excell/nats_project_template.xlsx')
+
+    if not os.path.exists(template_path):
+        raise FileNotFoundError(f"File not found: {template_path}")
+
+    wb = load_workbook(filename=template_path)
+    ws = wb.active
+
+    # Заполнение заголовков
+    ws['I3'] = f"{year} год"
+    ws['B5'] = f"Кол-во пользователей библиотек. Регистрация читателей План на {year} год {RegsPlan.objects.filter(library=branch, year=year).first().total_regs if RegsPlan.objects.filter(library=branch, year=year).exists() else 0} чел."
+    ws['G5'] = f"Общая посещаемость (план на {year} г. {VisitPlan.objects.filter(library=branch, year=year).first().total_visits if VisitPlan.objects.filter(library=branch, year=year).exists() else 0}) Факт Число посещений библиотек ВСЕГО (нарастающий итог с начала года)"
+    ws['I6'] = f"Всего в {year} году"
+    ws['J6'] = f"В том числе в рамках Нацпроекта 'Творческие люди в {year} году'"
+
+    # Получаем данные с начала года до конца выбранного месяца
+    visit_reports = VisitReport.objects.filter(library=branch, date__year=year, date__month__lte=month)
+    book_reports = BookReport.objects.filter(library=branch, date__year=year, date__month__lte=month)
+    events = Event.objects.filter(library=branch, date__year=year, date__month__lte=month)
+
+    # Заполнение данных для филиала
+    ws['A7'] = branch.full_name
+    ws['B7'] = sum(report.qty_reg_14 or 0 for report in visit_reports)
+    ws['C7'] = sum(report.qty_reg_15_35 or 0 for report in visit_reports) + sum(report.qty_reg_other or 0 for report in visit_reports) + sum(report.qty_reg_out_of_station or 0 for report in visit_reports) + sum(report.qty_reg_prlib or 0 for report in visit_reports) + sum(report.qty_reg_litres or 0 for report in visit_reports)
+    ws['D7'] = sum(report.qty_reg_14 or 0 for report in visit_reports) + sum(report.qty_reg_15_35 or 0 for report in visit_reports) + sum(report.qty_reg_other or 0 for report in visit_reports) + sum(report.qty_reg_out_of_station or 0 for report in visit_reports) + sum(report.qty_reg_prlib or 0 for report in visit_reports) + sum(report.qty_reg_litres or 0 for report in visit_reports)
+    ws['E7'] = sum(event.quantity or 0 for event in events)
+    ws['F7'] = sum(event.age_14 or 0 for event in events) + sum(event.age_35 or 0 for event in events) + sum(event.age_other or 0 for event in events) + sum(event.out_of_station or 0 for event in events)
+    ws['G7'] = sum(event.age_14 or 0 for event in events) + sum(event.age_35 or 0 for event in events) + sum(event.age_other or 0 for event in events) + sum(event.out_of_station or 0 for event in events) + sum(report.qty_visited_14 or 0 for report in visit_reports) + sum(report.qty_visited_15_35 or 0 for report in visit_reports) + sum(report.qty_visited_other or 0 for report in visit_reports) + sum(report.qty_visited_out_station or 0 for report in visit_reports) + sum(report.qty_visited_online or 0 for report in visit_reports) + sum(report.qty_visited_prlib or 0 for report in visit_reports) + sum(report.qty_visited_litres or 0 for report in visit_reports)
+    ws['H7'] = sum(report.qty_books_14 or 0 for report in book_reports) + sum(report.qty_books_15_35 or 0 for report in book_reports) + sum(report.qty_books_other or 0 for report in book_reports) + sum(report.qty_books_out_of_station or 0 for report in book_reports) + sum(report.qty_books_neb or 0 for report in book_reports) + sum(report.qty_books_prlib or 0 for report in book_reports) + sum(report.qty_books_litres or 0 for report in book_reports) + sum(report.qty_books_consultant or 0 for report in book_reports) + sum(report.qty_books_local_library or 0 for report in book_reports)
+    ws['K7'] = sum(report.qty_visited_online or 0 for report in visit_reports) + sum(event.online or 0 for event in events)
+
+    # Сохранение файла
+    filename = f"нац_проект_{branch.short_name}_{year}_{month}.xlsx"
+    safe_filename = quote(filename)
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
+    wb.save(response)
+    return response

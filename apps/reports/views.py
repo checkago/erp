@@ -1,7 +1,8 @@
 from collections import defaultdict
 
 from .checks import check_data_fillings
-from .report_generator import generate_all_reports_excel, generate_quarter_excel, generate_digital_month_report
+from .report_generator import generate_all_reports_excel, generate_quarter_excel, generate_digital_month_report, \
+    generate_nats_project_report
 from .utils import get_book_totals, get_event_totals, get_all_visit_totals, \
     get_all_book_totals, get_all_event_totals, get_visits_totals
 from django.http import HttpResponse
@@ -58,6 +59,16 @@ def export_quarter_report(request):
 def export_digital_month_report(request):
     month = int(request.GET.get('month'))
     response = generate_digital_month_report(request.user, month)
+    if response:
+        return response
+    else:
+        return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
+
+
+def export_nats_project_report(request):
+    year = 2025  # Текущий год
+    month = int(request.GET.get('month_nats'))  # Получаем месяц из запроса
+    response = generate_nats_project_report(request.user, year, month)
     if response:
         return response
     else:
