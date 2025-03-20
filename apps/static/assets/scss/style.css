@@ -1964,7 +1964,7 @@ button:focus {
     Typography css start
 ==========================**/
 body {
-  font-size: 14px;
+  font-size: 13px;
   overflow-x: hidden;
   font-family: Rubik, sans-serif;
   color: #2F2F3B; }
@@ -4916,7 +4916,7 @@ table.dataTable.display tbody tr.odd > .sorting_1 {
   box-shadow: 0 0 0 0.2rem rgba(171, 140, 228, 0.05); }
 
 .theme-form textarea {
-  border-color: #efefef; }
+  border-color: #adadad; }
   .theme-form textarea::-webkit-input-placeholder {
     color: #898989;
     font-size: 14px;
@@ -4939,7 +4939,7 @@ table.dataTable.display tbody tr.odd > .sorting_1 {
 .theme-form input[type=file],
 .theme-form textarea,
 .theme-form select {
-  border-color: #efefef;
+  border-color: #adadad;
   background-color: #fff;
   font-size: 14px;
   color: #898989;
@@ -4971,7 +4971,7 @@ table.dataTable.display tbody tr.odd > .sorting_1 {
   height: auto; }
 
 .theme-form select.form-control:not([size]):not([multiple]) {
-  border-color: #efefef;
+  border-color: #adadad;
   font-size: 14px; }
 
 .theme-form .checkbox label {
@@ -22328,7 +22328,7 @@ body[class*='dark-'] .for-light {
   margin-top: 0; }
 
 .login-card .login-main .theme-form label {
-  font-size: 14px; }
+  font-size: 13px; }
 
 .login-card .login-main .theme-form .show-hide {
   top: 50%; }
@@ -27739,5 +27739,3 @@ html[dir="rtl"] body.dark-only .page-wrapper .page-body-wrapper .page-body .card
 /**=====================
     63. Box-layout CSS ends
 ==========================**/
-
-/*# sourceMappingURL=style.css.map */
