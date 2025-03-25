@@ -672,8 +672,8 @@ def generate_digital_month_report(user, month):
     ws['C16'] = total_visited + total_events
     ws['D16'] = (ws['C16'].value / ws['B16'].value) * 100 if ws['B16'].value else 0
 
-    ws['C17'] = sum((report.qty_visited_14 or 0) + (event.age_14 or 0) for report, event in zip(visit_reports, events))
-    ws['C18'] = sum((report.qty_visited_15_35 or 0) + (event.age_35 or 0) for report, event in zip(visit_reports, events))
+    ws['C17'] = sum(report.qty_visited_14 or 0 for report in visit_reports) + sum(event.age_14 or 0 for event in events)
+    ws['C18'] = sum(report.qty_visited_15_35 or 0 for report in visit_reports) + sum(event.age_35 or 0 for event in events)
     ws['C19'] = sum((report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) for report in visit_reports)
     ws['C20'] = sum(report.qty_visited_out_station or 0 for report in visit_reports)
     ws['C21'] = sum((report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report in visit_reports)
