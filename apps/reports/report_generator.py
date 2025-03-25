@@ -110,7 +110,7 @@ def generate_visit_report(wb, branch, year, month):
     ws['N6'] = year_start_data['qty_visited_other']
     ws['O6'] = year_start_data['qty_visited_pensioners']
     ws['P6'] = year_start_data['qty_visited_invalids']
-    ws['QP6'] = year_start_data['qty_visited_out_station']
+    ws['Q6'] = year_start_data['qty_visited_out_station']
     ws['R6'] = year_start_data['qty_visited_prlib']
     ws['S6'] = year_start_data['qty_visited_litres']
     ws['T6'] = year_start_data['qty_visited_online']
