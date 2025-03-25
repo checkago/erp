@@ -112,7 +112,7 @@
                                     {{ form.qty_visited_out_station }}
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="id_qty_visited_online" class="form-label">Удаленно</label>
+                                    <label for="id_qty_visited_online" class="form-label">Удаленно<span class="text-danger fw-bold">* (Заполняет только ЦГБ)</span></label>
                                     {{ form.qty_visited_online }}
                                 </div>
                                 <div class="col-md-4">
@@ -124,6 +124,8 @@
                                     {{ form.qty_visited_litres }}
                                 </div>
                             </div>
+                            <hr class="text-primary">
+                                 <span class="text-danger fw-bold">* - Удаленные посещения, это не справки, а посещения сайта, соц. сетей. Заполняется только ЦГБ им. Тютчева.</span>
                             <hr class="text-primary">
                             <div class="row">
                                 <div id="total-visited-sum" class="col-4 text-center">
