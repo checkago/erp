@@ -676,7 +676,7 @@ def generate_digital_month_report(user, month):
     ws['C18'] = sum(report.qty_visited_15_35 or 0 for report in visit_reports) + sum(event.age_35 or 0 for event in events)
     ws['C19'] = sum((report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) for report in visit_reports)
     ws['C20'] = sum(report.qty_visited_out_station or 0 for report in visit_reports)
-    ws['C21'] = sum((report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report in visit_reports)
+    ws['C21'] = sum((report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report in visit_reports) + sum(report.qty_books_reference_online or 0 for report in book_reports)
     ws['C22'] = sum(report.qty_visited_invalids or 0 for report in visit_reports) + sum(event.invalids or 0 for event in events)
     ws['C23'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if event.paid)
     ws['C24'] = sum(event.invalids or 0 for event in events if event.paid)
