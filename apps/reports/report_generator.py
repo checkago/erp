@@ -663,8 +663,9 @@ def generate_digital_month_report(user, month):
     ws['B16'] = visit_plan.total_visits if visit_plan else 0
     total_visited = sum(
         (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) + (report.qty_visited_out_station or 0) +
-        (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report in visit_reports
+        (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report in visit_reports + (report.qty_books_reference_online or 0 for report in book_reports)
     )
+    + sum((report.qty_books_reference_online or 0) for report in book_reports)
     total_events = sum(
         (event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) + (event.online or 0) for event
         in events
