@@ -665,12 +665,14 @@ def generate_digital_month_report(user, month):
         (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) + (report.qty_visited_out_station or 0) +
         (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report in visit_reports
     )
-    + sum(report.qty_books_reference_online or 0 for report in book_reports)
+    total_references = sum(
+        (report.qty_books_reference_online or 0) for report in book_reports
+    )
     total_events = sum(
         (event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) + (event.online or 0) for event
         in events
     )
-    ws['C16'] = total_visited + total_events
+    ws['C16'] = total_visited + total_events + total_references
     ws['D16'] = (ws['C16'].value / ws['B16'].value) * 100 if ws['B16'].value else 0
 
     ws['C17'] = sum(report.qty_visited_14 or 0 for report in visit_reports) + sum(event.age_14 or 0 for event in events)
