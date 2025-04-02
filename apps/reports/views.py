@@ -119,9 +119,9 @@ class EventListView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         employee = Employee.objects.get(user=user)
 
-        # Получаем события за последние 60 дней
-        date_60_days_ago = timezone.now() - timedelta(days=60)
-        events = Event.objects.filter(date__gte=date_60_days_ago, library=employee.branch).order_by('-date')
+        # Получаем события за последние 90 дней
+        date_90_days_ago = timezone.now() - timedelta(days=90)
+        events = Event.objects.filter(date__gte=date_90_days_ago, library=employee.branch).order_by('-date')
 
         # Подготавливаем данные для графика
         dates = []
@@ -241,8 +241,8 @@ class VisitReportListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         employee = Employee.objects.get(user=user)
-        date_60_days_ago = timezone.now() - timedelta(days=60)
-        return VisitReport.objects.filter(date__gte=date_60_days_ago, library=employee.branch).order_by('-date')
+        date_90_days_ago = timezone.now() - timedelta(days=90)
+        return VisitReport.objects.filter(date__gte=date_90_days_ago, library=employee.branch).order_by('-date')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -401,8 +401,8 @@ class BookReportListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         user = self.request.user
         employee = Employee.objects.get(user=user)
-        date_60_days_ago = timezone.now() - timedelta(days=60)
-        return BookReport.objects.filter(date__gte=date_60_days_ago, library=employee.branch).order_by('-date')
+        date_90_days_ago = timezone.now() - timedelta(days=90)
+        return BookReport.objects.filter(date__gte=date_90_days_ago, library=employee.branch).order_by('-date')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
