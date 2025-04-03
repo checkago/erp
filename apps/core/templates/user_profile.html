@@ -12,11 +12,11 @@
 
 {% block content %}
     {% if messages %}
-    <div class="alert alert-success d-flex align-items-center" role="alert">
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    </div>
+        <div class="alert alert-success d-flex align-items-center" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
     {% endif %}
     <div class="page-body">
         <div class="container-fluid">
@@ -47,18 +47,18 @@
                         <div class="card-header pb-0 card-no-border">
                             <h3>Персональные данные</h3>
 
-                        <div class="card-body">
-                            <form method="post" enctype="multipart/form-data">
-                                {% csrf_token %}
-                                {{ user_form|crispy }}
-                                {{ employee_form|crispy }}
-                                <button class="btn btn-success-gradien" type="submit">Сохранить изменения</button>
-                            </form>
+                            <div class="card-body">
+                                <form method="post" enctype="multipart/form-data">
+                                    {% csrf_token %}
+                                    {{ user_form|crispy }}
+                                    {{ employee_form|crispy }}
+                                    <button class="btn btn-success-gradien" type="submit">Сохранить изменения</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
 

@@ -12,11 +12,11 @@
 
 {% block content %}
     {% if messages %}
-    <div class="alert alert-success d-flex align-items-center" role="alert">
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-    </div>
+        <div class="alert alert-success d-flex align-items-center" role="alert">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
     {% endif %}
     <div class="page-body">
         <div class="container-fluid">
@@ -41,33 +41,35 @@
                         <div class="card-header pb-0 card-no-border">
                             <h3>Персональные данные</h3>
 
-                        <div class="card-body">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <h5>ФИО: </h5><span class="mb-3">{{ employee }} {{ employee.user.middle_name }}</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <h5>Место работы: </h5><span class="mb-3">{{ employee.branch }}</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <h5>должность: </h5><span class="mb-3">{{ employee.position }}</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <h5>Email: </h5><span class="mb-3">{{ employee.user.email }}</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <h5>Телефон: </h5><span class="mb-3">{% if employee.phone %}{{ employee.phone }}{% else %}Нет информации{% endif %}</span>
-                                </li>
-                            </ul>
+                            <div class="card-body">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                        <h5>ФИО: </h5><span
+                                            class="mb-3">{{ employee }} {{ employee.user.middle_name }}</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <h5>Место работы: </h5><span class="mb-3">{{ employee.branch }}</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <h5>должность: </h5><span class="mb-3">{{ employee.position }}</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <h5>Email: </h5><span class="mb-3">{{ employee.user.email }}</span>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <h5>Телефон: </h5><span class="mb-3">{% if employee.phone %}
+                                        {{ employee.phone }}{% else %}Нет информации{% endif %}</span>
+                                    </li>
+                                </ul>
 
-                        </div>
-                        <div class="card-footer">
-                            <a href="{{ previous_url }}" class="btn btn-danger-gradien" type="submit">Назад</a>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{{ previous_url }}" class="btn btn-danger-gradien" type="submit">Назад</a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
 

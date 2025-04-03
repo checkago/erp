@@ -2,215 +2,236 @@
 <div class="container-fluid email-wrap bookmark-wrap todo-wrap">
     <div class="row flex-row">
 
-      {% include 'components/diary_sidebar.html' %}
+        {% include 'components/diary_sidebar.html' %}
 
-      <div class="col-xl-9 xl-70 box-col-12">
-        <div class="card">
-          <div class="card-header">
-                <div class="col-4"><h4>Форма книговыдачи</h4></div>
-            </div>
-            <div class="card-body">
-                <form method="post" id="BookForm" class="theme-form">
-                    {% csrf_token %}
-                    <div class="modal-body">
+        <div class="col-xl-9 xl-70 box-col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="col-4"><h4>Форма книговыдачи</h4></div>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="BookForm" class="theme-form">
+                        {% csrf_token %}
+                        <div class="modal-body">
 
-                        <!-- Группа регистрации -->
-                        <fieldset>
-                            <legend>Данные</legend>
+                            <!-- Группа регистрации -->
+                            <fieldset>
+                                <legend>Данные</legend>
 
-                            <div class="row mb-3 g-3">
-                                <div class="col-md-3">
-                                    <label for="id_cafedra" class="form-label">Кафедра</label>
-                                    {{ form.cafedra }}
+                                <div class="row mb-3 g-3">
+                                    <div class="col-md-3">
+                                        <label for="id_cafedra" class="form-label">Кафедра</label>
+                                        {{ form.cafedra }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="id_date" class="form-label">Дата отчета</label>
+                                        {{ form.date }}
+                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <label for="id_date" class="form-label">Дата отчета</label>
-                                    {{ form.date }}
-                                </div>
-                            </div>
-                        </fieldset>
+                            </fieldset>
 
-                        <!-- Группа книговыдачи -->
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <fieldset class="border border-2 border-primary p-4 mb-3">
-                                    <legend class="text-primary">Книговыдача
-                                        {% if mod_lib %}
-                                            <span class="float-end text-danger">
+                            <!-- Группа книговыдачи -->
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <fieldset class="border border-2 border-primary p-4 mb-3">
+                                        <legend class="text-primary">Книговыдача
+                                            {% if mod_lib %}
+                                                <span class="float-end text-danger">
                                                 <div id="sum"></div>
                                             </span>
-                                        {% endif %}
-                                    </legend>
-                                    <div class="row mb-3 g-3">
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_14" class="form-label">Книговыдача (До 14)</label>
-                                            {{ form.qty_books_14 }}
+                                            {% endif %}
+                                        </legend>
+                                        <div class="row mb-3 g-3">
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_14" class="form-label">Книговыдача (До
+                                                    14)</label>
+                                                {{ form.qty_books_14 }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_15_35" class="form-label">Книговыдача
+                                                    (14-30)</label>
+                                                {{ form.qty_books_15_35 }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_other" class="form-label">Книговыдача (Прочие
+                                                    30+)</label>
+                                                {{ form.qty_books_other }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_invalid" class="form-label">Инвалиды (Из общего
+                                                    числа)</label>
+                                                {{ form.qty_books_invalid }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_out_of_station"
+                                                       class="form-label">Внестационар</label>
+                                                {{ form.qty_books_out_of_station }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_neb" class="form-label">Книговыдача
+                                                    (НЭБ)</label>
+                                                {{ form.qty_books_neb }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_prlib" class="form-label">Книговыдача
+                                                    (Президентская)</label>
+                                                {{ form.qty_books_prlib }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_litres" class="form-label">Книговыдача
+                                                    (Литрес)</label>
+                                                {{ form.qty_books_litres }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_consultant" class="form-label">Книговыдача
+                                                    (Консультант+)</label>
+                                                {{ form.qty_books_consultant }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_local_library" class="form-label">Книговыдача
+                                                    (Локальная биб.)</label>
+                                                {{ form.qty_books_local_library }}
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_15_35" class="form-label">Книговыдача (14-30)</label>
-                                            {{ form.qty_books_15_35 }}
+                                        <hr class="text-primary">
+                                        <div class="row">
+                                            <div id="total-books-sum" class="col-4 text-center">
+                                                <h6>Общее число:</h6>
+                                                <h5 class="text-danger"><span>0</span></h5>
+                                            </div>
+                                            <div id="inv_pens_books_sum" class="col-4 text-center">
+                                                <h6>Инв. из общего числа:</h6>
+                                                <h5 class="text-danger"><span>0</span></h5>
+                                            </div>
+                                            <div id="electronic_books_sum" class="col-4 text-center">
+                                                <h6>Электронные ресурсы:</h6>
+                                                <h5 class="text-danger"><span>0</span></h5>
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_other" class="form-label">Книговыдача (Прочие 30+)</label>
-                                            {{ form.qty_books_other }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_invalid" class="form-label">Инвалиды (Из общего числа)</label>
-                                            {{ form.qty_books_invalid }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_out_of_station" class="form-label">Внестационар</label>
-                                            {{ form.qty_books_out_of_station }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_neb" class="form-label">Книговыдача (НЭБ)</label>
-                                            {{ form.qty_books_neb }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_prlib" class="form-label">Книговыдача (Президентская)</label>
-                                            {{ form.qty_books_prlib }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_litres" class="form-label">Книговыдача (Литрес)</label>
-                                            {{ form.qty_books_litres }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_consultant" class="form-label">Книговыдача (Консультант+)</label>
-                                            {{ form.qty_books_consultant }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_local_library" class="form-label">Книговыдача (Локальная биб.)</label>
-                                            {{ form.qty_books_local_library }}
-                                        </div>
-                                    </div>
-                                    <hr class="text-primary">
-                                    <div class="row">
-                                        <div id="total-books-sum" class="col-4 text-center">
-                                            <h6>Общее число:</h6>
-                                            <h5 class="text-danger"><span>0</span></h5>
-                                        </div>
-                                        <div id="inv_pens_books_sum" class="col-4 text-center">
-                                            <h6>Инв. из общего числа:</h6>
-                                            <h5 class="text-danger"><span>0</span></h5>
-                                        </div>
-                                        <div id="electronic_books_sum" class="col-4 text-center">
-                                            <h6>Электронные ресурсы:</h6>
-                                            <h5 class="text-danger"><span>0</span></h5>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset  class="conditional-fields border border-2 border-warning p-4 mb-1">
-                                    <h5 class="text-primary">В том числе по отраслям</h5>
+                                    </fieldset>
+                                    <fieldset class="conditional-fields border border-2 border-warning p-4 mb-1">
+                                        <h5 class="text-primary">В том числе по отраслям</h5>
                                         <hr>
-                                    <div class="row mb-3 g-3">
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_part_opl" class="form-label">Общ.-политтич.лит-ра</label>
-                                            {{ form.qty_books_part_opl }}
+                                        <div class="row mb-3 g-3">
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_part_opl" class="form-label">Общ.-политтич.лит-ра</label>
+                                                {{ form.qty_books_part_opl }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_part_enm" class="form-label">Естеств. Науки.
+                                                    Медицина</label>
+                                                {{ form.qty_books_part_enm }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_part_tech" class="form-label">Техника</label>
+                                                {{ form.qty_books_part_tech }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_part_sh" class="form-label">Сельское
+                                                    хозяйство</label>
+                                                {{ form.qty_books_part_sh }}
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_part_enm" class="form-label">Естеств. Науки. Медицина</label>
-                                            {{ form.qty_books_part_enm }}
+                                        <div class="row mb-3 g-3">
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_part_si" class="form-label">Спорт.
+                                                    Искусство</label>
+                                                {{ form.qty_books_part_si }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_part_yl" class="form-label">Языкознание.
+                                                    Лит-ведение</label>
+                                                {{ form.qty_books_part_yl }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_part_hl" class="form-label">Художественная
+                                                    лит-ра</label>
+                                                {{ form.qty_books_part_hl }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_part_dl" class="form-label">Детская
+                                                    литература</label>
+                                                {{ form.qty_books_part_dl }}
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_part_tech" class="form-label">Техника</label>
-                                            {{ form.qty_books_part_tech }}
+                                        <div class="row mb-3 g-3">
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_part_other" class="form-label">Прочие(в т.ч.
+                                                    журналы)</label>
+                                                {{ form.qty_books_part_other }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_part_audio"
+                                                       class="form-label">Аудиокниги</label>
+                                                {{ form.qty_books_part_audio }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_qty_books_part_krai" class="form-label">Краеведение(в том
+                                                    числе)</label>
+                                                {{ form.qty_books_part_krai }}
+                                            </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_part_sh" class="form-label">Сельское хозяйство</label>
-                                            {{ form.qty_books_part_sh }}
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3 g-3">
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_part_si" class="form-label">Спорт. Искусство</label>
-                                            {{ form.qty_books_part_si }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_part_yl" class="form-label">Языкознание. Лит-ведение</label>
-                                            {{ form.qty_books_part_yl }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_part_hl" class="form-label">Художественная лит-ра</label>
-                                            {{ form.qty_books_part_hl }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_part_dl" class="form-label">Детская литература</label>
-                                            {{ form.qty_books_part_dl }}
-                                        </div>
-                                    </div>
-                                    <div class="row mb-3 g-3">
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_part_other" class="form-label">Прочие(в т.ч. журналы)</label>
-                                            {{ form.qty_books_part_other }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_part_audio" class="form-label">Аудиокниги</label>
-                                            {{ form.qty_books_part_audio }}
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label for="id_qty_books_part_krai" class="form-label">Краеведение(в том числе)</label>
-                                            {{ form.qty_books_part_krai }}
-                                        </div>
-                                    </div>
-                                </fieldset>
+                                    </fieldset>
+                                </div>
                             </div>
+
+                            <!-- Группа справок -->
+                            <fieldset class="border border-2 border-info p-4 mb-1">
+                                <legend class="text-info">Справки</legend>
+                                <div class="row mb-3 g-3">
+                                    <div class="col-md-3">
+                                        <label for="id_qty_books_reference_do_14" class="form-label">Справки (До
+                                            14)</label>
+                                        {{ form.qty_books_reference_do_14 }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="id_qty_books_reference_14" class="form-label">Справки (14+)</label>
+                                        {{ form.qty_books_reference_14 }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="id_qty_books_reference_35" class="form-label">Справки (30+)</label>
+                                        {{ form.qty_books_reference_35 }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="id_qty_books_reference_invalid" class="form-label">Инвалиды (Из общ.
+                                            числа)</label>
+                                        {{ form.qty_books_reference_invalid }}
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="id_qty_books_reference_online" class="form-label">Удаленно</label>
+                                        {{ form.qty_books_reference_online }}
+                                    </div>
+                                </div>
+                                <hr class="text-primary">
+                                <div class="row">
+                                    <div id="total-references-sum" class="col-6 text-center">
+                                        <h6>Общее число:</h6>
+                                        <h5 class="text-danger"><span>0</span></h5>
+                                    </div>
+                                    <div id="inv_references_sum" class="col-6 text-center">
+                                        <h6>Инв. из общего числа:</h6>
+                                        <h5 class="text-danger"><span>0</span></h5>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <!-- Примечание -->
+                            <div class="col-md-6">
+                                <label for="id_note" class="form-label">Примечание</label>
+                                {{ form.note }}
+                            </div>
+
                         </div>
-
-                        <!-- Группа справок -->
-                        <fieldset class="border border-2 border-info p-4 mb-1">
-                            <legend class="text-info">Справки</legend>
-                            <div class="row mb-3 g-3">
-                                <div class="col-md-3">
-                                    <label for="id_qty_books_reference_do_14" class="form-label">Справки (До 14)</label>
-                                    {{ form.qty_books_reference_do_14 }}
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="id_qty_books_reference_14" class="form-label">Справки (14+)</label>
-                                    {{ form.qty_books_reference_14 }}
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="id_qty_books_reference_35" class="form-label">Справки (30+)</label>
-                                    {{ form.qty_books_reference_35 }}
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="id_qty_books_reference_invalid" class="form-label">Инвалиды (Из общ. числа)</label>
-                                    {{ form.qty_books_reference_invalid }}
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="id_qty_books_reference_online" class="form-label">Удаленно</label>
-                                    {{ form.qty_books_reference_online }}
-                                </div>
-                            </div>
-                            <hr class="text-primary">
-                            <div class="row">
-                                <div id="total-references-sum" class="col-6 text-center">
-                                    <h6>Общее число:</h6>
-                                    <h5 class="text-danger"><span>0</span></h5>
-                                </div>
-                                <div id="inv_references_sum" class="col-6 text-center">
-                                    <h6>Инв. из общего числа:</h6>
-                                    <h5 class="text-danger"><span>0</span></h5>
-                                </div>
-                            </div>
-                        </fieldset>
-
-                        <!-- Примечание -->
-                        <div class="col-md-6">
-                            <label for="id_note" class="form-label">Примечание</label>
-                            {{ form.note }}
+                        <div class="modal-footer">
+                            <a href="{% url 'books_list' %}" class="btn btn-secondary">Закрыть</a>
+                            <button type="submit" form="BookForm" class="btn btn-primary">Сохранить изменения</button>
                         </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <a href="{% url 'books_list' %}" class="btn btn-secondary">Закрыть</a>
-                        <button type="submit" form="BookForm" class="btn btn-primary">Сохранить изменения</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 <script>
     const qtyBooks14 = document.getElementById('id_qty_books_14');
     const qtyBooks15_35 = document.getElementById('id_qty_books_15_35');
@@ -275,16 +296,16 @@
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const modLib = {{ mod_lib|yesno:"true,false" }};
-    const fieldsToHide = document.querySelectorAll('.conditional-fields');
+    document.addEventListener('DOMContentLoaded', function () {
+        const modLib = {{ mod_lib|yesno:"true,false" }};
+        const fieldsToHide = document.querySelectorAll('.conditional-fields');
 
-    if (!modLib) {
-        fieldsToHide.forEach(field => {
-            field.style.display = 'none'; // Скрываем элементы
-        });
-    }
-});
+        if (!modLib) {
+            fieldsToHide.forEach(field => {
+                field.style.display = 'none'; // Скрываем элементы
+            });
+        }
+    });
 </script>
 
 
@@ -324,7 +345,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
-  </script>
+</script>
 
 <script>
     // Функция для вычисления суммы
@@ -348,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
-  </script>
+</script>
 
 
 <script>
@@ -387,4 +408,4 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
-  </script>
+</script>

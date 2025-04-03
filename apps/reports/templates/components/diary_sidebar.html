@@ -1,28 +1,31 @@
 {% load static %}
 
 <div class="col-xl-3 xl-30 box-col-12">
-        <div class="email-sidebar md-sidebar">
-          <div class="email-left-aside md-sidebar-aside">
+    <div class="email-sidebar md-sidebar">
+        <div class="email-left-aside md-sidebar-aside">
             <div class="card">
-              <div class="card-header">
-                  <div class="align-items-center">
-                    <div class="flex-grow-1">
-                      <h4 class="f-w-600 text-primary"> Разделы дневника</h4>
+                <div class="card-header">
+                    <div class="align-items-center">
+                        <div class="flex-grow-1">
+                            <h4 class="f-w-600 text-primary"> Разделы дневника</h4>
+                        </div>
                     </div>
-                  </div>
-              </div>
+                </div>
                 <div class="card-body">
                     <div class="email-app-sidebar left-bookmark">
                         <ul class="main-menu">
                             <div class="div"></div>
                             <li class="nav-item"><a href="{% url 'visits_list' %}">
-                                <span class="iconbg badge-light-success"><i data-feather="file-text"></i></span><span class="title ms-2">Регистрация/Посещения</span></a>
+                                <span class="iconbg badge-light-success"><i data-feather="file-text"></i></span><span
+                                    class="title ms-2">Регистрация/Посещения</span></a>
                             </li>
                             <li class="nav-item"><a href="{% url 'books_list' %}">
-                                <span class="iconbg badge-light-danger"><i data-feather="book-open"></i></span><span class="title ms-2">Книговыдача</span></a>
+                                <span class="iconbg badge-light-danger"><i data-feather="book-open"></i></span><span
+                                    class="title ms-2">Книговыдача</span></a>
                             </li>
                             <li class="nav-item"><a href="{% url 'events_list' %}">
-                                <span class="iconbg badge-light-info"><i data-feather="users"></i></span><span class="title ms-2">Массовые мероприятия</span></a>
+                                <span class="iconbg badge-light-info"><i data-feather="users"></i></span><span
+                                    class="title ms-2">Массовые мероприятия</span></a>
                             </li>
                         </ul>
                     </div>
@@ -48,7 +51,9 @@
                                 </select>
                             </div>
                             <div class="col-7">
-                                <button type="submit" class="btn-info-gradien d-flex badge-light btn-lg w-100"><i class="me-2" data-feather="check-circle"> </i>Дневник</button>
+                                <button type="submit" class="btn-info-gradien d-flex badge-light btn-lg w-100"><i
+                                        class="me-2" data-feather="check-circle"> </i>Дневник
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -71,7 +76,9 @@
                                 </select>
                             </div>
                             <div class="col-7 text-center">
-                                <button  type="submit" class="btn-info-gradien d-flex badge-light btn-lg w-100">Ежемесячный</button>
+                                <button type="submit" class="btn-info-gradien d-flex badge-light btn-lg w-100">
+                                    Ежемесячный
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -112,7 +119,7 @@
                                 </select>
                             </div>
                             <div class="col-7">
-                                <button  type="submit" class="btn-info-gradien d-flex badge-light btn-lg w-100">
+                                <button type="submit" class="btn-info-gradien d-flex badge-light btn-lg w-100">
                                     <i class="me-2" data-feather="check-circle"></i>Нац.Проект
                                 </button>
                             </div>
@@ -120,6 +127,6 @@
                     </form>
                 </div>
             </div>
-          </div>
         </div>
-      </div>
+    </div>
+</div>

@@ -1,5 +1,3 @@
-from django.contrib.auth.models import Group
-
 def get_data_for_user(user):
     if user.groups.filter(name='Администрация').exists():
         return {

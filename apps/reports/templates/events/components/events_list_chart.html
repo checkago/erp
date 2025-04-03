@@ -3,15 +3,15 @@
 <div class="container-fluid email-wrap bookmark-wrap todo-wrap">
     <div class="row flex-row">
 
-      {% include 'components/diary_sidebar.html' %}
+        {% include 'components/diary_sidebar.html' %}
 
-      <div class="col-xl-9 xl-70 box-col-12">
-        <div class="card">
-          <div class="card-body">
-            <div id="chart"> </div>
-          </div>
+        <div class="col-xl-9 xl-70 box-col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div id="chart"></div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
     <div class="container-fluid">
         <div class="card basic_table">
@@ -22,7 +22,7 @@
                     <div class="col-2"></div>
                     <div class="col-4">
                         <a href="{% url 'event_create' %}" class="btn btn-lg btn-primary d-flex float-end">
-                            <i class="me-2"  data-feather="plus-square"> </i> Добавить мероприятие в дневник
+                            <i class="me-2" data-feather="plus-square"> </i> Добавить мероприятие в дневник
                         </a>
                     </div>
                 </div>
@@ -31,43 +31,45 @@
                 <div class="table-responsive">
                     <table class="display border table-striped dataTable" id="basic-1">
                         <thead>
-                            <tr class="bg-info text-dark text-center">
-                                <th>Дата</th>
-                                <th>Кафедра</th>
-                                <th>Кол.</th>
-                                <th>Наименование</th>
-                                <th>Направление</th>
-                                <th>До 14</th>
-                                <th>До 30</th>
-                                <th>Прочие</th>
-                                <th>Инвалиды (в том числе)</th>
-                                <th>Внестац./Удаленно</th>
-                                <th>В рамках</th>
-                                <th>Платно</th>
-                                <th>Изменить</th>
-                            </tr>
+                        <tr class="bg-info text-dark text-center">
+                            <th>Дата</th>
+                            <th>Кафедра</th>
+                            <th>Кол.</th>
+                            <th>Наименование</th>
+                            <th>Направление</th>
+                            <th>До 14</th>
+                            <th>До 30</th>
+                            <th>Прочие</th>
+                            <th>Инвалиды (в том числе)</th>
+                            <th>Внестац./Удаленно</th>
+                            <th>В рамках</th>
+                            <th>Платно</th>
+                            <th>Изменить</th>
+                        </tr>
                         </thead>
                         <tbody>
                         {% for Event in events %}
                             <tr>
                                 <th data-order="{{ report.date|date:'Y-m-d' }}">{{ Event.date|date:"d.m.Y" }}</th>
                                 {% if Event.cafedra %}
-                                <th>{{ Event.cafedra }}</th>
+                                    <th>{{ Event.cafedra }}</th>
                                 {% else %}
-                                <th> --- --- </th>
+                                    <th> --- ---</th>
                                 {% endif %}
                                 <th>{{ Event.quantity }}</th>
                                 <th>{{ Event.name }}</th>
                                 <th>{{ Event.direction }}</th>
-                                <th>{{ Event.age_14}}</th>
-                                <th>{{ Event.age_35}}</th>
-                                <th>{{ Event.age_other}}</th>
-                                <th>{{ Event.invalids}}</th>
-                                <th>{{ Event.out_of_station}}</th>
-                                <th>{{ Event.as_part}}</th>
-                                <th>{% if Event.paid == True %}<i class="fa fa-ruble fa-2x"></i>{% else %}{% endif %}</th>
+                                <th>{{ Event.age_14 }}</th>
+                                <th>{{ Event.age_35 }}</th>
+                                <th>{{ Event.age_other }}</th>
+                                <th>{{ Event.invalids }}</th>
+                                <th>{{ Event.out_of_station }}</th>
+                                <th>{{ Event.as_part }}</th>
+                                <th>{% if Event.paid == True %}<i class="fa fa-ruble fa-2x"></i>{% else %}{% endif %}
+                                </th>
                                 <th>
-                                    <a class="float-end ml-3" href="{% url 'event_delete' Event.id %}" onclick="return confirm('Вы уверены, что хотите удалить это мероприятие?')">
+                                    <a class="float-end ml-3" href="{% url 'event_delete' Event.id %}"
+                                       onclick="return confirm('Вы уверены, что хотите удалить это мероприятие?')">
                                         <i class="text-danger" data-feather="trash-2"></i>
                                     </a>
                                     <a class="" href="{% url 'event_update' Event.id %}">
@@ -78,25 +80,25 @@
                         {% endfor %}
                         </tbody>
                         <tfoot>
-                            <tr class="bg-info text-dark text-center">
-                                <th>Дата</th>
-                                <th>Кафедра</th>
-                                <th>Кол.</th>
-                                <th>Наименование</th>
-                                <th>Направление</th>
-                                <th>До 14</th>
-                                <th>До 30</th>
-                                <th>Прочие</th>
-                                <th>Инвалиды (в том числе)</th>
-                                <th>Внестационар</th>
-                                <th>В рамках</th>
-                                <th>Платно</th>
-                                <th>Изменить</th>
-                            </tr>
+                        <tr class="bg-info text-dark text-center">
+                            <th>Дата</th>
+                            <th>Кафедра</th>
+                            <th>Кол.</th>
+                            <th>Наименование</th>
+                            <th>Направление</th>
+                            <th>До 14</th>
+                            <th>До 30</th>
+                            <th>Прочие</th>
+                            <th>Инвалиды (в том числе)</th>
+                            <th>Внестационар</th>
+                            <th>В рамках</th>
+                            <th>Платно</th>
+                            <th>Изменить</th>
+                        </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-  </div>
+</div>

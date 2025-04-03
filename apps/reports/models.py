@@ -4,9 +4,8 @@ from django.db import models
 from apps.core.models import Branch, Cafedra
 
 
-#Массовые мероприятия
+# Массовые мероприятия
 class Event(models.Model):
-    
     DN = 'Досуговое направление'
     DNN = 'Духовно-нравственное'
     EST = 'Эстетическое направление'
@@ -59,7 +58,7 @@ class Event(models.Model):
     name = models.CharField(max_length=250, verbose_name='Название мероприятия')
     date = models.DateField(verbose_name='Дата проведения')
     direction = models.CharField(max_length=150, choices=direction_CHOICES, default=IPN,
-                                  verbose_name='Направление')
+                                 verbose_name='Направление')
     quantity = models.IntegerField(default=1, verbose_name='Количество мероприятий')
     age_14 = models.IntegerField(default=0, verbose_name='До 14')
     age_35 = models.IntegerField(default=0, verbose_name='До 30')
@@ -69,7 +68,7 @@ class Event(models.Model):
     out_of_station = models.IntegerField(default=0, verbose_name='Внестационар')
     online = models.IntegerField(default=0, verbose_name='Удаленно')
     as_part = models.CharField(max_length=150, choices=age_CHOICES, default=KRUJKI,
-                                 verbose_name='В рамках')
+                               verbose_name='В рамках')
     paid = models.BooleanField(default=False, blank=True, verbose_name='Платное')
     note = models.TextField(verbose_name='Примечание', blank=True)
 
@@ -82,7 +81,8 @@ class Event(models.Model):
 
 
 class VisitReport(models.Model):
-    library = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='visitreports', verbose_name='Библиотека')
+    library = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='visitreports',
+                                verbose_name='Библиотека')
     cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
     date = models.DateField(null=True, verbose_name='Дата отчета')
     qty_reg_14 = models.IntegerField(default=0, verbose_name='Новые (До 14)')
@@ -130,7 +130,7 @@ class BookReport(models.Model):
     qty_books_part_enm = models.IntegerField(default=0, verbose_name='Естеств. Науки. Медицина')
     qty_books_part_tech = models.IntegerField(default=0, verbose_name='Техника')
     qty_books_part_sh = models.IntegerField(default=0, verbose_name='Сельское хозяйство')
-    qty_books_part_si= models.IntegerField(default=0, verbose_name='Спорт. Искусство')
+    qty_books_part_si = models.IntegerField(default=0, verbose_name='Спорт. Искусство')
     qty_books_part_yl = models.IntegerField(default=0, verbose_name='Языкознание. Литературоведение')
     qty_books_part_hl = models.IntegerField(default=0, verbose_name='Художественная лит-ра')
     qty_books_part_dl = models.IntegerField(default=0, verbose_name='Детская литература')
@@ -144,7 +144,6 @@ class BookReport(models.Model):
     qty_books_reference_invalid = models.IntegerField(default=0, verbose_name='Справки (Инвалиды (из общего числа))')
     qty_books_reference_online = models.IntegerField(default=0, verbose_name='Справки (Удаленно')
     note = models.TextField(blank=True, verbose_name='Примечание')
-
 
     class Meta:
         verbose_name = 'Отчет книговыдачи по библиотеке'

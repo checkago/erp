@@ -1,19 +1,19 @@
-import os
-import locale
 import calendar
+import locale
+import os
+from datetime import datetime, date
 from urllib.parse import quote
+
 import openpyxl
-from django.conf.locale import ru
-from django.db.models import Sum
-from django.db.models.functions import Coalesce
 from django.http import HttpResponse
+from django.utils import translation
 from django.utils.formats import date_format
 from openpyxl import load_workbook
-from django.utils import translation, timezone
-from .models import VisitReport, BookReport, Event, VisitsFirstData, EventsFirstData, BooksFirstData, VisitPlan, EventsPlan, RegsPlan, \
+
+from apps.core.models import Employee
+from .models import VisitReport, BookReport, Event, VisitsFirstData, EventsFirstData, BooksFirstData, VisitPlan, \
+    EventsPlan, RegsPlan, \
     BookPlan
-from apps.core.models import Employee, Branch
-from datetime import datetime, date
 
 
 def generate_all_reports_excel(user, year, month):
@@ -54,6 +54,7 @@ def generate_all_reports_excel(user, year, month):
     response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
     wb.save(response)
     return response
+
 
 def generate_visit_report(wb, branch, year, month):
     ws = wb["Число пользователей+посещения"]
@@ -103,7 +104,8 @@ def generate_visit_report(wb, branch, year, month):
     ws['H6'] = year_start_data['qty_reg_out_of_station']
     ws['I6'] = year_start_data['qty_reg_prlib']
     ws['J6'] = year_start_data['qty_reg_litres']
-    ws['K6'] = year_start_data['qty_visited_14'] + year_start_data['qty_visited_15_35'] + year_start_data['qty_visited_other']
+    ws['K6'] = year_start_data['qty_visited_14'] + year_start_data['qty_visited_15_35'] + year_start_data[
+        'qty_visited_other']
     ws['L6'] = year_start_data['qty_visited_14']
     ws['M6'] = year_start_data['qty_visited_15_35']
     ws['N6'] = year_start_data['qty_visited_other']
@@ -236,7 +238,8 @@ def generate_book_report(wb, branch, year, month):
     ws['V5'] = year_start_data['qty_books_part_other']
     ws['W5'] = year_start_data['qty_books_part_audio']
     ws['X5'] = year_start_data['qty_books_part_krai']
-    ws['Y5'] = year_start_data['qty_books_reference_do_14'] + year_start_data['qty_books_reference_14'] + year_start_data['qty_books_reference_35']
+    ws['Y5'] = year_start_data['qty_books_reference_do_14'] + year_start_data['qty_books_reference_14'] + \
+               year_start_data['qty_books_reference_35']
     ws['Z5'] = year_start_data['qty_books_reference_do_14']
     ws['AA5'] = year_start_data['qty_books_reference_14']
     ws['AB5'] = year_start_data['qty_books_reference_35']
@@ -290,7 +293,8 @@ def generate_book_report(wb, branch, year, month):
         ws[f'V{row_num}'] = report.qty_books_part_other
         ws[f'W{row_num}'] = report.qty_books_part_audio
         ws[f'X{row_num}'] = report.qty_books_part_krai
-        ws[f'Y{row_num}'] = report.qty_books_reference_do_14 + report.qty_books_reference_14 + report.qty_books_reference_35
+        ws[
+            f'Y{row_num}'] = report.qty_books_reference_do_14 + report.qty_books_reference_14 + report.qty_books_reference_35
         ws[f'Z{row_num}'] = report.qty_books_reference_do_14
         ws[f'AA{row_num}'] = report.qty_books_reference_14
         ws[f'AB{row_num}'] = report.qty_books_reference_35
@@ -298,6 +302,7 @@ def generate_book_report(wb, branch, year, month):
         ws[f'AD{row_num}'] = report.qty_books_reference_online
         ws[f'AE{row_num}'] = report.note
         row_num += 1
+
 
 def generate_events_report(wb, branch, year, month):
     ws = wb["Массовые мероприятия"]
@@ -469,6 +474,7 @@ def generate_quarter_excel(user, year, quarter):
     wb.save(response)
     return response
 
+
 def get_total_previous_year(branch, previous_year):
     visit_reports_prev_year = VisitReport.objects.filter(library=branch, date__year=previous_year)
     events_prev_year = Event.objects.filter(library=branch, date__year=previous_year)
@@ -511,17 +517,20 @@ def get_total_previous_year(branch, previous_year):
     if not visit_reports_prev_year.exists() and not events_prev_year.exists() and not book_reports_prev_year.exists():
         visits_first_data = VisitsFirstData.objects.filter(library=branch).first()
         events_first_data = EventsFirstData.objects.filter(library=branch).first()
-        books_first_data = BooksFirstData.objects.filter(library=branch).first()  # Если есть аналогичная модель для книг
+        books_first_data = BooksFirstData.objects.filter(
+            library=branch).first()  # Если есть аналогичная модель для книг
         total_prev_year = ((visits_first_data.data or 0) if visits_first_data else 0) + (
             (events_first_data.data or 0) if events_first_data else 0) + (
-            (books_first_data.data or 0) if books_first_data else 0)
+                              (books_first_data.data or 0) if books_first_data else 0)
 
     return total_prev_year
+
 
 def get_total_plan(branch, year):
     visit_plan = VisitPlan.objects.filter(library=branch, year=year).first()
     events_plan = EventsPlan.objects.filter(library=branch, year=year).first()
-    total_plan = ((visit_plan.total_visits or 0) if visit_plan else 0) + ((events_plan.total_events or 0) if events_plan else 0)
+    total_plan = ((visit_plan.total_visits or 0) if visit_plan else 0) + (
+        (events_plan.total_events or 0) if events_plan else 0)
     return total_plan
 
 
@@ -564,7 +573,7 @@ def fill_month_data(ws, branch, year, month, col_offset):
     ws[f'{chr(72 + col_offset)}7'] = total_out_station
     ws[f'{chr(73 + col_offset)}7'] = total_events_out_station
     ws[f'{chr(74 + col_offset)}7'] = (ws[f'{chr(69 + col_offset)}7'].value or 0) + (
-                ws[f'{chr(71 + col_offset)}7'].value or 0) + (ws[f'{chr(72 + col_offset)}7'].value or 0)
+            ws[f'{chr(71 + col_offset)}7'].value or 0) + (ws[f'{chr(72 + col_offset)}7'].value or 0)
 
 
 def get_total_year(branch, year):
@@ -574,7 +583,7 @@ def get_total_year(branch, year):
 
     total_year = (
             sum((report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) + (
-                        report.qty_visited_out_station or 0) for report in visit_reports_year) +
+                    report.qty_visited_out_station or 0) for report in visit_reports_year) +
             sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events_year) +
             sum((event.online or 0) for event in events_year) +
             sum((report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0)
@@ -593,7 +602,6 @@ def get_total_year(branch, year):
     ws['E4'] = f"{month_names[1]} посещаемость (всего)" if len(month_names) >= 1 else ""
     ws['K4'] = f"{month_names[2]} посещаемость (всего)" if len(month_names) >= 2 else ""
     ws['Q4'] = f"{month_names[3]} посещаемость (всего)" if len(month_names) >= 3 else ""
-
 
     # Сохранение файла
     filename = f"квартальный_нац_цели_{branch.short_name}_{year}_Q{quarter}.xlsx"
@@ -631,7 +639,8 @@ def generate_digital_month_report(user, month):
     # Заполнение заголовка
     current_date = date(current_year, month, 1)
     month_name = date_format(current_date, "F")
-    ws['A1'] = f"Цифровой отчёт о работе {branch.full_name} (МБУК «ЦБС им. А. Белого» Балашиха) за {month_name} {current_year} года (с нарастающим итогом)"
+    ws[
+        'A1'] = f"Цифровой отчёт о работе {branch.full_name} (МБУК «ЦБС им. А. Белого» Балашиха) за {month_name} {current_year} года (с нарастающим итогом)"
 
     # Получаем данные за текущий год до конца выбранного месяца
     visit_reports = VisitReport.objects.filter(library=branch, date__year=current_year, date__month__lte=month)
@@ -654,7 +663,8 @@ def generate_digital_month_report(user, month):
 
     ws['C5'] = sum(report.qty_reg_14 or 0 for report in visit_reports)
     ws['C6'] = sum(report.qty_reg_15_35 or 0 for report in visit_reports)
-    ws['C7'] = sum((report.qty_reg_14 or 0) + (report.qty_reg_15_35 or 0) + (report.qty_reg_other or 0) for report in visit_reports)
+    ws['C7'] = sum((report.qty_reg_14 or 0) + (report.qty_reg_15_35 or 0) + (report.qty_reg_other or 0) for report in
+                   visit_reports)
     ws['C8'] = sum(report.qty_reg_out_of_station or 0 for report in visit_reports)
     ws['C9'] = sum((report.qty_reg_prlib or 0) + (report.qty_reg_litres or 0) for report in visit_reports)
 
@@ -662,14 +672,17 @@ def generate_digital_month_report(user, month):
     ws['C10'] = sum(
         (report.qty_books_14 or 0) + (report.qty_books_15_35 or 0) + (report.qty_books_other or 0) +
         (report.qty_books_neb or 0) + (report.qty_books_prlib or 0) + (report.qty_books_litres or 0) +
-        (report.qty_books_consultant or 0) + (report.qty_books_local_library or 0) + (report.qty_books_out_of_station or 0)
+        (report.qty_books_consultant or 0) + (report.qty_books_local_library or 0) + (
+                    report.qty_books_out_of_station or 0)
         for report in book_reports
     )
     ws['D10'] = (ws['C10'].value / ws['B10'].value) * 100 if ws['B10'].value else 0
 
     ws['C11'] = sum(report.qty_books_14 or 0 for report in book_reports)
     ws['C12'] = sum(report.qty_books_15_35 or 0 for report in book_reports)
-    ws['C13'] = sum((report.qty_books_14 or 0) + (report.qty_books_15_35 or 0) + (report.qty_books_other or 0) for report in book_reports)
+    ws['C13'] = sum(
+        (report.qty_books_14 or 0) + (report.qty_books_15_35 or 0) + (report.qty_books_other or 0) for report in
+        book_reports)
     ws['C14'] = sum(report.qty_books_out_of_station or 0 for report in book_reports)
     ws['C15'] = sum(
         (report.qty_books_neb or 0) + (report.qty_books_prlib or 0) + (report.qty_books_litres or 0) +
@@ -679,8 +692,10 @@ def generate_digital_month_report(user, month):
 
     ws['B16'] = visit_plan.total_visits if visit_plan else 0
     total_visited = sum(
-        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) + (report.qty_visited_out_station or 0) +
-        (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report in visit_reports
+        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) + (
+                    report.qty_visited_out_station or 0) +
+        (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report
+        in visit_reports
     )
     total_references = sum(
         (report.qty_books_reference_online or 0) for report in book_reports
@@ -693,15 +708,22 @@ def generate_digital_month_report(user, month):
     ws['D16'] = (ws['C16'].value / ws['B16'].value) * 100 if ws['B16'].value else 0
 
     ws['C17'] = sum(report.qty_visited_14 or 0 for report in visit_reports) + sum(event.age_14 or 0 for event in events)
-    ws['C18'] = sum(report.qty_visited_15_35 or 0 for report in visit_reports) + sum(event.age_35 or 0 for event in events)
-    ws['C19'] = sum((report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) for report in visit_reports)
+    ws['C18'] = sum(report.qty_visited_15_35 or 0 for report in visit_reports) + sum(
+        event.age_35 or 0 for event in events)
+    ws['C19'] = sum(
+        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) for report in
+        visit_reports)
     ws['C20'] = sum(report.qty_visited_out_station or 0 for report in visit_reports)
-    ws['C21'] = sum((report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report in visit_reports) + sum(report.qty_books_reference_online or 0 for report in book_reports)
-    ws['C22'] = sum(report.qty_visited_invalids or 0 for report in visit_reports) + sum(event.invalids or 0 for event in events)
-    ws['C23'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if event.paid)
+    ws['C21'] = sum(
+        (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report
+        in visit_reports) + sum(report.qty_books_reference_online or 0 for report in book_reports)
+    ws['C22'] = sum(report.qty_visited_invalids or 0 for report in visit_reports) + sum(
+        event.invalids or 0 for event in events)
+    ws['C23'] = sum(
+        (event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if event.paid)
     ws['C24'] = sum(event.invalids or 0 for event in events if event.paid)
     ws['C25'] = sum((report.qty_books_reference_online or 0) + (report.qty_books_reference_do_14 or 0) + (
-                report.qty_books_reference_14 or 0) +
+            report.qty_books_reference_14 or 0) +
                     + (report.qty_books_reference_35 or 0) for report in book_reports)
     ws['C26'] = sum(report.qty_books_reference_do_14 or 0 for report in book_reports)
     ws['C27'] = sum(report.qty_books_reference_14 or 0 for report in book_reports)
@@ -715,13 +737,15 @@ def generate_digital_month_report(user, month):
     ws['C33'] = sum(event.quantity or 0 for event in events if event.age_35 != 0)
     ws['C34'] = sum(event.age_35 or 0 for event in events if event.age_35 != 0)
     ws['C35'] = sum(event.quantity or 0 for event in events if event.out_of_station == 0)
-    ws['C36'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if event.out_of_station == 0)
+    ws['C36'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if
+                    event.out_of_station == 0)
     ws['C37'] = sum(event.quantity or 0 for event in events if event.age_14 != 0 and event.out_of_station == 0)
     ws['C38'] = sum(event.age_14 or 0 for event in events if event.age_14 != 0 and event.out_of_station == 0)
     ws['C39'] = sum(event.quantity or 0 for event in events if event.age_35 != 0 and event.out_of_station == 0)
     ws['C40'] = sum(event.age_35 or 0 for event in events if event.age_35 != 0 and event.out_of_station == 0)
     ws['C41'] = sum(event.quantity or 0 for event in events if event.out_of_station != 0)
-    ws['C42'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if event.out_of_station != 0)
+    ws['C42'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if
+                    event.out_of_station != 0)
 
     # Сохранение файла
     filename = f"цифровой_ежемесячный_{branch.short_name}_{current_year}_{month}.xlsx"
@@ -755,8 +779,10 @@ def generate_nats_project_report(user, year, month):
 
     # Заполнение заголовков
     ws['I3'] = f"{year} год"
-    ws['B5'] = f"Кол-во пользователей библиотек. Регистрация читателей План на {year} год {RegsPlan.objects.filter(library=branch, year=year).first().total_regs if RegsPlan.objects.filter(library=branch, year=year).exists() else 0} чел."
-    ws['G5'] = f"Общая посещаемость (план на {year} г. {VisitPlan.objects.filter(library=branch, year=year).first().total_visits if VisitPlan.objects.filter(library=branch, year=year).exists() else 0}) Факт Число посещений библиотек ВСЕГО (нарастающий итог с начала года)"
+    ws[
+        'B5'] = f"Кол-во пользователей библиотек. Регистрация читателей План на {year} год {RegsPlan.objects.filter(library=branch, year=year).first().total_regs if RegsPlan.objects.filter(library=branch, year=year).exists() else 0} чел."
+    ws[
+        'G5'] = f"Общая посещаемость (план на {year} г. {VisitPlan.objects.filter(library=branch, year=year).first().total_visits if VisitPlan.objects.filter(library=branch, year=year).exists() else 0}) Факт Число посещений библиотек ВСЕГО (нарастающий итог с начала года)"
     ws['I6'] = f"Всего в {year} году"
     ws['J6'] = f"В том числе в рамках Нацпроекта 'Творческие люди в {year} году'"
 
@@ -768,13 +794,40 @@ def generate_nats_project_report(user, year, month):
     # Заполнение данных для филиала
     ws['A7'] = branch.full_name
     ws['B7'] = sum(report.qty_reg_14 or 0 for report in visit_reports)
-    ws['C7'] = sum(report.qty_reg_15_35 or 0 for report in visit_reports) + sum(report.qty_reg_other or 0 for report in visit_reports) + sum(report.qty_reg_out_of_station or 0 for report in visit_reports) + sum(report.qty_reg_prlib or 0 for report in visit_reports) + sum(report.qty_reg_litres or 0 for report in visit_reports)
-    ws['D7'] = sum(report.qty_reg_14 or 0 for report in visit_reports) + sum(report.qty_reg_15_35 or 0 for report in visit_reports) + sum(report.qty_reg_other or 0 for report in visit_reports) + sum(report.qty_reg_out_of_station or 0 for report in visit_reports) + sum(report.qty_reg_prlib or 0 for report in visit_reports) + sum(report.qty_reg_litres or 0 for report in visit_reports)
+    ws['C7'] = sum(report.qty_reg_15_35 or 0 for report in visit_reports) + sum(
+        report.qty_reg_other or 0 for report in visit_reports) + sum(
+        report.qty_reg_out_of_station or 0 for report in visit_reports) + sum(
+        report.qty_reg_prlib or 0 for report in visit_reports) + sum(
+        report.qty_reg_litres or 0 for report in visit_reports)
+    ws['D7'] = sum(report.qty_reg_14 or 0 for report in visit_reports) + sum(
+        report.qty_reg_15_35 or 0 for report in visit_reports) + sum(
+        report.qty_reg_other or 0 for report in visit_reports) + sum(
+        report.qty_reg_out_of_station or 0 for report in visit_reports) + sum(
+        report.qty_reg_prlib or 0 for report in visit_reports) + sum(
+        report.qty_reg_litres or 0 for report in visit_reports)
     ws['E7'] = sum(event.quantity or 0 for event in events)
-    ws['F7'] = sum(event.age_14 or 0 for event in events) + sum(event.age_35 or 0 for event in events) + sum(event.age_other or 0 for event in events)
-    ws['G7'] = sum(event.age_14 or 0 for event in events) + sum(event.age_35 or 0 for event in events) + sum(event.age_other or 0 for event in events) + sum(report.qty_visited_14 or 0 for report in visit_reports) + sum(report.qty_visited_15_35 or 0 for report in visit_reports) + sum(report.qty_visited_other or 0 for report in visit_reports) + sum(report.qty_visited_out_station or 0 for report in visit_reports) + sum(report.qty_visited_online or 0 for report in visit_reports) + sum(report.qty_visited_prlib or 0 for report in visit_reports) + sum(report.qty_visited_litres or 0 for report in visit_reports) + sum(report.qty_books_reference_online or 0 for report in book_reports)
-    ws['H7'] = sum(report.qty_books_14 or 0 for report in book_reports) + sum(report.qty_books_15_35 or 0 for report in book_reports) + sum(report.qty_books_other or 0 for report in book_reports) + sum(report.qty_books_out_of_station or 0 for report in book_reports) + sum(report.qty_books_neb or 0 for report in book_reports) + sum(report.qty_books_prlib or 0 for report in book_reports) + sum(report.qty_books_litres or 0 for report in book_reports) + sum(report.qty_books_consultant or 0 for report in book_reports) + sum(report.qty_books_local_library or 0 for report in book_reports)
-    ws['K7'] = sum(report.qty_visited_online or 0 for report in visit_reports) + sum(event.online or 0 for event in events)
+    ws['F7'] = sum(event.age_14 or 0 for event in events) + sum(event.age_35 or 0 for event in events) + sum(
+        event.age_other or 0 for event in events)
+    ws['G7'] = sum(event.age_14 or 0 for event in events) + sum(event.age_35 or 0 for event in events) + sum(
+        event.age_other or 0 for event in events) + sum(report.qty_visited_14 or 0 for report in visit_reports) + sum(
+        report.qty_visited_15_35 or 0 for report in visit_reports) + sum(
+        report.qty_visited_other or 0 for report in visit_reports) + sum(
+        report.qty_visited_out_station or 0 for report in visit_reports) + sum(
+        report.qty_visited_online or 0 for report in visit_reports) + sum(
+        report.qty_visited_prlib or 0 for report in visit_reports) + sum(
+        report.qty_visited_litres or 0 for report in visit_reports) + sum(
+        report.qty_books_reference_online or 0 for report in book_reports)
+    ws['H7'] = sum(report.qty_books_14 or 0 for report in book_reports) + sum(
+        report.qty_books_15_35 or 0 for report in book_reports) + sum(
+        report.qty_books_other or 0 for report in book_reports) + sum(
+        report.qty_books_out_of_station or 0 for report in book_reports) + sum(
+        report.qty_books_neb or 0 for report in book_reports) + sum(
+        report.qty_books_prlib or 0 for report in book_reports) + sum(
+        report.qty_books_litres or 0 for report in book_reports) + sum(
+        report.qty_books_consultant or 0 for report in book_reports) + sum(
+        report.qty_books_local_library or 0 for report in book_reports)
+    ws['K7'] = sum(report.qty_visited_online or 0 for report in visit_reports) + sum(
+        event.online or 0 for event in events)
 
     # Сохранение файла
     filename = f"нац_проект_{branch.short_name}_{year}_{month}.xlsx"

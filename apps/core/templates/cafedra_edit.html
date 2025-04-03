@@ -32,7 +32,8 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <button type="button" class="btn btn-primary" name="show-button" data-toggle="modal" data-target="#cafedraModal">
+                            <button type="button" class="btn btn-primary" name="show-button" data-toggle="modal"
+                                    data-target="#cafedraModal">
                                 Добавить/редактировать кафедры
                             </button>
                         </div>
@@ -43,65 +44,66 @@
                         <div class="card-header pb-0 card-no-border">
                             <h3>Данные филиала/отдела</h3>
 
-                        <div class="card-body">
-                            <form method="post" class="theme-form">
-                                {% csrf_token %}
+                            <div class="card-body">
+                                <form method="post" class="theme-form">
+                                    {% csrf_token %}
                                     <div class="col-md-4 mb-2 text-black">
                                         <label for="id_manager" class="form-label">Руководитель</label>
                                         {{ form.manager }}
                                     </div>
-                                <div class="row mb-3 g-3">
-                                    <div class="col-md-4">
-                                        <label for="id_full_name" class="form-label">Полное наименование</label>
-                                        {{ form.full_name }}
+                                    <div class="row mb-3 g-3">
+                                        <div class="col-md-4">
+                                            <label for="id_full_name" class="form-label">Полное наименование</label>
+                                            {{ form.full_name }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="id_short_name" class="form-label">Краткое наименование</label>
+                                            {{ form.short_name }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="id_address" class="form-label">Адрес</label>
+                                            {{ form.address }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="id_email" class="form-label">Email</label>
+                                            {{ form.email }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="id_phone" class="form-label">Телефон</label>
+                                            {{ form.phone }}
+                                        </div>
                                     </div>
-                                    <div class="col-md-4">
-                                        <label for="id_short_name" class="form-label">Краткое наименование</label>
-                                        {{ form.short_name }}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="id_address" class="form-label">Адрес</label>
-                                        {{ form.address }}
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="id_email" class="form-label">Email</label>
-                                        {{ form.email }}
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="id_phone" class="form-label">Телефон</label>
-                                        {{ form.phone }}
-                                    </div>
-                                </div>
-                                <button class="btn btn-success-gradien" type="submit">Сохранить изменения</button>
-                            </form>
+                                    <button class="btn btn-success-gradien" type="submit">Сохранить изменения</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
     </div>
 
 
-<div class="modal fade" id="cafedraModal" tabindex="-1" role="dialog" aria-labelledby="cafedraModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="cafedraModalLabel">Добавить/редактировать кафедры</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ cafedra_form.as_p }}
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
-                </form>
+    <div class="modal fade" id="cafedraModal" tabindex="-1" role="dialog" aria-labelledby="cafedraModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cafedraModalLabel">Добавить/редактировать кафедры</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ cafedra_form.as_p }}
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 {% endblock %}
 

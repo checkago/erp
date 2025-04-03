@@ -1,14 +1,14 @@
+from django.contrib import messages
 from django.contrib.auth import logout, authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
 from rest_framework import generics
 
 from apps.core.forms import ErpUserForm, EmployeeForm, BranchForm, CafedraForm
-from apps.core.models import Employee, Branch, Position, Cafedra, ErpUser, Organization
+from apps.core.models import Employee, Branch, Position, ErpUser, Organization
 from apps.core.serializers import EmployeeSerializer
 from apps.reports.utils import get_event_totals, get_book_totals, get_visits_totals
 
@@ -119,6 +119,7 @@ def branch_detail_view(request, pk):
                'employees': employees, 'add_cafedra_form': form}
     return render(request, 'branch_detail.html', context=context)
 
+
 @login_required
 @permission_required('branch.change_branch', raise_exception=True)
 def branch_edit_view(request, pk):
@@ -146,7 +147,6 @@ def branch_edit_view(request, pk):
         return render(request, 'branch_edit.html', context=context)
     else:
         return redirect('branch_detail', pk=pk)
-
 
 
 @login_required
@@ -247,6 +247,3 @@ def change_password(request):
     }
 
     return render(request, 'user_password_change.html', context)
-
-
-

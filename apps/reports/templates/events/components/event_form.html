@@ -2,18 +2,18 @@
 <div class="container-fluid email-wrap bookmark-wrap todo-wrap">
     <div class="row flex-row">
 
-      {% include 'components/diary_sidebar.html' %}
+        {% include 'components/diary_sidebar.html' %}
 
-      <div class="col-xl-9 xl-70 box-col-12">
-        <div class="card">
-          <div class="card-header">
-                <div class="col-4"><h4>Форма мероприятия</h4></div>
-            </div>
-            <div class="card-body">
-                <form method="post" id="EventForm" class="theme-form">
-                    {% csrf_token %}
-                    <div class="modal-body">
-                        <div class="row mb-3 g-3">
+        <div class="col-xl-9 xl-70 box-col-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="col-4"><h4>Форма мероприятия</h4></div>
+                </div>
+                <div class="card-body">
+                    <form method="post" id="EventForm" class="theme-form">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="row mb-3 g-3">
                                 <div class="col-md-3">
                                     <label for="id_cafedra" class="form-label">Кафедра</label>
                                     {{ form.cafedra }}
@@ -23,100 +23,103 @@
                                     <label for="id_date" class="form-label">Дата</label>
                                     {{ form.date }}
                                 </div>
-                            <fieldset class="border border-2 border-primary p-4 mb-2">
-                                <legend>Данные о мероприятиях</legend>
-                                <div class="row mb-3 g-3">
-                                    <div class="col-md-4">
-                                        <label for="id_name" class="form-label">Название события</label>
-                                        {{ form.name }}
-                                    </div>
+                                <fieldset class="border border-2 border-primary p-4 mb-2">
+                                    <legend>Данные о мероприятиях</legend>
+                                    <div class="row mb-3 g-3">
+                                        <div class="col-md-4">
+                                            <label for="id_name" class="form-label">Название события</label>
+                                            {{ form.name }}
+                                        </div>
 
-                                    <div class="col-md-4">
-                                        <label for="id_direction" class="form-label">Направление</label>
-                                        {{ form.direction }}
-                                    </div>
+                                        <div class="col-md-4">
+                                            <label for="id_direction" class="form-label">Направление</label>
+                                            {{ form.direction }}
+                                        </div>
 
-                                    <div class="col-md-2">
-                                        <label for="id_quantity" class="form-label">Кол. мероприятий</label>
-                                        {{ form.quantity }}
-                                    </div>
-                                    <legend class="mt-2">Количество участников</legend>
-                                    <div class="col-md-4">
-                                        <label for="id_age_14" class="form-label">До 14 лет</label>
-                                        {{ form.age_14 }}
-                                    </div>
+                                        <div class="col-md-2">
+                                            <label for="id_quantity" class="form-label">Кол. мероприятий</label>
+                                            {{ form.quantity }}
+                                        </div>
+                                        <legend class="mt-2">Количество участников</legend>
+                                        <div class="col-md-4">
+                                            <label for="id_age_14" class="form-label">До 14 лет</label>
+                                            {{ form.age_14 }}
+                                        </div>
 
-                                    <div class="col-md-4">
-                                        <label for="id_age_35" class="form-label">До 30 лет</label>
-                                        {{ form.age_35 }}
-                                    </div>
+                                        <div class="col-md-4">
+                                            <label for="id_age_35" class="form-label">До 30 лет</label>
+                                            {{ form.age_35 }}
+                                        </div>
 
-                                    <div class="col-md-4">
-                                        <label for="id_age_other" class="form-label">Прочие</label>
-                                        {{ form.age_other }}
-                                    </div>
+                                        <div class="col-md-4">
+                                            <label for="id_age_other" class="form-label">Прочие</label>
+                                            {{ form.age_other }}
+                                        </div>
 
-                                    <div class="col-md-4">
-                                        <label for="id_invalids" class="form-label">Инвалиды (Из общего числа)</label>
-                                        {{ form.invalids }}
-                                    </div>
+                                        <div class="col-md-4">
+                                            <label for="id_invalids" class="form-label">Инвалиды (Из общего
+                                                числа)</label>
+                                            {{ form.invalids }}
+                                        </div>
 
-                                    <div class="col-md-4">
-                                        <label for="id_pensioners" class="form-label">Пенсионеры (Из общего числа)</label>
-                                        {{ form.pensioners }}
-                                    </div>
+                                        <div class="col-md-4">
+                                            <label for="id_pensioners" class="form-label">Пенсионеры (Из общего
+                                                числа)</label>
+                                            {{ form.pensioners }}
+                                        </div>
 
-                                    <div class="col-md-4">
-                                        <label for="id_out_of_station" class="form-label">Внестационар (Из общего числа)</label>
-                                        {{ form.out_of_station }}
-                                    </div>
+                                        <div class="col-md-4">
+                                            <label for="id_out_of_station" class="form-label">Внестационар (Из общего
+                                                числа)</label>
+                                            {{ form.out_of_station }}
+                                        </div>
 
-                                    <div class='col-md-3'>
-                                        <label for='id_as_part' class='form-label'>В рамках</label>
-                                        {{ form.as_part }}
-                                    </div>
+                                        <div class='col-md-3'>
+                                            <label for='id_as_part' class='form-label'>В рамках</label>
+                                            {{ form.as_part }}
+                                        </div>
 
-                                    <div class='col-md-2 text-center align-text-bottom'>
-                                        <div class='d-block mt-2'>
-                                            <span><br></span>
-                                            {{ form.paid }}
-                                            <label class="btn btn-outline-primary" for='paid'>Платное</label>
+                                        <div class='col-md-2 text-center align-text-bottom'>
+                                            <div class='d-block mt-2'>
+                                                <span><br></span>
+                                                {{ form.paid }}
+                                                <label class="btn btn-outline-primary" for='paid'>Платное</label>
+                                            </div>
+                                        </div>
+
+                                        <div class='col-md-7'>
+                                            <label for='id_note' class='form-label'>Примечание</label>
+                                            {{ form.note }}
                                         </div>
                                     </div>
-
-                                    <div class='col-md-7'>
-                                        <label for='id_note' class='form-label'>Примечание</label>
-                                        {{ form.note }}
+                                    <hr class="text-primary">
+                                    <div class="row">
+                                        <div id="total-event-sum" class="col-4 text-center">
+                                            <h6>Общее число:</h6>
+                                            <h5 class="text-danger"><span>0</span></h5>
+                                        </div>
+                                        <div id="inv_pens_out_event_sum" class="col-4 text-center">
+                                            <h6>Пенс./Инв. из общего числа:</h6>
+                                            <h5 class="text-danger"><span>0</span></h5>
+                                        </div>
+                                        <div id="out_event_sum" class="col-4 text-center">
+                                            <h6>Внестац. из общего числа:</h6>
+                                            <h5 class="text-danger"><span>0</span></h5>
+                                        </div>
                                     </div>
-                                </div>
-                                <hr class="text-primary">
-                                <div class="row">
-                                    <div id="total-event-sum" class="col-4 text-center">
-                                        <h6>Общее число:</h6>
-                                        <h5 class="text-danger"><span>0</span></h5>
-                                    </div>
-                                    <div id="inv_pens_out_event_sum" class="col-4 text-center">
-                                        <h6>Пенс./Инв. из общего числа:</h6>
-                                        <h5 class="text-danger"><span>0</span></h5>
-                                    </div>
-                                    <div id="out_event_sum" class="col-4 text-center">
-                                        <h6>Внестац. из общего числа:</h6>
-                                        <h5 class="text-danger"><span>0</span></h5>
-                                    </div>
-                                </div>
-                            </fieldset>
+                                </fieldset>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <a href="{% url 'events_list' %}" class="btn btn-secondary">Закрыть</a>
-                        <button type="submit" form="EventForm" class="btn btn-primary">Сохранить изменения</button>
-                    </div>
-                </form>
+                        <div class="modal-footer">
+                            <a href="{% url 'events_list' %}" class="btn btn-secondary">Закрыть</a>
+                            <button type="submit" form="EventForm" class="btn btn-primary">Сохранить изменения</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 <script>
     // Функция для вычисления суммы
     function calculateSum() {
@@ -135,7 +138,7 @@
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
-  </script>
+</script>
 
 <script>
     // Функция для вычисления суммы
@@ -153,7 +156,7 @@
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
-  </script>
+</script>
 
 <script>
     // Функция для вычисления суммы
@@ -169,4 +172,4 @@
 
     // Вызов функции при загрузке страницы для отображения начальной суммы
     calculateSum();
-  </script>
+</script>

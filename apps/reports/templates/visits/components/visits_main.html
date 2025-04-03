@@ -2,15 +2,15 @@
 <div class="container-fluid email-wrap bookmark-wrap  todo-wrap">
     <div class="row flex-row">
 
-      {% include 'components/diary_sidebar.html' %}
+        {% include 'components/diary_sidebar.html' %}
 
-      <div class="col-xl-9 xl-70 box-col-12">
-        <div class="card">
-          <div class="card-body">
-            <div id="chart"> </div>
-          </div>
+        <div class="col-xl-9 xl-70 box-col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div id="chart"></div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
     <div class="container-fluid">
         <div class="card basic_table">
@@ -21,7 +21,7 @@
                     <div class="col-2"></div>
                     <div class="col-4">
                         <a href="{% url 'visits_create' %}" class="btn btn-lg btn-primary d-flex float-end">
-                            <i class="me-2"  data-feather="plus-square"> </i> Добавить песещения в дневник
+                            <i class="me-2" data-feather="plus-square"> </i> Добавить песещения в дневник
                         </a>
                     </div>
                 </div>
@@ -30,40 +30,41 @@
                 <div class="table-responsive">
                     <table class="display border table-striped dataTable" id="basic-1">
                         <thead>
-                            <tr class="bg-success text-dark text-center">
-                                <th class="fixed-column" rowspan="2">Дата отчета</th>
-                                <th rowspan="2">Кафедра</th>
-                                <th colspan="7">Новые</th>
-                                <th colspan="8">Посещение</th>
-                                <th rowspan="2">Изменить</th>
-                            </tr>
-                            <tr class="bg-warning text-dark text-center">
-                                <th>До 14</th>
-                                <th>Молодежь 14-30</th>
-                                <th>Прочие 30+</th>
-                                <th>Инвалиды (в Общем числе)</th>
-                                <th>Внестационар</th>
-                                <th>Президентская</th>
-                                <th>Литрес</th>
+                        <tr class="bg-success text-dark text-center">
+                            <th class="fixed-column" rowspan="2">Дата отчета</th>
+                            <th rowspan="2">Кафедра</th>
+                            <th colspan="7">Новые</th>
+                            <th colspan="8">Посещение</th>
+                            <th rowspan="2">Изменить</th>
+                        </tr>
+                        <tr class="bg-warning text-dark text-center">
+                            <th>До 14</th>
+                            <th>Молодежь 14-30</th>
+                            <th>Прочие 30+</th>
+                            <th>Инвалиды (в Общем числе)</th>
+                            <th>Внестационар</th>
+                            <th>Президентская</th>
+                            <th>Литрес</th>
 
-                                <th class="bg-info text-dark">До 14</th>
-                                <th class="bg-info text-dark">Молодежь 14-30</th>
-                                <th class="bg-info text-dark">Прочие 30+</th>
-                                <th class="bg-info text-dark">Инвалиды (в Общем числе)</th>
-                                <th class="bg-info text-dark">Внестационар</th>
-                                <th class="bg-info text-dark">Удаленно</th>
-                                <th class="bg-info text-dark">Президентская</th>
-                                <th class="bg-info text-dark">Литрес</th>
-                            </tr>
+                            <th class="bg-info text-dark">До 14</th>
+                            <th class="bg-info text-dark">Молодежь 14-30</th>
+                            <th class="bg-info text-dark">Прочие 30+</th>
+                            <th class="bg-info text-dark">Инвалиды (в Общем числе)</th>
+                            <th class="bg-info text-dark">Внестационар</th>
+                            <th class="bg-info text-dark">Удаленно</th>
+                            <th class="bg-info text-dark">Президентская</th>
+                            <th class="bg-info text-dark">Литрес</th>
+                        </tr>
                         </thead>
                         <tbody>
                         {% for visit in visits %}
                             <tr>
-                                <td data-order="{{ report.date|date:'Y-m-d' }}" class="fixed-column">{{ visit.date|date:"d.m.Y" }}</td>
+                                <td data-order="{{ report.date|date:'Y-m-d' }}"
+                                    class="fixed-column">{{ visit.date|date:"d.m.Y" }}</td>
                                 {% if visit.cafedra %}
-                                <td>{{ visit.cafedra }}</td>
+                                    <td>{{ visit.cafedra }}</td>
                                 {% else %}
-                                <td> --- --- </td>
+                                    <td> --- ---</td>
                                 {% endif %}
                                 <td>{{ visit.qty_reg_14 }}</td>
                                 <td>{{ visit.qty_reg_15_35 }}</td>
@@ -72,7 +73,7 @@
                                 <td>{{ visit.qty_reg_out_of_station }}</td>
                                 <td>{{ visit.qty_reg_prlib }}</td>
                                 <td>{{ visit.qty_reg_litres }}</td>
-                                <td>{{ visit.qty_visited_14}}</td>
+                                <td>{{ visit.qty_visited_14 }}</td>
                                 <td>{{ visit.qty_visited_15_35 }}</td>
                                 <td>{{ visit.qty_visited_other }}</td>
                                 <td>{{ visit.qty_visited_invalids }}</td>
@@ -81,7 +82,8 @@
                                 <td>{{ visit.qty_visited_prlib }}</td>
                                 <td>{{ visit.qty_visited_litres }}</td>
                                 <td>
-                                    <a class="float-end ml-3" href="{% url 'visits_delete' visit.id %}" onclick="return confirm('Вы уверены, что хотите удалить эту запись о посещениях?')">
+                                    <a class="float-end ml-3" href="{% url 'visits_delete' visit.id %}"
+                                       onclick="return confirm('Вы уверены, что хотите удалить эту запись о посещениях?')">
                                         <i class="text-danger" data-feather="trash-2"></i>
                                     </a>
                                     <a class="" href="{% url 'visits_update' visit.id %}">
@@ -92,35 +94,35 @@
                         {% endfor %}
                         </tbody>
                         <tfoot>
-                            <tr class="bg-success text-dark text-center">
-                                <th class="fixed-column" rowspan="2">Дата отчета</th>
-                                <th rowspan="2">Кафедра</th>
-                                <th colspan="7">Новые</th>
-                                <th colspan="8">Посещение</th>
-                                <th rowspan="2">Изменить</th>
-                            </tr>
-                            <tr class="bg-warning text-dark text-center">
-                                <th>До 14</th>
-                                <th>Молодежь 14-30</th>
-                                <th>Прочие 30+</th>
-                                <th>Инвалиды (в Общем числе)</th>
-                                <th>Внестационар</th>
-                                <th>Президентская</th>
-                                <th>Литрес</th>
+                        <tr class="bg-success text-dark text-center">
+                            <th class="fixed-column" rowspan="2">Дата отчета</th>
+                            <th rowspan="2">Кафедра</th>
+                            <th colspan="7">Новые</th>
+                            <th colspan="8">Посещение</th>
+                            <th rowspan="2">Изменить</th>
+                        </tr>
+                        <tr class="bg-warning text-dark text-center">
+                            <th>До 14</th>
+                            <th>Молодежь 14-30</th>
+                            <th>Прочие 30+</th>
+                            <th>Инвалиды (в Общем числе)</th>
+                            <th>Внестационар</th>
+                            <th>Президентская</th>
+                            <th>Литрес</th>
 
-                                <th class="bg-info text-dark">До 14</th>
-                                <th class="bg-info text-dark">Молодежь 14-30</th>
-                                <th class="bg-info text-dark">Прочие 30+</th>
-                                <th class="bg-info text-dark">Инвалиды (в Общем числе)</th>
-                                <th class="bg-info text-dark">Внестационар</th>
-                                <th class="bg-info text-dark">Удаленно</th>
-                                <th class="bg-info text-dark">Президентская</th>
-                                <th class="bg-info text-dark">Литрес</th>
-                            </tr>
+                            <th class="bg-info text-dark">До 14</th>
+                            <th class="bg-info text-dark">Молодежь 14-30</th>
+                            <th class="bg-info text-dark">Прочие 30+</th>
+                            <th class="bg-info text-dark">Инвалиды (в Общем числе)</th>
+                            <th class="bg-info text-dark">Внестационар</th>
+                            <th class="bg-info text-dark">Удаленно</th>
+                            <th class="bg-info text-dark">Президентская</th>
+                            <th class="bg-info text-dark">Литрес</th>
+                        </tr>
                         </tfoot>
                     </table>
                 </div>
             </div>
         </div>
     </div>
-  </div>
+</div>

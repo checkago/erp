@@ -1,22 +1,23 @@
 from collections import defaultdict
+from datetime import timedelta, datetime
 
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy, reverse
+from django.utils import timezone
+from django.views import View
+from django.views.decorators.cache import cache_page
+from django.views.generic import CreateView, UpdateView, ListView, TemplateView
+
+from apps.core.models import Employee
 from .checks import check_data_fillings
+from .forms import EventForm, BookReportForm, VisitReportForm
+from .models import Event, VisitReport, BookReport
 from .report_generator import generate_all_reports_excel, generate_quarter_excel, generate_digital_month_report, \
     generate_nats_project_report
 from .utils import get_book_totals, get_event_totals, get_all_visit_totals, \
     get_all_book_totals, get_all_event_totals, get_visits_totals
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect, render
-from django.utils import timezone
-from datetime import timedelta, datetime
-from django.urls import reverse_lazy, reverse
-from django.views import View
-from django.views.decorators.cache import cache_page
-from django.views.generic import CreateView, UpdateView, ListView, TemplateView
-from .models import Event, VisitReport, BookReport
-from .forms import EventForm, BookReportForm, VisitReportForm
-from apps.core.models import Employee
 
 
 class LoginRequiredMixin:
@@ -47,7 +48,7 @@ def export_all_reports(request):
 
 
 def export_quarter_report(request):
-    year = datetime.now().year   # Текущий год
+    year = datetime.now().year  # Текущий год
     quarter = int(request.GET.get('quarter'))  # Получаем квартал из запроса
     response = generate_quarter_excel(request.user, year, quarter)
     if response:
@@ -66,7 +67,7 @@ def export_digital_month_report(request):
 
 
 def export_nats_project_report(request):
-    year = datetime.now().year   # Текущий год
+    year = datetime.now().year  # Текущий год
     month = int(request.GET.get('month_nats'))  # Получаем месяц из запроса
     response = generate_nats_project_report(request.user, year, month)
     if response:
@@ -115,7 +116,8 @@ class EventListView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Мероприятия"}
+        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>',
+                                 "child": "Мероприятия"}
         user = self.request.user
         employee = Employee.objects.get(user=user)
 
@@ -126,18 +128,18 @@ class EventListView(LoginRequiredMixin, TemplateView):
         # Подготавливаем данные для графика
         dates = []
         quantity_data = []  # Общее количество мероприятий за день
-        age_14_data = []    # Участники до 14 лет
-        age_35_data = []    # Участники до 35 лет
-        age_other_data = [] # Участники старше 35 лет
-        total_age_data = [] # Общее количество участников (линия)
+        age_14_data = []  # Участники до 14 лет
+        age_35_data = []  # Участники до 35 лет
+        age_other_data = []  # Участники старше 35 лет
+        total_age_data = []  # Общее количество участников (линия)
 
         # Используем defaultdict для агрегации данных по дням
         day_count = defaultdict(lambda: {
             'quantity': 0,  # Количество мероприятий
-            'age_14': 0,    # Участники до 14 лет
-            'age_35': 0,    # Участники до 35 лет
-            'age_other': 0, # Участники старше 35 лет
-            'online': 0,    # Онлайн-участники
+            'age_14': 0,  # Участники до 14 лет
+            'age_35': 0,  # Участники до 35 лет
+            'age_other': 0,  # Участники старше 35 лет
+            'online': 0,  # Онлайн-участники
             'out_of_station': 0  # Участники вне стационара
         })
 
@@ -162,7 +164,8 @@ class EventListView(LoginRequiredMixin, TemplateView):
             age_35_data.append(counts['age_35'])
             age_other_data.append(counts['age_other'])
             # Общее количество участников: age_14 + age_35 + age_other + online + out_of_station
-            total_age_data.append(counts['age_14'] + counts['age_35'] + counts['age_other'] + counts['online'] + counts['out_of_station'])
+            total_age_data.append(
+                counts['age_14'] + counts['age_35'] + counts['age_other'] + counts['online'] + counts['out_of_station'])
 
         # Логируем данные для отладки
         print("Dates:", dates)
@@ -230,7 +233,7 @@ class EventDeleteView(LoginRequiredMixin, View):
         # if event.author != request.user:
         #     return HttpResponseForbidden("У вас нет прав на удаление этого мероприятия.")
         event.delete()
-        return redirect(reverse_lazy('events_list')) # Перенаправляем на список мероприятий
+        return redirect(reverse_lazy('events_list'))  # Перенаправляем на список мероприятий
 
 
 class VisitReportListView(LoginRequiredMixin, ListView):
@@ -340,7 +343,8 @@ class VisitReportCreateView(LoginRequiredMixin, CreateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
-        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Добавить Посещение"}
+        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>',
+                                 "child": "Добавить Посещение"}
         return context
 
     def get_form_kwargs(self):
@@ -367,7 +371,8 @@ class VisitReportUpdateView(LoginRequiredMixin, UpdateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
-        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Редактировать Посещение"}
+        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>',
+                                 "child": "Редактировать Посещение"}
         return context
 
     def get_form_kwargs(self):
@@ -390,7 +395,7 @@ class VisitDeleteView(LoginRequiredMixin, View):
         # if event.author != request.user:
         #     return HttpResponseForbidden("У вас нет прав на удаление этого мероприятия.")
         visit.delete()
-        return redirect(reverse_lazy('visits_list')) # Перенаправляем на список мероприятий
+        return redirect(reverse_lazy('visits_list'))  # Перенаправляем на список мероприятий
 
 
 class BookReportListView(LoginRequiredMixin, ListView):
@@ -410,7 +415,8 @@ class BookReportListView(LoginRequiredMixin, ListView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
-        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Книговыдача"}
+        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>',
+                                 "child": "Книговыдача"}
         reports = self.get_queryset()
 
         # Подготавливаем данные для графика
@@ -515,8 +521,9 @@ class BookReportListView(LoginRequiredMixin, ListView):
             qty_books_reference_invalid_data.append(counts['qty_books_reference_invalid'])
             qty_books_reference_online_data.append(counts['qty_books_reference_online'])
             total_books_data.append(
-                counts['qty_books_14'] + counts['qty_books_15_35'] + counts['qty_books_invalid'] + counts['qty_books_neb']
-                + counts['qty_books_prlib']+ counts['qty_books_litres']+ counts['qty_books_consultant']
+                counts['qty_books_14'] + counts['qty_books_15_35'] + counts['qty_books_invalid'] + counts[
+                    'qty_books_neb']
+                + counts['qty_books_prlib'] + counts['qty_books_litres'] + counts['qty_books_consultant']
             )
             total_references_data.append(
                 counts['qty_books_reference_14'] + counts['qty_books_reference_35'] +
@@ -559,13 +566,15 @@ class BookReportCreateView(LoginRequiredMixin, CreateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib  # Передаем статус модельной библиотеки в контекст
-        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Добавить книговыдачу"}
+        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>',
+                                 "child": "Добавить книговыдачу"}
         return context
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
-        kwargs['mod_lib'] = Employee.objects.get(user=self.request.user).branch.mod_lib  # Передаем статус модельной библиотеки в форму
+        kwargs['mod_lib'] = Employee.objects.get(
+            user=self.request.user).branch.mod_lib  # Передаем статус модельной библиотеки в форму
         return kwargs
 
     def form_valid(self, form):
@@ -587,7 +596,8 @@ class BookReportUpdateView(LoginRequiredMixin, UpdateView):
         employee = Employee.objects.get(user=user)
         branch = employee.branch
         context['mod_lib'] = branch.mod_lib
-        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Редактировать книговыдачу"}
+        context['breadcrumb'] = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>',
+                                 "child": "Редактировать книговыдачу"}
         return context
 
     def get_form_kwargs(self):
@@ -612,4 +622,4 @@ class BookReportDeleteView(LoginRequiredMixin, View):
         # if event.author != request.user:
         #     return HttpResponseForbidden("У вас нет прав на удаление этого мероприятия.")
         book.delete()
-        return redirect(reverse_lazy('books_list')) # Перенаправляем на список мероприятий
+        return redirect(reverse_lazy('books_list'))  # Перенаправляем на список мероприятий

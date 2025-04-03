@@ -4,25 +4,25 @@
 {% load sass_tags %}
 
 {% block css %}
-<!-- Plugins css start-->
-<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/todo.scss' %}">
-<!-- Plugins css Ends-->
+    <!-- Plugins css start-->
+    <link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/todo.scss' %}">
+    <!-- Plugins css Ends-->
 {% endblock %}
 
 {% block content %}
 
-<div class="page-body">
-      {% include "layout/breadcrumb.html" %}
+    <div class="page-body">
+        {% include "layout/breadcrumb.html" %}
 
-     {% include "events/components/event_form.html" %}
+        {% include "events/components/event_form.html" %}
 
-</div>
+    </div>
 
 {% endblock %}
 
 {% block scriptcontent %}
-<!-- Plugins JS start-->
-    <script src="{% static 'assets/js/todo/todo.js'%}"></script>
+    <!-- Plugins JS start-->
+    <script src="{% static 'assets/js/todo/todo.js' %}"></script>
 
-<!-- Plugins JS Ends-->
+    <!-- Plugins JS Ends-->
 {% endblock %}

@@ -34,97 +34,102 @@
                         <div class="card-header pb-0 card-no-border">
                             <h3>Данные филиала/отдела</h3>
 
-                        <div class="card-body">
-                            <form method="post" class="theme-form">
-                                {% csrf_token %}
+                            <div class="card-body">
+                                <form method="post" class="theme-form">
+                                    {% csrf_token %}
                                     <div class="col-md-4 mb-2 text-black">
                                         <label for="id_manager" class="form-label">Руководитель</label>
                                         {{ form.manager }}
                                     </div>
-                                <div class="row mb-3 g-3">
-                                    <div class="col-md-4">
-                                        <label for="id_full_name" class="form-label">Полное наименование</label>
-                                        {{ form.full_name }}
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="id_short_name" class="form-label">Краткое наименование</label>
-                                        {{ form.short_name }}
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="id_address" class="form-label">Адрес</label>
-                                        {{ form.address }}
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="id_email" class="form-label">Email</label>
-                                        {{ form.email }}
-                                    </div>
-                                    <div class="col-md-4">
-                                        <label for="id_phone" class="form-label">Телефон</label>
-                                        {{ form.phone }}
-                                    </div>
-                                    <fieldset hidden>
-                                        <div class="row">
-                                            <div class='col-md-3 text-center align-text-bottom'>
-                                                <div class='d-block mt-2'>
-                                                    <span><br></span>
-                                                    {{ form.department }}
-                                                    <label class="btn btn-outline-primary" for='department'>Отдел</label>
-                                                </div>
-                                            </div>
-                                            <div class='col-md-3 text-center align-text-bottom'>
-                                                <div class='d-block mt-2'>
-                                                    <span><br></span>
-                                                    {{ form.adult }}
-                                                    <label class="btn btn-outline-primary" for='adult'>Взрослая</label>
-                                                </div>
-                                            </div>
-                                            <div class='col-md-3 text-center align-text-bottom'>
-                                                <div class='d-block mt-2'>
-                                                    <span><br></span>
-                                                    {{ form.child }}
-                                                    <label class="btn btn-outline-primary" for='child'>Детская</label>
-                                                </div>
-                                            </div>
-                                            <div class='col-md-3 text-center align-text-bottom'>
-                                                <div class='d-block mt-2'>
-                                                    <span><br></span>
-                                                    {{ form.mod_lib }}
-                                                    <label class="btn btn-outline-primary" for='mod_lib'>Модельная</label>
-                                                </div>
-                                            </div>
+                                    <div class="row mb-3 g-3">
+                                        <div class="col-md-4">
+                                            <label for="id_full_name" class="form-label">Полное наименование</label>
+                                            {{ form.full_name }}
                                         </div>
-                                    </fieldset>
-                                </div>
-                                <button class="btn btn-success-gradien" type="submit">Сохранить изменения</button>
-                            </form>
+                                        <div class="col-md-4">
+                                            <label for="id_short_name" class="form-label">Краткое наименование</label>
+                                            {{ form.short_name }}
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="id_address" class="form-label">Адрес</label>
+                                            {{ form.address }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="id_email" class="form-label">Email</label>
+                                            {{ form.email }}
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="id_phone" class="form-label">Телефон</label>
+                                            {{ form.phone }}
+                                        </div>
+                                        <fieldset hidden>
+                                            <div class="row">
+                                                <div class='col-md-3 text-center align-text-bottom'>
+                                                    <div class='d-block mt-2'>
+                                                        <span><br></span>
+                                                        {{ form.department }}
+                                                        <label class="btn btn-outline-primary"
+                                                               for='department'>Отдел</label>
+                                                    </div>
+                                                </div>
+                                                <div class='col-md-3 text-center align-text-bottom'>
+                                                    <div class='d-block mt-2'>
+                                                        <span><br></span>
+                                                        {{ form.adult }}
+                                                        <label class="btn btn-outline-primary"
+                                                               for='adult'>Взрослая</label>
+                                                    </div>
+                                                </div>
+                                                <div class='col-md-3 text-center align-text-bottom'>
+                                                    <div class='d-block mt-2'>
+                                                        <span><br></span>
+                                                        {{ form.child }}
+                                                        <label class="btn btn-outline-primary"
+                                                               for='child'>Детская</label>
+                                                    </div>
+                                                </div>
+                                                <div class='col-md-3 text-center align-text-bottom'>
+                                                    <div class='d-block mt-2'>
+                                                        <span><br></span>
+                                                        {{ form.mod_lib }}
+                                                        <label class="btn btn-outline-primary"
+                                                               for='mod_lib'>Модельная</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <button class="btn btn-success-gradien" type="submit">Сохранить изменения</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
     </div>
 
 
-<div class="modal fade" id="addCafedraModal" tabindex="-1" role="dialog" aria-labelledby="addCafedraModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addCafedraModalLabel">Добавить кафедру</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ add_cafedra_form.as_p }}
-                    <button type="submit" class="btn btn-primary">Добавить</button>
-                </form>
+    <div class="modal fade" id="addCafedraModal" tabindex="-1" role="dialog" aria-labelledby="addCafedraModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCafedraModalLabel">Добавить кафедру</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ add_cafedra_form.as_p }}
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 {% endblock %}
 

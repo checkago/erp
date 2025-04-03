@@ -12,41 +12,45 @@
         <div class="container-fluid">
             {% include "layout/breadcrumb.html" %}
             <div class="col">
-                    <div class="card bg-warning common-hover border b-primary">
-                        <div class="card-body">
-                            <h3 class="card-title text-bg-warning">{{ organization }}</h3>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-
+                <div class="card bg-warning common-hover border b-primary">
+                    <div class="card-body">
+                        <h3 class="card-title text-bg-warning">{{ organization }}</h3>
                     </div>
                 </div>
+                <div class="card-footer">
+
+                </div>
+            </div>
         </div>
     </div>
 
 
 
 
-<div class="modal fade" id="addCafedraModal" tabindex="-1" role="dialog" aria-labelledby="СafedraModalLabel" aria-hidden="true">
-    <div class="modal-dialog mt-0 mb-0" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Добавление новой кафедры</h5>
-                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close" data-bs-original-title="" title=""></button>
+    <div class="modal fade" id="addCafedraModal" tabindex="-1" role="dialog" aria-labelledby="СafedraModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog mt-0 mb-0" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Добавление новой кафедры</h5>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Close"
+                            data-bs-original-title="" title=""></button>
+                </div>
+                <form method="post" name="add_cafedra_form">
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        {{ add_cafedra_form|crispy }}
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal"
+                                data-bs-original-title="" title="">Отмена
+                        </button>
+                        <button class="btn btn-primary" type="submit">Добавить кафедру</button>
+                    </div>
+                </form>
             </div>
-            <form method="post" name="add_cafedra_form">
-            <div class="modal-body">
-                {% csrf_token %}
-                {{ add_cafedra_form|crispy }}
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal" data-bs-original-title="" title="">Отмена</button>
-                <button class="btn btn-primary" type="submit">Добавить кафедру</button>
-            </div>
-            </form>
         </div>
     </div>
-</div>
 
 
 

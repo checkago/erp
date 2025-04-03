@@ -2,94 +2,126 @@
 
 <div class="container-fluid email-wrap bookmark-wrap todo-wrap">
     <div class="row">
-      <div class="col-xl-12 col-md-12">
-        <div class="card common-hover">
-            <div class="card-header b-t-danger border-2">
-                <div class="float-start">
-                    <h4 class="text-primary">Сводные итоги по всем филиалам</h4>
+        <div class="col-xl-12 col-md-12">
+            <div class="card common-hover">
+                <div class="card-header b-t-danger border-2">
+                    <div class="float-start">
+                        <h4 class="text-primary">Сводные итоги по всем филиалам</h4>
+                    </div>
+                    <div class="float-end">
+                        <btn class="btn btn-round btn-secondary-gradien">Сохранить отчет в Excell</btn>
+                    </div>
                 </div>
-                <div class="float-end">
-                    <btn class="btn btn-round btn-secondary-gradien">Сохранить отчет в Excell</btn>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-header bg-success text-bg-success">
-                                <h4>Регистрация/Посещения</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <h6>Новые</h6>
-                                        <ul>
-                                            <li class="mb-3">За сегодня: {% if all_totals_visits.daily.total_reg %}<strong>{{ all_totals_visits.daily.total_reg }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
-                                            <li class="mb-3">За месяц: <strong>{{ all_totals_visits.monthly.total_reg }}</strong></li>
-                                            <li class="mb-3">С начала года: <strong>{{ all_totals_visits.yearly.total_reg }}</strong></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col">
-                                        <h6>Посещения</h6>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header bg-success text-bg-success">
+                                    <h4>Регистрация/Посещения</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Новые</h6>
                                             <ul>
-                                            <li class="mb-3">За сегодня: {% if all_totals_visits.daily.total_visited %}<strong>{{ all_totals_visits.daily.total_visited }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
-                                            <li class="mb-3">За месяц: <strong>{{ all_totals_visits.monthly.total_visited }}</strong></li>
-                                            <li class="mb-3">С начала года: <strong>{{ all_totals_visits.yearly.total_visited }}</strong></li>
-                                        </ul>
+                                                <li class="mb-3">За сегодня: {% if all_totals_visits.daily.total_reg %}
+                                                    <strong>{{ all_totals_visits.daily.total_reg }}</strong>{% else %}
+                                                    <strong>Данных нет</strong>{% endif %}</li>
+                                                <li class="mb-3">За месяц:
+                                                    <strong>{{ all_totals_visits.monthly.total_reg }}</strong></li>
+                                                <li class="mb-3">С начала года:
+                                                    <strong>{{ all_totals_visits.yearly.total_reg }}</strong></li>
+                                            </ul>
+                                        </div>
+                                        <div class="col">
+                                            <h6>Посещения</h6>
+                                            <ul>
+                                                <li class="mb-3">За сегодня:
+                                                    {% if all_totals_visits.daily.total_visited %}
+                                                        <strong>{{ all_totals_visits.daily.total_visited }}</strong>{% else %}
+                                                        <strong>Данных нет</strong>{% endif %}</li>
+                                                <li class="mb-3">За месяц:
+                                                    <strong>{{ all_totals_visits.monthly.total_visited }}</strong></li>
+                                                <li class="mb-3">С начала года:
+                                                    <strong>{{ all_totals_visits.yearly.total_visited }}</strong></li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-header bg-danger text-bg-danger">
-                                <h4>Книговыдача</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <h6>Книговыдача</h6>
-                                        <ul>
-                                            <li class="mb-3">За сегодня: {% if all_totals_books.daily.loan.total_loan %}<strong>{{ all_totals_books.daily.loan.total_loan }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
-                                            <li class="mb-3">За месяц: <strong>{{ all_totals_books.monthly.loan.total_loan }}</strong></li>
-                                            <li class="mb-3">С начала года: <strong>{{ all_totals_books.yearly.loan.total_loan }}</strong></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col">
-                                        <h6>Справки</h6>
-                                        <ul>
-                                            <li class="mb-3">За сегодня: {% if all_totals_books.daily.reference.total_reference %}<strong>{{ all_totals_books.daily.reference.total_reference }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
-                                            <li class="mb-3">За месяц: <strong>{{ all_totals_books.monthly.reference.total_reference }}</strong></li>
-                                            <li class="mb-3">С начала года: <strong>{{ all_totals_books.yearly.reference.total_reference }}</strong></li>
-                                        </ul>
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header bg-danger text-bg-danger">
+                                    <h4>Книговыдача</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Книговыдача</h6>
+                                            <ul>
+                                                <li class="mb-3">За сегодня:
+                                                    {% if all_totals_books.daily.loan.total_loan %}
+                                                        <strong>{{ all_totals_books.daily.loan.total_loan }}</strong>{% else %}
+                                                        <strong>Данных нет</strong>{% endif %}</li>
+                                                <li class="mb-3">За месяц:
+                                                    <strong>{{ all_totals_books.monthly.loan.total_loan }}</strong></li>
+                                                <li class="mb-3">С начала года:
+                                                    <strong>{{ all_totals_books.yearly.loan.total_loan }}</strong></li>
+                                            </ul>
+                                        </div>
+                                        <div class="col">
+                                            <h6>Справки</h6>
+                                            <ul>
+                                                <li class="mb-3">За сегодня:
+                                                    {% if all_totals_books.daily.reference.total_reference %}
+                                                        <strong>{{ all_totals_books.daily.reference.total_reference }}</strong>{% else %}
+                                                        <strong>Данных нет</strong>{% endif %}</li>
+                                                <li class="mb-3">За месяц:
+                                                    <strong>{{ all_totals_books.monthly.reference.total_reference }}</strong>
+                                                </li>
+                                                <li class="mb-3">С начала года:
+                                                    <strong>{{ all_totals_books.yearly.reference.total_reference }}</strong>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col">
-                        <div class="card">
-                            <div class="card-header bg-info text-bg-info">
-                                <h4>Мероприятия</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <h6>Количество</h6>
-                                        <ul>
-                                            <li class="mb-3">За сегодня: {% if all_totals_events.daily.total_quantity %}<strong>{{ all_totals_events.daily.total_quantity }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
-                                            <li class="mb-3">За месяц: <strong>{{ all_totals_events.monthly.total_quantity }}</strong></li>
-                                            <li class="mb-3">С начала года: <strong>{{ all_totals_events.yearly.total_quantity }}</strong></li>
-                                        </ul>
-                                    </div>
-                                    <div class="col">
-                                        <h6>Посетители</h6>
-                                        <ul>
-                                            <li class="mb-3">За сегодня: {% if all_totals_events.daily.total_visitors %}<strong>{{ all_totals_events.daily.total_visitors }}</strong>{% else %}<strong>Данных нет</strong>{% endif %}</li>
-                                            <li class="mb-3">За месяц: <strong>{{ all_totals_events.monthly.total_visitors }}</strong></li>
-                                            <li class="mb-3">С начала года: <strong>{{ all_totals_events.yearly.total_visitors }}</strong></li>
-                                        </ul>
+                        <div class="col">
+                            <div class="card">
+                                <div class="card-header bg-info text-bg-info">
+                                    <h4>Мероприятия</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Количество</h6>
+                                            <ul>
+                                                <li class="mb-3">За сегодня:
+                                                    {% if all_totals_events.daily.total_quantity %}
+                                                        <strong>{{ all_totals_events.daily.total_quantity }}</strong>{% else %}
+                                                        <strong>Данных нет</strong>{% endif %}</li>
+                                                <li class="mb-3">За месяц:
+                                                    <strong>{{ all_totals_events.monthly.total_quantity }}</strong></li>
+                                                <li class="mb-3">С начала года:
+                                                    <strong>{{ all_totals_events.yearly.total_quantity }}</strong></li>
+                                            </ul>
+                                        </div>
+                                        <div class="col">
+                                            <h6>Посетители</h6>
+                                            <ul>
+                                                <li class="mb-3">За сегодня:
+                                                    {% if all_totals_events.daily.total_visitors %}
+                                                        <strong>{{ all_totals_events.daily.total_visitors }}</strong>{% else %}
+                                                        <strong>Данных нет</strong>{% endif %}</li>
+                                                <li class="mb-3">За месяц:
+                                                    <strong>{{ all_totals_events.monthly.total_visitors }}</strong></li>
+                                                <li class="mb-3">С начала года:
+                                                    <strong>{{ all_totals_events.yearly.total_visitors }}</strong></li>
+                                            </ul>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -98,19 +130,21 @@
                 </div>
             </div>
         </div>
-      </div>
-      <div class="col-xl-12">
-          <div class="row">
-              <div class="col-7">
-                  <div class="card basic_table">
-                      <div class="card-header">
-                          <h5>Обратить внимание:</h5>
-                          <span>В списке отражаются библиотеки, которые не заполняли разделы дневника более <strong class="text-primary">3 дней</strong> и требуют внимания. <span class="text-danger text-uppercase"><strong>Красным отмечены</strong></span> злостные должники с превышением более чем на <strong class="text-primary">7 дней</strong></span>
+        <div class="col-xl-12">
+            <div class="row">
+                <div class="col-7">
+                    <div class="card basic_table">
+                        <div class="card-header">
+                            <h5>Обратить внимание:</h5>
+                            <span>В списке отражаются библиотеки, которые не заполняли разделы дневника более <strong
+                                    class="text-primary">3 дней</strong> и требуют внимания. <span
+                                    class="text-danger text-uppercase"><strong>Красным отмечены</strong></span> злостные должники с превышением более чем на <strong
+                                    class="text-primary">7 дней</strong></span>
 
-                      </div>
-                      <div class="card-body">
-                        <table class="display border table-striped dataTable" id="basic-1">
-                            <thead class="bg-info text-dark text-center">
+                        </div>
+                        <div class="card-body">
+                            <table class="display border table-striped dataTable" id="basic-1">
+                                <thead class="bg-info text-dark text-center">
                                 <tr>
                                     <th>Дата крайней записи</th>
                                     <th>Библиотека</th>
@@ -118,8 +152,8 @@
                                     <th>Пропущенные дни</th>
                                     <th>Запись заранее</th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
                                 {% for report in reports_fill_check %}
                                     {# Отображаем пропущенные дни #}
                                     {% for category, days in report.missed_days.items %}
@@ -141,7 +175,8 @@
                                                 <td class="{% if report.is_bad_library %}bg-danger f-w-600 text-bg-danger text-end{% endif %}">
                                                     <strong>{{ days }}</strong>
                                                 </td>
-                                                <td>-</td> <!-- Здесь можно указать дополнительные данные, если нужно -->
+                                                <td>-</td>
+                                                <!-- Здесь можно указать дополнительные данные, если нужно -->
                                             </tr>
                                         {% endif %}
                                     {% endfor %}
@@ -152,7 +187,8 @@
                                             <td>{{ future_visit.date|date:"d.m.Y" }}</td>
                                             <td>{{ report.branch }}</td>
                                             <td>Посещения</td>
-                                            <td>-</td> <!-- Здесь можно указать количество пропущенных дней или оставить пустым -->
+                                            <td>-</td>
+                                            <!-- Здесь можно указать количество пропущенных дней или оставить пустым -->
                                             <td>Будущая запись</td>
                                         </tr>
                                     {% endfor %}
@@ -162,7 +198,8 @@
                                             <td>{{ future_book.date|date:"d.m.Y" }}</td>
                                             <td>{{ report.branch }}</td>
                                             <td>Книговыдача</td>
-                                            <td>-</td> <!-- Здесь можно указать количество пропущенных дней или оставить пустым -->
+                                            <td>-</td>
+                                            <!-- Здесь можно указать количество пропущенных дней или оставить пустым -->
                                             <td>Будущая запись</td>
                                         </tr>
                                     {% endfor %}
@@ -172,22 +209,25 @@
                                             <td>{{ future_event.date|date:"d.m.Y" }}</td>
                                             <td>{{ report.branch }}</td>
                                             <td>Мероприятия</td>
-                                            <td>-</td> <!-- Здесь можно указать количество пропущенных дней или оставить пустым -->
+                                            <td>-</td>
+                                            <!-- Здесь можно указать количество пропущенных дней или оставить пустым -->
                                             <td>Будущая запись</td>
                                         </tr>
                                     {% endfor %}
                                 {% empty %}
                                     <tr>
-                                        <td colspan="5" class="bg-light text-bg-light">Нет данных о пропущенных записях.</td>
+                                        <td colspan="5" class="bg-light text-bg-light">Нет данных о пропущенных
+                                            записях.
+                                        </td>
                                     </tr>
                                 {% endfor %}
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
 
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
