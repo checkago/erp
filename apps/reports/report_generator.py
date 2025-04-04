@@ -10,7 +10,7 @@ from django.utils import translation
 from django.utils.formats import date_format
 from openpyxl import load_workbook
 
-from apps.core.models import Employee
+from apps.core.models import Employee, Branch
 from .models import VisitReport, BookReport, Event, VisitsFirstData, EventsFirstData, BooksFirstData, VisitPlan, \
     EventsPlan, RegsPlan, \
     BookPlan
@@ -837,3 +837,200 @@ def generate_nats_project_report(user, year, month):
     response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
     wb.save(response)
     return response
+
+
+def generate_quarter_excel_all_branches(user, year, quarter):
+    try:
+        employee = Employee.objects.get(user=user)
+    except Employee.DoesNotExist:
+        return None
+
+    # Устанавливаем русскую локаль только для этого потока
+    old_locale = locale.getlocale()
+    try:
+        locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+    except locale.Error:
+        pass
+
+    # Загрузка шаблона
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    template_path = os.path.join(base_dir, 'reports/excell/report_quarter_template_all_branch.xlsx')
+
+    if not os.path.exists(template_path):
+        raise FileNotFoundError(f"File not found: {template_path}")
+
+    wb = load_workbook(filename=template_path)
+    ws = wb.active
+
+    # Динамическое заполнение заголовков
+    ws['E3'] = f"Значение показателя в {quarter} квартале {year} года"
+    ws['C3'] = f"Данные статистики по посещаемости по итогам {year - 1} года"
+    ws['D3'] = f"Значение целевого показателя за {year} год план"
+    ws['W3'] = f"итого за {quarter}-й квартал {year}"
+
+    # Получаем все филиалы, кроме "Администрация"
+    branches = Branch.objects.exclude(short_name__icontains='Администрация').order_by('short_name')
+
+    # Определяем месяцы квартала
+    months = {
+        1: (1, 2, 3),
+        2: (4, 5, 6),
+        3: (7, 8, 9),
+        4: (10, 11, 12)
+    }[quarter]
+
+    # Начальная строка для данных
+    start_row = 7
+    current_row = start_row
+
+    # Для хранения итоговых значений
+    totals = {
+        'prev_year': 0,
+        'plan': 0,
+        'quarter': 0,
+        'year': 0,
+        'months': {month: {
+            'visits_events': 0,
+            'events': 0,
+            'online': 0,
+            'out_station': 0,
+            'events_out_station': 0,
+            'total': 0
+        } for month in months}
+    }
+
+    for branch in branches:
+        # Записываем название филиала
+        ws[f'B{current_row}'] = branch.full_name
+
+        # Данные за предыдущий год
+        total_prev_year = get_total_previous_year(branch, year - 1)
+        ws[f'C{current_row}'] = total_prev_year
+        totals['prev_year'] += total_prev_year
+
+        # Плановые показатели за текущий год
+        total_plan = get_total_plan(branch, year)
+        ws[f'D{current_row}'] = total_plan
+        totals['plan'] += total_plan
+
+        # Заполнение данных по месяцам
+        for i, month in enumerate(months):
+            col_offset = i * 6
+            month_data = fill_month_data_all_branches(ws, branch, year, month, col_offset, current_row)
+
+            # Суммируем данные для итогов
+            for key in month_data:
+                totals['months'][month][key] += month_data[key]
+
+        # Итог за квартал
+        total_quarter = 0
+        for i, month in enumerate(months):
+            col_offset = i * 6
+            total_quarter += (ws[f'{chr(74 + col_offset)}{current_row}'].value or 0)
+
+        ws[f'W{current_row}'] = total_quarter
+        totals['quarter'] += total_quarter
+
+        # Итог за год
+        total_year = get_total_year(branch, year)
+        ws[f'X{current_row}'] = total_year
+        totals['year'] += total_year
+
+        # Процент выполнения плана
+        ws[f'Y{current_row}'] = (total_year / (total_plan or 1)) * 100 if total_year is not None else 0
+
+        current_row += 1
+
+    # Добавляем строку с итогами
+    ws[f'B{current_row}'] = "ИТОГО:"
+    ws[f'C{current_row}'] = totals['prev_year']
+    ws[f'D{current_row}'] = totals['plan']
+
+    # Заполняем итоги по месяцам
+    for i, month in enumerate(months):
+        col_offset = i * 6
+        month_data = totals['months'][month]
+
+        ws[f'{chr(69 + col_offset)}{current_row}'] = month_data['visits_events']
+        ws[f'{chr(70 + col_offset)}{current_row}'] = month_data['events']
+        ws[f'{chr(71 + col_offset)}{current_row}'] = month_data['online']
+        ws[f'{chr(72 + col_offset)}{current_row}'] = month_data['out_station']
+        ws[f'{chr(73 + col_offset)}{current_row}'] = month_data['events_out_station']
+        ws[f'{chr(74 + col_offset)}{current_row}'] = month_data['total']
+
+    ws[f'W{current_row}'] = totals['quarter']
+    ws[f'X{current_row}'] = totals['year']
+    ws[f'Y{current_row}'] = (totals['year'] / (totals['plan'] or 1)) * 100 if totals['year'] is not None else 0
+
+    # Динамическое заполнение названий месяцев
+    month_names = []
+    for month in months:
+        current_date = datetime(year, month, 1)
+        month_name_ru = date_format(current_date, "F")
+        month_names.append(month_name_ru)
+
+    ws['E4'] = f"{month_names[0]} посещаемость (всего)"
+    if len(months) > 1:
+        ws['K4'] = f"{month_names[1]} посещаемость (всего)"
+    if len(months) > 2:
+        ws['Q4'] = f"{month_names[2]} посещаемость (всего)"
+
+    # Сохранение файла
+    filename = f"квартальный_нац_цели_все_филиалы_{year}_Q{quarter}.xlsx"
+    safe_filename = quote(filename)
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
+    wb.save(response)
+    return response
+
+
+def fill_month_data_all_branches(ws, branch, year, month, col_offset, row):
+    visit_reports = VisitReport.objects.filter(library=branch, date__year=year, date__month=month)
+    events = Event.objects.filter(library=branch, date__year=year, date__month=month)
+    book_reports = BookReport.objects.filter(library=branch, date__year=year, date__month=month)
+
+    total_visits = sum(
+        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0)
+        for report in visit_reports
+    )
+    total_events = sum(
+        ((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0)) - (event.out_of_station or 0)
+        for event in events
+    )
+    total_online = sum(
+        (event.online or 0) for event in events
+    ) + sum(
+        (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0)
+        for report in visit_reports
+    ) + sum(
+        (report.qty_books_reference_online or 0)
+        for report in book_reports
+    )
+    total_out_station = sum(
+        (event.out_of_station or 0) for event in events
+    ) + sum(
+        (report.qty_visited_out_station or 0)
+        for report in visit_reports
+    )
+    total_events_out_station = sum(
+        (event.out_of_station or 0) for event in events
+    )
+    total_month = total_visits + total_events + total_online + total_out_station
+
+    # Записываем данные в ячейки
+    ws[f'{chr(69 + col_offset)}{row}'] = total_visits + total_events
+    ws[f'{chr(70 + col_offset)}{row}'] = total_events
+    ws[f'{chr(71 + col_offset)}{row}'] = total_online
+    ws[f'{chr(72 + col_offset)}{row}'] = total_out_station
+    ws[f'{chr(73 + col_offset)}{row}'] = total_events_out_station
+    ws[f'{chr(74 + col_offset)}{row}'] = total_month
+
+    return {
+        'visits_events': total_visits + total_events,
+        'events': total_events,
+        'online': total_online,
+        'out_station': total_out_station,
+        'events_out_station': total_events_out_station,
+        'total': total_month
+    }

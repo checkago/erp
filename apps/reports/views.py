@@ -15,7 +15,7 @@ from .checks import check_data_fillings
 from .forms import EventForm, BookReportForm, VisitReportForm
 from .models import Event, VisitReport, BookReport
 from .report_generator import generate_all_reports_excel, generate_quarter_excel, generate_digital_month_report, \
-    generate_nats_project_report
+    generate_nats_project_report, generate_quarter_excel_all_branches
 from .utils import get_book_totals, get_event_totals, get_all_visit_totals, \
     get_all_book_totals, get_all_event_totals, get_visits_totals
 
@@ -55,6 +55,16 @@ def export_quarter_report(request):
         return response
     else:
         return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
+
+
+def export_quarter_all_branches(request):
+    current_year = datetime.now().year
+    quarter = int(request.GET.get('quarter'))
+    response = generate_quarter_excel_all_branches(request.user, current_year, quarter)
+    if response:
+        return response
+    else:
+        return HttpResponse("Нет данных для экспорта.", status=404)
 
 
 def export_digital_month_report(request):
