@@ -870,7 +870,7 @@ def generate_quarter_excel_all_branches(user, year, quarter):
     ws['W3'] = f"итого за {quarter}-й квартал {year}"
 
     # Получаем все филиалы, кроме "Администрация"
-    branches = Branch.objects.exclude(Branch.department == 'True').order_by('short_name')
+    branches = Branch.objects.exclude(department__in=['True', 'true', '1', 1]).order_by('short_name')
 
     # Определяем месяцы квартала
     months = {
