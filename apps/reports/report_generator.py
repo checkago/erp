@@ -1075,7 +1075,7 @@ def generate_nats_project_report_all_branches(user, year, month):
     branches = Branch.objects.exclude(department=True).order_by('id')
 
     # Начальная строка для данных (в шаблоне данные начинаются с 8 строки)
-    start_row = 8
+    start_row = 7
     current_row = start_row
 
     # Для хранения итоговых значений
