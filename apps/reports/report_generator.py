@@ -853,9 +853,9 @@ def generate_quarter_excel_all_branches(user, year, quarter):
     except locale.Error:
         pass
 
-    # Загрузка шаблона
+    # Загрузка нового шаблона
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    template_path = os.path.join(base_dir, 'reports/excell/report_quarter_template_all_branch.xlsx')
+    template_path = os.path.join(base_dir, 'reports/excell/report_quarter_template_all_branch.xlsx')  # Используем новый шаблон
 
     if not os.path.exists(template_path):
         raise FileNotFoundError(f"File not found: {template_path}")
@@ -869,8 +869,12 @@ def generate_quarter_excel_all_branches(user, year, quarter):
     ws['D3'] = f"Значение целевого показателя за {year} год план"
     ws['W3'] = f"итого за {quarter}-й квартал {year}"
 
-    # Получаем все филиалы, кроме "Администрация"
+    # Получаем все филиалы, кроме "Администрация", в том же порядке, что и в шаблоне
     branches = Branch.objects.exclude(department=True).order_by('id')
+
+    # Проверяем, что филиалов ровно 17, как в шаблоне
+    if branches.count() != 17:
+        raise ValueError("Количество филиалов не соответствует шаблону (ожидается 17)")
 
     # Определяем месяцы квартала
     months = {
@@ -880,8 +884,9 @@ def generate_quarter_excel_all_branches(user, year, quarter):
         4: (10, 11, 12)
     }[quarter]
 
-    # Начальная строка для данных
+    # Начальная строка для данных (в новом шаблоне филиалы с 7 по 23 строку)
     start_row = 7
+    end_row = 23
     current_row = start_row
 
     # Для хранения итоговых значений
@@ -901,8 +906,7 @@ def generate_quarter_excel_all_branches(user, year, quarter):
     }
 
     for branch in branches:
-        # Записываем название филиала
-        ws[f'B{current_row}'] = branch.full_name
+        # В новом шаблоне названия филиалов уже прописаны, поэтому не заполняем column B
 
         # Данные за предыдущий год
         total_prev_year = get_total_previous_year(branch, year - 1)
@@ -941,8 +945,11 @@ def generate_quarter_excel_all_branches(user, year, quarter):
         ws[f'Y{current_row}'] = (total_year / (total_plan or 1)) * 100 if total_year is not None else 0
 
         current_row += 1
+        if current_row > end_row:
+            break  # На случай, если филиалов больше 17
 
-    # Добавляем строку с итогами
+    # Заполняем строку с итогами (строка 24 в новом шаблоне)
+    current_row = 24
     ws[f'B{current_row}'] = "ИТОГО:"
     ws[f'C{current_row}'] = totals['prev_year']
     ws[f'D{current_row}'] = totals['plan']
@@ -983,6 +990,10 @@ def generate_quarter_excel_all_branches(user, year, quarter):
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
     wb.save(response)
+
+    # Восстанавливаем локаль
+    locale.setlocale(locale.LC_ALL, old_locale)
+
     return response
 
 
