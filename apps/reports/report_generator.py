@@ -855,7 +855,7 @@ def generate_quarter_excel_all_branches(user, year, quarter):
 
     # Загрузка нового шаблона
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    template_path = os.path.join(base_dir, 'reports/excell/new.xlsx')
+    template_path = os.path.join(base_dir, 'reports/excell/report_quarter_template_all_branch.xlsx')
 
     if not os.path.exists(template_path):
         raise FileNotFoundError(f"File not found: {template_path}")
