@@ -950,7 +950,7 @@ def generate_quarter_excel_all_branches(user, year, quarter):
 
     # Заполняем строку с итогами (строка 24 в новом шаблоне)
     current_row = 24
-    ws[f'B{current_row}'] = "ИТОГО:"
+    ws[f'A{current_row}'] = "ИТОГО:"
     ws[f'C{current_row}'] = totals['prev_year']
     ws[f'D{current_row}'] = totals['plan']
 
