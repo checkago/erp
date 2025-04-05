@@ -855,7 +855,7 @@ def generate_quarter_excel_all_branches(user, year, quarter):
 
     # Загрузка нового шаблона
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    template_path = os.path.join(base_dir, 'reports/excell/report_quarter_template_all_branch.xlsx')  # Используем новый шаблон
+    template_path = os.path.join(base_dir, 'reports/excell/new.xlsx')
 
     if not os.path.exists(template_path):
         raise FileNotFoundError(f"File not found: {template_path}")
@@ -884,7 +884,7 @@ def generate_quarter_excel_all_branches(user, year, quarter):
         4: (10, 11, 12)
     }[quarter]
 
-    # Начальная строка для данных (в новом шаблоне филиалы с 7 по 23 строку)
+    # Начальная и конечная строки для данных
     start_row = 7
     end_row = 23
     current_row = start_row
@@ -906,7 +906,8 @@ def generate_quarter_excel_all_branches(user, year, quarter):
     }
 
     for branch in branches:
-        # В новом шаблоне названия филиалов уже прописаны, поэтому не заполняем column B
+        # Заполняем название филиала (колонка B)
+        ws[f'B{current_row}'] = branch.full_name
 
         # Данные за предыдущий год
         total_prev_year = get_total_previous_year(branch, year - 1)
@@ -942,7 +943,8 @@ def generate_quarter_excel_all_branches(user, year, quarter):
         totals['year'] += total_year
 
         # Процент выполнения плана
-        ws[f'Y{current_row}'] = (total_year / (total_plan or 1)) * 100 if total_year is not None else 0
+        percent = (total_year / (total_plan or 1)) * 100 if total_year is not None else 0
+        ws[f'Y{current_row}'] = round(percent, 2)  # Округляем до 2 знаков после запятой
 
         current_row += 1
         if current_row > end_row:
@@ -950,7 +952,7 @@ def generate_quarter_excel_all_branches(user, year, quarter):
 
     # Заполняем строку с итогами (строка 24 в новом шаблоне)
     current_row = 24
-    ws[f'A{current_row}'] = "ИТОГО:"
+    ws[f'B{current_row}'] = "ИТОГО:"
     ws[f'C{current_row}'] = totals['prev_year']
     ws[f'D{current_row}'] = totals['plan']
 
@@ -968,7 +970,9 @@ def generate_quarter_excel_all_branches(user, year, quarter):
 
     ws[f'W{current_row}'] = totals['quarter']
     ws[f'X{current_row}'] = totals['year']
-    ws[f'Y{current_row}'] = (totals['year'] / (totals['plan'] or 1)) * 100 if totals['year'] is not None else 0
+
+    total_percent = (totals['year'] / (totals['plan'] or 1)) * 100 if totals['year'] is not None else 0
+    ws[f'Y{current_row}'] = round(total_percent, 2)  # Округляем до 2 знаков после запятой
 
     # Динамическое заполнение названий месяцев
     month_names = []
