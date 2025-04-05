@@ -1050,3 +1050,124 @@ def fill_month_data_all_branches(ws, branch, year, month, col_offset, row):
         'events_out_station': total_events_out_station,
         'total': total_month
     }
+
+
+def generate_nats_project_report_all_branches(user, year, month):
+    try:
+        employee = Employee.objects.get(user=user)
+    except Employee.DoesNotExist:
+        return None
+
+    # Загрузка шаблона для всех филиалов
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    template_path = os.path.join(base_dir, 'reports/excell/nats_project_template_all_branches.xlsx')
+
+    if not os.path.exists(template_path):
+        raise FileNotFoundError(f"File not found: {template_path}")
+
+    wb = load_workbook(filename=template_path)
+    ws = wb['2025_год']  # Работаем с нужным листом
+
+    # Заполнение заголовков
+    ws['I3'] = f"{year} год"
+
+    # Получаем все филиалы, исключая административные (department=True)
+    branches = Branch.objects.exclude(department=True).order_by('id')
+
+    # Начальная строка для данных (в шаблоне данные начинаются с 8 строки)
+    start_row = 8
+    current_row = start_row
+
+    # Для хранения итоговых значений
+    totals = {
+        'children': 0,
+        'adults': 0,
+        'total_regs': 0,
+        'events_count': 0,
+        'events_participants': 0,
+        'total_visits': 0,
+        'books_issued': 0,
+        'website_visits': 0
+    }
+
+    for branch in branches:
+        # Получаем данные с начала года до конца выбранного месяца
+        visit_reports = VisitReport.objects.filter(library=branch, date__year=year, date__month__lte=month)
+        book_reports = BookReport.objects.filter(library=branch, date__year=year, date__month__lte=month)
+        events = Event.objects.filter(library=branch, date__year=year, date__month__lte=month)
+
+        # Рассчитываем показатели
+        children = sum(report.qty_reg_14 or 0 for report in visit_reports)
+        adults = sum(report.qty_reg_15_35 or 0 for report in visit_reports) + \
+                 sum(report.qty_reg_other or 0 for report in visit_reports) + \
+                 sum(report.qty_reg_out_of_station or 0 for report in visit_reports) + \
+                 sum(report.qty_reg_prlib or 0 for report in visit_reports) + \
+                 sum(report.qty_reg_litres or 0 for report in visit_reports)
+        total_regs = children + adults
+        events_count = sum(event.quantity or 0 for event in events)
+        events_participants = sum(event.age_14 or 0 for event in events) + \
+                              sum(event.age_35 or 0 for event in events) + \
+                              sum(event.age_other or 0 for event in events)
+        total_visits = events_participants + \
+                       sum(report.qty_visited_14 or 0 for report in visit_reports) + \
+                       sum(report.qty_visited_15_35 or 0 for report in visit_reports) + \
+                       sum(report.qty_visited_other or 0 for report in visit_reports) + \
+                       sum(report.qty_visited_out_station or 0 for report in visit_reports) + \
+                       sum(report.qty_visited_online or 0 for report in visit_reports) + \
+                       sum(report.qty_visited_prlib or 0 for report in visit_reports) + \
+                       sum(report.qty_visited_litres or 0 for report in visit_reports) + \
+                       sum(report.qty_books_reference_online or 0 for report in book_reports)
+        books_issued = sum(report.qty_books_14 or 0 for report in book_reports) + \
+                       sum(report.qty_books_15_35 or 0 for report in book_reports) + \
+                       sum(report.qty_books_other or 0 for report in book_reports) + \
+                       sum(report.qty_books_out_of_station or 0 for report in book_reports) + \
+                       sum(report.qty_books_neb or 0 for report in book_reports) + \
+                       sum(report.qty_books_prlib or 0 for report in book_reports) + \
+                       sum(report.qty_books_litres or 0 for report in book_reports) + \
+                       sum(report.qty_books_consultant or 0 for report in book_reports) + \
+                       sum(report.qty_books_local_library or 0 for report in book_reports)
+        website_visits = sum(report.qty_visited_online or 0 for report in visit_reports) + \
+                         sum(event.online or 0 for event in events)
+
+        # Заполняем данные для филиала
+        ws[f'A{current_row}'] = branch.full_name
+        ws[f'B{current_row}'] = children
+        ws[f'C{current_row}'] = adults
+        ws[f'D{current_row}'] = total_regs
+        ws[f'E{current_row}'] = events_count
+        ws[f'F{current_row}'] = events_participants
+        ws[f'G{current_row}'] = total_visits
+        ws[f'H{current_row}'] = books_issued
+        ws[f'K{current_row}'] = website_visits
+
+        # Суммируем для итогов
+        totals['children'] += children
+        totals['adults'] += adults
+        totals['total_regs'] += total_regs
+        totals['events_count'] += events_count
+        totals['events_participants'] += events_participants
+        totals['total_visits'] += total_visits
+        totals['books_issued'] += books_issued
+        totals['website_visits'] += website_visits
+
+        current_row += 1
+
+    # Заполняем строку с итогами (последняя строка в шаблоне)
+    ws[f'A{current_row}'] = "ИТОГО:"
+    ws[f'B{current_row}'] = totals['children']
+    ws[f'C{current_row}'] = totals['adults']
+    ws[f'D{current_row}'] = totals['total_regs']
+    ws[f'E{current_row}'] = totals['events_count']
+    ws[f'F{current_row}'] = totals['events_participants']
+    ws[f'G{current_row}'] = totals['total_visits']
+    ws[f'H{current_row}'] = totals['books_issued']
+    ws[f'K{current_row}'] = totals['website_visits']
+
+    # Сохранение файла
+    filename = f"нац_проект_все_филиалы_{year}_{month}.xlsx"
+    safe_filename = quote(filename)
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = f'attachment; filename="{safe_filename}"'
+    wb.save(response)
+    return response

@@ -15,7 +15,7 @@ from .checks import check_data_fillings
 from .forms import EventForm, BookReportForm, VisitReportForm
 from .models import Event, VisitReport, BookReport
 from .report_generator import generate_all_reports_excel, generate_quarter_excel, generate_digital_month_report, \
-    generate_nats_project_report, generate_quarter_excel_all_branches
+    generate_nats_project_report, generate_quarter_excel_all_branches, generate_nats_project_report_all_branches
 from .utils import get_book_totals, get_event_totals, get_all_visit_totals, \
     get_all_book_totals, get_all_event_totals, get_visits_totals
 
@@ -80,6 +80,16 @@ def export_nats_project_report(request):
     year = datetime.now().year  # Текущий год
     month = int(request.GET.get('month_nats'))  # Получаем месяц из запроса
     response = generate_nats_project_report(request.user, year, month)
+    if response:
+        return response
+    else:
+        return HttpResponse("Нет данных для экспорта.", status=404)
+
+
+def export_nats_project_report_all_branches(request):
+    year = datetime.now().year  # Текущий год
+    month = int(request.GET.get('month_nats'))  # Получаем месяц из запроса
+    response = generate_nats_project_report_all_branches(request.user, year, month)
     if response:
         return response
     else:
