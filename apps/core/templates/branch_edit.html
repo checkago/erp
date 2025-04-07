@@ -37,68 +37,293 @@
                             <div class="card-body">
                                 <form method="post" class="theme-form">
                                     {% csrf_token %}
-                                    <div class="col-md-4 mb-2 text-black">
-                                        <label for="id_manager" class="form-label">Руководитель</label>
-                                        {{ form.manager }}
-                                    </div>
-                                    <div class="row mb-3 g-3">
-                                        <div class="col-md-4">
-                                            <label for="id_full_name" class="form-label">Полное наименование</label>
-                                            {{ form.full_name }}
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="id_short_name" class="form-label">Краткое наименование</label>
-                                            {{ form.short_name }}
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label for="id_address" class="form-label">Адрес</label>
-                                            {{ form.address }}
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="id_email" class="form-label">Email</label>
-                                            {{ form.email }}
-                                        </div>
-                                        <div class="col-md-4">
-                                            <label for="id_phone" class="form-label">Телефон</label>
-                                            {{ form.phone }}
-                                        </div>
-                                        <fieldset hidden>
-                                            <div class="row">
-                                                <div class='col-md-3 text-center align-text-bottom'>
-                                                    <div class='d-block mt-2'>
-                                                        <span><br></span>
-                                                        {{ form.department }}
-                                                        <label class="btn btn-outline-primary"
-                                                               for='department'>Отдел</label>
-                                                    </div>
-                                                </div>
-                                                <div class='col-md-3 text-center align-text-bottom'>
-                                                    <div class='d-block mt-2'>
-                                                        <span><br></span>
-                                                        {{ form.adult }}
-                                                        <label class="btn btn-outline-primary"
-                                                               for='adult'>Взрослая</label>
-                                                    </div>
-                                                </div>
-                                                <div class='col-md-3 text-center align-text-bottom'>
-                                                    <div class='d-block mt-2'>
-                                                        <span><br></span>
-                                                        {{ form.child }}
-                                                        <label class="btn btn-outline-primary"
-                                                               for='child'>Детская</label>
-                                                    </div>
-                                                </div>
-                                                <div class='col-md-3 text-center align-text-bottom'>
-                                                    <div class='d-block mt-2'>
-                                                        <span><br></span>
-                                                        {{ form.mod_lib }}
-                                                        <label class="btn btn-outline-primary"
-                                                               for='mod_lib'>Модельная</label>
-                                                    </div>
+                                    
+                                    <!-- Основная информация -->
+                                    <fieldset class="mb-4 p-3 border rounded">
+                                        <legend class="w-auto px-2">Основная информация</legend>
+                                        <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label for="id_manager" class="form-label">Руководитель</label>
+                                                {{ form.manager }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_full_name" class="form-label">Полное наименование</label>
+                                                {{ form.full_name }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_short_name" class="form-label">Краткое наименование</label>
+                                                {{ form.short_name }}
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label for="id_address" class="form-label">Адрес юридический</label>
+                                                {{ form.address }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="id_mail_address" class="form-label">Адрес почтовый</label>
+                                                {{ form.mail_address }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_email" class="form-label">Email</label>
+                                                {{ form.email }}
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="id_phone" class="form-label">Телефон</label>
+                                                {{ form.phone }}
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-check-input">
+                                                    {{ form.department }}
+                                                    <label class="form-check-label" for="id_department">Это отдел</label>
                                                 </div>
                                             </div>
-                                        </fieldset>
-                                    </div>
+                                        </div>
+                                    </fieldset>
+                            
+                                    <!-- Тип библиотеки -->
+                                    <fieldset class="mb-4 p-3 border rounded">
+                                        <legend class="w-auto px-2">Тип библиотеки</legend>
+                                        <div class="row g-3">
+                                            <div class="col-md-2">
+                                                <div class="form-check-input">
+                                                    {{ form.adult }}
+                                                    <label class="form-check-label" for="id_adult">Взрослая</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-check-input">
+                                                    {{ form.child }}
+                                                    <label class="form-check-label" for="id_child">Детская</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-check-input">
+                                                    {{ form.child_young }}
+                                                    <label class="form-check-label" for="id_child_young">Детско-Юношеская</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-check-input">
+                                                    {{ form.village }}
+                                                    <label class="form-check-label" for="id_village">Сельская</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-check-input">
+                                                    {{ form.mod_lib }}
+                                                    <label class="form-check-label" for="id_mod_lib">Модельная</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                            
+                                    <!-- Материально-техническая база -->
+                                    <fieldset class="mb-4 p-3 border rounded">
+                                        <legend class="w-auto px-2">Материально-техническая база</legend>
+                                        
+                                        <!-- Объекты культурного наследия -->
+                                        <div class="row mb-3 g-3">
+                                            <div class="col-md-12">
+                                                <h6 class="text-muted">Объекты культурного наследия</h6>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-check-input">
+                                                    {{ form.object_federal_importance }}
+                                                    <label class="form-check-label" for="id_object_federal_importance">Федерального значения</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-check-input">
+                                                    {{ form.object_regional_importance }}
+                                                    <label class="form-check-label" for="id_object_regional_importance">Регионального значения</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Доступность для лиц с ограниченными возможностями -->
+                                        <div class="row mb-3 g-3">
+                                            <div class="col-md-12">
+                                                <h6 class="text-muted">Доступность для лиц с ограниченными возможностями</h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check-input">
+                                                    {{ form.room_for_vision_disabled }}
+                                                    <label class="form-check-label" for="id_room_for_vision_disabled">С нарушением зрения</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check-input">
+                                                    {{ form.room_for_hearing_disabled }}
+                                                    <label class="form-check-label" for="id_room_for_hearing_disabled">С нарушением слуха</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check-input">
+                                                    {{ form.room_for_musculoskeletal_system_disabled }}
+                                                    <label class="form-check-label" for="id_room_for_musculoskeletal_system_disabled">С нарушением ОДА</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Площадь помещений -->
+                                        <div class="row mb-3 g-3">
+                                            <div class="col-md-12">
+                                                <h6 class="text-muted">Площадь помещений (м²)</h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_area_full" class="form-label">Общая площадь</label>
+                                                {{ form.area_full }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_area_fund" class="form-label">Для хранения фондов</label>
+                                                {{ form.area_fund }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_area_work" class="form-label">Для обслуживания пользователей</label>
+                                                {{ form.area_work }}
+                                            </div>
+                                            
+                                            <div class="col-md-4">
+                                                <label for="id_area_operation" class="form-label">В оперативном управлении</label>
+                                                {{ form.area_operation }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_area_rental" class="form-label">По договору аренды</label>
+                                                {{ form.area_rental }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_area_other" class="form-label">Прочее</label>
+                                                {{ form.area_other }}
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Техническое состояние помещений -->
+                                        <div class="row mb-3 g-3">
+                                            <div class="col-md-12">
+                                                <h6 class="text-muted">Техническое состояние помещений</h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_area_repair" class="form-label">Требует капитального ремонта</label>
+                                                {{ form.area_repair }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_area_emergency" class="form-label">Аварийное</label>
+                                                {{ form.area_emergency }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_out_of_station_service_points" class="form-label">Пункты вне стационара</label>
+                                                {{ form.out_of_station_service_points }}
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Посадочные места -->
+                                        <div class="row mb-3 g-3">
+                                            <div class="col-md-12">
+                                                <h6 class="text-muted">Посадочные места</h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_seatings" class="form-label">Всего мест</label>
+                                                {{ form.seatings }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_seatings_computer" class="form-label">Компьютеризированных</label>
+                                                {{ form.seatings_computer }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_seatings_internet" class="form-label">С выходом в интернет</label>
+                                                {{ form.seatings_internet }}
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Автоматизированные технологии -->
+                                        <div class="row mb-3 g-3">
+                                            <div class="col-md-12">
+                                                <h6 class="text-muted">Автоматизированные технологии</h6>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check-input">
+                                                    {{ form.autotech_electronic_catalog }}
+                                                    <label class="form-check-label" for="id_autotech_electronic_catalog">Электронный каталог</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check-input">
+                                                    {{ form.autotech_funds_disbursement }}
+                                                    <label class="form-check-label" for="id_autotech_funds_disbursement">Учет выдачи фондов</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check-input">
+                                                    {{ form.autotech_user_access }}
+                                                    <label class="form-check-label" for="id_autotech_user_access">Учет доступа посетителей</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check-input">
+                                                    {{ form.autotech_funds_documents }}
+                                                    <label class="form-check-label" for="id_autotech_funds_documents">Учет документов фонда</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check-input">
+                                                    {{ form.autotech_funds_digitization }}
+                                                    <label class="form-check-label" for="id_autotech_funds_digitization">Оцифровка фонда</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Оборудование и транспорт -->
+                                        <div class="row mb-3 g-3">
+                                            <div class="col-md-12">
+                                                <h6 class="text-muted">Оборудование и транспорт</h6>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check-input">
+                                                    {{ form.invalids_equipment }}
+                                                    <label class="form-check-label" for="id_invalids_equipment">Оборудование для инвалидов</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_cars" class="form-label">Всего транспортных средств</label>
+                                                {{ form.cars }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_cars_special" class="form-label">Специализированных</label>
+                                                {{ form.cars_special }}
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Интернет и ресурсы -->
+                                        <div class="row g-3">
+                                            <div class="col-md-12">
+                                                <h6 class="text-muted">Интернет и ресурсы</h6>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-check-input">
+                                                    {{ form.availability_internet }}
+                                                    <label class="form-check-label" for="id_availability_internet">Наличие интернета</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-check-input">
+                                                    {{ form.availability_internet_for_users }}
+                                                    <label class="form-check-label" for="id_availability_internet_for_users">Интернет для посетителей</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-check-input">
+                                                    {{ form.availability_site }}
+                                                    <label class="form-check-label" for="id_availability_site">Собственный сайт</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-check-input">
+                                                    {{ form.availability_site_for_disabled }}
+                                                    <label class="form-check-label" for="id_availability_site_for_disabled">Сайт для слабовидящих</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                            
                                     <button class="btn btn-success-gradien" type="submit">Сохранить изменения</button>
                                 </form>
                             </div>

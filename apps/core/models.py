@@ -101,10 +101,66 @@ class Branch(models.Model):
     email = models.EmailField(max_length=250, blank=True, verbose_name='Email')
     phone = models.CharField(max_length=20, blank=True, verbose_name='Телефон')
     department = models.BooleanField(default=False, blank=True, verbose_name='Это отдел')
-    adult = models.BooleanField(default=False, blank=True, verbose_name='Взрослая библиотека')
+    # Тип библиотеки
+    adult = models.BooleanField(default=False, blank=True, verbose_name='Взрослая')
     child = models.BooleanField(default=False, blank=True, verbose_name='Детская')
+    child_young = models.BooleanField(default=False, blank=True, verbose_name='Детско-Юношеская')
     village = models.BooleanField(default=False, blank=True, verbose_name='Сельская')
     mod_lib = models.BooleanField(default=False, blank=True, verbose_name='Модельная')
+
+    # МАТЕРИАЛЬНО ТЕХНИЧЕСКАЯ БАЗА
+    # Объекты культурного наследия
+    object_federal_importance = models.BooleanField(default=False, verbose_name='Федерального значения')
+    object_regional_importance = models.BooleanField(default=False, verbose_name='Регионального значения')
+
+    # Здания (помещения), доступные для лиц
+    room_for_vision_disabled = models.BooleanField(default=False, verbose_name='С нарушением зрения')
+    room_for_hearing_disabled = models.BooleanField(default=False, verbose_name='С нарушением слуха')
+    room_for_musculoskeletal_system_disabled = models.BooleanField(default=False,
+                                                                   verbose_name='С нарушением опорно-двигательного аппарата')
+
+    # Площадь помещений в м2
+    area_full = models.IntegerField(default=0, verbose_name='Общая площадь помещений в м2')
+    area_fund = models.IntegerField(default=0, verbose_name='Площадь для хранения фондов в м2')
+    area_work = models.IntegerField(default=0, verbose_name='Площадь для обслуживания пользователей в м2')
+
+    # Площадь помещений по форме пользования м2
+    area_operation = models.IntegerField(default=0, verbose_name='В оперативном управлении')
+    area_rental = models.IntegerField(default=0, verbose_name='По договору аренды')
+    area_other = models.IntegerField(default=0, verbose_name='Прочее')
+
+    # Техническое состояние помещений (из гр. 10), м2
+    area_repair = models.IntegerField(default=0, verbose_name='Требует капитального ремонта')
+    area_emergency = models.IntegerField(default=0, verbose_name='Аварийное')
+    out_of_station_service_points = models.IntegerField(default=0, verbose_name='Пункты вне стационарного обслуживания в ед.')
+
+    # Число посадочных мест для пользователей, ед.
+    seatings = models.IntegerField(default=0, verbose_name='Посадочные места')
+    seatings_computer = models.IntegerField(default=0, verbose_name='Из них компьютеризованных')
+    seatings_internet = models.IntegerField(default=0, verbose_name='с возможностью выхода в Интернет')
+
+    # Наличие автоматизированных технологий (да - 1, нет - 0)
+    autotech_electronic_catalog = models.BooleanField(default=True,
+                                                      verbose_name='Обработка поступлений и ведения электронного каталога')
+    autotech_funds_disbursement = models.BooleanField(default=True, verbose_name='Организация и учет выдачи фондов')
+    autotech_user_access = models.BooleanField(default=True, verbose_name='Организация и учет доступа посетителей')
+    autotech_funds_documents = models.BooleanField(default=True, verbose_name='Учет документов библиотечного фонда')
+    autotech_funds_digitization = models.BooleanField(default=True, verbose_name='Для оцифровки фонда')
+
+    # Средства для инвалидов
+    invalids_equipment = models.BooleanField(default=True, verbose_name='Наличие оборудования для инвалидов')
+
+    # Число транспортных средств, ед.
+    cars = models.IntegerField(default=0, verbose_name='Всего транспортных средств')
+    cars_special = models.IntegerField(default=0, verbose_name='Из них число специализированных транспортных средств')
+
+    # Интернет и ресурсы
+    availability_internet = models.BooleanField(default=True, verbose_name='Наличие интернета')
+    availability_internet_for_users = models.BooleanField(default=True,
+                                                          verbose_name='Наличие интернета для посетителей')
+    availability_site = models.BooleanField(default=False, verbose_name='Наличие собственного Интернет-сайта')
+    availability_site_for_disabled = models.BooleanField(default=False,
+                                                         verbose_name='Наличие собственного Интернет-сайта для слабовидящих')
 
     class Meta:
         verbose_name = 'Филиал'

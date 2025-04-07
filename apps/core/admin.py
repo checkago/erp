@@ -70,10 +70,77 @@ class OrganizationAdmin(admin.ModelAdmin):
     list_display = ('id', 'full_name', 'short_name', 'manager')
     list_filter = ('manager',)
 
+from django.contrib import admin
+from .models import Branch
 
+@admin.register(Branch)
 class BranchAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Основная информация', {
+            'fields': (
+                'organization', 'full_name', 'short_name', 'manager',
+                'address', 'mail_address', 'email', 'phone', 'department'
+            )
+        }),
+        ('Тип библиотеки', {
+            'fields': (
+                'adult', 'child', 'child_young', 'village', 'mod_lib'
+            )
+        }),
+        ('МАТЕРИАЛЬНО-ТЕХНИЧЕСКАЯ БАЗА', {
+            'fields': (
+
+            )
+        }),
+        ('Объекты культурного наследия', {
+            'fields': (
+                'object_federal_importance', 'object_regional_importance',
+            )
+        }),
+        ('Доступность для лиц с ограниченными возможностями', {
+            'fields': (
+                'room_for_vision_disabled', 'room_for_hearing_disabled',
+                'room_for_musculoskeletal_system_disabled'
+            )
+        }),
+        ('Площадь помещений (м²)', {
+            'fields': (
+                'area_full', 'area_fund', 'area_work',
+                'area_operation', 'area_rental', 'area_other'
+            )
+        }),
+        ('Техническое состояние помещений', {
+            'fields': (
+                'area_repair', 'area_emergency', 'out_of_station_service_points'
+            )
+        }),
+        ('Посадочные места', {
+            'fields': (
+                'seatings', 'seatings_computer', 'seatings_internet'
+            )
+        }),
+        ('Автоматизированные технологии', {
+            'fields': (
+                'autotech_electronic_catalog', 'autotech_funds_disbursement',
+                'autotech_user_access', 'autotech_funds_documents',
+                'autotech_funds_digitization'
+            )
+        }),
+        ('Прочее оборудование', {
+            'fields': (
+                'invalids_equipment', 'cars', 'cars_special'
+            )
+        }),
+        ('Интернет и ресурсы', {
+            'fields': (
+                'availability_internet', 'availability_internet_for_users',
+                'availability_site', 'availability_site_for_disabled'
+            )
+        }),
+    )
     list_display = ('full_name', 'short_name', 'manager', 'adult', 'child', 'village')
     list_filter = ('organization', 'manager', 'adult', 'child')
+
 
 
 class CafedraAdmin(admin.ModelAdmin):
@@ -104,6 +171,5 @@ admin.site.register(ErpUser, ErpUserAdmin)
 admin.site.register(Position, PositionAdmin)
 admin.site.register(Employee, EmployeeAdmin)
 admin.site.register(Organization, OrganizationAdmin)
-admin.site.register(Branch, BranchAdmin)
 admin.site.register(Cafedra, CafedraAdmin)
 admin.site.register(Notification, NotificationAdmin)
