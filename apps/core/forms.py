@@ -34,20 +34,20 @@ class BranchForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control border border-1 border-dark'}),
 
             # Флаговые поля (чекбоксы)
-            'department': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'department'}),
-            'adult': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'adult'}),
-            'child': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'child'}),
-            'child_young': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'child_young'}),
-            'village': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'village'}),
-            'mod_lib': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'mod_lib'}),
+            'department': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'department'}),
+            'adult': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'adult'}),
+            'child': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'child'}),
+            'child_young': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'child_young'}),
+            'village': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'village'}),
+            'mod_lib': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'mod_lib'}),
 
             # Материально-техническая база (флаги)
-            'object_federal_importance': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'object_federal'}),
-            'object_regional_importance': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'object_regional'}),
-            'room_for_vision_disabled': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'vision_disabled'}),
-            'room_for_hearing_disabled': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'hearing_disabled'}),
+            'object_federal_importance': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'object_federal'}),
+            'object_regional_importance': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'object_regional'}),
+            'room_for_vision_disabled': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'vision_disabled'}),
+            'room_for_hearing_disabled': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'hearing_disabled'}),
             'room_for_musculoskeletal_system_disabled': forms.CheckboxInput(
-                attrs={'class': 'btn-check', 'id': 'musculoskeletal_disabled'}),
+                attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'musculoskeletal_disabled'}),
 
             # Числовые поля
             'area_full': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
