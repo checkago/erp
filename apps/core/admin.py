@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.utils import timezone
 from datetime import datetime, date
 from import_export import resources
@@ -21,6 +22,11 @@ class ErpUserAdmin(ImportExportModelAdmin, BaseUserAdmin):
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('username', 'first_name', 'last_name', 'email')
 
+    # Используем UserChangeForm для редактирования
+    form = UserChangeForm
+    # Используем UserCreationForm для создания
+    add_form = UserCreationForm
+
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         ('Personal info', {'fields': ('last_name', 'first_name', 'middle_name',
@@ -37,19 +43,17 @@ class ErpUserAdmin(ImportExportModelAdmin, BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2'),
+            'fields': ('username', 'password1', 'password2', 'email'),
         }),
-        ('Additional Fields', {'fields': ('email', 'birth_date',
-                                          'bio',
-                                          'task_notifications',
-                                          'messages_notifications',
-                                          'events_notifications')}),
+        ('Additional Fields', {
+            'classes': ('wide',),
+            'fields': ('last_name', 'first_name', 'middle_name',
+                       'birth_date', 'bio',
+                       'task_notifications',
+                       'messages_notifications',
+                       'events_notifications'),
+        }),
     )
-
-    def save_model(self, request, obj, form, change):
-        if not change:  # Если это создание нового пользователя
-            obj.set_password(form.cleaned_data['password'])  # Устанавливаем зашифрованный пароль
-        super().save_model(request, obj, form, change)
 
 
 class PositionAdmin(admin.ModelAdmin):

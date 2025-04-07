@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import ErpUser, Employee, Branch, Cafedra
 
 
@@ -34,20 +35,20 @@ class BranchForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'form-control border border-1 border-dark'}),
 
             # Флаговые поля (чекбоксы)
-            'department': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'department'}),
-            'adult': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'adult'}),
-            'child': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'child'}),
-            'child_young': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'child_young'}),
-            'village': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'village'}),
-            'mod_lib': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'mod_lib'}),
+            'department': forms.CheckboxInput(attrs={'class': 'form-check-input', 'type': 'checkbox'}),
+            'adult': forms.CheckboxInput(attrs={'class': 'form-check-input', 'type': 'checkbox'}),
+            'child': forms.CheckboxInput(attrs={'class': 'form-check-input', 'type': 'checkbox'}),
+            'child_young': forms.CheckboxInput(attrs={'class': 'form-check-input', 'type': 'checkbox'}),
+            'village': forms.CheckboxInput(attrs={'class': 'form-check-input', 'type': 'checkbox'}),
+            'mod_lib': forms.CheckboxInput(attrs={'class': 'form-check-input', 'type': 'checkbox'}),
 
             # Материально-техническая база (флаги)
-            'object_federal_importance': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'object_federal'}),
-            'object_regional_importance': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'object_regional'}),
-            'room_for_vision_disabled': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'vision_disabled'}),
-            'room_for_hearing_disabled': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'hearing_disabled'}),
+            'object_federal_importance': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox'}),
+            'object_regional_importance': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox'}),
+            'room_for_vision_disabled': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox'}),
+            'room_for_hearing_disabled': forms.CheckboxInput(attrs={'class': 'btn-check', 'type': 'checkbox'}),
             'room_for_musculoskeletal_system_disabled': forms.CheckboxInput(
-                attrs={'class': 'btn-check', 'type': 'checkbox', 'id': 'musculoskeletal_disabled'}),
+                attrs={'class': 'btn-check', 'type': 'checkbox'}),
 
             # Числовые поля
             'area_full': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
@@ -66,37 +67,31 @@ class BranchForm(forms.ModelForm):
 
             # Автоматизированные технологии
             'autotech_electronic_catalog': forms.CheckboxInput(
-                attrs={'class': 'btn-check', 'id': 'electronic_catalog'}),
+                attrs={'class': 'btn-check'}),
             'autotech_funds_disbursement': forms.CheckboxInput(
-                attrs={'class': 'btn-check', 'id': 'funds_disbursement'}),
-            'autotech_user_access': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'user_access'}),
-            'autotech_funds_documents': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'funds_documents'}),
+                attrs={'class': 'btn-check'}),
+            'autotech_user_access': forms.CheckboxInput(attrs={'class': 'btn-check'}),
+            'autotech_funds_documents': forms.CheckboxInput(attrs={'class': 'btn-check'}),
             'autotech_funds_digitization': forms.CheckboxInput(
-                attrs={'class': 'btn-check', 'id': 'funds_digitization'}),
+                attrs={'class': 'btn-check'}),
 
             # Оборудование и транспорт
-            'invalids_equipment': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'invalids_equipment'}),
+            'invalids_equipment': forms.CheckboxInput(attrs={'class': 'btn-check'}),
             'cars': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
             'cars_special': forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'}),
 
             # Интернет и ресурсы
-            'availability_internet': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'availability_internet'}),
+            'availability_internet': forms.CheckboxInput(attrs={'class': 'btn-check'}),
             'availability_internet_for_users': forms.CheckboxInput(
-                attrs={'class': 'btn-check', 'id': 'internet_for_users'}),
-            'availability_site': forms.CheckboxInput(attrs={'class': 'btn-check', 'id': 'availability_site'}),
+                attrs={'class': 'btn-check'}),
+            'availability_site': forms.CheckboxInput(attrs={'class': 'btn-check'}),
             'availability_site_for_disabled': forms.CheckboxInput(
-                attrs={'class': 'btn-check', 'id': 'site_for_disabled'}),
+                attrs={'class': 'btn-check'}),
         }
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        # Устанавливаем placeholder'ы для числовых полей
-        for field in ['area_full', 'area_fund', 'area_work', 'area_operation',
-                      'area_rental', 'area_other', 'area_repair', 'area_emergency',
-                      'out_of_station_service_points', 'seatings', 'seatings_computer',
-                      'seatings_internet', 'cars', 'cars_special']:
-            self.fields[field].widget.attrs['placeholder'] = '0'
         if user:
             employee = Employee.objects.get(user=user)
             self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)

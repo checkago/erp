@@ -35,13 +35,23 @@
                             <h3>Данные филиала/отдела</h3>
 
                             <div class="card-body">
-                                <form method="post" class="theme-form">
+                                <form method="post" enctype="multipart/form-data" class="theme-form">
                                     {% csrf_token %}
-                                    
+                                    {% if form.errors %}
+                                    <div class="alert alert-danger">
+                                        {% for field, errors in form.errors.items %}
+                                            {{ field }}: {{ errors|join:", " }}
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
                                     <!-- Основная информация -->
                                     <fieldset class="mb-4 p-3 border rounded">
                                         <legend class="w-auto px-2">Основная информация</legend>
                                         <div class="row g-3">
+                                            <div class="col-md-4">
+                                                <label for="id_organization" class="form-label">Организация</label>
+                                                {{ form.organization }}
+                                            </div>
                                             <div class="col-md-4">
                                                 <label for="id_manager" class="form-label">Руководитель</label>
                                                 {{ form.manager }}
@@ -78,48 +88,48 @@
                                             </div>
                                         </div>
                                     </fieldset>
-                            
+
                                     <!-- Тип библиотеки -->
                                     <fieldset class="mb-4 p-3 border rounded">
                                         <legend class="w-auto px-2">Тип библиотеки</legend>
                                         <div class="row g-3">
                                             <div class="col-md-2">
-                                                <div class="form-check">
-                                                    <label class="form-check-label" for="id_adult">Взрослая</label>
+                                                <div class="form-check checkbox checkbox-secondary mb-0">
                                                     {{ form.adult }}
+                                                    <label class="form-check-label" for="id_adult">Взрослая</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
-                                                <div class="form-check">
+                                                <div class="orm-check checkbox checkbox-secondary mb-0">
                                                     {{ form.child }}
                                                     <label class="form-check-label" for="id_child">Детская</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-check">
+                                                <div class="form-check checkbox checkbox-secondary mb-0">
                                                     {{ form.child_young }}
                                                     <label class="form-check-label" for="id_child_young">Детско-Юношеская</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
-                                                <div class="form-check">
+                                                <div class="form-check checkbox checkbox-secondary mb-0">
                                                     {{ form.village }}
                                                     <label class="form-check-label" for="id_village">Сельская</label>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
-                                                <div class="form-check">
+                                                <div class="form-check checkbox checkbox-secondary mb-0">
                                                     {{ form.mod_lib }}
                                                     <label class="form-check-label" for="id_mod_lib">Модельная</label>
                                                 </div>
                                             </div>
                                         </div>
                                     </fieldset>
-                            
+
                                     <!-- Материально-техническая база -->
                                     <fieldset class="mb-4 p-3 border rounded">
                                         <legend class="w-auto px-2">Материально-техническая база</legend>
-                                        
+
                                         <!-- Объекты культурного наследия -->
                                         <div class="row mb-3 g-3">
                                             <div class="col-md-12">
@@ -138,7 +148,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Доступность для лиц с ограниченными возможностями -->
                                         <div class="row mb-3 g-3">
                                             <div class="col-md-12">
@@ -163,7 +173,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Площадь помещений -->
                                         <div class="row mb-3 g-3">
                                             <div class="col-md-12">
@@ -181,7 +191,7 @@
                                                 <label for="id_area_work" class="form-label">Для обслуживания пользователей</label>
                                                 {{ form.area_work }}
                                             </div>
-                                            
+
                                             <div class="col-md-4">
                                                 <label for="id_area_operation" class="form-label">В оперативном управлении</label>
                                                 {{ form.area_operation }}
@@ -195,7 +205,7 @@
                                                 {{ form.area_other }}
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Техническое состояние помещений -->
                                         <div class="row mb-3 g-3">
                                             <div class="col-md-12">
@@ -214,7 +224,7 @@
                                                 {{ form.out_of_station_service_points }}
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Посадочные места -->
                                         <div class="row mb-3 g-3">
                                             <div class="col-md-12">
@@ -233,7 +243,7 @@
                                                 {{ form.seatings_internet }}
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Автоматизированные технологии -->
                                         <div class="row mb-3 g-3">
                                             <div class="col-md-12">
@@ -270,7 +280,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Оборудование и транспорт -->
                                         <div class="row mb-3 g-3">
                                             <div class="col-md-12">
@@ -291,7 +301,7 @@
                                                 {{ form.cars_special }}
                                             </div>
                                         </div>
-                                        
+
                                         <!-- Интернет и ресурсы -->
                                         <div class="row g-3">
                                             <div class="col-md-12">
