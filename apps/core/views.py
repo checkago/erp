@@ -77,7 +77,7 @@ def signup_home(request):
 @login_required(login_url="/login_home")
 # @cache_page(60 * 5)
 def employee_list_view(request):
-    employees = Employee.objects.all()
+    employees = Employee.objects.all().exclude(dismissed=True)
     context = {"breadcrumb": {"parent": "Главная", "child": "Сотрудники"}, 'employees': employees}
     return render(request, 'employee_list.html', context=context)
 
