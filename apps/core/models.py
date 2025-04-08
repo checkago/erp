@@ -120,18 +120,18 @@ class Branch(models.Model):
                                                                    verbose_name='С нарушением опорно-двигательного аппарата')
 
     # Площадь помещений в м2
-    area_full = models.DecimalField(default=0, max_digits=5, decimal_places=2, verbose_name='Общая площадь помещений в м2')
-    area_fund = models.DecimalField(default=0, max_digits=5, decimal_places=2, verbose_name='Площадь для хранения фондов в м2')
-    area_work = models.DecimalField(default=0, max_digits=5, decimal_places=2, verbose_name='Площадь для обслуживания пользователей в м2')
+    area_full = models.DecimalField(default=0, max_digits=6, decimal_places=2, verbose_name='Общая площадь помещений в м2')
+    area_fund = models.DecimalField(default=0, max_digits=6, decimal_places=2, verbose_name='Площадь для хранения фондов в м2')
+    area_work = models.DecimalField(default=0, max_digits=6, decimal_places=2, verbose_name='Площадь для обслуживания пользователей в м2')
 
     # Площадь помещений по форме пользования м2
-    area_operation = models.DecimalField(default=0,max_digits=5, decimal_places=2, verbose_name='В оперативном управлении')
-    area_rental = models.DecimalField(default=0, max_digits=5, decimal_places=2, verbose_name='По договору аренды')
-    area_other = models.DecimalField(default=0, max_digits=5, decimal_places=2,  verbose_name='Прочее')
+    area_operation = models.DecimalField(default=0,max_digits=6, decimal_places=2, verbose_name='В оперативном управлении')
+    area_rental = models.DecimalField(default=0, max_digits=6, decimal_places=2, verbose_name='По договору аренды')
+    area_other = models.DecimalField(default=0, max_digits=6, decimal_places=2,  verbose_name='Прочее')
 
     # Техническое состояние помещений (из гр. 10), м2
-    area_repair = models.DecimalField(default=0, max_digits=5, decimal_places=2, verbose_name='Требует капитального ремонта')
-    area_emergency = models.DecimalField(default=0, max_digits=5, decimal_places=2, verbose_name='Аварийное')
+    area_repair = models.DecimalField(default=0, max_digits=6, decimal_places=2, verbose_name='Требует капитального ремонта')
+    area_emergency = models.DecimalField(default=0, max_digits=6, decimal_places=2, verbose_name='Аварийное')
     out_of_station_service_points = models.IntegerField(default=0, verbose_name='Пункты вне стационарного обслуживания в ед.')
 
     # Число посадочных мест для пользователей, ед.
