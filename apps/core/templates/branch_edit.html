@@ -46,7 +46,7 @@
                                     {% endif %}
                                     <!-- Основная информация -->
                                     <fieldset class="mb-4 p-3 border rounded">
-                                        <legend class="w-auto px-2">Основная информация</legend>
+                                        <legend class="w-auto px-2 text-primary text-uppercase">Основная информация</legend>
                                         <div class="row g-3">
                                             <div class="col-md-4">
                                                 <label for="id_organization" class="form-label">Организация</label>
@@ -81,7 +81,7 @@
                                                 {{ form.phone }}
                                             </div>
                                             <div class="col-md-12">
-                                                <div class="form-check">
+                                                <div class="form-check checkbox checkbox-secondary mb-0">
                                                     {{ form.department }}
                                                     <label class="form-check-label" for="id_department">Это отдел</label>
                                                 </div>
@@ -91,7 +91,7 @@
 
                                     <!-- Тип библиотеки -->
                                     <fieldset class="mb-4 p-3 border rounded">
-                                        <legend class="w-auto px-2">Тип библиотеки</legend>
+                                        <legend class="w-auto px-2 text-primary text-uppercase">Тип библиотеки</legend>
                                         <div class="row g-3">
                                             <div class="col-md-2">
                                                 <div class="form-check checkbox checkbox-secondary mb-0">
@@ -125,215 +125,217 @@
                                             </div>
                                         </div>
                                     </fieldset>
-
-                                    <!-- Материально-техническая база -->
-                                    <fieldset class="mb-4 p-3 border rounded">
-                                        <legend class="w-auto px-2">Материально-техническая база</legend>
-
-                                        <!-- Объекты культурного наследия -->
-                                        <div class="row mb-3 g-3">
-                                            <div class="col-md-12">
-                                                <h6 class="text-muted">Объекты культурного наследия</h6>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-check checkbox mb-0">
-                                                    {{ form.object_federal_importance }}
-                                                    <label class="form-check-label" for="id_object_federal_importance">Федерального значения</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-check">
-                                                    {{ form.object_regional_importance }}
-                                                    <label class="form-check-label" for="id_object_regional_importance">Регионального значения</label>
-                                                </div>
-                                            </div>
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title text-uppercase">Материально-техническая база</h4>
                                         </div>
+                                        <div class="card-body">
+                                            <fieldset class="mb-4 p-3 border rounded">
+                                                <legend class="w-auto px-2 text-primary text-uppercase">Объекты культурного наследия</legend>
 
-                                        <!-- Доступность для лиц с ограниченными возможностями -->
-                                        <div class="row mb-3 g-3">
-                                            <div class="col-md-12">
-                                                <h6 class="text-muted">Доступность для лиц с ограниченными возможностями</h6>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-check">
-                                                    {{ form.room_for_vision_disabled }}
-                                                    <label class="form-check-label" for="id_room_for_vision_disabled">С нарушением зрения</label>
+                                                <!-- Объекты культурного наследия -->
+                                                <div class="row mb-3 g-3">
+                                                    <div class="col-md-3">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.object_federal_importance }}
+                                                            <label class="form-check-label" for="id_object_federal_importance">Федерального значения</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.object_regional_importance }}
+                                                            <label class="form-check-label" for="id_object_regional_importance">Регионального значения</label>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-check">
-                                                    {{ form.room_for_hearing_disabled }}
-                                                    <label class="form-check-label" for="id_room_for_hearing_disabled">С нарушением слуха</label>
+                                            </fieldset>
+                                            <fieldset class="mb-4 p-3 border rounded">
+                                                <legend class="w-auto px-2 text-primary text-uppercase">Доступность для лиц с ограниченными возможностями</legend>
+                                                <!-- Доступность для лиц с ограниченными возможностями -->
+                                                <div class="row mb-3 g-3">
+                                                    <div class="col-md-4">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.room_for_vision_disabled }}
+                                                            <label class="form-check-label" for="id_room_for_vision_disabled">С нарушением зрения</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.room_for_hearing_disabled }}
+                                                            <label class="form-check-label" for="id_room_for_hearing_disabled">С нарушением слуха</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.room_for_musculoskeletal_system_disabled }}
+                                                            <label class="form-check-label" for="id_room_for_musculoskeletal_system_disabled">С нарушением ОДА</label>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-check">
-                                                    {{ form.room_for_musculoskeletal_system_disabled }}
-                                                    <label class="form-check-label" for="id_room_for_musculoskeletal_system_disabled">С нарушением ОДА</label>
+                                            </fieldset>
+                                            <fieldset class="mb-4 p-3 border rounded">
+                                                <legend class="w-auto px-2 text-primary text-uppercase">Площадь помещений (м²)</legend>
+
+                                                <!-- Площадь помещений -->
+                                                <div class="row mb-3 g-3">
+                                                    <div class="col-md-4">
+                                                        <label for="id_area_full" class="form-label">Общая площадь</label>
+                                                        {{ form.area_full }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="id_area_fund" class="form-label">Для хранения фондов</label>
+                                                        {{ form.area_fund }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="id_area_work" class="form-label">Для обслуживания пользователей</label>
+                                                        {{ form.area_work }}
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label for="id_area_operation" class="form-label">В оперативном управлении</label>
+                                                        {{ form.area_operation }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="id_area_rental" class="form-label">По договору аренды</label>
+                                                        {{ form.area_rental }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="id_area_other" class="form-label">Прочее</label>
+                                                        {{ form.area_other }}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </fieldset>
+                                            <fieldset class="mb-4 p-3 border rounded">
+                                                <legend class="w-auto px-2 text-primary text-uppercase">Техническое состояние помещений</legend>
+
+                                                <!-- Техническое состояние помещений -->
+                                                <div class="row mb-3 g-3">
+                                                    <div class="col-md-4">
+                                                        <label for="id_area_repair" class="form-label">Требует капитального ремонта</label>
+                                                        {{ form.area_repair }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="id_area_emergency" class="form-label">Аварийное</label>
+                                                        {{ form.area_emergency }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="id_out_of_station_service_points" class="form-label">Пункты вне стационара</label>
+                                                        {{ form.out_of_station_service_points }}
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset class="mb-4 p-3 border rounded">
+                                                <legend class="w-auto px-2 text-primary text-uppercase">Посадочные места</legend>
+
+                                                <!-- Посадочные места -->
+                                                <div class="row mb-3 g-3">
+                                                    <div class="col-md-4">
+                                                        <label for="id_seatings" class="form-label">Всего мест</label>
+                                                        {{ form.seatings }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="id_seatings_computer" class="form-label">Компьютеризированных</label>
+                                                        {{ form.seatings_computer }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="id_seatings_internet" class="form-label">С выходом в интернет</label>
+                                                        {{ form.seatings_internet }}
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset class="mb-4 p-3 border rounded">
+                                                <legend class="w-auto px-2 text-primary text-uppercase">Технологии автоматизации</legend>
+
+                                                <!-- Автоматизированные технологии -->
+                                                <div class="row mb-3 g-3">
+                                                    <div class="col-md-6">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.autotech_electronic_catalog }}
+                                                            <label class="form-check-label" for="id_autotech_electronic_catalog">Электронный каталог</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.autotech_funds_disbursement }}
+                                                            <label class="form-check-label" for="id_autotech_funds_disbursement">Учет выдачи фондов</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.autotech_user_access }}
+                                                            <label class="form-check-label" for="id_autotech_user_access">Учет доступа посетителей</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.autotech_funds_documents }}
+                                                            <label class="form-check-label" for="id_autotech_funds_documents">Учет документов фонда</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.autotech_funds_digitization }}
+                                                            <label class="form-check-label" for="id_autotech_funds_digitization">Оцифровка фонда</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset class="mb-4 p-3 border rounded">
+                                                <legend class="w-auto px-2 text-primary text-uppercase">Оборудование и транспорт</legend>
+
+                                                <!-- Оборудование и транспорт -->
+                                                <div class="row mb-3 g-3">
+                                                    <div class="col-md-4">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.invalids_equipment }}
+                                                            <label class="form-check-label" for="id_invalids_equipment">Оборудование для инвалидов</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="id_cars" class="form-label">Всего транспортных средств</label>
+                                                        {{ form.cars }}
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="id_cars_special" class="form-label">Специализированных</label>
+                                                        {{ form.cars_special }}
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset class="mb-4 p-3 border rounded">
+                                                <legend class="w-auto px-1 text-primary text-uppercase">Интернет и ресурсы</legend>
+
+                                                <!-- Интернет и ресурсы -->
+                                                <div class="row g-3">
+                                                    <div class="col-md-3">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.availability_internet }}
+                                                            <label class="form-check-label" for="id_availability_internet">Наличие интернета</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.availability_internet_for_users }}
+                                                            <label class="form-check-label" for="id_availability_internet_for_users">Интернет для посетителей</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.availability_site }}
+                                                            <label class="form-check-label" for="id_availability_site">Собственный сайт</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-check checkbox checkbox-secondary mb-0">
+                                                            {{ form.availability_site_for_disabled }}
+                                                            <label class="form-check-label" for="id_availability_site_for_disabled">Сайт для слабовидящих</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
                                         </div>
+                                    </div>
 
-                                        <!-- Площадь помещений -->
-                                        <div class="row mb-3 g-3">
-                                            <div class="col-md-12">
-                                                <h6 class="text-muted">Площадь помещений (м²)</h6>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_area_full" class="form-label">Общая площадь</label>
-                                                {{ form.area_full }}
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_area_fund" class="form-label">Для хранения фондов</label>
-                                                {{ form.area_fund }}
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_area_work" class="form-label">Для обслуживания пользователей</label>
-                                                {{ form.area_work }}
-                                            </div>
 
-                                            <div class="col-md-4">
-                                                <label for="id_area_operation" class="form-label">В оперативном управлении</label>
-                                                {{ form.area_operation }}
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_area_rental" class="form-label">По договору аренды</label>
-                                                {{ form.area_rental }}
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_area_other" class="form-label">Прочее</label>
-                                                {{ form.area_other }}
-                                            </div>
-                                        </div>
-
-                                        <!-- Техническое состояние помещений -->
-                                        <div class="row mb-3 g-3">
-                                            <div class="col-md-12">
-                                                <h6 class="text-muted">Техническое состояние помещений</h6>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_area_repair" class="form-label">Требует капитального ремонта</label>
-                                                {{ form.area_repair }}
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_area_emergency" class="form-label">Аварийное</label>
-                                                {{ form.area_emergency }}
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_out_of_station_service_points" class="form-label">Пункты вне стационара</label>
-                                                {{ form.out_of_station_service_points }}
-                                            </div>
-                                        </div>
-
-                                        <!-- Посадочные места -->
-                                        <div class="row mb-3 g-3">
-                                            <div class="col-md-12">
-                                                <h6 class="text-muted">Посадочные места</h6>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_seatings" class="form-label">Всего мест</label>
-                                                {{ form.seatings }}
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_seatings_computer" class="form-label">Компьютеризированных</label>
-                                                {{ form.seatings_computer }}
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_seatings_internet" class="form-label">С выходом в интернет</label>
-                                                {{ form.seatings_internet }}
-                                            </div>
-                                        </div>
-
-                                        <!-- Автоматизированные технологии -->
-                                        <div class="row mb-3 g-3">
-                                            <div class="col-md-12">
-                                                <h6 class="text-muted">Автоматизированные технологии</h6>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-check">
-                                                    {{ form.autotech_electronic_catalog }}
-                                                    <label class="form-check-label" for="id_autotech_electronic_catalog">Электронный каталог</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-check">
-                                                    {{ form.autotech_funds_disbursement }}
-                                                    <label class="form-check-label" for="id_autotech_funds_disbursement">Учет выдачи фондов</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-check">
-                                                    {{ form.autotech_user_access }}
-                                                    <label class="form-check-label" for="id_autotech_user_access">Учет доступа посетителей</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-check">
-                                                    {{ form.autotech_funds_documents }}
-                                                    <label class="form-check-label" for="id_autotech_funds_documents">Учет документов фонда</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-check">
-                                                    {{ form.autotech_funds_digitization }}
-                                                    <label class="form-check-label" for="id_autotech_funds_digitization">Оцифровка фонда</label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Оборудование и транспорт -->
-                                        <div class="row mb-3 g-3">
-                                            <div class="col-md-12">
-                                                <h6 class="text-muted">Оборудование и транспорт</h6>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-check">
-                                                    {{ form.invalids_equipment }}
-                                                    <label class="form-check-label" for="id_invalids_equipment">Оборудование для инвалидов</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_cars" class="form-label">Всего транспортных средств</label>
-                                                {{ form.cars }}
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label for="id_cars_special" class="form-label">Специализированных</label>
-                                                {{ form.cars_special }}
-                                            </div>
-                                        </div>
-
-                                        <!-- Интернет и ресурсы -->
-                                        <div class="row g-3">
-                                            <div class="col-md-12">
-                                                <h6 class="text-muted">Интернет и ресурсы</h6>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-check">
-                                                    {{ form.availability_internet }}
-                                                    <label class="form-check-label" for="id_availability_internet">Наличие интернета</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-check">
-                                                    {{ form.availability_internet_for_users }}
-                                                    <label class="form-check-label" for="id_availability_internet_for_users">Интернет для посетителей</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-check">
-                                                    {{ form.availability_site }}
-                                                    <label class="form-check-label" for="id_availability_site">Собственный сайт</label>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-check">
-                                                    {{ form.availability_site_for_disabled }}
-                                                    <label class="form-check-label" for="id_availability_site_for_disabled">Сайт для слабовидящих</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                            
                                     <button class="btn btn-success-gradien" type="submit">Сохранить изменения</button>
                                 </form>
                             </div>
