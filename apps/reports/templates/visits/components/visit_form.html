@@ -38,11 +38,15 @@
                                                 {{ form.qty_reg_14 }}
                                             </div>
                                             <div class="col-md-4">
-                                                <label for="id_qty_reg_15_35" class="form-label">Молодежь 14-30</label>
+                                                <label for="id_qty_reg_15_35" class="form-label">От 15 до 17</label>
                                                 {{ form.qty_reg_15_35 }}
                                             </div>
+                                             <div class="col-md-4">
+                                                <label for="id_qty_reg_18_35" class="form-label">От 18 до 35</label>
+                                                {{ form.qty_reg_18_35 }}
+                                            </div>
                                             <div class="col-md-4">
-                                                <label for="id_qty_reg_other" class="form-label">Прочие 30+</label>
+                                                <label for="id_qty_reg_other" class="form-label">Прочие 35+</label>
                                                 {{ form.qty_reg_other }}
                                             </div>
                                             <div class="col-md-4">
@@ -96,12 +100,17 @@
                                                 {{ form.qty_visited_14 }}
                                             </div>
                                             <div class="col-md-4">
-                                                <label for="id_qty_visited_15_35" class="form-label">Молодежь
-                                                    14-30</label>
+                                                <label for="id_qty_visited_15_35" class="form-label">От
+                                                    15 до 17</label>
                                                 {{ form.qty_visited_15_35 }}
                                             </div>
                                             <div class="col-md-4">
-                                                <label for="id_qty_visited_other" class="form-label">Прочие 30+</label>
+                                                <label for="id_qty_visited_18_35" class="form-label">От
+                                                    18 до 35</label>
+                                                {{ form.qty_visited_18_35 }}
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="id_qty_visited_other" class="form-label">Прочие 35+</label>
                                                 {{ form.qty_visited_other }}
                                             </div>
                                             <div class="col-md-4">
@@ -136,7 +145,7 @@
                                             </div>
                                         </div>
                                         <hr class="text-primary">
-                                        <span class="text-danger fw-bold">* - Удаленные посещения, это не справки, а посещения сайта. Заполняется только ЦГБ им. Тютчева. <br>Если вам звонят, пишут в соц. сети или мессенджер, фиксируйте и вносите это в раздел справок(удаленно)</br></span>
+                                        <span class="text-danger fw-bold">* - Удаленные посещения, это не справки, а посещения сайта. Заполняется только ЦГБ им. Тютчева. <br>Если вам звонят, пишут в соц. сети или мессенджер, фиксируйте и вносите это в раздел справок(удаленно)</span>
                                         <hr class="text-primary">
                                         <div class="row">
                                             <div id="total-visited-sum" class="col-4 text-center">
@@ -177,16 +186,18 @@
     function calculateSum() {
         const qtyReg14 = parseFloat(document.getElementById('id_qty_reg_14').value) || 0;
         const qtyReg15_35 = parseFloat(document.getElementById('id_qty_reg_15_35').value) || 0;
+        const qtyReg18_35 = parseFloat(document.getElementById('id_qty_reg_18_35').value) || 0;
         const qtyRegOther = parseFloat(document.getElementById('id_qty_reg_other').value) || 0;
         const qtyRegOutOfStation = parseFloat(document.getElementById('id_qty_reg_out_of_station').value) || 0;
 
-        const totalSum = qtyReg14 + qtyReg15_35 + qtyRegOther + qtyRegOutOfStation;
+        const totalSum = qtyReg14 + qtyReg15_35 + qtyReg18_35 + qtyRegOther + qtyRegOutOfStation;
         document.getElementById('total-reg-sum').querySelector('span').textContent = totalSum;
     }
 
     // Назначение обработчиков событий на поля ввода
     document.getElementById('id_qty_reg_14').addEventListener('input', calculateSum);
     document.getElementById('id_qty_reg_15_35').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_reg_18_35').addEventListener('input', calculateSum);
     document.getElementById('id_qty_reg_other').addEventListener('input', calculateSum);
     document.getElementById('id_qty_reg_out_of_station').addEventListener('input', calculateSum);
 
@@ -236,17 +247,19 @@
     function calculateSum() {
         const qtyVisited14 = parseFloat(document.getElementById('id_qty_visited_14').value) || 0;
         const qtyVisited15_35 = parseFloat(document.getElementById('id_qty_visited_15_35').value) || 0;
+        const qtyVisited18_35 = parseFloat(document.getElementById('id_qty_visited_18_35').value) || 0;
         const qtyVisitedOther = parseFloat(document.getElementById('id_qty_visited_other').value) || 0;
         const qtyVisitedOnline = parseFloat(document.getElementById('id_qty_visited_online').value) || 0;
         const qtyVisitedOutOfStation = parseFloat(document.getElementById('id_qty_visited_out_station').value) || 0;
 
-        const totalSum = qtyVisited14 + qtyVisited15_35 + qtyVisitedOther + qtyVisitedOnline + qtyVisitedOutOfStation;
+        const totalSum = qtyVisited14 + qtyVisited15_35 + qtyVisited18_35 + qtyVisitedOther + qtyVisitedOnline + qtyVisitedOutOfStation;
         document.getElementById('total-visited-sum').querySelector('span').textContent = totalSum;
     }
 
     // Назначение обработчиков событий на поля ввода
     document.getElementById('id_qty_visited_14').addEventListener('input', calculateSum);
     document.getElementById('id_qty_visited_15_35').addEventListener('input', calculateSum);
+    document.getElementById('id_qty_visited_18_35').addEventListener('input', calculateSum);
     document.getElementById('id_qty_visited_other').addEventListener('input', calculateSum);
     document.getElementById('id_qty_visited_online').addEventListener('input', calculateSum);
     document.getElementById('id_qty_visited_out_station').addEventListener('input', calculateSum);

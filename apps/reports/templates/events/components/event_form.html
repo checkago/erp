@@ -47,12 +47,17 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="id_age_35" class="form-label">До 30 лет</label>
+                                            <label for="id_age_18" class="form-label">От 15 до 17</label>
+                                            {{ form.age_18 }}
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label for="id_age_35" class="form-label">От 18 до 35</label>
                                             {{ form.age_35 }}
                                         </div>
 
                                         <div class="col-md-4">
-                                            <label for="id_age_other" class="form-label">Прочие</label>
+                                            <label for="id_age_other" class="form-label">Прочие 35+</label>
                                             {{ form.age_other }}
                                         </div>
 
@@ -124,15 +129,17 @@
     // Функция для вычисления суммы
     function calculateSum() {
         const qtyEvent14 = parseFloat(document.getElementById('id_age_14').value) || 0;
+        const qtyEvent18 = parseFloat(document.getElementById('id_age_18').value) || 0;
         const qtyEvent35 = parseFloat(document.getElementById('id_age_35').value) || 0;
         const qtyEventOther = parseFloat(document.getElementById('id_age_other').value) || 0;
 
-        const totalSum = qtyEvent14 + qtyEvent35 + qtyEventOther;
+        const totalSum = qtyEvent14 + qtyEvent18 + qtyEvent35 + qtyEventOther;
         document.getElementById('total-event-sum').querySelector('span').textContent = totalSum;
     }
 
     // Назначение обработчиков событий на поля ввода
     document.getElementById('id_age_14').addEventListener('input', calculateSum);
+    document.getElementById('id_age_18').addEventListener('input', calculateSum);
     document.getElementById('id_age_35').addEventListener('input', calculateSum);
     document.getElementById('id_age_other').addEventListener('input', calculateSum);
 

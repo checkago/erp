@@ -33,22 +33,24 @@
                         <tr class="bg-success text-dark text-center">
                             <th class="fixed-column" rowspan="2">Дата отчета</th>
                             <th rowspan="2">Кафедра</th>
-                            <th colspan="7">Новые</th>
-                            <th colspan="8">Посещение</th>
+                            <th colspan="8">Новые</th>
+                            <th colspan="9">Посещение</th>
                             <th rowspan="2">Изменить</th>
                         </tr>
                         <tr class="bg-warning text-dark text-center">
                             <th>До 14</th>
-                            <th>Молодежь 14-30</th>
-                            <th>Прочие 30+</th>
+                            <th>15-17</th>
+                            <th>18-35</th>
+                            <th>Прочие 35+</th>
                             <th>Инвалиды (в Общем числе)</th>
                             <th>Внестационар</th>
                             <th>Президентская</th>
                             <th>Литрес</th>
 
                             <th class="bg-info text-dark">До 14</th>
-                            <th class="bg-info text-dark">Молодежь 14-30</th>
-                            <th class="bg-info text-dark">Прочие 30+</th>
+                            <th class="bg-info text-dark">15-17</th>
+                            <th class="bg-info text-dark">18-35</th>
+                            <th class="bg-info text-dark">Прочие 35+</th>
                             <th class="bg-info text-dark">Инвалиды (в Общем числе)</th>
                             <th class="bg-info text-dark">Внестационар</th>
                             <th class="bg-info text-dark">Удаленно</th>
@@ -68,6 +70,7 @@
                                 {% endif %}
                                 <td>{{ visit.qty_reg_14 }}</td>
                                 <td>{{ visit.qty_reg_15_35 }}</td>
+                                <td>{{ visit.qty_reg_18_35 }}</td>
                                 <td>{{ visit.qty_reg_other }}</td>
                                 <td>{{ visit.qty_reg_invalid }}</td>
                                 <td>{{ visit.qty_reg_out_of_station }}</td>
@@ -75,6 +78,7 @@
                                 <td>{{ visit.qty_reg_litres }}</td>
                                 <td>{{ visit.qty_visited_14 }}</td>
                                 <td>{{ visit.qty_visited_15_35 }}</td>
+                                <td>{{ visit.qty_visited_18_35 }}</td>
                                 <td>{{ visit.qty_visited_other }}</td>
                                 <td>{{ visit.qty_visited_invalids }}</td>
                                 <td>{{ visit.qty_visited_out_station }}</td>
@@ -97,22 +101,24 @@
                         <tr class="bg-success text-dark text-center">
                             <th class="fixed-column" rowspan="2">Дата отчета</th>
                             <th rowspan="2">Кафедра</th>
-                            <th colspan="7">Новые</th>
-                            <th colspan="8">Посещение</th>
+                            <th colspan="8">Новые</th>
+                            <th colspan="9">Посещение</th>
                             <th rowspan="2">Изменить</th>
                         </tr>
                         <tr class="bg-warning text-dark text-center">
                             <th>До 14</th>
-                            <th>Молодежь 14-30</th>
-                            <th>Прочие 30+</th>
+                            <th>15-17</th>
+                            <th>18-35</th>
+                            <th>Прочие 35+</th>
                             <th>Инвалиды (в Общем числе)</th>
                             <th>Внестационар</th>
                             <th>Президентская</th>
                             <th>Литрес</th>
 
                             <th class="bg-info text-dark">До 14</th>
-                            <th class="bg-info text-dark">Молодежь 14-30</th>
-                            <th class="bg-info text-dark">Прочие 30+</th>
+                            <th class="bg-info text-dark">15-17</th>
+                            <th class="bg-info text-dark">18-35</th>
+                            <th class="bg-info text-dark">Прочие 35+</th>
                             <th class="bg-info text-dark">Инвалиды (в Общем числе)</th>
                             <th class="bg-info text-dark">Внестационар</th>
                             <th class="bg-info text-dark">Удаленно</th>
