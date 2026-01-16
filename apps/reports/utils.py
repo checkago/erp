@@ -7,9 +7,9 @@ from apps.core.models import Employee
 def _aggregate_visits(queryset):
     """Вспомогательная функция для агрегации данных по посещениям."""
     return queryset.aggregate(
-        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_other') +
+        total_reg=Sum('qty_reg_14') + Sum('qty_reg_15_35') + Sum('qty_reg_18_35') + Sum('qty_reg_other') +
                   Sum('qty_reg_prlib') + Sum('qty_reg_litres') + Sum('qty_reg_out_of_station'),
-        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') +
+        total_visited=Sum('qty_visited_14') + Sum('qty_visited_15_35') + Sum('qty_visited_18_35') +
                       Sum('qty_visited_other') + Sum('qty_visited_online') + Sum('qty_visited_prlib') +
                       Sum('qty_visited_litres') + Sum('qty_visited_out_station')
     )
@@ -17,11 +17,11 @@ def _aggregate_visits(queryset):
 
 def _aggregate_books(queryset):
     return queryset.aggregate(
-        total_loan=Sum('qty_books_14') + Sum('qty_books_15_35') + Sum('qty_books_other') +
-                   Sum('qty_books_neb') + Sum('qty_books_prlib') + Sum('qty_books_litres') +
-                   Sum('qty_books_consultant') + Sum('qty_books_local_library') +Sum('qty_books_out_of_station'),
-        total_reference=Sum('qty_books_reference_do_14') + Sum('qty_books_reference_14') +
-                        Sum('qty_books_reference_35')
+        total_loan=Sum(F('qty_books_14') + F('qty_books_15_35') + F('qty_books_18_35') + F('qty_books_other') +
+                   F('qty_books_neb') + F('qty_books_prlib') + F('qty_books_litres') +
+                   F('qty_books_consultant') + F('qty_books_local_library') + F('qty_books_out_of_station')),
+        total_reference=Sum('qty_books_reference_do_14') + Sum('qty_books_reference_14') + Sum('qty_books_reference_18')
+                        + Sum('qty_books_reference_35')
     )
 
 
@@ -29,7 +29,7 @@ def _aggregate_events(queryset):
     """Вспомогательная функция для агрегации данных по мероприятиям."""
     return queryset.aggregate(
         total_quantity=Sum('quantity'),
-        total_visitors=Sum(F('age_14') + F('age_35') + F('age_other')),
+        total_visitors=Sum(F('age_14') + F('age_18') + F('age_35') + F('age_other')),
         total_paid=Count('id', filter=Q(paid=True))
     )
 
@@ -66,24 +66,41 @@ def get_book_totals(user):
 
     # Агрегация данных
     daily_totals = BookReport.objects.filter(date=today, library=library).aggregate(
-        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0) + Sum('qty_books_other', default=0)
-        + Sum('qty_books_out_of_station') + Sum('qty_books_neb') + Sum('qty_books_litres') + Sum('qty_books_prlib') + Sum('qty_books_consultant') + Sum('qty_books_local_library'),
-        total_reference=Sum('qty_books_reference_do_14', default=0) + Sum('qty_books_reference_14', default=0) + Sum('qty_books_reference_35', default=0)
+        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0)
+                   + Sum('qty_books_18_35', default=0)
+                   + Sum('qty_books_other', default=0)
+                   + Sum('qty_books_out_of_station') + Sum('qty_books_neb') + Sum('qty_books_litres')
+                   + Sum('qty_books_prlib') + Sum('qty_books_consultant') + Sum('qty_books_local_library'),
+        total_reference=Sum('qty_books_reference_do_14', default=0)
+                        + Sum('qty_books_reference_14', default=0)
+                        + Sum('qty_books_reference_18', default=0)
+                        + Sum('qty_books_reference_35', default=0)
                         + Sum('qty_books_reference_online', default=0)
     )
 
     monthly_totals = BookReport.objects.filter(date__month=today.month, date__year=today.year, library=library).aggregate(
-        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0) + Sum('qty_books_other', default=0)
-        + Sum('qty_books_out_of_station') + Sum('qty_books_neb') + Sum('qty_books_litres') + Sum('qty_books_prlib') + Sum('qty_books_consultant') + Sum('qty_books_local_library'),
-        total_reference=Sum('qty_books_reference_do_14', default=0) + Sum('qty_books_reference_14', default=0) + Sum('qty_books_reference_35', default=0)
+        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0)
+                   + Sum('qty_books_18_35', default=0) + Sum('qty_books_other', default=0)
+                   + Sum('qty_books_out_of_station') + Sum('qty_books_neb') + Sum('qty_books_litres')
+                   + Sum('qty_books_prlib') + Sum('qty_books_consultant') + Sum('qty_books_local_library'),
+        total_reference=Sum('qty_books_reference_do_14', default=0)
+                        + Sum('qty_books_reference_14', default=0)
+                        + Sum('qty_books_reference_18', default=0)
+                        + Sum('qty_books_reference_35', default=0)
                         + Sum('qty_books_reference_online', default=0)
 )
 
     yearly_totals = BookReport.objects.filter(date__year=today.year, library=library).aggregate(
-        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0) + Sum('qty_books_other', default=0) +
-        Sum('qty_books_neb', default=0) + Sum('qty_books_prlib', default=0) + Sum('qty_books_litres', default=0) +
-        Sum('qty_books_consultant', default=0) + Sum('qty_books_local_library', default=0) + Sum('qty_books_out_of_station', default=0),
-        total_reference=Sum('qty_books_reference_do_14', default=0) + Sum('qty_books_reference_14', default=0) + Sum('qty_books_reference_35', default=0)
+        total_loan=Sum('qty_books_14', default=0) + Sum('qty_books_15_35', default=0)
+                   + Sum('qty_books_18_35', default=0) + Sum('qty_books_other', default=0)
+                   + Sum('qty_books_neb', default=0) + Sum('qty_books_prlib', default=0)
+                   + Sum('qty_books_litres', default=0) + Sum('qty_books_consultant', default=0)
+                   + Sum('qty_books_local_library', default=0)
+                   + Sum('qty_books_out_of_station', default=0),
+        total_reference=Sum('qty_books_reference_do_14', default=0)
+                        + Sum('qty_books_reference_14', default=0)
+                        + Sum('qty_books_reference_18', default=0)
+                        + Sum('qty_books_reference_35', default=0)
                         + Sum('qty_books_reference_online', default=0)
     )
 

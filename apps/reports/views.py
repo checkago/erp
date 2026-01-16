@@ -149,7 +149,8 @@ class EventListView(LoginRequiredMixin, TemplateView):
         dates = []
         quantity_data = []  # Общее количество мероприятий за день
         age_14_data = []  # Участники до 14 лет
-        age_35_data = []  # Участники до 35 лет
+        age_18_data = []  # Участники от 15 до 17 лет
+        age_35_data = []  # Участники от 18 до 35 лет
         age_other_data = []  # Участники старше 35 лет
         total_age_data = []  # Общее количество участников (линия)
 
@@ -157,7 +158,8 @@ class EventListView(LoginRequiredMixin, TemplateView):
         day_count = defaultdict(lambda: {
             'quantity': 0,  # Количество мероприятий
             'age_14': 0,  # Участники до 14 лет
-            'age_35': 0,  # Участники до 35 лет
+            'age_18': 0,  # Участники от 15 до 17 лет
+            'age_35': 0,  # Участники от 18 до 35 лет
             'age_other': 0,  # Участники старше 35 лет
             'online': 0,  # Онлайн-участники
             'out_of_station': 0  # Участники вне стационара
@@ -168,6 +170,7 @@ class EventListView(LoginRequiredMixin, TemplateView):
             day_key = event.date  # event.date уже является объектом datetime.date
             day_count[day_key]['quantity'] += event.quantity
             day_count[day_key]['age_14'] += event.age_14
+            day_count[day_key]['age_18'] += event.age_18
             day_count[day_key]['age_35'] += event.age_35
             day_count[day_key]['age_other'] += event.age_other
             day_count[day_key]['online'] += event.online
@@ -181,16 +184,18 @@ class EventListView(LoginRequiredMixin, TemplateView):
             dates.append(day.strftime('%d.%m.%Y'))  # Преобразуем дату в строку для графика
             quantity_data.append(counts['quantity'])
             age_14_data.append(counts['age_14'])
+            age_18_data.append(counts['age_18'])
             age_35_data.append(counts['age_35'])
             age_other_data.append(counts['age_other'])
             # Общее количество участников: age_14 + age_35 + age_other + online + out_of_station
             total_age_data.append(
-                counts['age_14'] + counts['age_35'] + counts['age_other'] + counts['online'] + counts['out_of_station'])
+                counts['age_14'] + counts['age_18'] + counts['age_35'] + counts['age_other'] + counts['online'] + counts['out_of_station'])
 
         # Логируем данные для отладки
         print("Dates:", dates)
         print("Quantity Data:", quantity_data)
         print("Age 14 Data:", age_14_data)
+        print("Age 18 Data:", age_18_data)
         print("Age 35 Data:", age_35_data)
         print("Age Other Data:", age_other_data)
         print("Total Age Data:", total_age_data)
@@ -199,6 +204,7 @@ class EventListView(LoginRequiredMixin, TemplateView):
         context['dates'] = dates
         context['quantity_data'] = quantity_data
         context['age_14_data'] = age_14_data
+        context['age_18_data'] = age_18_data
         context['age_35_data'] = age_35_data
         context['age_other_data'] = age_other_data
         context['total_age_data'] = total_age_data
