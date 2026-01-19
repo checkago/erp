@@ -78,6 +78,7 @@ def generate_visit_report(wb, branch, year, month):
     year_start_data = {
         'qty_reg_14': sum(report.qty_reg_14 for report in visit_reports_year),
         'qty_reg_15_35': sum(report.qty_reg_15_35 for report in visit_reports_year),
+        'qty_reg_18_35': sum(report.qty_reg_18_35 for report in visit_reports_year),
         'qty_reg_other': sum(report.qty_reg_other for report in visit_reports_year),
         'qty_reg_pensioners': sum(report.qty_reg_pensioners for report in visit_reports_year),
         'qty_reg_invalid': sum(report.qty_reg_invalid for report in visit_reports_year),
@@ -86,6 +87,7 @@ def generate_visit_report(wb, branch, year, month):
         'qty_reg_litres': sum(report.qty_reg_litres for report in visit_reports_year),
         'qty_visited_14': sum(report.qty_visited_14 for report in visit_reports_year),
         'qty_visited_15_35': sum(report.qty_visited_15_35 for report in visit_reports_year),
+        'qty_visited_18_35': sum(report.qty_visited_18_35 for report in visit_reports_year),
         'qty_visited_other': sum(report.qty_visited_other for report in visit_reports_year),
         'qty_visited_pensioners': sum(report.qty_visited_pensioners for report in visit_reports_year),
         'qty_visited_invalids': sum(report.qty_visited_invalids for report in visit_reports_year),
@@ -96,26 +98,29 @@ def generate_visit_report(wb, branch, year, month):
     }
 
     # Записываем данные с начала года в строку 6
-    ws['B6'] = year_start_data['qty_reg_14'] + year_start_data['qty_reg_15_35'] + year_start_data['qty_reg_other']
+    ws['B6'] = (year_start_data['qty_reg_14'] + year_start_data['qty_reg_15_35'] + year_start_data['qty_reg_18_35']
+                + year_start_data['qty_reg_other'])
     ws['C6'] = year_start_data['qty_reg_14']
     ws['D6'] = year_start_data['qty_reg_15_35']
-    ws['E6'] = year_start_data['qty_reg_other']
-    ws['F6'] = year_start_data['qty_reg_pensioners']
-    ws['G6'] = year_start_data['qty_reg_invalid']
-    ws['H6'] = year_start_data['qty_reg_out_of_station']
-    ws['I6'] = year_start_data['qty_reg_prlib']
-    ws['J6'] = year_start_data['qty_reg_litres']
-    ws['K6'] = year_start_data['qty_visited_14'] + year_start_data['qty_visited_15_35'] + year_start_data[
-        'qty_visited_other']
-    ws['L6'] = year_start_data['qty_visited_14']
-    ws['M6'] = year_start_data['qty_visited_15_35']
-    ws['N6'] = year_start_data['qty_visited_other']
-    ws['O6'] = year_start_data['qty_visited_pensioners']
-    ws['P6'] = year_start_data['qty_visited_invalids']
-    ws['Q6'] = year_start_data['qty_visited_out_station']
-    ws['R6'] = year_start_data['qty_visited_prlib']
-    ws['S6'] = year_start_data['qty_visited_litres']
-    ws['T6'] = year_start_data['qty_visited_online']
+    ws['E6'] = year_start_data['qty_reg_18_35']
+    ws['F6'] = year_start_data['qty_reg_other']
+    ws['G6'] = year_start_data['qty_reg_pensioners']
+    ws['H6'] = year_start_data['qty_reg_invalid']
+    ws['I6'] = year_start_data['qty_reg_out_of_station']
+    ws['J6'] = year_start_data['qty_reg_prlib']
+    ws['K6'] = year_start_data['qty_reg_litres']
+    ws['L6'] = (year_start_data['qty_visited_14'] + year_start_data['qty_visited_15_35'] + year_start_data['qty_visited_18_35']
+                + year_start_data['qty_visited_other'])
+    ws['M6'] = year_start_data['qty_visited_14']
+    ws['N6'] = year_start_data['qty_visited_15_35']
+    ws['O6'] = year_start_data['qty_visited_18_35']
+    ws['P6'] = year_start_data['qty_visited_other']
+    ws['Q6'] = year_start_data['qty_visited_pensioners']
+    ws['R6'] = year_start_data['qty_visited_invalids']
+    ws['S6'] = year_start_data['qty_visited_out_station']
+    ws['T6'] = year_start_data['qty_visited_prlib']
+    ws['U6'] = year_start_data['qty_visited_litres']
+    ws['V6'] = year_start_data['qty_visited_online']
 
     # Заполняем данные за текущий месяц
     current_date = date(year, month, 1)
@@ -133,26 +138,28 @@ def generate_visit_report(wb, branch, year, month):
 
         # Записываем данные в текущую строку
         ws[f'A{row_num}'] = report.date.strftime('%d.%m.%Y')
-        ws[f'B{row_num}'] = report.qty_reg_14 + report.qty_reg_15_35 + report.qty_reg_other
+        ws[f'B{row_num}'] = report.qty_reg_14 + report.qty_reg_15_35 + report.qty_reg_18_35 + report.qty_reg_other
         ws[f'C{row_num}'] = report.qty_reg_14
         ws[f'D{row_num}'] = report.qty_reg_15_35
-        ws[f'E{row_num}'] = report.qty_reg_other
-        ws[f'F{row_num}'] = report.qty_reg_pensioners
-        ws[f'G{row_num}'] = report.qty_reg_invalid
-        ws[f'H{row_num}'] = report.qty_reg_out_of_station
-        ws[f'I{row_num}'] = report.qty_reg_prlib
-        ws[f'J{row_num}'] = report.qty_reg_litres
-        ws[f'K{row_num}'] = report.qty_visited_14 + report.qty_visited_15_35 + report.qty_visited_other
-        ws[f'L{row_num}'] = report.qty_visited_14
-        ws[f'M{row_num}'] = report.qty_visited_15_35
-        ws[f'N{row_num}'] = report.qty_visited_other
-        ws[f'O{row_num}'] = report.qty_visited_pensioners
-        ws[f'P{row_num}'] = report.qty_visited_invalids
-        ws[f'Q{row_num}'] = report.qty_visited_out_station
-        ws[f'R{row_num}'] = report.qty_visited_prlib
-        ws[f'S{row_num}'] = report.qty_visited_litres
-        ws[f'T{row_num}'] = report.qty_visited_online
-        ws[f'U{row_num}'] = report.note
+        ws[f'E{row_num}'] = report.qty_reg_18_35
+        ws[f'F{row_num}'] = report.qty_reg_other
+        ws[f'G{row_num}'] = report.qty_reg_pensioners
+        ws[f'H{row_num}'] = report.qty_reg_invalid
+        ws[f'I{row_num}'] = report.qty_reg_out_of_station
+        ws[f'J{row_num}'] = report.qty_reg_prlib
+        ws[f'K{row_num}'] = report.qty_reg_litres
+        ws[f'L{row_num}'] = report.qty_visited_14 + report.qty_visited_15_35 + report.qty_visited_18_35 + report.qty_visited_other
+        ws[f'M{row_num}'] = report.qty_visited_14
+        ws[f'N{row_num}'] = report.qty_visited_15_35
+        ws[f'O{row_num}'] = report.qty_visited_18_35
+        ws[f'P{row_num}'] = report.qty_visited_other
+        ws[f'Q{row_num}'] = report.qty_visited_pensioners
+        ws[f'R{row_num}'] = report.qty_visited_invalids
+        ws[f'S{row_num}'] = report.qty_visited_out_station
+        ws[f'T{row_num}'] = report.qty_visited_prlib
+        ws[f'U{row_num}'] = report.qty_visited_litres
+        ws[f'V{row_num}'] = report.qty_visited_online
+        ws[f'W{row_num}'] = report.note
         row_num += 1
 
 
@@ -177,6 +184,7 @@ def generate_book_report(wb, branch, year, month):
     year_start_data = {
         'qty_books_14': sum(report.qty_books_14 for report in book_reports_year),
         'qty_books_15_35': sum(report.qty_books_15_35 for report in book_reports_year),
+        'qty_books_18_35': sum(report.qty_books_18_35 for report in book_reports_year),
         'qty_books_other': sum(report.qty_books_other for report in book_reports_year),
         'qty_books_invalid': sum(report.qty_books_invalid for report in book_reports_year),
         'qty_books_out_of_station': sum(report.qty_books_out_of_station for report in book_reports_year),
@@ -198,6 +206,7 @@ def generate_book_report(wb, branch, year, month):
         'qty_books_part_krai': sum(report.qty_books_part_krai for report in book_reports_year),
         'qty_books_reference_do_14': sum(report.qty_books_reference_do_14 for report in book_reports_year),
         'qty_books_reference_14': sum(report.qty_books_reference_14 for report in book_reports_year),
+        'qty_books_reference_18': sum(report.qty_books_reference_18 for report in book_reports_year),
         'qty_books_reference_35': sum(report.qty_books_reference_35 for report in book_reports_year),
         'qty_books_reference_invalid': sum(report.qty_books_reference_invalid for report in book_reports_year),
         'qty_books_reference_online': sum(report.qty_books_reference_online for report in book_reports_year),
@@ -205,22 +214,24 @@ def generate_book_report(wb, branch, year, month):
 
     # Записываем данные с начала года в строку 5
     ws['B5'] = (
-            year_start_data['qty_books_14'] + year_start_data['qty_books_15_35'] + year_start_data['qty_books_other'] +
+            year_start_data['qty_books_14'] + year_start_data['qty_books_15_35'] + year_start_data['qty_books_18_35']
+            + year_start_data['qty_books_other'] +
             year_start_data['qty_books_neb'] + year_start_data['qty_books_prlib'] +
             year_start_data['qty_books_litres'] + year_start_data['qty_books_consultant'] +
             year_start_data['qty_books_local_library']
     )
     ws['C5'] = year_start_data['qty_books_14']
     ws['D5'] = year_start_data['qty_books_15_35']
-    ws['E5'] = year_start_data['qty_books_other']
-    ws['F5'] = year_start_data['qty_books_invalid']
-    ws['G5'] = year_start_data['qty_books_out_of_station']
-    ws['H5'] = year_start_data['qty_books_neb']
-    ws['I5'] = year_start_data['qty_books_prlib']
-    ws['J5'] = year_start_data['qty_books_litres']
-    ws['K5'] = year_start_data['qty_books_consultant']
-    ws['L5'] = year_start_data['qty_books_local_library']
-    ws['M5'] = (
+    ws['E5'] = year_start_data['qty_books_18_35']
+    ws['F5'] = year_start_data['qty_books_other']
+    ws['G5'] = year_start_data['qty_books_invalid']
+    ws['H5'] = year_start_data['qty_books_out_of_station']
+    ws['I5'] = year_start_data['qty_books_neb']
+    ws['J5'] = year_start_data['qty_books_prlib']
+    ws['K5'] = year_start_data['qty_books_litres']
+    ws['L5'] = year_start_data['qty_books_consultant']
+    ws['M5'] = year_start_data['qty_books_local_library']
+    ws['N5'] = (
             year_start_data['qty_books_part_opl'] + year_start_data['qty_books_part_enm'] +
             year_start_data['qty_books_part_tech'] + year_start_data['qty_books_part_sh'] +
             year_start_data['qty_books_part_si'] + year_start_data['qty_books_part_yl'] +
@@ -228,24 +239,25 @@ def generate_book_report(wb, branch, year, month):
             year_start_data['qty_books_part_other'] + year_start_data['qty_books_part_audio'] +
             year_start_data['qty_books_part_krai']
     )
-    ws['N5'] = year_start_data['qty_books_part_opl']
-    ws['O5'] = year_start_data['qty_books_part_enm']
-    ws['P5'] = year_start_data['qty_books_part_tech']
-    ws['Q5'] = year_start_data['qty_books_part_sh']
-    ws['R5'] = year_start_data['qty_books_part_si']
-    ws['S5'] = year_start_data['qty_books_part_yl']
-    ws['T5'] = year_start_data['qty_books_part_hl']
-    ws['U5'] = year_start_data['qty_books_part_dl']
-    ws['V5'] = year_start_data['qty_books_part_other']
-    ws['W5'] = year_start_data['qty_books_part_audio']
-    ws['X5'] = year_start_data['qty_books_part_krai']
-    ws['Y5'] = year_start_data['qty_books_reference_do_14'] + year_start_data['qty_books_reference_14'] + \
-               year_start_data['qty_books_reference_35']
-    ws['Z5'] = year_start_data['qty_books_reference_do_14']
-    ws['AA5'] = year_start_data['qty_books_reference_14']
-    ws['AB5'] = year_start_data['qty_books_reference_35']
-    ws['AC5'] = year_start_data['qty_books_reference_invalid']
-    ws['AD5'] = year_start_data['qty_books_reference_online']
+    ws['O5'] = year_start_data['qty_books_part_opl']
+    ws['P5'] = year_start_data['qty_books_part_enm']
+    ws['Q5'] = year_start_data['qty_books_part_tech']
+    ws['R5'] = year_start_data['qty_books_part_sh']
+    ws['S'] = year_start_data['qty_books_part_si']
+    ws['T5'] = year_start_data['qty_books_part_yl']
+    ws['U5'] = year_start_data['qty_books_part_hl']
+    ws['V5'] = year_start_data['qty_books_part_dl']
+    ws['W5'] = year_start_data['qty_books_part_other']
+    ws['X5'] = year_start_data['qty_books_part_audio']
+    ws['Y5'] = year_start_data['qty_books_part_krai']
+    ws['Z5'] = (year_start_data['qty_books_reference_do_14'] + year_start_data['qty_books_reference_14']
+                + year_start_data['qty_books_reference_18'] + year_start_data['qty_books_reference_35'])
+    ws['AA5'] = year_start_data['qty_books_reference_do_14']
+    ws['AB5'] = year_start_data['qty_books_reference_14']
+    ws['AC5'] = year_start_data['qty_books_reference_18']
+    ws['AD5'] = year_start_data['qty_books_reference_35']
+    ws['AE5'] = year_start_data['qty_books_reference_invalid']
+    ws['AF5'] = year_start_data['qty_books_reference_online']
 
     # Заполняем данные за текущий месяц
     current_date = date(year, month, 1)
@@ -264,44 +276,46 @@ def generate_book_report(wb, branch, year, month):
         # Записываем данные в текущую строку
         ws[f'A{row_num}'] = report.date.strftime('%d.%m.%Y')
         ws[f'B{row_num}'] = (
-                report.qty_books_14 + report.qty_books_15_35 + report.qty_books_other + report.qty_books_neb +
+                report.qty_books_14 + report.qty_books_15_35 + report.qty_books_18_35 + report.qty_books_other + report.qty_books_neb +
                 report.qty_books_prlib + report.qty_books_litres + report.qty_books_consultant + report.qty_books_local_library
         )
         ws[f'C{row_num}'] = report.qty_books_14
         ws[f'D{row_num}'] = report.qty_books_15_35
-        ws[f'E{row_num}'] = report.qty_books_other
-        ws[f'F{row_num}'] = report.qty_books_invalid
-        ws[f'G{row_num}'] = report.qty_books_out_of_station
-        ws[f'H{row_num}'] = report.qty_books_neb
-        ws[f'I{row_num}'] = report.qty_books_prlib
-        ws[f'J{row_num}'] = report.qty_books_litres
-        ws[f'K{row_num}'] = report.qty_books_consultant
-        ws[f'L{row_num}'] = report.qty_books_local_library
-        ws[f'M{row_num}'] = (
+        ws[f'E{row_num}'] = report.qty_books_18_35
+        ws[f'F{row_num}'] = report.qty_books_other
+        ws[f'G{row_num}'] = report.qty_books_invalid
+        ws[f'H{row_num}'] = report.qty_books_out_of_station
+        ws[f'I{row_num}'] = report.qty_books_neb
+        ws[f'J{row_num}'] = report.qty_books_prlib
+        ws[f'K{row_num}'] = report.qty_books_litres
+        ws[f'L{row_num}'] = report.qty_books_consultant
+        ws[f'M{row_num}'] = report.qty_books_local_library
+        ws[f'N{row_num}'] = (
                 report.qty_books_part_opl + report.qty_books_part_enm + report.qty_books_part_tech +
                 report.qty_books_part_sh + report.qty_books_part_si + report.qty_books_part_yl +
                 report.qty_books_part_hl + report.qty_books_part_dl + report.qty_books_part_other +
                 report.qty_books_part_audio + report.qty_books_part_krai
         )
-        ws[f'N{row_num}'] = report.qty_books_part_opl
-        ws[f'O{row_num}'] = report.qty_books_part_enm
-        ws[f'P{row_num}'] = report.qty_books_part_tech
-        ws[f'Q{row_num}'] = report.qty_books_part_sh
-        ws[f'R{row_num}'] = report.qty_books_part_si
-        ws[f'S{row_num}'] = report.qty_books_part_yl
-        ws[f'T{row_num}'] = report.qty_books_part_hl
-        ws[f'U{row_num}'] = report.qty_books_part_dl
-        ws[f'V{row_num}'] = report.qty_books_part_other
-        ws[f'W{row_num}'] = report.qty_books_part_audio
-        ws[f'X{row_num}'] = report.qty_books_part_krai
+        ws[f'O{row_num}'] = report.qty_books_part_opl
+        ws[f'P{row_num}'] = report.qty_books_part_enm
+        ws[f'Q{row_num}'] = report.qty_books_part_tech
+        ws[f'R{row_num}'] = report.qty_books_part_sh
+        ws[f'S{row_num}'] = report.qty_books_part_si
+        ws[f'T{row_num}'] = report.qty_books_part_yl
+        ws[f'U{row_num}'] = report.qty_books_part_hl
+        ws[f'V{row_num}'] = report.qty_books_part_dl
+        ws[f'W{row_num}'] = report.qty_books_part_other
+        ws[f'X{row_num}'] = report.qty_books_part_audio
+        ws[f'Y{row_num}'] = report.qty_books_part_krai
         ws[
-            f'Y{row_num}'] = report.qty_books_reference_do_14 + report.qty_books_reference_14 + report.qty_books_reference_35
-        ws[f'Z{row_num}'] = report.qty_books_reference_do_14
-        ws[f'AA{row_num}'] = report.qty_books_reference_14
-        ws[f'AB{row_num}'] = report.qty_books_reference_35
-        ws[f'AC{row_num}'] = report.qty_books_reference_invalid
-        ws[f'AD{row_num}'] = report.qty_books_reference_online
-        ws[f'AE{row_num}'] = report.note
+            f'Z{row_num}'] = (report.qty_books_reference_do_14 + report.qty_books_reference_14 + report.qty_books_reference_18
+                              + report.qty_books_reference_35)
+        ws[f'AA{row_num}'] = report.qty_books_reference_do_14
+        ws[f'AB{row_num}'] = report.qty_books_reference_14
+        ws[f'AC{row_num}'] = report.qty_books_reference_35
+        ws[f'AD{row_num}'] = report.qty_books_reference_invalid
+        ws[f'AE{row_num}'] = report.qty_books_reference_online
+        ws[f'AF{row_num}'] = report.note
         row_num += 1
 
 
@@ -325,8 +339,9 @@ def generate_events_report(wb, branch, year, month):
     # Агрегируем данные с начала года
     year_start_data = {
         'quantity': sum(event.quantity for event in events_year),
-        'participants': sum(event.age_14 + event.age_35 + event.age_other for event in events_year),
+        'participants': sum(event.age_14 + event.age_18 + event.age_35 + event.age_other for event in events_year),
         'age_14': sum(event.age_14 for event in events_year),
+        'age_18': sum(event.age_18 for event in events_year),
         'age_35': sum(event.age_35 for event in events_year),
         'age_other': sum(event.age_other for event in events_year),
         'invalids': sum(event.invalids for event in events_year),
@@ -338,11 +353,12 @@ def generate_events_report(wb, branch, year, month):
     ws['D5'] = year_start_data['quantity']
     ws['E5'] = year_start_data['participants']
     ws['F5'] = year_start_data['age_14']
-    ws['G5'] = year_start_data['age_35']
-    ws['H5'] = year_start_data['age_other']
-    ws['I5'] = year_start_data['invalids']
-    ws['J5'] = year_start_data['pensioners']
-    ws['K5'] = year_start_data['out_of_station']
+    ws['G5'] = year_start_data['age_18']
+    ws['H5'] = year_start_data['age_35']
+    ws['I5'] = year_start_data['age_other']
+    ws['J5'] = year_start_data['invalids']
+    ws['K5'] = year_start_data['pensioners']
+    ws['L5'] = year_start_data['out_of_station']
 
     current_date = date(year, month, 1)
     month_name_ru = date_format(current_date, "F")
@@ -363,16 +379,17 @@ def generate_events_report(wb, branch, year, month):
         ws[f'B{row_num}'] = event.name
         ws[f'C{row_num}'] = event.direction
         ws[f'D{row_num}'] = event.quantity
-        ws[f'E{row_num}'] = event.age_14 + event.age_35 + event.age_other
+        ws[f'E{row_num}'] = event.age_14 + event.age_18 + event.age_35 + event.age_other
         ws[f'F{row_num}'] = event.age_14
-        ws[f'G{row_num}'] = event.age_35
-        ws[f'H{row_num}'] = event.age_other
-        ws[f'I{row_num}'] = event.invalids
-        ws[f'J{row_num}'] = event.pensioners
-        ws[f'K{row_num}'] = event.out_of_station
-        ws[f'L{row_num}'] = event.as_part
-        ws[f'M{row_num}'] = 'X' if event.paid else ''
-        ws[f'N{row_num}'] = event.note
+        ws[f'G{row_num}'] = event.age_18
+        ws[f'H{row_num}'] = event.age_35
+        ws[f'I{row_num}'] = event.age_other
+        ws[f'J{row_num}'] = event.invalids
+        ws[f'K{row_num}'] = event.pensioners
+        ws[f'L{row_num}'] = event.out_of_station
+        ws[f'M{row_num}'] = event.as_part
+        ws[f'N{row_num}'] = 'X' if event.paid else ''
+        ws[f'O{row_num}'] = event.note
         row_num += 1
 
 
