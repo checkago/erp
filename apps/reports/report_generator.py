@@ -243,7 +243,7 @@ def generate_book_report(wb, branch, year, month):
     ws['P5'] = year_start_data['qty_books_part_enm']
     ws['Q5'] = year_start_data['qty_books_part_tech']
     ws['R5'] = year_start_data['qty_books_part_sh']
-    ws['S'] = year_start_data['qty_books_part_si']
+    ws['S5'] = year_start_data['qty_books_part_si']
     ws['T5'] = year_start_data['qty_books_part_yl']
     ws['U5'] = year_start_data['qty_books_part_hl']
     ws['V5'] = year_start_data['qty_books_part_dl']
