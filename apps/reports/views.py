@@ -19,6 +19,7 @@ from .report_generator import generate_all_reports_excel, generate_quarter_excel
 from .utils import get_book_totals, get_event_totals, get_all_visit_totals, \
     get_all_book_totals, get_all_event_totals, get_visits_totals
 
+current_year = datetime.now().year
 
 class LoginRequiredMixin:
     login_url = "/login_home"
@@ -38,7 +39,7 @@ class CachedViewMixin:
 
 def export_all_reports(request):
     user = request.user
-    year = datetime.now().year
+    year = current_year
     month = int(request.GET.get('month'))
     response = generate_all_reports_excel(user, year, month)
     if response:
