@@ -39,7 +39,7 @@ class CachedViewMixin:
 
 def export_all_reports(request):
     user = request.user
-    year = current_year
+    year = 2026
     month = int(request.GET.get('month'))
     response = generate_all_reports_excel(user, year, month)
     if response:
