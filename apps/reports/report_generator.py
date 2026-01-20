@@ -865,7 +865,6 @@ def generate_nats_project_report(user, year, month):
     if not branch:
         return None
 
-    # Загрузка шаблона
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     template_path = os.path.join(base_dir, 'reports/excell/nats_project_template.xlsx')
 
@@ -875,59 +874,91 @@ def generate_nats_project_report(user, year, month):
     wb = load_workbook(filename=template_path)
     ws = wb.active
 
-    # Заполнение заголовков
+    # Заголовки
     ws['I3'] = f"{year} год"
-    ws[
-        'B5'] = f"Кол-во пользователей библиотек. Регистрация читателей План на {year} год {RegsPlan.objects.filter(library=branch, year=year).first().total_regs if RegsPlan.objects.filter(library=branch, year=year).exists() else 0} чел."
-    ws[
-        'G5'] = f"Общая посещаемость (план на {year} г. {VisitPlan.objects.filter(library=branch, year=year).first().total_visits if VisitPlan.objects.filter(library=branch, year=year).exists() else 0}) Факт Число посещений библиотек ВСЕГО (нарастающий итог с начала года)"
+    regs_plan = RegsPlan.objects.filter(library=branch, year=year).first()
+    visit_plan = VisitPlan.objects.filter(library=branch, year=year).first()
+
+    ws['B5'] = f"Кол-во пользователей библиотек. Регистрация читателей План на {year} год {regs_plan.total_regs if regs_plan else 0} чел."
+    ws['G5'] = f"Общая посещаемость (план на {year} г. {visit_plan.total_visits if visit_plan else 0}) Факт Число посещений библиотек ВСЕГО (нарастающий итог с начала года)"
     ws['I6'] = f"Всего в {year} году"
     ws['J6'] = f"В том числе в рамках Нацпроекта 'Творческие люди в {year} году'"
 
-    # Получаем данные с начала года до конца выбранного месяца
+    # Данные
     visit_reports = VisitReport.objects.filter(library=branch, date__year=year, date__month__lte=month)
     book_reports = BookReport.objects.filter(library=branch, date__year=year, date__month__lte=month)
     events = Event.objects.filter(library=branch, date__year=year, date__month__lte=month)
 
-    # Заполнение данных для филиала
+    # A7 — название
     ws['A7'] = branch.full_name
-    ws['B7'] = sum(report.qty_reg_14 or 0 for report in visit_reports)
-    ws['C7'] = sum(report.qty_reg_15_35 or 0 for report in visit_reports) + sum(
-        report.qty_reg_other or 0 for report in visit_reports) + sum(
-        report.qty_reg_out_of_station or 0 for report in visit_reports) + sum(
-        report.qty_reg_prlib or 0 for report in visit_reports) + sum(
-        report.qty_reg_litres or 0 for report in visit_reports)
-    ws['D7'] = sum(report.qty_reg_14 or 0 for report in visit_reports) + sum(
-        report.qty_reg_15_35 or 0 for report in visit_reports) + sum(
-        report.qty_reg_other or 0 for report in visit_reports) + sum(
-        report.qty_reg_out_of_station or 0 for report in visit_reports) + sum(
-        report.qty_reg_prlib or 0 for report in visit_reports) + sum(
-        report.qty_reg_litres or 0 for report in visit_reports)
-    ws['E7'] = sum(event.quantity or 0 for event in events)
-    ws['F7'] = sum(event.age_14 or 0 for event in events) + sum(event.age_35 or 0 for event in events) + sum(
-        event.age_other or 0 for event in events)
-    ws['G7'] = sum(event.age_14 or 0 for event in events) + sum(event.age_35 or 0 for event in events) + sum(
-        event.age_other or 0 for event in events) + sum(report.qty_visited_14 or 0 for report in visit_reports) + sum(
-        report.qty_visited_15_35 or 0 for report in visit_reports) + sum(
-        report.qty_visited_other or 0 for report in visit_reports) + sum(
-        report.qty_visited_out_station or 0 for report in visit_reports) + sum(
-        report.qty_visited_online or 0 for report in visit_reports) + sum(
-        report.qty_visited_prlib or 0 for report in visit_reports) + sum(
-        report.qty_visited_litres or 0 for report in visit_reports) + sum(
-        report.qty_books_reference_online or 0 for report in book_reports)
-    ws['H7'] = sum(report.qty_books_14 or 0 for report in book_reports) + sum(
-        report.qty_books_15_35 or 0 for report in book_reports) + sum(
-        report.qty_books_other or 0 for report in book_reports) + sum(
-        report.qty_books_out_of_station or 0 for report in book_reports) + sum(
-        report.qty_books_neb or 0 for report in book_reports) + sum(
-        report.qty_books_prlib or 0 for report in book_reports) + sum(
-        report.qty_books_litres or 0 for report in book_reports) + sum(
-        report.qty_books_consultant or 0 for report in book_reports) + sum(
-        report.qty_books_local_library or 0 for report in book_reports)
-    ws['K7'] = sum(report.qty_visited_online or 0 for report in visit_reports) + sum(
-        event.online or 0 for event in events)
 
-    # Сохранение файла
+    # B7 — дети до 14 лет (регистрации)
+    reg_u14 = sum(r.qty_reg_14 or 0 for r in visit_reports)
+    ws['B7'] = reg_u14
+
+    # C7 — остальное население (15+): все регистрации, кроме до 14
+    reg_15_plus = (
+        sum(r.qty_reg_15_35 or 0 for r in visit_reports) +      # 15–17
+        sum(r.qty_reg_18_35 or 0 for r in visit_reports) +      # 18–35
+        sum(r.qty_reg_other or 0 for r in visit_reports) +      # 36+
+        sum(r.qty_reg_invalid or 0 for r in visit_reports) +    # инвалиды (из общего)
+        sum(r.qty_reg_pensioners or 0 for r in visit_reports)   # пенсионеры (из общего)
+    )
+    ws['C7'] = reg_15_plus
+
+    # D7 — ВСЕГО = B7 + C7
+    ws['D7'] = reg_u14 + reg_15_plus
+
+    # E7 — количество мероприятий (штук)
+    ws['E7'] = sum(e.quantity or 0 for e in events)
+
+    # F7 — участники мероприятий (люди)
+    event_attendees = (
+        sum(e.age_14 or 0 for e in events) +    # до 14
+        sum(e.age_18 or 0 for e in events) +    # 15–17 ← ИСПРАВЛЕНО!
+        sum(e.age_35 or 0 for e in events) +    # 18–35
+        sum(e.age_other or 0 for e in events)   # 36+
+    )
+    ws['F7'] = event_attendees
+
+    # G7 — общая посещаемость = посещения + мероприятия + справки
+    visits = (
+        sum(r.qty_visited_14 or 0 for r in visit_reports) +
+        sum(r.qty_visited_15_35 or 0 for r in visit_reports) +
+        sum(r.qty_visited_18_35 or 0 for r in visit_reports) +
+        sum(r.qty_visited_other or 0 for r in visit_reports) +
+        sum(r.qty_visited_invalids or 0 for r in visit_reports) +
+        sum(r.qty_visited_pensioners or 0 for r in visit_reports) +
+        sum(r.qty_visited_out_station or 0 for r in visit_reports) +
+        sum(r.qty_visited_online or 0 for r in visit_reports) +
+        sum(r.qty_visited_prlib or 0 for r in visit_reports) +
+        sum(r.qty_visited_litres or 0 for r in visit_reports)
+    )
+    references = sum(r.qty_books_reference_online or 0 for r in book_reports)
+    ws['G7'] = visits + event_attendees + references
+
+    # H7 — выданные книги
+    books = (
+        sum(r.qty_books_14 or 0 for r in book_reports) +
+        sum(r.qty_books_15_35 or 0 for r in book_reports) +
+        sum(r.qty_books_18_35 or 0 for r in book_reports) +
+        sum(r.qty_books_other or 0 for r in book_reports) +
+        sum(r.qty_books_invalid or 0 for r in book_reports) +
+        sum(r.qty_books_out_of_station or 0 for r in book_reports) +
+        sum(r.qty_books_neb or 0 for r in book_reports) +
+        sum(r.qty_books_prlib or 0 for r in book_reports) +
+        sum(r.qty_books_litres or 0 for r in book_reports) +
+        sum(r.qty_books_consultant or 0 for r in book_reports) +
+        sum(r.qty_books_local_library or 0 for r in book_reports)
+        # остальные поля (разделы литературы) — можно добавить при необходимости
+    )
+    ws['H7'] = books
+
+    # K7 — посетители сайтов (удалённые обращения)
+    # Согласно шаблону — это онлайн-обращения, а не онлайн-мероприятия
+    ws['K7'] = sum(r.qty_visited_online or 0 for r in visit_reports)
+
+    # Сохранение
     filename = f"нац_проект_{branch.short_name}_{year}_{month}.xlsx"
     safe_filename = quote(filename)
 
