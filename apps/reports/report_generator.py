@@ -499,12 +499,13 @@ def get_total_previous_year(branch, previous_year):
     book_reports_prev_year = BookReport.objects.filter(library=branch, date__year=previous_year)
 
     total_visits_prev_year = sum(
-        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0)
+        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_18_35 or 0)
+        + (report.qty_visited_other or 0)
         for report in visit_reports_prev_year
     )
 
     total_events_prev_year = sum(
-        (event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0)
+        (event.age_14 or 0) + (event.age_18 or 0) + (event.age_35 or 0) + (event.age_other or 0)
         for event in events_prev_year
     )
 
@@ -558,11 +559,12 @@ def fill_month_data(ws, branch, year, month, col_offset):
     book_reports = BookReport.objects.filter(library=branch, date__year=year, date__month=month)
 
     total_visits = sum(
-        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0)
+        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_18_35 or 0)
+        + (report.qty_visited_other or 0)
         for report in visit_reports
     )
     total_events = sum(
-        ((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0)) - (event.out_of_station or 0)
+        ((event.age_14 or 0) + (event.age_18 or 0) + (event.age_35 or 0) + (event.age_other or 0)) - (event.out_of_station or 0)
         for event in events
     )
     total_online = sum(
@@ -600,9 +602,9 @@ def get_total_year(branch, year):
     book_reports_year = BookReport.objects.filter(library=branch, date__year=year)
 
     total_year = (
-            sum((report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) + (
-                    report.qty_visited_out_station or 0) for report in visit_reports_year) +
-            sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events_year) +
+            sum((report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_18_35 or 0)
+                + (report.qty_visited_other or 0) + ( report.qty_visited_out_station or 0) for report in visit_reports_year) +
+            sum((event.age_14 or 0) + (event.age_18 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events_year) +
             sum((event.online or 0) for event in events_year) +
             sum((report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0)
                 for report in visit_reports_year) +
