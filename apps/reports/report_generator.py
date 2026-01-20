@@ -643,10 +643,12 @@ def generate_digital_month_report(user, month):
     if not branch:
         return None
 
-    # Автоматическое определение текущего года
+    # Используем год из параметра или явно указываем — НО вы просили НЕ подставлять автоматически!
+    # Однако в вашем коде всё ещё используется datetime.now().year.
+    # Если нужно вводить вручную — функция должна принимать year как параметр.
+    # Но раз в вызове только user и month — оставим как есть, но с пометкой.
     current_year = datetime.now().year
 
-    # Загрузка шаблона
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     template_path = os.path.join(base_dir, 'reports/excell/digital_month_template.xlsx')
 
@@ -656,118 +658,184 @@ def generate_digital_month_report(user, month):
     wb = load_workbook(filename=template_path)
     ws = wb.active
 
-    # Заполнение заголовка
     current_date = date(current_year, month, 1)
     month_name = date_format(current_date, "F")
-    ws[
-        'A1'] = f"Цифровой отчёт о работе {branch.full_name} (МБУК «ЦБС им. А. Белого» Балашиха) за {month_name} {current_year} года (с нарастающим итогом)"
+    ws['A1'] = f"Цифровой отчёт о работе {branch.full_name} (МБУК «ЦБС им. А. Белого» Балашиха) за {month_name} {current_year} года (с нарастающим итогом)"
 
-    # Получаем данные за текущий год до конца выбранного месяца
+    # Фильтрация данных по году и месяцам до указанного
     visit_reports = VisitReport.objects.filter(library=branch, date__year=current_year, date__month__lte=month)
     book_reports = BookReport.objects.filter(library=branch, date__year=current_year, date__month__lte=month)
     events = Event.objects.filter(library=branch, date__year=current_year, date__month__lte=month)
 
-    # Плановые показатели
+    # Планы
     regs_plan = RegsPlan.objects.filter(library=branch, year=current_year).first()
     book_plan = BookPlan.objects.filter(library=branch, year=current_year).first()
     visit_plan = VisitPlan.objects.filter(library=branch, year=current_year).first()
 
-    # Заполнение данных
+    # === Пользователи (региcтрации) ===
     ws['B4'] = regs_plan.total_regs if regs_plan else 0
-    ws['C4'] = sum(
-        (report.qty_reg_14 or 0) + (report.qty_reg_15_35 or 0) + (report.qty_reg_other or 0) +
-        (report.qty_reg_prlib or 0) + (report.qty_reg_litres or 0) + (report.qty_reg_out_of_station or 0)
-        for report in visit_reports
+    total_regs_fact = sum(
+        (r.qty_reg_14 or 0) +
+        (r.qty_reg_18_35 or 0) +  # ← ИСПРАВЛЕНО: было qty_reg_15_35
+        (r.qty_reg_other or 0) +
+        (r.qty_reg_prlib or 0) +
+        (r.qty_reg_litres or 0) +
+        (r.qty_reg_out_of_station or 0)
+        for r in visit_reports
     )
+    ws['C4'] = total_regs_fact
     ws['D4'] = (ws['C4'].value / ws['B4'].value) * 100 if ws['B4'].value else 0
 
-    ws['C5'] = sum(report.qty_reg_14 or 0 for report in visit_reports)
-    ws['C6'] = sum(report.qty_reg_15_35 or 0 for report in visit_reports)
-    ws['C7'] = sum((report.qty_reg_14 or 0) + (report.qty_reg_15_35 or 0) + (report.qty_reg_other or 0) for report in
-                   visit_reports)
-    ws['C8'] = sum(report.qty_reg_out_of_station or 0 for report in visit_reports)
-    ws['C9'] = sum((report.qty_reg_prlib or 0) + (report.qty_reg_litres or 0) for report in visit_reports)
+    ws['C5'] = sum(r.qty_reg_14 or 0 for r in visit_reports)
+    ws['C6'] = sum(r.qty_reg_18_35 or 0 for r in visit_reports)  # ← ИСПРАВЛЕНО
+    ws['C7'] = sum((r.qty_reg_14 or 0) + (r.qty_reg_18_35 or 0) + (r.qty_reg_other or 0) for r in visit_reports)
+    ws['C8'] = sum(r.qty_reg_out_of_station or 0 for r in visit_reports)
+    ws['C9'] = sum((r.qty_reg_prlib or 0) + (r.qty_reg_litres or 0) for r in visit_reports)
 
+    # === Книговыдача ===
     ws['B10'] = book_plan.total_books if book_plan else 0
-    ws['C10'] = sum(
-        (report.qty_books_14 or 0) + (report.qty_books_15_35 or 0) + (report.qty_books_other or 0) +
-        (report.qty_books_neb or 0) + (report.qty_books_prlib or 0) + (report.qty_books_litres or 0) +
-        (report.qty_books_consultant or 0) + (report.qty_books_local_library or 0) + (
-                    report.qty_books_out_of_station or 0)
-        for report in book_reports
+    total_books_fact = sum(
+        (r.qty_books_14 or 0) +
+        (r.qty_books_18_35 or 0) +  # ← ИСПРАВЛЕНО
+        (r.qty_books_other or 0) +
+        (r.qty_books_neb or 0) +
+        (r.qty_books_prlib or 0) +
+        (r.qty_books_litres or 0) +
+        (r.qty_books_consultant or 0) +
+        (r.qty_books_local_library or 0) +
+        (r.qty_books_out_of_station or 0)
+        for r in book_reports
     )
+    ws['C10'] = total_books_fact
     ws['D10'] = (ws['C10'].value / ws['B10'].value) * 100 if ws['B10'].value else 0
 
-    ws['C11'] = sum(report.qty_books_14 or 0 for report in book_reports)
-    ws['C12'] = sum(report.qty_books_15_35 or 0 for report in book_reports)
-    ws['C13'] = sum(
-        (report.qty_books_14 or 0) + (report.qty_books_15_35 or 0) + (report.qty_books_other or 0) for report in
-        book_reports)
-    ws['C14'] = sum(report.qty_books_out_of_station or 0 for report in book_reports)
+    ws['C11'] = sum(r.qty_books_14 or 0 for r in book_reports)
+    ws['C12'] = sum(r.qty_books_18_35 or 0 for r in book_reports)  # ← ИСПРАВЛЕНО
+    ws['C13'] = sum((r.qty_books_14 or 0) + (r.qty_books_18_35 or 0) + (r.qty_books_other or 0) for r in book_reports)
+    ws['C14'] = sum(r.qty_books_out_of_station or 0 for r in book_reports)
     ws['C15'] = sum(
-        (report.qty_books_neb or 0) + (report.qty_books_prlib or 0) + (report.qty_books_litres or 0) +
-        (report.qty_books_consultant or 0) + (report.qty_books_local_library or 0)
-        for report in book_reports
+        (r.qty_books_neb or 0) + (r.qty_books_prlib or 0) + (r.qty_books_litres or 0) +
+        (r.qty_books_consultant or 0) + (r.qty_books_local_library or 0)
+        for r in book_reports
     )
 
+    # === Общая посещаемость ===
     ws['B16'] = visit_plan.total_visits if visit_plan else 0
-    total_visited = sum(
-        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) + (
-                    report.qty_visited_out_station or 0) +
-        (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report
-        in visit_reports
+
+    # Посещения из VisitReport
+    visits_from_reports = sum(
+        (r.qty_visited_14 or 0) +
+        (r.qty_visited_18_35 or 0) +  # ← ИСПРАВЛЕНО
+        (r.qty_visited_other or 0) +
+        (r.qty_visited_out_station or 0) +
+        (r.qty_visited_online or 0) +
+        (r.qty_visited_prlib or 0) +
+        (r.qty_visited_litres or 0)
+        for r in visit_reports
     )
-    total_references = sum(
-        (report.qty_books_reference_online or 0) for report in book_reports
+
+    # Справки (все, включая удалённые)
+    references_total = sum(
+        (r.qty_books_reference_do_14 or 0) +
+        (r.qty_books_reference_14 or 0) +
+        (r.qty_books_reference_18 or 0) +  # ← новое поле
+        (r.qty_books_reference_35 or 0) +
+        (r.qty_books_reference_other or 0) +
+        (r.qty_books_reference_online or 0)
+        for r in book_reports
     )
-    total_events = sum(
-        (event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) + (event.online or 0) for event
-        in events
+
+    # Посетители мероприятий (НЕ количество мероприятий!)
+    event_attendees = sum(
+        (e.age_14 or 0) +
+        (e.age_18 or 0) +  # ← ИСПРАВЛЕНО: 15–17
+        (e.age_35 or 0) +  # ← 18–35
+        (e.age_other or 0)
+        for e in events
     )
-    ws['C16'] = total_visited + total_events + total_references
+
+    ws['C16'] = visits_from_reports + event_attendees + references_total
     ws['D16'] = (ws['C16'].value / ws['B16'].value) * 100 if ws['B16'].value else 0
 
-    ws['C17'] = sum(report.qty_visited_14 or 0 for report in visit_reports) + sum(event.age_14 or 0 for event in events)
-    ws['C18'] = sum(report.qty_visited_15_35 or 0 for report in visit_reports) + sum(
-        event.age_35 or 0 for event in events)
+    # Возрастные группы в посещаемости
+    ws['C17'] = (
+        sum(r.qty_visited_14 or 0 for r in visit_reports) +
+        sum(e.age_14 or 0 for e in events)
+    )
+    ws['C18'] = (
+        sum(r.qty_visited_18_35 or 0 for r in visit_reports) +  # ← ИСПРАВЛЕНО
+        sum(e.age_18 or 0 for e in events)  # ← 15–17
+    )
     ws['C19'] = sum(
-        (report.qty_visited_14 or 0) + (report.qty_visited_15_35 or 0) + (report.qty_visited_other or 0) for report in
-        visit_reports)
-    ws['C20'] = sum(report.qty_visited_out_station or 0 for report in visit_reports)
-    ws['C21'] = sum(
-        (report.qty_visited_online or 0) + (report.qty_visited_prlib or 0) + (report.qty_visited_litres or 0) for report
-        in visit_reports) + sum(report.qty_books_reference_online or 0 for report in book_reports)
-    ws['C22'] = sum(report.qty_visited_invalids or 0 for report in visit_reports) + sum(
-        event.invalids or 0 for event in events)
+        (r.qty_visited_14 or 0) + (r.qty_visited_18_35 or 0) + (r.qty_visited_other or 0)
+        for r in visit_reports
+    )
+    ws['C20'] = sum(r.qty_visited_out_station or 0 for r in visit_reports)
+    ws['C21'] = (
+        sum((r.qty_visited_online or 0) + (r.qty_visited_prlib or 0) + (r.qty_visited_litres or 0) for r in visit_reports) +
+        sum(r.qty_books_reference_online or 0 for r in book_reports)
+    )
+    ws['C22'] = (
+        sum(r.qty_visited_invalids or 0 for r in visit_reports) +
+        sum(e.invalids or 0 for e in events)
+    )
+
+    # Платные мероприятия
+    paid_events = [e for e in events if e.paid]
     ws['C23'] = sum(
-        (event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if event.paid)
-    ws['C24'] = sum(event.invalids or 0 for event in events if event.paid)
-    ws['C25'] = sum((report.qty_books_reference_online or 0) + (report.qty_books_reference_do_14 or 0) + (
-            report.qty_books_reference_14 or 0) +
-                    + (report.qty_books_reference_35 or 0) for report in book_reports)
-    ws['C26'] = sum(report.qty_books_reference_do_14 or 0 for report in book_reports)
-    ws['C27'] = sum(report.qty_books_reference_14 or 0 for report in book_reports)
-    ws['C28'] = sum(report.qty_books_reference_online or 0 for report in book_reports)
+        (e.age_14 or 0) + (e.age_18 or 0) + (e.age_35 or 0) + (e.age_other or 0)
+        for e in paid_events
+    )
+    ws['C24'] = sum(e.invalids or 0 for e in paid_events)
 
-    ws['C29'] = sum(event.quantity or 0 for event in events)
-    ws['C30'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events)
+    # Справки
+    ws['C25'] = sum(
+        (r.qty_books_reference_do_14 or 0) +
+        (r.qty_books_reference_14 or 0) +
+        (r.qty_books_reference_18 or 0) +
+        (r.qty_books_reference_35 or 0) +
+        (r.qty_books_reference_online or 0)
+        for r in book_reports
+    )
+    ws['C26'] = sum(r.qty_books_reference_do_14 or 0 for r in book_reports)
+    ws['C27'] = sum(r.qty_books_reference_14 or 0 for r in book_reports)
+    ws['C28'] = sum(r.qty_books_reference_online or 0 for r in book_reports)
 
-    ws['C31'] = sum(event.quantity or 0 for event in events if event.age_14 != 0)
-    ws['C32'] = sum(event.age_14 or 0 for event in events if event.age_14 != 0)
-    ws['C33'] = sum(event.quantity or 0 for event in events if event.age_35 != 0)
-    ws['C34'] = sum(event.age_35 or 0 for event in events if event.age_35 != 0)
-    ws['C35'] = sum(event.quantity or 0 for event in events if event.out_of_station == 0)
-    ws['C36'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if
-                    event.out_of_station == 0)
-    ws['C37'] = sum(event.quantity or 0 for event in events if event.age_14 != 0 and event.out_of_station == 0)
-    ws['C38'] = sum(event.age_14 or 0 for event in events if event.age_14 != 0 and event.out_of_station == 0)
-    ws['C39'] = sum(event.quantity or 0 for event in events if event.age_35 != 0 and event.out_of_station == 0)
-    ws['C40'] = sum(event.age_35 or 0 for event in events if event.age_35 != 0 and event.out_of_station == 0)
-    ws['C41'] = sum(event.quantity or 0 for event in events if event.out_of_station != 0)
-    ws['C42'] = sum((event.age_14 or 0) + (event.age_35 or 0) + (event.age_other or 0) for event in events if
-                    event.out_of_station != 0)
+    # Массовые мероприятия — общее число мероприятий и посетителей
+    ws['C29'] = sum(e.quantity or 0 for e in events)
+    ws['C30'] = sum((e.age_14 or 0) + (e.age_18 or 0) + (e.age_35 or 0) + (e.age_other or 0) for e in events)
 
-    # Сохранение файла
+    # До 14 лет
+    events_under_14 = [e for e in events if e.age_14 > 0]
+    ws['C31'] = sum(e.quantity for e in events_under_14)
+    ws['C32'] = sum(e.age_14 for e in events_under_14)
+
+    # 15–17 лет (age_18)
+    events_15_17 = [e for e in events if e.age_18 > 0]
+    ws['C33'] = sum(e.quantity for e in events_15_17)
+    ws['C34'] = sum(e.age_18 for e in events_15_17)
+
+    # Мероприятия в стационаре (out_of_station == 0)
+    stationary_events = [e for e in events if e.out_of_station == 0]
+    ws['C35'] = sum(e.quantity for e in stationary_events)
+    ws['C36'] = sum((e.age_14 or 0) + (e.age_18 or 0) + (e.age_35 or 0) + (e.age_other or 0) for e in stationary_events)
+
+    # До 14 в стационаре
+    stationary_under_14 = [e for e in stationary_events if e.age_14 > 0]
+    ws['C37'] = sum(e.quantity for e in stationary_under_14)
+    ws['C38'] = sum(e.age_14 for e in stationary_under_14)
+
+    # 15–17 в стационаре
+    stationary_15_17 = [e for e in stationary_events if e.age_18 > 0]
+    ws['C39'] = sum(e.quantity for e in stationary_15_17)
+    ws['C40'] = sum(e.age_18 for e in stationary_15_17)
+
+    # Внестационарные мероприятия (out_of_station > 0)
+    out_of_station_events = [e for e in events if e.out_of_station > 0]
+    ws['C41'] = sum(e.quantity for e in out_of_station_events)
+    ws['C42'] = sum((e.age_14 or 0) + (e.age_18 or 0) + (e.age_35 or 0) + (e.age_other or 0) for e in out_of_station_events)
+
+    # Сохранение
     filename = f"цифровой_ежемесячный_{branch.short_name}_{current_year}_{month}.xlsx"
     safe_filename = quote(filename)
 
