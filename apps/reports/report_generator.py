@@ -741,16 +741,6 @@ def generate_digital_month_report(user, month):
         for r in visit_reports
     )
 
-    event_attendees = sum(
-        (e.age_14 or 0) +
-        (e.age_18 or 0) +    # 15–17
-        (e.age_35 or 0) +    # 18–35
-        (e.age_other or 0) +
-        (e.invalids or 0) +
-        (e.pensioners or 0)
-        for e in events
-    )
-
     references_total = sum(
         (r.qty_books_reference_do_14 or 0) +
         (r.qty_books_reference_14 or 0) +
