@@ -773,15 +773,8 @@ def generate_digital_month_report(user, month):
         (r.qty_visited_14 or 0) + (r.qty_visited_15_35 or 0) + (r.qty_visited_18_35 or 0) +
         (r.qty_visited_other or 0)
         for r in visit_reports
-    ) + sum(
-        (e.age_14 or 0) + (e.age_18 or 0) + (e.age_35 or 0) + (e.age_other or 0) +
-        (e.invalids or 0) + (e.pensioners or 0)
-        for e in events if e.out_of_station == 0
     )  # стационар
-    ws['C23'] = sum(r.qty_visited_out_station or 0 for r in visit_reports) + sum(
-        (e.age_14 or 0) + (e.age_18 or 0) + (e.age_35 or 0) + (e.age_other or 0)
-        for e in events if e.out_of_station > 0
-    )  # вне стационара
+    ws['C23'] = sum(r.qty_visited_out_station or 0 for r in visit_reports) # вне стационара
     ws['C24'] = sum(r.qty_visited_online or 0 + r.qty_visited_prlib or 0 + r.qty_visited_litres or 0 for r in visit_reports) + sum(r.qty_books_reference_online or 0 for r in book_reports)  # удалённые
 
     # === Инвалиды, платные, льготы (C25–C27) ===
