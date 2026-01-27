@@ -700,7 +700,6 @@ def generate_digital_month_report(user, month):
         (r.qty_books_15_35 or 0) +
         (r.qty_books_18_35 or 0) +
         (r.qty_books_other or 0) +
-        (r.qty_books_invalid or 0) +
         (r.qty_books_out_of_station or 0) +
         (r.qty_books_neb or 0) +
         (r.qty_books_prlib or 0) +
@@ -774,7 +773,7 @@ def generate_digital_month_report(user, month):
     ws['C21'] = sum(r.qty_visited_18_35 or 0 for r in visit_reports) + sum(e.age_35 or 0 for e in events)  # 18–35
     ws['C22'] = sum(
         (r.qty_visited_14 or 0) + (r.qty_visited_15_35 or 0) + (r.qty_visited_18_35 or 0) +
-        (r.qty_visited_other or 0) + (r.qty_visited_invalids or 0) + (r.qty_visited_pensioners or 0)
+        (r.qty_visited_other or 0)
         for r in visit_reports
     ) + sum(
         (e.age_14 or 0) + (e.age_18 or 0) + (e.age_35 or 0) + (e.age_other or 0) +
