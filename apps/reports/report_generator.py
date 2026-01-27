@@ -687,7 +687,7 @@ def generate_digital_month_report(user, month):
     ws['C7'] = sum(r.qty_reg_18_35 or 0 for r in visit_reports)   # 18–35
     ws['C8'] = sum(
         (r.qty_reg_14 or 0) + (r.qty_reg_15_35 or 0) + (r.qty_reg_18_35 or 0) +
-        (r.qty_reg_other or 0)
+        (r.qty_reg_other or 0) + (r.qty_reg_invalid or 0) + (r.qty_reg_pensioners or 0)
         for r in visit_reports
     )  # стационар
     ws['C9'] = sum(r.qty_reg_out_of_station or 0 for r in visit_reports)  # вне стационара
@@ -717,7 +717,7 @@ def generate_digital_month_report(user, month):
     ws['C14'] = sum(r.qty_books_18_35 or 0 for r in book_reports)   # 18–35
     ws['C15'] = sum(
         (r.qty_books_14 or 0) + (r.qty_books_15_35 or 0) + (r.qty_books_18_35 or 0) +
-        (r.qty_books_other or 0) +
+        (r.qty_books_other or 0) + (r.qty_books_invalid or 0) +
         (r.qty_books_neb or 0) + (r.qty_books_prlib or 0) + (r.qty_books_litres or 0) +
         (r.qty_books_consultant or 0) + (r.qty_books_local_library or 0) +
         (r.qty_books_part_opl or 0) + (r.qty_books_part_enm or 0) + (r.qty_books_part_tech or 0) +
@@ -774,7 +774,7 @@ def generate_digital_month_report(user, month):
     ws['C21'] = sum(r.qty_visited_18_35 or 0 for r in visit_reports) + sum(e.age_35 or 0 for e in events)  # 18–35
     ws['C22'] = sum(
         (r.qty_visited_14 or 0) + (r.qty_visited_15_35 or 0) + (r.qty_visited_18_35 or 0) +
-        (r.qty_visited_other or 0)
+        (r.qty_visited_other or 0) + (r.qty_visited_invalids or 0) + (r.qty_visited_pensioners or 0)
         for r in visit_reports
     ) + sum(
         (e.age_14 or 0) + (e.age_18 or 0) + (e.age_35 or 0) + (e.age_other or 0) +
@@ -901,9 +901,7 @@ def generate_nats_project_report(user, year, month):
     reg_15_plus = (
         sum(r.qty_reg_15_35 or 0 for r in visit_reports) +      # 15–17
         sum(r.qty_reg_18_35 or 0 for r in visit_reports) +      # 18–35
-        sum(r.qty_reg_other or 0 for r in visit_reports) +      # 35+
-        sum(r.qty_reg_invalid or 0 for r in visit_reports) +    # инвалиды (из общего)
-        sum(r.qty_reg_pensioners or 0 for r in visit_reports)   # пенсионеры (из общего)
+        sum(r.qty_reg_other or 0 for r in visit_reports)    # 35+
     )
     ws['C7'] = reg_15_plus
 
@@ -928,8 +926,6 @@ def generate_nats_project_report(user, year, month):
         sum(r.qty_visited_15_35 or 0 for r in visit_reports) +
         sum(r.qty_visited_18_35 or 0 for r in visit_reports) +
         sum(r.qty_visited_other or 0 for r in visit_reports) +
-        sum(r.qty_visited_invalids or 0 for r in visit_reports) +
-        sum(r.qty_visited_pensioners or 0 for r in visit_reports) +
         sum(r.qty_visited_out_station or 0 for r in visit_reports) +
         sum(r.qty_visited_online or 0 for r in visit_reports) +
         sum(r.qty_visited_prlib or 0 for r in visit_reports) +
@@ -944,7 +940,6 @@ def generate_nats_project_report(user, year, month):
         sum(r.qty_books_15_35 or 0 for r in book_reports) +
         sum(r.qty_books_18_35 or 0 for r in book_reports) +
         sum(r.qty_books_other or 0 for r in book_reports) +
-        sum(r.qty_books_invalid or 0 for r in book_reports) +
         sum(r.qty_books_out_of_station or 0 for r in book_reports) +
         sum(r.qty_books_neb or 0 for r in book_reports) +
         sum(r.qty_books_prlib or 0 for r in book_reports) +
