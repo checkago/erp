@@ -753,7 +753,7 @@ def generate_digital_month_report(user, month):
     )
 
     ws['B18'] = visit_plan.total_visits if visit_plan else 0
-    ws['C18'] = visits_from_reports + event_attendees + references_total
+    ws['C18'] = visits_from_reports + references_total
     ws['D18'] = (ws['C18'].value / ws['B18'].value) * 100 if ws['B18'].value else 0
 
     ws['C19'] = sum(r.qty_visited_14 or 0 for r in visit_reports) + sum(e.age_14 or 0 for e in events)
