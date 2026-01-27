@@ -312,10 +312,11 @@ def generate_book_report(wb, branch, year, month):
                               + report.qty_books_reference_35)
         ws[f'AA{row_num}'] = report.qty_books_reference_do_14
         ws[f'AB{row_num}'] = report.qty_books_reference_14
-        ws[f'AC{row_num}'] = report.qty_books_reference_35
-        ws[f'AD{row_num}'] = report.qty_books_reference_invalid
-        ws[f'AE{row_num}'] = report.qty_books_reference_online
-        ws[f'AF{row_num}'] = report.note
+        ws[f'AC{row_num}'] = report.qty_books_reference_18
+        ws[f'AD{row_num}'] = report.qty_books_reference_35
+        ws[f'AE{row_num}'] = report.qty_books_reference_invalid
+        ws[f'AF{row_num}'] = report.qty_books_reference_online
+        ws[f'AG{row_num}'] = report.note
         row_num += 1
 
 
@@ -900,7 +901,7 @@ def generate_nats_project_report(user, year, month):
     reg_15_plus = (
         sum(r.qty_reg_15_35 or 0 for r in visit_reports) +      # 15–17
         sum(r.qty_reg_18_35 or 0 for r in visit_reports) +      # 18–35
-        sum(r.qty_reg_other or 0 for r in visit_reports) +      # 36+
+        sum(r.qty_reg_other or 0 for r in visit_reports) +      # 35+
         sum(r.qty_reg_invalid or 0 for r in visit_reports) +    # инвалиды (из общего)
         sum(r.qty_reg_pensioners or 0 for r in visit_reports)   # пенсионеры (из общего)
     )
@@ -917,7 +918,7 @@ def generate_nats_project_report(user, year, month):
         sum(e.age_14 or 0 for e in events) +    # до 14
         sum(e.age_18 or 0 for e in events) +    # 15–17 ← ИСПРАВЛЕНО!
         sum(e.age_35 or 0 for e in events) +    # 18–35
-        sum(e.age_other or 0 for e in events)   # 36+
+        sum(e.age_other or 0 for e in events)   # 35+
     )
     ws['F7'] = event_attendees
 
