@@ -741,19 +741,26 @@ def generate_digital_month_report(user, month):
         for r in visit_reports
     )
 
+    event_attendees = sum(
+        (e.age_14 or 0) +
+        (e.age_18 or 0) +    # 15–17
+        (e.age_35 or 0) +    # 18–35
+        (e.age_other or 0)
+        for e in events
+    )
+
     references_total = sum(
         (r.qty_books_reference_do_14 or 0) +
         (r.qty_books_reference_14 or 0) +
         (r.qty_books_reference_18 or 0) +  # 15–17
         (r.qty_books_reference_35 or 0) +  # 18–35
         (r.qty_books_reference_other or 0) +
-        (r.qty_books_reference_invalid or 0) +
         (r.qty_books_reference_online or 0)
         for r in book_reports
     )
 
     ws['B18'] = visit_plan.total_visits if visit_plan else 0
-    ws['C18'] = visits_from_reports + references_total
+    ws['C18'] = visits_from_reports + event_attendees + references_total
     ws['D18'] = (ws['C18'].value / ws['B18'].value) * 100 if ws['B18'].value else 0
 
     ws['C19'] = sum(r.qty_visited_14 or 0 for r in visit_reports) + sum(e.age_14 or 0 for e in events)
