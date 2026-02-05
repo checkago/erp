@@ -750,11 +750,11 @@ def generate_digital_month_report(user, month):
     )
 
     references_total = sum(
-        (r.qty_books_reference_do_14 or 0) +
-        (r.qty_books_reference_14 or 0) +
-        (r.qty_books_reference_18 or 0) +  # 15–17
-        (r.qty_books_reference_35 or 0) +  # 18–35
-        (r.qty_books_reference_other or 0) +
+        # (r.qty_books_reference_do_14 or 0) +
+        # (r.qty_books_reference_14 or 0) +
+        # (r.qty_books_reference_18 or 0) +  # 15–17
+        # (r.qty_books_reference_35 or 0) +  # 18–35
+        # (r.qty_books_reference_other or 0) +
         (r.qty_books_reference_online or 0)
         for r in book_reports
     )
