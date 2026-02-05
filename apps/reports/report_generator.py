@@ -887,9 +887,8 @@ def generate_nats_project_report(user, year, month):
     reg_15_plus = (
         sum(r.qty_reg_15_35 or 0 for r in visit_reports) +      # 15–17
         sum(r.qty_reg_18_35 or 0 for r in visit_reports) +      # 18–35
-        sum(r.qty_reg_other or 0 for r in visit_reports) +   # 35+
-        sum(r.qty_reg_prlib or 0 for r in visit_reports) +
-        sum(r.qty_reg_litres or 0 for r in visit_reports)
+        sum(r.qty_reg_other or 0 for r in visit_reports)   # 35+
+
     )
     ws['C7'] = reg_15_plus
 
