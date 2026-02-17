@@ -1346,7 +1346,9 @@ def generate_digital_month_report_all_branches(month):
 
     # Плановые показатели — сумма по всем филиалам
     total_regs_plan = sum(
-        RegsPlan.objects.filter(library=branch, year=current_year).first().total_regs or 0
+        (RegsPlan.objects.filter(library=branch, year=current_year).first().total_regs or 0)
+        if RegsPlan.objects.filter(library=branch, year=current_year).exists()
+        else 0
         for branch in branches
     )
     total_books_plan = sum(
