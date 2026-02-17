@@ -1327,13 +1327,13 @@ def generate_digital_month_report_all_branches(month):
     wb = load_workbook(filename=template_path)
     ws = wb.active
 
+    from django.utils.formats import date_format
     current_date = date(current_year, month, 1)
     month_name = date_format(current_date, "F")
     ws['A1'] = f"Сводный цифровой отчёт о работе всех филиалов МБУК «ЦБС им. А. Белого» Балашиха за {month_name} {current_year} года (с нарастающим итогом)"
 
     branches = Branch.objects.exclude(department=True)
 
-    # === Данные по всем филиалам (факт) ===
     all_visit_reports = VisitReport.objects.filter(
         library__in=branches,
         date__year=current_year,
@@ -1350,20 +1350,12 @@ def generate_digital_month_report_all_branches(month):
         date__month__lte=month
     )
 
-    # === ПЛАНЫ: агрегация одним запросом ===
-    regs_plan_total = RegsPlan.objects.filter(
-        library__in=branches, year=current_year
-    ).aggregate(total=sum('total_regs'))['total'] or 0
+    from django.db.models import Sum
+    regs_plan_total = RegsPlan.objects.filter(library__in=branches, year=current_year).aggregate(total=Sum('total_regs'))['total'] or 0
+    books_plan_total = BookPlan.objects.filter(library__in=branches, year=current_year).aggregate(total=Sum('total_books'))['total'] or 0
+    visits_plan_total = VisitPlan.objects.filter(library__in=branches, year=current_year).aggregate(total=Sum('total_visits'))['total'] or 0
 
-    books_plan_total = BookPlan.objects.filter(
-        library__in=branches, year=current_year
-    ).aggregate(total=sum('total_books'))['total'] or 0
-
-    visits_plan_total = VisitPlan.objects.filter(
-        library__in=branches, year=current_year
-    ).aggregate(total=sum('total_visits'))['total'] or 0
-
-    # === ФАКТ: пользователи ===
+    # === Пользователи ===
     total_regs = sum(
         (r.qty_reg_14 or 0) +
         (r.qty_reg_15_35 or 0) +
@@ -1384,7 +1376,7 @@ def generate_digital_month_report_all_branches(month):
     regs_out_station = sum(r.qty_reg_out_of_station or 0 for r in all_visit_reports)
     regs_remote = sum((r.qty_reg_prlib or 0) + (r.qty_reg_litres or 0) for r in all_visit_reports)
 
-    # === ФАКТ: книговыдача ===
+    # === Книговыдача ===
     total_books = sum(
         (r.qty_books_14 or 0) +
         (r.qty_books_15_35 or 0) +
@@ -1401,7 +1393,7 @@ def generate_digital_month_report_all_branches(month):
     books_u14 = sum(r.qty_books_14 or 0 for r in all_book_reports)
     books_15_17 = sum(r.qty_books_15_35 or 0 for r in all_book_reports)
     books_18_35 = sum(r.qty_books_18_35 or 0 for r in all_book_reports)
-    # ⚠️ ИСПРАВЛЕНО: стационар — ТОЛЬКО основные категории (как в C15 индивидуального отчёта)
+    # ✅ ИСПРАВЛЕНО: стационар — ТОЛЬКО основные категории (как в C15)
     books_stationary = sum(
         (r.qty_books_14 or 0) +
         (r.qty_books_15_35 or 0) +
@@ -1410,7 +1402,7 @@ def generate_digital_month_report_all_branches(month):
         for r in all_book_reports
     )
     books_out_station = sum(r.qty_books_out_of_station or 0 for r in all_book_reports)
-    # Удалённые / специализированные (как в C17)
+    # ✅ Удалённые — остальные категории (как в C17)
     books_remote = sum(
         (r.qty_books_neb or 0) +
         (r.qty_books_prlib or 0) +
@@ -1420,7 +1412,7 @@ def generate_digital_month_report_all_branches(month):
         for r in all_book_reports
     )
 
-    # === ФАКТ: посещаемость ===
+    # === Посещаемость ===
     visits_from_reports = sum(
         (r.qty_visited_14 or 0) +
         (r.qty_visited_15_35 or 0) +
@@ -1471,8 +1463,8 @@ def generate_digital_month_report_all_branches(month):
         for r in all_book_reports
     )
     ref_do_14 = sum(r.qty_books_reference_do_14 or 0 for r in all_book_reports)
-    ref_14 = sum(r.qty_books_reference_14 or 0 for r in all_book_reports)      # 15–17
-    ref_18 = sum(r.qty_books_reference_18 or 0 for r in all_book_reports)      # 18–35
+    ref_14 = sum(r.qty_books_reference_14 or 0 for r in all_book_reports)
+    ref_18 = sum(r.qty_books_reference_18 or 0 for r in all_book_reports)
     ref_online = sum(r.qty_books_reference_online or 0 for r in all_book_reports)
 
     # === Мероприятия ===
@@ -1514,10 +1506,9 @@ def generate_digital_month_report_all_branches(month):
         for e in out_stat_events
     )
 
-    # === Заполнение шаблона (строка 4) ===
+    # === Заполнение шаблона ===
     row = 4
 
-    # Пользователи
     ws[f'B{row}'] = regs_plan_total
     ws[f'C{row}'] = total_regs
     ws[f'D{row}'] = (total_regs / regs_plan_total * 100) if regs_plan_total else 0
@@ -1528,18 +1519,16 @@ def generate_digital_month_report_all_branches(month):
     ws[f'C{row+5}'] = regs_out_station
     ws[f'C{row+6}'] = regs_remote
 
-    # Книговыдача
     ws[f'B{row+7}'] = books_plan_total
     ws[f'C{row+7}'] = total_books
     ws[f'D{row+7}'] = (total_books / books_plan_total * 100) if books_plan_total else 0
     ws[f'C{row+8}'] = books_u14
     ws[f'C{row+9}'] = books_15_17
     ws[f'C{row+10}'] = books_18_35
-    ws[f'C{row+11}'] = books_stationary      # ← ИСПРАВЛЕНО!
+    ws[f'C{row+11}'] = books_stationary  # ← ЕДИНСТВЕННОЕ ИЗМЕНЕНИЕ
     ws[f'C{row+12}'] = books_out_station
     ws[f'C{row+13}'] = books_remote
 
-    # Посещаемость
     ws[f'B{row+14}'] = visits_plan_total
     ws[f'C{row+14}'] = total_visits
     ws[f'D{row+14}'] = (total_visits / visits_plan_total * 100) if visits_plan_total else 0
@@ -1550,19 +1539,14 @@ def generate_digital_month_report_all_branches(month):
     ws[f'C{row+19}'] = visits_out_station
     ws[f'C{row+20}'] = visits_remote
 
-    # Инвалиды и платные
     ws[f'C{row+21}'] = invalids
     ws[f'C{row+22}'] = paid_events
     ws[f'C{row+23}'] = paid_invalids
-
-    # Справки
     ws[f'C{row+24}'] = ref_total
     ws[f'C{row+25}'] = ref_do_14
     ws[f'C{row+26}'] = ref_14
     ws[f'C{row+27}'] = ref_18
     ws[f'C{row+28}'] = ref_online
-
-    # Мероприятия
     ws[f'C{row+29}'] = events_total_qty
     ws[f'C{row+30}'] = events_total_attendees
     ws[f'C{row+31}'] = events_u14_qty
@@ -1571,7 +1555,6 @@ def generate_digital_month_report_all_branches(month):
     ws[f'C{row+34}'] = events_15_17_att
     ws[f'C{row+35}'] = events_18_35_qty
     ws[f'C{row+36}'] = events_18_35_att
-
     ws[f'C{row+37}'] = stat_events_qty
     ws[f'C{row+38}'] = stat_events_att
     ws[f'C{row+39}'] = stat_u14_qty
@@ -1580,12 +1563,11 @@ def generate_digital_month_report_all_branches(month):
     ws[f'C{row+42}'] = stat_15_17_att
     ws[f'C{row+43}'] = stat_18_35_qty
     ws[f'C{row+44}'] = stat_18_35_att
-
     ws[f'C{row+45}'] = out_stat_events_qty
     ws[f'C{row+46}'] = out_stat_events_att
 
-    # Сохранение
     filename = f"цифровой_ежемесячный_сводный_{current_year}_{month}.xlsx"
+    from urllib.parse import quote
     safe_filename = quote(filename)
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
