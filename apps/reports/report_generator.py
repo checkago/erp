@@ -716,14 +716,18 @@ def generate_digital_month_report(user, month):
     ws['C14'] = sum(r.qty_books_18_35 or 0 for r in book_reports)   # 18–35
     ws['C15'] = sum(
         (r.qty_books_14 or 0) + (r.qty_books_15_35 or 0) + (r.qty_books_18_35 or 0) +
-        (r.qty_books_other or 0) +
-        (r.qty_books_neb or 0) + (r.qty_books_prlib or 0) + (r.qty_books_litres or 0) +
-        (r.qty_books_consultant or 0) + (r.qty_books_local_library or 0)
+        (r.qty_books_other or 0)
         for r in book_reports
     )
     ws['C16'] = sum(r.qty_books_out_of_station or 0 for r in book_reports)  # вне стационара
-    ws['C17'] = sum(r.qty_books_neb or 0 + r.qty_books_prlib or 0 + r.qty_books_litres or 0 +
-                    r.qty_books_consultant or 0 + r.qty_books_local_library or 0 for r in book_reports)  # удалённые
+    ws['C17'] = sum(
+        (r.qty_books_neb or 0) +
+        (r.qty_books_prlib or 0) +
+        (r.qty_books_litres or 0) +
+        (r.qty_books_consultant or 0) +
+        (r.qty_books_local_library or 0)
+        for r in book_reports
+    )
 
     # === Общая посещаемость (B18–C24) ===
     visits_from_reports = sum(
