@@ -15,7 +15,8 @@ from .checks import check_data_fillings
 from .forms import EventForm, BookReportForm, VisitReportForm
 from .models import Event, VisitReport, BookReport
 from .report_generator import generate_all_reports_excel, generate_quarter_excel, generate_digital_month_report, \
-    generate_nats_project_report, generate_quarter_excel_all_branches, generate_nats_project_report_all_branches
+    generate_nats_project_report, generate_quarter_excel_all_branches, generate_nats_project_report_all_branches, \
+    generate_digital_month_report_all_branches
 from .utils import get_book_totals, get_event_totals, get_all_visit_totals, \
     get_all_book_totals, get_all_event_totals, get_visits_totals
 
@@ -74,6 +75,27 @@ def export_digital_month_report(request):
         return response
     else:
         return HttpResponse("Нет данных для экспорта или пользователь не связан с сотрудником.", status=404)
+
+
+def export_digital_month_all_branches(request):
+    """
+    Экспорт сводного цифрового месячного отчёта по всем филиалам.
+    Ожидает параметр ?month=2 (февраль и т.д.)
+    """
+    try:
+        month = int(request.GET.get('month'))
+        if not (1 <= month <= 12):
+            raise ValueError("Месяц должен быть от 1 до 12")
+    except (TypeError, ValueError):
+        return HttpResponse("Некорректный параметр 'month'. Укажите число от 1 до 12.", status=400)
+
+    current_year = datetime.now().year
+    response = generate_digital_month_report_all_branches(request.user, month)
+
+    if response:
+        return response
+    else:
+        return HttpResponse("Нет данных для экспорта или пользователь не привязан к библиотеке.", status=404)
 
 
 def export_nats_project_report(request):

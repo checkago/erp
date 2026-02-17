@@ -31,6 +31,7 @@ urlpatterns = [
     path('export_nats_project_report/', export_nats_project_report, name='export_nats_project_report'),
     path('export_nats_project_report-all/', export_nats_project_report_all_branches,
          name='export_nats_project_report_all_branches'),
+    path('export/digital-month-all/', views.export_digital_month_all_branches, name='export_digital_month_all'),
 ]
 
 
