@@ -78,10 +78,6 @@ def export_digital_month_report(request):
 
 
 def export_digital_month_all_branches(request):
-    """
-    Экспорт сводного цифрового месячного отчёта по всем филиалам.
-    Ожидает параметр ?month=2 (февраль и т.д.)
-    """
     try:
         month = int(request.GET.get('month'))
         if not (1 <= month <= 12):
@@ -89,13 +85,11 @@ def export_digital_month_all_branches(request):
     except (TypeError, ValueError):
         return HttpResponse("Некорректный параметр 'month'. Укажите число от 1 до 12.", status=400)
 
-    current_year = datetime.now().year
-    response = generate_digital_month_report_all_branches(request.user, month)
-
-    if response:
+    try:
+        response = generate_digital_month_report_all_branches(month)
         return response
-    else:
-        return HttpResponse("Нет данных для экспорта или пользователь не привязан к библиотеке.", status=404)
+    except Exception as e:
+        return HttpResponse(f"Ошибка при генерации отчёта: {str(e)}", status=500)
 
 
 def export_nats_project_report(request):
