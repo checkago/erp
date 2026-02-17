@@ -92,8 +92,31 @@
                                             </div>
                                         </div>
 
-                                        <div class='col-md-7'>
-                                            <label for='id_note' class='form-label'>Примечание</label>
+                                        <fieldset class="border p-3 mb-3">
+                                            <legend class="w-auto px-2">Дополнительная книговыдача на мероприятии</legend>
+                                            <div class="row mb-2">
+                                                <div class="col-md-3">
+                                                    <label for="id_qty_books_14" class="form-label">До 14 лет</label>
+                                                    {{ form.qty_books_14 }}
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="id_qty_books_15_35" class="form-label">От 15 до 17 лет</label>
+                                                    {{ form.qty_books_15_35 }}
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="id_qty_books_18_35" class="form-label">От 18 до 35 лет</label>
+                                                    {{ form.qty_books_18_35 }}
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <label for="id_qty_books_other" class="form-label">35+</label>
+                                                    {{ form.qty_books_other }}
+                                                </div>
+                                            </div>
+                                        </fieldset>
+
+                                        <!-- Примечание -->
+                                        <div class="mb-3">
+                                            {{ form.note.label_tag }}
                                             {{ form.note }}
                                         </div>
                                     </div>

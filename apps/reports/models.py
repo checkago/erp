@@ -119,6 +119,7 @@ class BookReport(models.Model):
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='bookreports', verbose_name='Библиотека')
     cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
     date = models.DateField(null=True, verbose_name='Дата отчета')
+    tag = models.CharField(blank=True, verbose_name='Тег')
     qty_books_14 = models.IntegerField(default=0, verbose_name='Книговыдача (До 14)')
     qty_books_15_35 = models.IntegerField(default=0, verbose_name='Книговыдача (15-17)')
     qty_books_18_35 = models.IntegerField(default=0, verbose_name='Книговыдача (18-35)')

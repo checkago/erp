@@ -4,12 +4,36 @@ from apps.core.models import Employee, Cafedra
 
 
 class EventForm(forms.ModelForm):
+    # Дополнительные поля для BookReport
+    qty_books_14 = forms.IntegerField(
+        required=False,
+        initial=0,
+        widget=forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'})
+    )
+    qty_books_15_35 = forms.IntegerField(
+        required=False,
+        initial=0,
+        widget=forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'})
+    )
+    qty_books_18_35 = forms.IntegerField(
+        required=False,
+        initial=0,
+        widget=forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'})
+    )
+    qty_books_other = forms.IntegerField(
+        required=False,
+        initial=0,
+        widget=forms.NumberInput(attrs={'class': 'form-control border border-1 border-dark'})
+    )
 
     class Meta:
         model = Event
-        fields = ['cafedra', 'name', 'date', 'direction',
-                  'quantity', 'as_part', 'age_14', 'age_18',
-                  'age_35', 'age_other', 'invalids', 'pensioners', 'out_of_station', 'as_part', 'paid', 'note']
+        fields = [
+            'cafedra', 'name', 'date', 'direction',
+            'quantity', 'as_part', 'age_14', 'age_18',
+            'age_35', 'age_other', 'invalids', 'pensioners',
+            'out_of_station', 'paid', 'note'
+        ]
         widgets = {
             'cafedra': forms.Select(attrs={'class': 'form-select border border-1 border-dark'}),
             'name': forms.TextInput(attrs={'class': 'form-control border border-1 border-dark'}),

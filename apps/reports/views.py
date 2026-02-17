@@ -216,7 +216,7 @@ class EventListView(LoginRequiredMixin, TemplateView):
 
 class EventCreateView(LoginRequiredMixin, View):
     def get(self, request):
-        form = EventForm(user=request.user)  # Создаем пустую форму
+        form = EventForm(user=request.user)
         breadcrumb = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Мероприятия"}
         return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
 
@@ -224,18 +224,48 @@ class EventCreateView(LoginRequiredMixin, View):
         form = EventForm(request.POST, user=request.user)
         breadcrumb = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Мероприятия"}
         if form.is_valid():
-            event = form.save(commit=False)  # Не сохраняем объект сразу
+            event = form.save(commit=False)
             employee = Employee.objects.get(user=request.user)
-            event.library = employee.branch  # Устанавливаем библиотеку
-            event.save()  # Сохраняем объект
+            event.library = employee.branch
+            event.save()
+
+            # Создаем или обновляем связанный BookReport
+            book_report, created = BookReport.objects.get_or_create(
+                library=employee.branch,
+                date=event.date,
+                tag='М'  # фиксированный тег
+            )
+            # Обновляем только нужные поля
+            book_report.qty_books_14 = form.cleaned_data.get('qty_books_14') or 0
+            book_report.qty_books_15_35 = form.cleaned_data.get('qty_books_15_35') or 0
+            book_report.qty_books_18_35 = form.cleaned_data.get('qty_books_18_35') or 0
+            book_report.qty_books_other = form.cleaned_data.get('qty_books_other') or 0
+            book_report.save()
+
             return redirect(reverse_lazy('events_list'))
         return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
 
 
 class EventUpdateView(LoginRequiredMixin, View):
     def get(self, request, id):
-        event_instance = get_object_or_404(Event, id=id)  # Получаем объект события по id
-        form = EventForm(instance=event_instance, user=request.user)  # Создаем форму с текущими данными события
+        event_instance = get_object_or_404(Event, id=id)
+        # Получаем связанный BookReport (если есть)
+        book_report = BookReport.objects.filter(
+            library=event_instance.library,
+            date=event_instance.date,
+            tag='М'
+        ).first()
+
+        initial = {}
+        if book_report:
+            initial.update({
+                'qty_books_14': book_report.qty_books_14,
+                'qty_books_15_35': book_report.qty_books_15_35,
+                'qty_books_18_35': book_report.qty_books_18_35,
+                'qty_books_other': book_report.qty_books_other,
+            })
+
+        form = EventForm(instance=event_instance, user=request.user, initial=initial)
         breadcrumb = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Мероприятия"}
         return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
 
@@ -244,10 +274,23 @@ class EventUpdateView(LoginRequiredMixin, View):
         form = EventForm(request.POST, instance=event_instance, user=request.user)
         breadcrumb = {"parent": f'<a href="{reverse("diary")}"><strong>Дневник</strong></a>', "child": "Мероприятия"}
         if form.is_valid():
-            event = form.save(commit=False)  # Не сохраняем объект сразу
+            event = form.save(commit=False)
             employee = Employee.objects.get(user=request.user)
-            event.library = employee.branch  # Устанавливаем библиотеку
-            event.save()  # Сохраняем объект
+            event.library = employee.branch
+            event.save()
+
+            # Обновляем или создаём BookReport
+            book_report, created = BookReport.objects.get_or_create(
+                library=employee.branch,
+                date=event.date,
+                tag='М'
+            )
+            book_report.qty_books_14 = form.cleaned_data.get('qty_books_14') or 0
+            book_report.qty_books_15_35 = form.cleaned_data.get('qty_books_15_35') or 0
+            book_report.qty_books_18_35 = form.cleaned_data.get('qty_books_18_35') or 0
+            book_report.qty_books_other = form.cleaned_data.get('qty_books_other') or 0
+            book_report.save()
+
             return redirect(reverse_lazy('events_list'))
         return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
 
