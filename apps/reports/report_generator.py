@@ -718,13 +718,9 @@ def generate_digital_month_report(user, month):
         (r.qty_books_14 or 0) + (r.qty_books_15_35 or 0) + (r.qty_books_18_35 or 0) +
         (r.qty_books_other or 0) +
         (r.qty_books_neb or 0) + (r.qty_books_prlib or 0) + (r.qty_books_litres or 0) +
-        (r.qty_books_consultant or 0) + (r.qty_books_local_library or 0) +
-        (r.qty_books_part_opl or 0) + (r.qty_books_part_enm or 0) + (r.qty_books_part_tech or 0) +
-        (r.qty_books_part_sh or 0) + (r.qty_books_part_si or 0) + (r.qty_books_part_yl or 0) +
-        (r.qty_books_part_hl or 0) + (r.qty_books_part_dl or 0) + (r.qty_books_part_other or 0) +
-        (r.qty_books_part_audio or 0) + (r.qty_books_part_krai or 0)
+        (r.qty_books_consultant or 0) + (r.qty_books_local_library or 0)
         for r in book_reports
-    ) - sum(r.qty_books_out_of_station or 0 for r in book_reports)  # приблизительно — стационар
+    )
     ws['C16'] = sum(r.qty_books_out_of_station or 0 for r in book_reports)  # вне стационара
     ws['C17'] = sum(r.qty_books_prlib or 0 + r.qty_books_litres or 0 for r in book_reports)  # удалённые
 
