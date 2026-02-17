@@ -722,7 +722,8 @@ def generate_digital_month_report(user, month):
         for r in book_reports
     )
     ws['C16'] = sum(r.qty_books_out_of_station or 0 for r in book_reports)  # вне стационара
-    ws['C17'] = sum(r.qty_books_prlib or 0 + r.qty_books_litres or 0 for r in book_reports)  # удалённые
+    ws['C17'] = sum(r.qty_books_neb or 0 + r.qty_books_prlib or 0 + r.qty_books_litres or 0 +
+                    r.qty_books_consultant or 0 + r.qty_books_local_library or 0 for r in book_reports)  # удалённые
 
     # === Общая посещаемость (B18–C24) ===
     visits_from_reports = sum(
@@ -768,7 +769,12 @@ def generate_digital_month_report(user, month):
         for r in visit_reports
     )  # стационар
     ws['C23'] = sum(r.qty_visited_out_station or 0 for r in visit_reports) # вне стационара
-    ws['C24'] = sum(r.qty_visited_online or 0 + r.qty_visited_prlib or 0 + r.qty_visited_litres or 0 for r in visit_reports) + sum(r.qty_books_reference_online or 0 for r in book_reports)  # удалённые
+    ws['C24'] = sum(
+        (r.qty_visited_online or 0) +
+        (r.qty_visited_prlib or 0) +
+        (r.qty_visited_litres or 0)
+        for r in visit_reports
+    ) + sum(r.qty_books_reference_online or 0 for r in book_reports)
 
     # === Инвалиды, платные, льготы (C25–C27) ===
     ws['C25'] = sum(r.qty_visited_invalids or 0 for r in visit_reports) + sum(e.invalids or 0 for e in events)
