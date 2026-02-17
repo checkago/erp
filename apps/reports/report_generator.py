@@ -1350,20 +1350,18 @@ def generate_digital_month_report_all_branches(month):
         date__month__lte=month
     )
 
-    # === ПЛАНЫ: агрегация одним запросом (без .first()!) ===
-    from django.db.models import Sum
-
+    # === ПЛАНЫ: агрегация одним запросом ===
     regs_plan_total = RegsPlan.objects.filter(
         library__in=branches, year=current_year
-    ).aggregate(total=Sum('total_regs'))['total'] or 0
+    ).aggregate(total=sum('total_regs'))['total'] or 0
 
     books_plan_total = BookPlan.objects.filter(
         library__in=branches, year=current_year
-    ).aggregate(total=Sum('total_books'))['total'] or 0
+    ).aggregate(total=sum('total_books'))['total'] or 0
 
     visits_plan_total = VisitPlan.objects.filter(
         library__in=branches, year=current_year
-    ).aggregate(total=Sum('total_visits'))['total'] or 0
+    ).aggregate(total=sum('total_visits'))['total'] or 0
 
     # === ФАКТ: пользователи ===
     total_regs = sum(
@@ -1403,14 +1401,24 @@ def generate_digital_month_report_all_branches(month):
     books_u14 = sum(r.qty_books_14 or 0 for r in all_book_reports)
     books_15_17 = sum(r.qty_books_15_35 or 0 for r in all_book_reports)
     books_18_35 = sum(r.qty_books_18_35 or 0 for r in all_book_reports)
+    # ⚠️ ИСПРАВЛЕНО: стационар — ТОЛЬКО основные категории (как в C15 индивидуального отчёта)
     books_stationary = sum(
-        (r.qty_books_14 or 0) + (r.qty_books_15_35 or 0) + (r.qty_books_18_35 or 0) +
-        (r.qty_books_other or 0) + (r.qty_books_neb or 0) + (r.qty_books_prlib or 0) +
-        (r.qty_books_litres or 0) + (r.qty_books_consultant or 0) + (r.qty_books_local_library or 0)
+        (r.qty_books_14 or 0) +
+        (r.qty_books_15_35 or 0) +
+        (r.qty_books_18_35 or 0) +
+        (r.qty_books_other or 0)
         for r in all_book_reports
     )
     books_out_station = sum(r.qty_books_out_of_station or 0 for r in all_book_reports)
-    books_remote = sum((r.qty_books_prlib or 0) + (r.qty_books_litres or 0) for r in all_book_reports)
+    # Удалённые / специализированные (как в C17)
+    books_remote = sum(
+        (r.qty_books_neb or 0) +
+        (r.qty_books_prlib or 0) +
+        (r.qty_books_litres or 0) +
+        (r.qty_books_consultant or 0) +
+        (r.qty_books_local_library or 0)
+        for r in all_book_reports
+    )
 
     # === ФАКТ: посещаемость ===
     visits_from_reports = sum(
@@ -1527,7 +1535,7 @@ def generate_digital_month_report_all_branches(month):
     ws[f'C{row+8}'] = books_u14
     ws[f'C{row+9}'] = books_15_17
     ws[f'C{row+10}'] = books_18_35
-    ws[f'C{row+11}'] = books_stationary
+    ws[f'C{row+11}'] = books_stationary      # ← ИСПРАВЛЕНО!
     ws[f'C{row+12}'] = books_out_station
     ws[f'C{row+13}'] = books_remote
 
