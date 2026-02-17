@@ -1306,10 +1306,6 @@ def generate_nats_project_report_all_branches(user, year, month):
 
 
 def generate_digital_month_report_all_branches(month):
-    """
-    Генерирует СВОДНЫЙ цифровой отчёт по ВСЕМ филиалам (без разбивки по филиалам).
-    Возвращает HttpResponse с Excel-файлом, содержащим ОДНУ итоговую строку.
-    """
     current_year = datetime.now().year
 
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -1327,7 +1323,7 @@ def generate_digital_month_report_all_branches(month):
 
     branches = Branch.objects.exclude(department=True)
 
-    # === Агрегация данных по всем филиалам ===
+    # === Данные по всем филиалам (факт) ===
     all_visit_reports = VisitReport.objects.filter(
         library__in=branches,
         date__year=current_year,
@@ -1344,23 +1340,22 @@ def generate_digital_month_report_all_branches(month):
         date__month__lte=month
     )
 
-    # Плановые показатели — сумма по всем филиалам
-    total_regs_plan = sum(
-        (RegsPlan.objects.filter(library=branch, year=current_year).first().total_regs or 0)
-        if RegsPlan.objects.filter(library=branch, year=current_year).exists()
-        else 0
-        for branch in branches
-    )
-    total_books_plan = sum(
-        BookPlan.objects.filter(library=branch, year=current_year).first().total_books or 0
-        for branch in branches
-    )
-    total_visits_plan = sum(
-        VisitPlan.objects.filter(library=branch, year=current_year).first().total_visits or 0
-        for branch in branches
-    )
+    # === ПЛАНЫ: агрегация одним запросом (без .first()!) ===
+    from django.db.models import Sum
 
-    # === Пользователи ===
+    regs_plan_total = RegsPlan.objects.filter(
+        library__in=branches, year=current_year
+    ).aggregate(total=Sum('total_regs'))['total'] or 0
+
+    books_plan_total = BookPlan.objects.filter(
+        library__in=branches, year=current_year
+    ).aggregate(total=Sum('total_books'))['total'] or 0
+
+    visits_plan_total = VisitPlan.objects.filter(
+        library__in=branches, year=current_year
+    ).aggregate(total=Sum('total_visits'))['total'] or 0
+
+    # === ФАКТ: пользователи ===
     total_regs = sum(
         (r.qty_reg_14 or 0) +
         (r.qty_reg_15_35 or 0) +
@@ -1381,7 +1376,7 @@ def generate_digital_month_report_all_branches(month):
     regs_out_station = sum(r.qty_reg_out_of_station or 0 for r in all_visit_reports)
     regs_remote = sum((r.qty_reg_prlib or 0) + (r.qty_reg_litres or 0) for r in all_visit_reports)
 
-    # === Книговыдача ===
+    # === ФАКТ: книговыдача ===
     total_books = sum(
         (r.qty_books_14 or 0) +
         (r.qty_books_15_35 or 0) +
@@ -1407,7 +1402,7 @@ def generate_digital_month_report_all_branches(month):
     books_out_station = sum(r.qty_books_out_of_station or 0 for r in all_book_reports)
     books_remote = sum((r.qty_books_prlib or 0) + (r.qty_books_litres or 0) for r in all_book_reports)
 
-    # === Посещаемость ===
+    # === ФАКТ: посещаемость ===
     visits_from_reports = sum(
         (r.qty_visited_14 or 0) +
         (r.qty_visited_15_35 or 0) +
@@ -1462,7 +1457,7 @@ def generate_digital_month_report_all_branches(month):
     ref_18 = sum(r.qty_books_reference_18 or 0 for r in all_book_reports)      # 18–35
     ref_online = sum(r.qty_books_reference_online or 0 for r in all_book_reports)
 
-    # === Мероприятия (всего) ===
+    # === Мероприятия ===
     events_total_qty = sum(e.quantity or 0 for e in all_events)
     events_total_attendees = sum(
         (e.age_14 or 0) + (e.age_18 or 0) + (e.age_35 or 0) + (e.age_other or 0)
@@ -1478,7 +1473,6 @@ def generate_digital_month_report_all_branches(month):
     events_18_35_qty = sum(e.quantity or 0 for e in ev_18_35)
     events_18_35_att = sum(e.age_35 or 0 for e in ev_18_35)
 
-    # === Стационарные мероприятия ===
     stat_events = [e for e in all_events if (e.out_of_station or 0) == 0]
     stat_events_qty = sum(e.quantity or 0 for e in stat_events)
     stat_events_att = sum(
@@ -1495,7 +1489,6 @@ def generate_digital_month_report_all_branches(month):
     stat_18_35_qty = sum(e.quantity or 0 for e in s_18_35)
     stat_18_35_att = sum(e.age_35 or 0 for e in s_18_35)
 
-    # === Вне стационара ===
     out_stat_events = [e for e in all_events if (e.out_of_station or 0) > 0]
     out_stat_events_qty = sum(e.quantity or 0 for e in out_stat_events)
     out_stat_events_att = sum(
@@ -1503,13 +1496,13 @@ def generate_digital_month_report_all_branches(month):
         for e in out_stat_events
     )
 
-    # === Заполнение шаблона (строка 4 — основная строка данных) ===
+    # === Заполнение шаблона (строка 4) ===
     row = 4
 
     # Пользователи
-    ws[f'B{row}'] = total_regs_plan
+    ws[f'B{row}'] = regs_plan_total
     ws[f'C{row}'] = total_regs
-    ws[f'D{row}'] = (total_regs / total_regs_plan * 100) if total_regs_plan else 0
+    ws[f'D{row}'] = (total_regs / regs_plan_total * 100) if regs_plan_total else 0
     ws[f'C{row+1}'] = regs_u14
     ws[f'C{row+2}'] = regs_15_17
     ws[f'C{row+3}'] = regs_18_35
@@ -1518,9 +1511,9 @@ def generate_digital_month_report_all_branches(month):
     ws[f'C{row+6}'] = regs_remote
 
     # Книговыдача
-    ws[f'B{row+7}'] = total_books_plan
+    ws[f'B{row+7}'] = books_plan_total
     ws[f'C{row+7}'] = total_books
-    ws[f'D{row+7}'] = (total_books / total_books_plan * 100) if total_books_plan else 0
+    ws[f'D{row+7}'] = (total_books / books_plan_total * 100) if books_plan_total else 0
     ws[f'C{row+8}'] = books_u14
     ws[f'C{row+9}'] = books_15_17
     ws[f'C{row+10}'] = books_18_35
@@ -1529,9 +1522,9 @@ def generate_digital_month_report_all_branches(month):
     ws[f'C{row+13}'] = books_remote
 
     # Посещаемость
-    ws[f'B{row+14}'] = total_visits_plan
+    ws[f'B{row+14}'] = visits_plan_total
     ws[f'C{row+14}'] = total_visits
-    ws[f'D{row+14}'] = (total_visits / total_visits_plan * 100) if total_visits_plan else 0
+    ws[f'D{row+14}'] = (total_visits / visits_plan_total * 100) if visits_plan_total else 0
     ws[f'C{row+15}'] = visits_u14
     ws[f'C{row+16}'] = visits_15_17
     ws[f'C{row+17}'] = visits_18_35
@@ -1551,7 +1544,7 @@ def generate_digital_month_report_all_branches(month):
     ws[f'C{row+27}'] = ref_18
     ws[f'C{row+28}'] = ref_online
 
-    # Мероприятия (всего)
+    # Мероприятия
     ws[f'C{row+29}'] = events_total_qty
     ws[f'C{row+30}'] = events_total_attendees
     ws[f'C{row+31}'] = events_u14_qty
@@ -1561,7 +1554,6 @@ def generate_digital_month_report_all_branches(month):
     ws[f'C{row+35}'] = events_18_35_qty
     ws[f'C{row+36}'] = events_18_35_att
 
-    # Стационар
     ws[f'C{row+37}'] = stat_events_qty
     ws[f'C{row+38}'] = stat_events_att
     ws[f'C{row+39}'] = stat_u14_qty
@@ -1571,7 +1563,6 @@ def generate_digital_month_report_all_branches(month):
     ws[f'C{row+43}'] = stat_18_35_qty
     ws[f'C{row+44}'] = stat_18_35_att
 
-    # Вне стационара
     ws[f'C{row+45}'] = out_stat_events_qty
     ws[f'C{row+46}'] = out_stat_events_att
 
