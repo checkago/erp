@@ -67,7 +67,7 @@ class EventForm(forms.ModelForm):
         if user:
             from .models import Employee
             employee = Employee.objects.get(user=user)
-            self.fields['cafedra'].queryset = employee.branch.cafedra_set.all()
+            self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
 
 
 class BookReportForm(forms.ModelForm):

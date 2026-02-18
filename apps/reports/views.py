@@ -253,9 +253,8 @@ class EventCreateView(LoginRequiredMixin, View):
             event = form.save(commit=False)
             employee = Employee.objects.get(user=request.user)
             event.library = employee.branch
-            event.save()
+            event.save()  # Теперь event имеет id
 
-            # Подсчитываем общую книговыдачу
             total_books = (
                 (form.cleaned_data.get('qty_books_14') or 0) +
                 (form.cleaned_data.get('qty_books_15_35') or 0) +
@@ -267,8 +266,7 @@ class EventCreateView(LoginRequiredMixin, View):
                 BookReport.objects.create(
                     library=employee.branch,
                     date=event.date,
-                    tag='М',
-                    event=event,
+                    tag=f"М-{event.id}",
                     qty_books_14=form.cleaned_data.get('qty_books_14') or 0,
                     qty_books_15_35=form.cleaned_data.get('qty_books_15_35') or 0,
                     qty_books_18_35=form.cleaned_data.get('qty_books_18_35') or 0,
@@ -282,7 +280,7 @@ class EventCreateView(LoginRequiredMixin, View):
 class EventUpdateView(LoginRequiredMixin, View):
     def get(self, request, id):
         event_instance = get_object_or_404(Event, id=id)
-        book_report = event_instance.book_reports.first()
+        book_report = BookReport.objects.filter(tag=f"М-{event_instance.id}").first()
 
         initial = {}
         if book_report:
@@ -314,7 +312,8 @@ class EventUpdateView(LoginRequiredMixin, View):
                 (form.cleaned_data.get('qty_books_other') or 0)
             )
 
-            book_report = event.book_reports.first()
+            unique_tag = f"М-{event.id}"
+            book_report = BookReport.objects.filter(tag=unique_tag).first()
 
             if total_books > 0:
                 if book_report:
@@ -327,8 +326,7 @@ class EventUpdateView(LoginRequiredMixin, View):
                     BookReport.objects.create(
                         library=employee.branch,
                         date=event.date,
-                        tag='М',
-                        event=event,
+                        tag=unique_tag,
                         qty_books_14=form.cleaned_data.get('qty_books_14') or 0,
                         qty_books_15_35=form.cleaned_data.get('qty_books_15_35') or 0,
                         qty_books_18_35=form.cleaned_data.get('qty_books_18_35') or 0,
@@ -345,6 +343,8 @@ class EventUpdateView(LoginRequiredMixin, View):
 class EventDeleteView(LoginRequiredMixin, View):
     def get(self, request, id):
         event = get_object_or_404(Event, id=id)
+        # Удаляем связанный отчёт по книгам
+        BookReport.objects.filter(tag=f"М-{event.id}").delete()
         event.delete()
         return redirect(reverse_lazy('events_list'))
 

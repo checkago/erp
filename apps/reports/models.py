@@ -53,12 +53,12 @@ class Event(models.Model):
         (AD, 'Активное долголетие'),
         (OTHER, 'Прочие'),
     )
-
     library = models.ForeignKey(Branch, on_delete=models.CASCADE, related_name='events', verbose_name='Библиотека')
     cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
     name = models.CharField(max_length=250, verbose_name='Название мероприятия')
     date = models.DateField(verbose_name='Дата проведения')
-    direction = models.CharField(max_length=150, choices=direction_CHOICES, default=IPN, verbose_name='Направление')
+    direction = models.CharField(max_length=150, choices=direction_CHOICES, default=IPN,
+                                 verbose_name='Направление')
     quantity = models.IntegerField(default=1, verbose_name='Количество мероприятий')
     age_14 = models.IntegerField(default=0, verbose_name='До 14')
     age_18 = models.IntegerField(default=0, verbose_name='От 15 до 17')
@@ -68,7 +68,8 @@ class Event(models.Model):
     pensioners = models.IntegerField(default=0, verbose_name='Пенсионеры (из общего числа)')
     out_of_station = models.IntegerField(default=0, verbose_name='Внестационар')
     online = models.IntegerField(default=0, verbose_name='Удаленно')
-    as_part = models.CharField(max_length=150, choices=age_CHOICES, default=KRUJKI, verbose_name='В рамках')
+    as_part = models.CharField(max_length=150, choices=age_CHOICES, default=KRUJKI,
+                               verbose_name='В рамках')
     paid = models.BooleanField(default=False, blank=True, verbose_name='Платное')
     note = models.TextField(verbose_name='Примечание', blank=True)
 
@@ -149,16 +150,6 @@ class BookReport(models.Model):
     qty_books_reference_invalid = models.IntegerField(default=0, verbose_name='Справки (Инвалиды (из общего числа))')
     qty_books_reference_online = models.IntegerField(default=0, verbose_name='Справки (Удаленно')
     note = models.TextField(blank=True, verbose_name='Примечание')
-
-    # НОВОЕ поле — связь с мероприятием (опционально, чтобы не сломать старые данные)
-    event = models.ForeignKey(
-        Event,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        verbose_name='Связанное мероприятие',
-        related_name='book_reports'
-    )
 
     class Meta:
         verbose_name = 'Отчет книговыдачи по библиотеке'
