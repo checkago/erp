@@ -21,6 +21,16 @@ from .utils import get_book_totals, get_event_totals, get_all_visit_totals, \
     get_all_book_totals, get_all_event_totals, get_visits_totals
 
 
+# --- ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ---
+def get_books_total(cleaned_data):
+    return (
+        (cleaned_data.get('qty_books_14') or 0) +
+        (cleaned_data.get('qty_books_15_35') or 0) +
+        (cleaned_data.get('qty_books_18_35') or 0) +
+        (cleaned_data.get('qty_books_other') or 0)
+    )
+
+
 class LoginRequiredMixin:
     login_url = "/login_home"
 
