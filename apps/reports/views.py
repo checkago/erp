@@ -245,18 +245,20 @@ class EventCreateView(LoginRequiredMixin, View):
             event.library = employee.branch
             event.save()
 
-            # Создаем или обновляем связанный BookReport
-            book_report, created = BookReport.objects.get_or_create(
-                library=employee.branch,
-                date=event.date,
-                tag='М'  # фиксированный тег
-            )
-            # Обновляем только нужные поля
-            book_report.qty_books_14 = form.cleaned_data.get('qty_books_14') or 0
-            book_report.qty_books_15_35 = form.cleaned_data.get('qty_books_15_35') or 0
-            book_report.qty_books_18_35 = form.cleaned_data.get('qty_books_18_35') or 0
-            book_report.qty_books_other = form.cleaned_data.get('qty_books_other') or 0
-            book_report.save()
+            # Проверяем, есть ли ненулевая книговыдача
+            total_books = get_books_total(form.cleaned_data)
+            if total_books > 0:
+                book_report, created = BookReport.objects.get_or_create(
+                    library=employee.branch,
+                    date=event.date,
+                    tag='М'
+                )
+                book_report.qty_books_14 = form.cleaned_data.get('qty_books_14') or 0
+                book_report.qty_books_15_35 = form.cleaned_data.get('qty_books_15_35') or 0
+                book_report.qty_books_18_35 = form.cleaned_data.get('qty_books_18_35') or 0
+                book_report.qty_books_other = form.cleaned_data.get('qty_books_other') or 0
+                book_report.save()
+            # Иначе — ничего не делаем
 
             return redirect(reverse_lazy('events_list'))
         return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
@@ -265,7 +267,6 @@ class EventCreateView(LoginRequiredMixin, View):
 class EventUpdateView(LoginRequiredMixin, View):
     def get(self, request, id):
         event_instance = get_object_or_404(Event, id=id)
-        # Получаем связанный BookReport (если есть)
         book_report = BookReport.objects.filter(
             library=event_instance.library,
             date=event_instance.date,
@@ -295,17 +296,29 @@ class EventUpdateView(LoginRequiredMixin, View):
             event.library = employee.branch
             event.save()
 
-            # Обновляем или создаём BookReport
-            book_report, created = BookReport.objects.get_or_create(
+            total_books = get_books_total(form.cleaned_data)
+            existing_book_report = BookReport.objects.filter(
                 library=employee.branch,
                 date=event.date,
                 tag='М'
-            )
-            book_report.qty_books_14 = form.cleaned_data.get('qty_books_14') or 0
-            book_report.qty_books_15_35 = form.cleaned_data.get('qty_books_15_35') or 0
-            book_report.qty_books_18_35 = form.cleaned_data.get('qty_books_18_35') or 0
-            book_report.qty_books_other = form.cleaned_data.get('qty_books_other') or 0
-            book_report.save()
+            ).first()
+
+            if total_books > 0:
+                # Создаём или обновляем
+                book_report = existing_book_report or BookReport(
+                    library=employee.branch,
+                    date=event.date,
+                    tag='М'
+                )
+                book_report.qty_books_14 = form.cleaned_data.get('qty_books_14') or 0
+                book_report.qty_books_15_35 = form.cleaned_data.get('qty_books_15_35') or 0
+                book_report.qty_books_18_35 = form.cleaned_data.get('qty_books_18_35') or 0
+                book_report.qty_books_other = form.cleaned_data.get('qty_books_other') or 0
+                book_report.save()
+            else:
+                # Удаляем, если был и теперь всё ноль
+                if existing_book_report:
+                    existing_book_report.delete()
 
             return redirect(reverse_lazy('events_list'))
         return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
