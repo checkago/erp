@@ -65,7 +65,7 @@ class EventForm(forms.ModelForm):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         if user:
-            from .models import Employee
+            # Используем Employee и Cafedra из глобального импорта (apps.core.models)
             employee = Employee.objects.get(user=user)
             self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
 
