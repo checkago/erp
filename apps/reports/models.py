@@ -55,7 +55,7 @@ class Event(models.Model):
     )
 
     library = models.ForeignKey('Branch', on_delete=models.CASCADE, related_name='events', verbose_name='Библиотека')
-    cafedra = models.ForeignKey('Cafedra', on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
+    cafedra = models.ForeignKey(Cafedra, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Кафедра')
     name = models.CharField(max_length=250, verbose_name='Название мероприятия')
     date = models.DateField(verbose_name='Дата проведения')
     direction = models.CharField(max_length=150, choices=direction_CHOICES, default=IPN, verbose_name='Направление')
