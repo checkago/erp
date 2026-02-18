@@ -1,7 +1,7 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
-from apps.core.models import Branch, Cafedra
+from apps.core.models import Branch, Cafedra, Employee
 
 
 # Массовые мероприятия
