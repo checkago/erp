@@ -151,6 +151,16 @@ class BookReport(models.Model):
     qty_books_reference_online = models.IntegerField(default=0, verbose_name='Справки (Удаленно')
     note = models.TextField(blank=True, verbose_name='Примечание')
 
+    # НОВОЕ поле — связь с мероприятием (опционально, чтобы не сломать старые данные)
+    event = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        verbose_name='Связанное мероприятие',
+        related_name='book_reports'
+    )
+
     class Meta:
         verbose_name = 'Отчет книговыдачи по библиотеке'
         verbose_name_plural = 'Отчеты книговыдачи библиотекам'
