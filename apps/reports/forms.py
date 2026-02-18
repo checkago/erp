@@ -4,7 +4,7 @@ from apps.core.models import Employee, Cafedra
 
 
 class EventForm(forms.ModelForm):
-    # Дополнительные поля для BookReport
+    # Дополнительные поля для книговыдачи на мероприятии
     qty_books_14 = forms.IntegerField(
         required=False,
         initial=0,
@@ -65,8 +65,9 @@ class EventForm(forms.ModelForm):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         if user:
+            from .models import Employee
             employee = Employee.objects.get(user=user)
-            self.fields['cafedra'].queryset = Cafedra.objects.filter(library=employee.branch)
+            self.fields['cafedra'].queryset = employee.branch.cafedra_set.all()
 
 
 class BookReportForm(forms.ModelForm):

@@ -255,20 +255,25 @@ class EventCreateView(LoginRequiredMixin, View):
             event.library = employee.branch
             event.save()
 
-            # Проверяем, есть ли ненулевая книговыдача
-            total_books = get_books_total(form.cleaned_data)
+            # Подсчитываем общую книговыдачу
+            total_books = (
+                (form.cleaned_data.get('qty_books_14') or 0) +
+                (form.cleaned_data.get('qty_books_15_35') or 0) +
+                (form.cleaned_data.get('qty_books_18_35') or 0) +
+                (form.cleaned_data.get('qty_books_other') or 0)
+            )
+
             if total_books > 0:
-                book_report, created = BookReport.objects.get_or_create(
+                BookReport.objects.create(
                     library=employee.branch,
                     date=event.date,
-                    tag='М'
+                    tag='М',
+                    event=event,
+                    qty_books_14=form.cleaned_data.get('qty_books_14') or 0,
+                    qty_books_15_35=form.cleaned_data.get('qty_books_15_35') or 0,
+                    qty_books_18_35=form.cleaned_data.get('qty_books_18_35') or 0,
+                    qty_books_other=form.cleaned_data.get('qty_books_other') or 0,
                 )
-                book_report.qty_books_14 = form.cleaned_data.get('qty_books_14') or 0
-                book_report.qty_books_15_35 = form.cleaned_data.get('qty_books_15_35') or 0
-                book_report.qty_books_18_35 = form.cleaned_data.get('qty_books_18_35') or 0
-                book_report.qty_books_other = form.cleaned_data.get('qty_books_other') or 0
-                book_report.save()
-            # Иначе — ничего не делаем
 
             return redirect(reverse_lazy('events_list'))
         return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
@@ -277,11 +282,7 @@ class EventCreateView(LoginRequiredMixin, View):
 class EventUpdateView(LoginRequiredMixin, View):
     def get(self, request, id):
         event_instance = get_object_or_404(Event, id=id)
-        book_report = BookReport.objects.filter(
-            library=event_instance.library,
-            date=event_instance.date,
-            tag='М'
-        ).first()
+        book_report = event_instance.book_reports.first()
 
         initial = {}
         if book_report:
@@ -306,29 +307,36 @@ class EventUpdateView(LoginRequiredMixin, View):
             event.library = employee.branch
             event.save()
 
-            total_books = get_books_total(form.cleaned_data)
-            existing_book_report = BookReport.objects.filter(
-                library=employee.branch,
-                date=event.date,
-                tag='М'
-            ).first()
+            total_books = (
+                (form.cleaned_data.get('qty_books_14') or 0) +
+                (form.cleaned_data.get('qty_books_15_35') or 0) +
+                (form.cleaned_data.get('qty_books_18_35') or 0) +
+                (form.cleaned_data.get('qty_books_other') or 0)
+            )
+
+            book_report = event.book_reports.first()
 
             if total_books > 0:
-                # Создаём или обновляем
-                book_report = existing_book_report or BookReport(
-                    library=employee.branch,
-                    date=event.date,
-                    tag='М'
-                )
-                book_report.qty_books_14 = form.cleaned_data.get('qty_books_14') or 0
-                book_report.qty_books_15_35 = form.cleaned_data.get('qty_books_15_35') or 0
-                book_report.qty_books_18_35 = form.cleaned_data.get('qty_books_18_35') or 0
-                book_report.qty_books_other = form.cleaned_data.get('qty_books_other') or 0
-                book_report.save()
+                if book_report:
+                    book_report.qty_books_14 = form.cleaned_data.get('qty_books_14') or 0
+                    book_report.qty_books_15_35 = form.cleaned_data.get('qty_books_15_35') or 0
+                    book_report.qty_books_18_35 = form.cleaned_data.get('qty_books_18_35') or 0
+                    book_report.qty_books_other = form.cleaned_data.get('qty_books_other') or 0
+                    book_report.save()
+                else:
+                    BookReport.objects.create(
+                        library=employee.branch,
+                        date=event.date,
+                        tag='М',
+                        event=event,
+                        qty_books_14=form.cleaned_data.get('qty_books_14') or 0,
+                        qty_books_15_35=form.cleaned_data.get('qty_books_15_35') or 0,
+                        qty_books_18_35=form.cleaned_data.get('qty_books_18_35') or 0,
+                        qty_books_other=form.cleaned_data.get('qty_books_other') or 0,
+                    )
             else:
-                # Удаляем, если был и теперь всё ноль
-                if existing_book_report:
-                    existing_book_report.delete()
+                if book_report:
+                    book_report.delete()
 
             return redirect(reverse_lazy('events_list'))
         return render(request, 'events/event_form.html', {'form': form, 'breadcrumb': breadcrumb})
@@ -337,11 +345,8 @@ class EventUpdateView(LoginRequiredMixin, View):
 class EventDeleteView(LoginRequiredMixin, View):
     def get(self, request, id):
         event = get_object_or_404(Event, id=id)
-        # Добавьте проверку прав, если нужно (например, что только автор может удалять)
-        # if event.author != request.user:
-        #     return HttpResponseForbidden("У вас нет прав на удаление этого мероприятия.")
         event.delete()
-        return redirect(reverse_lazy('events_list'))  # Перенаправляем на список мероприятий
+        return redirect(reverse_lazy('events_list'))
 
 
 class VisitReportListView(LoginRequiredMixin, ListView):
